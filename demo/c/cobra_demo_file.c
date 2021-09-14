@@ -1,0 +1,198 @@
+/*
+    Copyright 2021 Picovoice Inc.
+    You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
+    file accompanying this source.
+    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+    specific language governing permissions and limitations under the License.
+*/
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#if defined(_WIN32) || defined(_WIN64)
+
+#include <windows.h>
+
+#else
+
+#include <dlfcn.h>
+
+#endif
+
+#define DR_WAV_IMPLEMENTATION
+
+#include "dr_wav.h"
+
+#include "pv_cobra.h"
+
+static void *open_dl(const char *dl_path) {
+
+#if defined(_WIN32) || defined(_WIN64)
+
+    return LoadLibrary(dl_path);
+
+#else
+
+    return dlopen(dl_path, RTLD_NOW);
+
+#endif
+
+}
+
+static void *load_symbol(void *handle, const char *symbol) {
+
+#if defined(_WIN32) || defined(_WIN64)
+
+    return GetProcAddress((HMODULE) handle, symbol);
+
+#else
+
+    return dlsym(handle, symbol);
+
+#endif
+
+}
+
+static void close_dl(void *handle) {
+
+#if defined(_WIN32) || defined(_WIN64)
+
+    FreeLibrary((HMODULE) handle);
+
+#else
+
+    dlclose(handle);
+
+#endif
+
+}
+
+static void print_dl_error(const char *message) {
+
+#if defined(_WIN32) || defined(_WIN64)
+
+    fprintf(stderr, "%s with code '%lu'.\n", message, GetLastError());
+
+#else
+
+    fprintf(stderr, "%s with '%s'.\n", message, dlerror());
+
+#endif
+
+}
+
+int main(int argc, char *argv[]) {
+    if (argc != 4) {
+        fprintf(stderr, "usage : %s library_path app_id wav_path\n", argv[0]);
+        exit(1);
+    }
+
+    const char *library_path = argv[1];
+    const char *app_id = argv[2];
+    const char *wav_path = argv[3];
+
+    void *cobra_library = open_dl(library_path);
+    if (!cobra_library) {
+        fprintf(stderr, "failed to open library at '%s'.\n", library_path);
+        exit(1);
+    }
+
+    const char *(*pv_status_to_string_func)(pv_status_t) = load_symbol(cobra_library, "pv_status_to_string");
+    if (!pv_status_to_string_func) {
+        print_dl_error("failed to load 'pv_status_to_string'");
+        exit(1);
+    }
+
+    int32_t (*pv_sample_rate_func)() = load_symbol(cobra_library, "pv_sample_rate");
+    if (!pv_sample_rate_func) {
+        print_dl_error("failed to load 'pv_sample_rate'");
+        exit(1);
+    }
+
+    pv_status_t (*pv_cobra_init_func)(const char *, pv_cobra_t **) = load_symbol(cobra_library, "pv_cobra_init");
+    if (!pv_cobra_init_func) {
+        print_dl_error("failed to load 'pv_cobra_init'");
+        exit(1);
+    }
+
+    void (*pv_cobra_delete_func)(pv_cobra_t *) = load_symbol(cobra_library, "pv_cobra_delete");
+    if (!pv_cobra_delete_func) {
+        print_dl_error("failed to load 'pv_cobra_delete'");
+        exit(1);
+    }
+
+    pv_status_t (*pv_cobra_process_func)(pv_cobra_t *, const int16_t *, float *) =
+    load_symbol(cobra_library, "pv_cobra_process");
+    if (!pv_cobra_process_func) {
+        print_dl_error("failed to load 'pv_cobra_process'");
+        exit(1);
+    }
+
+    int32_t (*pv_cobra_frame_length_func)() = load_symbol(cobra_library, "pv_cobra_frame_length");
+    if (!pv_cobra_frame_length_func) {
+        print_dl_error("failed to load 'pv_cobra_frame_length'");
+        exit(1);
+    }
+
+    const char *(*pv_cobra_version_func)() = load_symbol(cobra_library, "pv_cobra_version");
+    if (!pv_cobra_version_func) {
+        print_dl_error("failed to load 'pv_cobra_version'");
+        exit(1);
+    }
+
+    drwav f;
+
+    if (!drwav_init_file(&f, wav_path, NULL)) {
+        fprintf(stderr, "failed to open wav file at '%s'.", wav_path);
+        exit(1);
+    }
+
+    if (f.sampleRate != (uint32_t) pv_sample_rate_func()) {
+        fprintf(stderr, "audio sample rate should be %d\n.", pv_sample_rate_func());
+        exit(1);
+    }
+
+    if (f.bitsPerSample != 16) {
+        fprintf(stderr, "audio format should be 16-bit\n.");
+        exit(1);
+    }
+
+    if (f.channels != 1) {
+        fprintf(stderr, "audio should be single-channel.\n");
+        exit(1);
+    }
+
+    int16_t *pcm = calloc(pv_cobra_frame_length_func(), sizeof(int16_t));
+    if (!pcm) {
+        fprintf(stderr, "failed to allocate memory for audio frame.\n");
+        exit(1);
+    }
+
+    pv_cobra_t *cobra = NULL;
+    pv_status_t status = pv_cobra_init_func(app_id, &cobra);
+    if (status != PV_STATUS_SUCCESS) {
+        fprintf(stderr, "failed to init with '%s'", pv_status_to_string_func(status));
+        exit(1);
+    }
+
+    fprintf(stdout, "V%s\n\n", pv_cobra_version_func());
+
+    while ((int32_t) drwav_read_pcm_frames_s16(&f, pv_cobra_frame_length_func(), pcm) == pv_cobra_frame_length_func()) {
+        float is_voiced = 0.f;
+        status = pv_cobra_process_func(cobra, pcm, &is_voiced);
+        if (status != PV_STATUS_SUCCESS) {
+            fprintf(stderr, "failed to init with '%s'", pv_status_to_string_func(status));
+            exit(1);
+        }
+        fprintf(stdout, "%.2f ", is_voiced);
+    }
+    fprintf(stdout, "\n");
+
+    free(pcm);
+    drwav_uninit(&f);
+    pv_cobra_delete_func(cobra);
+    close_dl(cobra_library);
+
+    return 0;
+}
