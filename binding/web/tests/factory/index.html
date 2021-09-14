@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>unit test - CobraWebFactory</title>
+  <script src="../dist/iife/index.js"></script>
+  <script type="application/javascript">
+    let pcm = null;
+
+    window.onload = function () {
+      const audioContext = new (window.AudioContext || window.webKitAudioContext)(
+        { sampleRate: 16000 }
+      );
+
+      function readAudioFile(selectedFile, callback) {
+        let reader = new FileReader();
+        reader.onload = function (ev) {
+          let wavBytes = reader.result;
+          audioContext.decodeAudioData(wavBytes, callback);
+        };
+        reader.readAsArrayBuffer(selectedFile);
+      }
+
+      const fileSelector = document.getElementById("audioFile");
+      fileSelector.addEventListener("change", (event) => {
+        document.getElementById("audioLoaded").style.display = "none";
+
+        writeMessage("Loading audio file...");
+        const fileList = event.target.files;
+        readAudioFile(fileList[0], (audioBuffer) => {
+          const f32PCM = audioBuffer.getChannelData(0);
+          const i16PCM = new Int16Array(f32PCM.length);
+
+          const INT16_MAX = 32767;
+          const INT16_MIN = -32768;
+          i16PCM.set(
+            f32PCM.map((f) => {
+              let i = Math.trunc(f * INT16_MAX);
+              if (f > INT16_MAX) i = INT16_MAX;
+              if (f < INT16_MIN) i = INT16_MIN;
+              return i;
+            })
+          );
+          pcm = i16PCM;
+          document.getElementById("audioLoaded").style.display = "block";
+          writeMessage("Loading audio file... done!");
+        });
+      });
+    }
+
+    function writeMessage(message) {
+      console.log(message);
+      let p = document.createElement("p");
+      let text = document.createTextNode(message);
+      p.appendChild(text);
+      document.body.appendChild(p);
+    }
+
+    function assertLess(actual, expected, failureMessage) {
+      if (actual >= expected) {
+        throw new Error(failureMessage);
+      }
+    }
+
+    async function startTest() {
+      document.getElementById("testComplete").style.display = "none";
+
+      writeMessage("Starting test...");
+
+      const accessKey = document.getElementById("accessKey").value;
+
+      if (!pcm) {
+        writeMessage("Audio file not provided...");
+        return
+      }
+
+      let handle = null;
+      try {
+        writeMessage("Cobra is loading. Please wait...");
+        handle = await CobraWebFactory.Cobra.create(accessKey);
+        writeMessage("Cobra worker ready!");
+
+        let frameLength = handle.frameLength;
+        let isPassed = true
+        let voiceProbability = []
+        for (let i = 0; i < (pcm.byteLength / pcm.BYTES_PER_ELEMENT); i += frameLength) {
+          const result = await handle.process(pcm.slice(i, i + frameLength));
+          voiceProbability.push(result);
+        }
+        labels = new Array(voiceProbability.length).fill(0);
+        for (let i = 10; i < 28; i++) {
+          labels[i] = 1;
+        }
+
+        const lossFunc = (a, b) => -a.map((x, i) => a[i] * Math.log(b[i]) + (1 - a[i]) * Math.log(1 - b[i])).reduce((m, n) => m + n) / a.length;
+        const error = lossFunc(labels, voiceProbability)
+        assertLess(error, 0.1, `Received the error value of ${error}`)
+        writeMessage("Test passed!");
+      } catch (error) {
+        writeMessage(error);
+        writeMessage("Test failed!");
+      } finally {
+        document.getElementById("testComplete").style.display = "block";
+      }
+    }
+  </script>
+</head>
+
+<body>
+  <h1>Cobra web binding test</h1>
+  <p>After entering the AccessKey and audio file, click the "Test Cobra" button. For the result, refer to the browser
+    console.</p>
+
+  <p>
+    <label for="accessKey">AccessKey string provided by
+      <a href="https://picovoice.ai/console/">Picovoice Console</a>:</label>
+    <input type="text" id="accessKey" name="accessKey" />
+  </p>
+
+  <p>
+    <label for="audioFile">Select audio file located on {PROJECT_ROOT}/res/audio/sample.wav:</label>
+    <input type="file" id="audioFile" name="audioFile" accept="audio/*" />
+  </p>
+
+  <input type="button" id="submit" value="Test Cobra" onclick="startTest()" />
+
+  <br>
+
+  <h4 id="audioLoaded" style="display: none;">Audio file loaded!</h4>
+  <h4 id="testComplete" style="display: none;">Test Complete!</h4>
+  <hr />
+</body>
+
+</html>

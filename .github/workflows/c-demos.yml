@@ -1,0 +1,41 @@
+name: C Demos
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths:
+      - 'demo/c/**'
+      - '!demo/c/README.md'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'demo/c/**'
+      - '!demo/c/README.md'
+
+jobs:
+  build-micdemo:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
+    - name: Build Micdemo
+      run: |
+        cmake -S demo/c/. -B demo/c/build
+        cmake --build demo/c/build --target cobra_demo_mic
+
+  build-filedemo:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
+    - name: Build Filedemo
+      run: |
+        cmake -S demo/c/. -B demo/c/build
+        cmake --build demo/c/build --target cobra_demo_file
