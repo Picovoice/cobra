@@ -48,7 +48,7 @@ yarn add @picovoice/web-voice-processor @picovoice/cobra-web-worker
 
 ```javascript
 import { WebVoiceProcessor } from "@picovoice/web-voice-processor"
-import {CobraWorkerFactory } from "@picovoice/cobra-web-worker";
+import { CobraWorkerFactory } from "@picovoice/cobra-web-worker";
   
 // The worker will call the callback function upon a detection event with
 // the probability of the voice activity as the input argument
