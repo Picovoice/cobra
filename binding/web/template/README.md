@@ -2,7 +2,7 @@
 
 The Picovoice Cobra library for web browsers, powered by WebAssembly. Intended (but not required) to be used with the [@picovoice/web-voice-processor](https://www.npmjs.com/package/@picovoice/web-voice-processor) package.
 
-This library processes always-listening voice stream in-browser, offline. All processing is done via WebAssembly and Workers in a separate thread.
+This library processes audio for voice detection in-browser, offline. All processing is done via WebAssembly and Workers in a separate thread.
 
 ## Compatibility
 
@@ -16,7 +16,7 @@ If you are using this library with the [@picovoice/web-voice-processor](https://
 
 ## Packages
 
-The Cobra SDK for Web is split into separate worker and factory pacakges; Import each as required.
+The Cobra SDK for Web is split into separate worker and factory packages; import each as required.
 
 ### Workers 
 
@@ -54,9 +54,9 @@ import { CobraWorkerFactory } from "@picovoice/cobra-web-worker";
 // the probability of the voice activity as the input argument
 function cobraCallback(voiceProbability) {
   // voiceProbability: Probability of voice activity. It is a floating-point number within [0, 1].
-  const threshold = // .. detection threshold within [0, 1] 
+  const threshold = // .. detection threshold
   if voiceProbability >= threshold {
-    // .. detection made!
+    // .. voice detected!
   }
 }
 
@@ -87,10 +87,10 @@ startCobra()
 
 // Finished with Cobra? Release the WebVoiceProcessor and the worker.
 if (done) {
-    webVp.release()
-    cobraWorker.sendMessage({
-    command: "release"
-    })
+  webVp.release()
+  cobraWorker.sendMessage({
+  command: "release"
+  })
 }
 
 ```
