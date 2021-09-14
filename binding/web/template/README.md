@@ -134,4 +134,4 @@ yarn build
 
 The output will appear in the ./dist/ folder.
 
-For example usage refer to the [web demo](../../../demo/web/README.md)
+For example usage refer to the [web demo](/demo/web/)
