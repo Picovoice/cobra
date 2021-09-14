@@ -50,7 +50,8 @@ yarn add @picovoice/web-voice-processor @picovoice/cobra-web-worker
 import { WebVoiceProcessor } from "@picovoice/web-voice-processor"
 import {CobraWorkerFactory } from "@picovoice/cobra-web-worker";
   
-// The worker will call the callback function upon a detection event with the probability of the voice activity as the input argument
+// The worker will call the callback function upon a detection event with
+// the probability of the voice activity as the input argument
 function cobraCallback(voiceProbability) {
   // voiceProbability: Probability of voice activity. It is a floating-point number within [0, 1].
   const threshold = // .. detection threshold within [0, 1] 
@@ -108,16 +109,18 @@ import { Cobra } from "@picovoice/cobra-web-factory";
 async function startCobra() {
   const appId = // .. AppID string provided by Picovoice Console (https://picovoice.ai/console/)
   const handle = await Cobra.create(appId);
-
-  // Send Cobra frames of audio (check handle.frameLength for size of array)
-  const audioFrames =  new Int16Array( /* Provide data with correct format and size*/ )
-  const cobraResult = handle.process(audioFrames)
-  // cobraResult: Probability of voice activity. It is a floating-point number within [0, 1].
+  return handle;
 }
 
-startCobra()
+const cobraHandle = startCobra()
+
+// Send Cobra frames of audio (check handle.frameLength for size of array)
+const audioFrames =  new Int16Array( /* Provide data with correct format and size*/ )
+const cobraResult = cobraHandle.process(audioFrames)
+// cobraResult: Probability of voice activity. It is a floating-point number within [0, 1].
 
 ...
+
 ```
 
 ## Build from source (IIFE + ESM outputs)
