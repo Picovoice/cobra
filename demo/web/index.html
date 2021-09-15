@@ -20,9 +20,7 @@
       function cobraCallback(voiceProbability) {
         const timestamp = new Date();
         writeVoiceProbability(
-          `Voice detected with probability of ${voiceProbability.toFixed(
-            2
-          )} at ${timestamp.toString()}`,
+          `Voice detected with probability of ${voiceProbability.toFixed(2)} at ${timestamp.toString()}`,
           voiceProbability
         );
       }
@@ -60,6 +58,7 @@
       });
     </script>
   </head>
+
   <body>
     <h1>Cobra Web Demo - worker</h1>
     <p>
@@ -69,7 +68,7 @@
     </p>
 
     <label for="appId"
-      >AppID string provided by  
+      >AppID string provided by
       <a href="https://picovoice.ai/console/">Picovoice Console</a>:</label
     >
     <input type="text" id="appId" name="appId" />
@@ -91,7 +90,7 @@
         max="100"
         value="0"
         class="slider"
-        disabled = true
+        disabled="true"
         id="voiceProbabilityRange"
       />
     </div>
