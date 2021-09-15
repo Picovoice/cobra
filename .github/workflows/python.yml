@@ -2,17 +2,15 @@ name: Python
 
 on:
   push:
-    branches: [ github-actions ]
+    branches: [ master ]
     paths:
-      - 'DELETEME.TXT'
       - 'binding/python/**'
       - '!binding/python/README.md'
       - 'lib/**'
       - 'res/**'
   pull_request:
-    branches: [ github-actions ]
+    branches: [ master ]
     paths:
-      - 'DELETEME.TXT'
       - 'binding/python/**'
       - '!binding/python/README.md'
       - 'lib/**'

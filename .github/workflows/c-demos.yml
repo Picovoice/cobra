@@ -2,15 +2,13 @@ name: C Demos
 
 on:
   push:
-    branches: [ github-actions ]
+    branches: [ master ]
     paths:
-      - 'DELETEME.TXT'
       - 'demo/c/**'
       - '!demo/c/README.md'
   pull_request:
-    branches: [ github-actions ]
+    branches: [ master ]
     paths:
-      - 'DELETEME.TXT'
       - 'demo/c/**'
       - '!demo/c/README.md'
 
