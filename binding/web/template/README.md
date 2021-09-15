@@ -76,8 +76,8 @@ async function startCobra() {
   // n.b. This promise will reject if the user refuses permission! Make sure you handle that possibility.
   const webVp =
       await WebVoiceProcessor.init({
-      engines: [cobraWorker],
-      start: true,
+        engines: [cobraWorker],
+        start: true,
       });
 }
 
@@ -89,7 +89,7 @@ startCobra()
 if (done) {
   webVp.release()
   cobraWorker.sendMessage({
-  command: "release"
+    command: "release"
   })
 }
 
