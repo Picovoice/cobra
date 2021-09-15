@@ -18,22 +18,21 @@
       }
 
       function cobraCallback(voiceProbability) {
-        const timestamp = new Date()
+        const timestamp = new Date();
         writeVoiceProbability(
           `Voice detected with probability of ${voiceProbability.toFixed(2)} at ${timestamp.toString()}`,
           voiceProbability
         );
       }
 
-      async function startCobra() {
+      async function startCobra(appId) {
         writeMessage("Cobra is loading. Please wait...");
-        const appId = // .. AppID string provided by Picovoice Console (https://picovoice.ai/console/)
         let engineHandle = null;
         try {
           engineHandle = await CobraWebWorker.CobraWorkerFactory.create(
-          appId,
-          cobraCallback
-        );
+            appId,
+            cobraCallback
+          );
         } catch (error) {
           writeMessage(error);
           throw new Error(error);
@@ -54,19 +53,30 @@
         }
       }
 
-      document.addEventListener("DOMContentLoaded", function () {
-        startCobra();
-      });
     </script>
   </head>
+
   <body>
     <h1>Cobra Web Demo - worker</h1>
     <p>
       This demo uses Cobra for Web and the WebVoiceProcessor packages to create
       an instance of Cobra that listens for voice activity and outputs them to
-      the page.
+      the page. After entering the AppID, click the "run Cobra" button.
     </p>
+
+    <label for="appId"
+      >AppID string provided by
+      <a href="https://picovoice.ai/console/">Picovoice Console</a>:</label
+    >
+    <input type="text" id="appId" name="appId" />
+    <input
+      type="button"
+      id="sumbit"
+      value="Run Cobra"
+      onclick="startCobra(document.getElementById('appId').value)"
+    />
     <hr />
+
     <div id="voiceProbability" class="voiceProbability">
       <h2 id="voiceProbabilityText">
         Waiting for the Cobra engine to be initialized ...
@@ -77,6 +87,7 @@
         max="100"
         value="0"
         class="slider"
+        disabled="true"
         id="voiceProbabilityRange"
       />
     </div>
