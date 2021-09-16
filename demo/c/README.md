@@ -71,7 +71,7 @@ cmake -S demo/c/. -B demo/c/build && cmake --build demo/c/build --target cobra_d
 Run the demo:
 
 ```console
-./demo/c/cobra_demo_file ${LIBRARY_PATH} ${APP_ID} ${INPUT_AUDIO_FILE}
+./demo/c/build/cobra_demo_file ${LIBRARY_PATH} ${APP_ID} ${INPUT_AUDIO_FILE}
 ```
 
 Replace `${LIBRARY_PATH}` with the path to the appropriate Cobra library available under [lib](/lib), `${APP_ID}` with a
