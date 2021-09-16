@@ -253,9 +253,9 @@ pv_cobra_delete(handle);
 
 ### Web
 
-Cobra is available on modern web browsers (i.e. not Internet Explorer) via [WebAssembly](https://webassembly.org/). Microphone audio is handled via the [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) and is abstracted by the WebVoiceProcessor, which also handles downsampling to the correct format. Cobra is provided pre-packaged as a [Web Worker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers).
+Cobra is available on modern web browsers (i.e., not Internet Explorer) via [WebAssembly](https://webassembly.org/). Cobra is provided pre-packaged as a [Web Worker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers) to allow it to perform processing off the main thread.
 
-The Cobra package (@picovoice/cobra-web-worker) can be used with the @picovoice/web-voice-processor.
+The Cobra package [@picovoice/cobra-web-worker](https://www.npmjs.com/package/@picovoice/cobra-web-worker) can be used with the [@picovoice/web-voice-processor](https://www.npmjs.com/package/@picovoice/web-voice-processor). Microphone audio is handled via the [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) and is abstracted by the WebVoiceProcessor, which also handles downsampling to the correct format.
 
 #### Vanilla JavaScript and HTML (CDN Script Tag)
 
@@ -263,8 +263,8 @@ The Cobra package (@picovoice/cobra-web-worker) can be used with the @picovoice/
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <script src="node_modules/@picovoice/cobra-web-worker/dist/iife/index.js"></script>
-    <script src="node_modules/@picovoice/web-voice-processor/dist/iife/index.js"></script>
+    <script src="https://unpkg.com/@picovoice/cobra-web-worker/dist/iife/index.js"></script>
+    <script src="https://unpkg.com/@picovoice/web-voice-processor/dist/iife/index.js"></script>
     <script type="application/javascript">
       function cobraCallback(voiceProbability) {
         const threshold = 0.8;
