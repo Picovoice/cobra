@@ -68,7 +68,7 @@ private let APP_ID = "YOUR_APPID_HERE"
 
 Then, using Xcode, open the generated CobraDemo.xcworkspace and run the application. Press the start button and start talking. The background will change colour while you're talking.
 
-For more information about Python demos go to [demo/ios](/demo/ios).
+For more information about iOS demos go to [demo/ios](/demo/ios).
 
 ### C Demos
 
