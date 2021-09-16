@@ -13,12 +13,17 @@ Cobra is a highly-accurate and lightweight voice activity detection (VAD) engine
     - [Android Demos](#android-demos)
     - [iOS demos](#ios-demos)
     - [C Demos](#c-demos)
+    - [Web Demos](#web-demos)
   - [SDKs](#sdks)
     - [Python](#python)
     - [Android](#android)
     - [iOS](#ios)
     - [C](#c)
+    - [Web](#web)
+      - [Vanilla JavaScript and HTML (CDN Script Tag)](#vanilla-javascript-and-html-cdn-script-tag)
+      - [Vanilla JavaScript and HTML (ES Modules)](#vanilla-javascript-and-html-es-modules)
   - [Releases](#releases)
+    - [v1.0.0 June Sep 14, 2021](#v100-june-sep-14-2021)
 
 ## Demos
 
@@ -72,10 +77,28 @@ repository run the demo:
 ```
 
 Replace `${LIBRARY_PATH}` with path to appropriate library available under [lib](/lib), Replace `${THRESHOLD}` with voice
-detection threshold (a floating-point number within [0, 1]), and `${INPUT_AUDIO_DEVICE}` with  the name of your
-microphone device. The demo opens an audio  stream and detects speech signal.
+detection threshold (a floating-point number within [0, 1]), and `${INPUT_AUDIO_DEVICE}` with the name of your
+microphone device. The demo opens an audio stream and detects speech signal.
 
 For more information about C demos go to [demo/c](/demo/c).
+
+### Web Demos
+
+From [demo/web](/demo/web) run the following in the terminal:
+
+```console
+yarn
+yarn start
+```
+
+(or)
+
+```console
+npm install
+npm run start
+```
+
+Open http://localhost:5000 in your browser to try the demo.
 
 ## SDKs
 
@@ -153,7 +176,7 @@ Finally, when done be sure to explicitly release the resources using `handle.del
 
 ### iOS
 
-To import the Cobra iOS binding into your project, add the following line to your Podfile and run `pod install`: 
+To import the Cobra iOS binding into your project, add the following line to your Podfile and run `pod install`:
 
 ```ruby
 pod 'Cobra-iOS'
@@ -169,7 +192,7 @@ do {
     handle = try Cobra(appID: appID)
 } catch { }
 
-let threshold = // .. detection threshold within [0, 1] 
+let threshold = // .. detection threshold within [0, 1]
 
 func getNextAudioFrame() -> [Int16] {
     // .. get audioFrame
@@ -228,7 +251,112 @@ Finally, when done be sure to release the acquired resources:
 pv_cobra_delete(handle);
 ```
 
+### Web
+
+Cobra is available on modern web browsers (i.e., not Internet Explorer) via [WebAssembly](https://webassembly.org/). Cobra is provided pre-packaged as a [Web Worker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers) to allow it to perform processing off the main thread.
+
+The Cobra package [@picovoice/cobra-web-worker](https://www.npmjs.com/package/@picovoice/cobra-web-worker) can be used with the [@picovoice/web-voice-processor](https://www.npmjs.com/package/@picovoice/web-voice-processor). Microphone audio is handled via the [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) and is abstracted by the WebVoiceProcessor, which also handles downsampling to the correct format.
+
+#### Vanilla JavaScript and HTML (CDN Script Tag)
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="https://unpkg.com/@picovoice/cobra-web-worker/dist/iife/index.js"></script>
+    <script src="https://unpkg.com/@picovoice/web-voice-processor/dist/iife/index.js"></script>
+    <script type="application/javascript">
+      function cobraCallback(voiceProbability) {
+        const threshold = 0.8;
+        if voiceProbability >= threshold {
+          const timestamp = new Date();
+          console.log("Voice detected with probability of " + 
+            voiceProbability.toFixed(2) + 
+            " at " + 
+            timestamp.toString()
+          );
+        }
+      }
+
+      async function startCobra() {
+        const appId = // AppID string provided by Picovoice Console (picovoice.ai/console/)
+        const cobraWorker = await CobraWorkerFactory.create(
+          appId,
+          cobraCallback
+        );
+
+        console.log("Cobra worker ready!");
+
+        console.log(
+          "WebVoiceProcessor initializing. Microphone permissions requested ..."
+        );
+
+        try {
+          let webVp = await window.WebVoiceProcessor.WebVoiceProcessor.init({
+            engines: [cobraWorker],
+          });
+          console.log("WebVoiceProcessor ready and listening!");
+        } catch (e) {
+          console.log("WebVoiceProcessor failed to initialize: " + e);
+        }
+      }
+
+      document.addEventListener("DOMContentLoaded", function () {
+        startCobra();
+      });
+    </script>
+  </head>
+  <body></body>
+</html>
+```
+
+#### Vanilla JavaScript and HTML (ES Modules)
+
+```console
+yarn add @picovoice/cobra-web-worker @picovoice/web-voice-processor
+```
+
+(or)
+
+```console
+npm install @picovoice/cobra-web-worker @picovoice/web-voice-processor
+```
+
+```javascript
+import { WebVoiceProcessor } from "@picovoice/web-voice-processor"
+import { CobraWorkerFactory } from "@picovoice/cobra-web-worker";
+  
+function cobraCallback(voiceProbability) {
+  const threshold = 0.8;
+  if voiceProbability >= threshold {
+    const timestamp = new Date();
+    console.log("Voice detected with probability of " + 
+      voiceProbability.toFixed(2) + 
+      " at " + 
+      timestamp.toString()
+    );
+  }
+}
+
+async function startCobra() {
+  const appId = //AppID string provided by Picovoice Console (picovoice.ai/console/)
+  const cobraWorker = await CobraWorkerFactory.create(
+      appId,
+      cobraCallback
+  );
+
+  const webVp =
+      await WebVoiceProcessor.init({
+        engines: [cobraWorker],
+        start: true,
+      });
+}
+
+startCobra()
+```
+
 ## Releases
 
 ### v1.0.0 June Sep 14, 2021
+
 - Initial release.
