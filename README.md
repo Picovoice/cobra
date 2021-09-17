@@ -41,7 +41,7 @@ With a working microphone connected to your device run the following in the term
 cobra_demo_mic --app_id APP_ID
 ```
 
-where `APP_ID` is an AppID which should be obtained form [Picovoice Console](picovoice.ai/console/). The engine starts processing the audio input from the microphone in realtime and outputs to the terminal when it detects any voice activities.
+where `APP_ID` is an AppID which should be obtained from [Picovoice Console](picovoice.ai/console/). The engine starts processing the audio input from the microphone in realtime and outputs to the terminal when it detects any voice activities.
 
 For more information about Python demos go to [demo/python](/demo/python).
 
@@ -118,7 +118,7 @@ import pvcobra
 handle = pvcobra.create(app_id=APP_ID)
 ```
 
-where `APP_ID` is an AppID which should be obtained form [Picovoice Console](picovoice.ai/console/). When initialized, valid sample rate can be obtained using `handle.sample_rate`. The required frame length (number of audio samples in an input array) is `handle.frame_length`. The object can be used to monitor incoming audio as follows:
+where `APP_ID` is an AppID which should be obtained from [Picovoice Console](picovoice.ai/console/). When initialized, valid sample rate can be obtained using `handle.sample_rate`. The required frame length (number of audio samples in an input array) is `handle.frame_length`. The object can be used to monitor incoming audio as follows:
 
 ```python
 def get_next_audio_frame():
