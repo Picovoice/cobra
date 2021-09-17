@@ -30,10 +30,10 @@ sudo pip3 install pvcobrademo
 The Microphone demo opens an audio stream from a microphone and detects voice activities. The following opens the default microphone:
 
 ```console
-cobra_demo_mic
+cobra_demo_mic --app_id APP_ID
 ```
 
-It is possible that the default audio input device recognized by PyAudio is not the one being used. There are a couple of debugging facilities baked into the demo application to solve this. First, type the following into the console:
+where `APP_ID` is an AppID which should be obtained from [Picovoice Console](https://picovoice.ai/console/). It is possible that the default audio input device recognized by PyAudio is not the one being used. There are a couple of debugging facilities baked into the demo application to solve this. First, type the following into the console:
 
 ```console
 cobra_demo_mic --show_audio_devices
@@ -70,13 +70,13 @@ It can be seen that the last device (index 21) is considered default. But on thi
 the input device which has an index of 10. After finding the correct index the demo application can be invoked as below:
 
 ```console
-cobra_demo_mic --audio_device_index 10
+cobra_demo_mic --app_id APP_ID --audio_device_index 10
 ```
 
 If the problem persists we suggest storing the recorded audio into a file for inspection. This can be achieved by:
 
 ```console
-cobra_demo_mic --audio_device_index 10 --output_path ~/test.wav
+cobra_demo_mic --app_id APP_ID --audio_device_index 10 --output_path ~/test.wav
 ```
 
 If after listening to stored file there is no apparent problem detected please open an issue.
@@ -88,13 +88,12 @@ benchmarking. It accepts 16kHz audio files. Cobra processes a single-channel aud
 provided it only processes the first (left) channel. The following processes a file looking for voice activities:
 
 ```console
-cobra_demo_file --input_audio_path ${AUDIO_PATH}
+cobra_demo_file --app_id APP_ID --input_audio_path ${AUDIO_PATH}
 ```
-
-The threshold of the engine can be tuned using the `threshold` input argument:
+where `APP_ID` is an AppID which should be obtained from [Picovoice Console](https://picovoice.ai/console/). The threshold of the engine can be tuned using the `threshold` input argument:
 
 ```console
-cobra_demo_file --input_audio_path ${AUDIO_PATH} \
+cobra_demo_file --app_id APP_ID --input_audio_path ${AUDIO_PATH} \
  --threshold 0.9
 ```
 
