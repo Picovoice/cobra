@@ -66,14 +66,19 @@ Then, using Xcode, open the generated CobraDemo.xcworkspace and run the applicat
 Build the demo:
 
 ```console
-gcc -std=c99 -O3 -o demo/c/cobra_demo_mic -I include/  demo/c/cobra_demo_mic.c -ldl -lasound
+cmake -S demo/c/. -B demo/c/build && cmake --build demo/c/build --target cobra_demo_mic
 ```
 
-Find the name of audio input device (microphone) on your computer using `arecord -L` and then from the root of the
-repository run the demo:
+To list the available audio input devices:
 
 ```console
-./demo/c/cobra_demo_mic ${LIBRARY_PATH} ${THRESHOLD} ${INPUT_AUDIO_DEVICE}
+./demo/c/build/cobra_demo_mic --show_audio_devices
+```
+
+To run the demo:
+
+```console
+./demo/c/build/cobra_demo_mic ${LIBRARY_PATH} ${APP_ID} ${THRESHOLD} ${AUDIO_DEVICE_INDEX}
 ```
 
 Replace `${LIBRARY_PATH}` with path to appropriate library available under [lib](/lib), Replace `${THRESHOLD}` with voice
@@ -270,9 +275,9 @@ The Cobra package [@picovoice/cobra-web-worker](https://www.npmjs.com/package/@p
         const threshold = 0.8;
         if voiceProbability >= threshold {
           const timestamp = new Date();
-          console.log("Voice detected with probability of " + 
-            voiceProbability.toFixed(2) + 
-            " at " + 
+          console.log("Voice detected with probability of " +
+            voiceProbability.toFixed(2) +
+            " at " +
             timestamp.toString()
           );
         }
@@ -325,14 +330,14 @@ npm install @picovoice/cobra-web-worker @picovoice/web-voice-processor
 ```javascript
 import { WebVoiceProcessor } from "@picovoice/web-voice-processor"
 import { CobraWorkerFactory } from "@picovoice/cobra-web-worker";
-  
+
 function cobraCallback(voiceProbability) {
   const threshold = 0.8;
   if voiceProbability >= threshold {
     const timestamp = new Date();
-    console.log("Voice detected with probability of " + 
-      voiceProbability.toFixed(2) + 
-      " at " + 
+    console.log("Voice detected with probability of " +
+      voiceProbability.toFixed(2) +
+      " at " +
       timestamp.toString()
     );
   }
