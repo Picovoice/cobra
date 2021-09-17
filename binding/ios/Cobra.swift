@@ -13,20 +13,13 @@ public enum CobraError: Error {
     case invalidArgument(message:String)
     case io
     case outOfMemory
-    case activationServerError
-    case invalidAppID
-    case connectionFailed
-    case requestFailed
-    case unexpectedResponse
-    case licenseExpired
-    case licenseUsageLimitReached
-    case licenseDeviceLimitReached
-    case appIDThrottled
-    case malformedRequest
-    case invalidDeviceID
-    case appIDNotFound
-    case appIDPermissionError
-    case appIDDisabled
+    case keyError
+    case invalidState
+    case runtimeError
+    case activationError
+    case activationLimitReached
+    case activationThrottled
+    case activationRefused
 }
 
 /// iOS (Swift) binding for Cobra voice activity detection (VAD) engine. It detects speech signals within an incoming
@@ -113,34 +106,20 @@ public class Cobra {
             throw CobraError.outOfMemory
         case PV_STATUS_INVALID_ARGUMENT:
             throw CobraError.invalidArgument(message:"Cobra rejected one of the provided arguments.")
-        case PV_STATUS_ACTIVATION_SERVER_ERROR:
-            throw CobraError.activationServerError
-        case PV_STATUS_INVALID_APP_ID:
-            throw CobraError.invalidAppID
-        case PV_STATUS_CONNECTION_FAILED:
-            throw CobraError.connectionFailed
-        case PV_STATUS_REQUEST_FAILED:
-            throw CobraError.requestFailed
-        case PV_STATUS_UNEXPECTED_RESPONSE:
-            throw CobraError.unexpectedResponse
-        case PV_STATUS_LICENSE_EXPIRED:
-            throw CobraError.licenseExpired
-        case PV_STATUS_LICENSE_USAGE_LIMIT_REACHED:
-            throw CobraError.licenseUsageLimitReached
-        case PV_STATUS_LICENSE_DEVICE_LIMIT_REACHED:
-            throw CobraError.licenseDeviceLimitReached
-        case PV_STATUS_APP_ID_THROTTLED:
-            throw CobraError.appIDThrottled
-        case PV_STATUS_MALFORMED_REQUEST:
-            throw CobraError.malformedRequest
-        case PV_STATUS_INVALID_DEVICE_ID:
-            throw CobraError.invalidDeviceID
-        case PV_STATUS_APP_ID_NOT_FOUND:
-            throw CobraError.appIDNotFound
-        case PV_STATUS_APP_ID_PERMISSION_ERROR:
-            throw CobraError.appIDPermissionError
-        case PV_STATUS_APP_ID_DISABLED:
-            throw CobraError.appIDDisabled
+        case PV_STATUS_KEY_ERROR:
+            throw CobraError.keyError
+        case PV_STATUS_INVALID_STATE:
+            throw CobraError.invalidState
+        case PV_STATUS_RUNTIME_ERROR:
+            throw CobraError.runtimeError
+        case PV_STATUS_ACTIVATION_ERROR:
+            throw CobraError.activationError
+        case PV_STATUS_ACTIVATION_LIMIT_REACHED:
+            throw CobraError.activationLimitReached
+        case PV_STATUS_ACTIVATION_THROTTLED:
+            throw CobraError.activationThrottled
+        case PV_STATUS_ACTIVATION_REFUSED:
+            throw CobraError.activationRefused
         default:
             return
         }
