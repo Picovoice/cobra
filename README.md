@@ -78,7 +78,7 @@ To list the available audio input devices:
 To run the demo:
 
 ```console
-./demo/c/cobra_demo_mic ${LIBRARY_PATH} ${THRESHOLD} ${INPUT_AUDIO_DEVICE}
+./demo/c/build/cobra_demo_mic ${LIBRARY_PATH} ${THRESHOLD} ${INPUT_AUDIO_DEVICE}
 ```
 
 Replace `${LIBRARY_PATH}` with path to appropriate library available under [lib](/lib), Replace `${THRESHOLD}` with voice
