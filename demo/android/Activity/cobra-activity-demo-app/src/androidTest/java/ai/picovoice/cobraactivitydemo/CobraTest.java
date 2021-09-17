@@ -105,16 +105,16 @@ public class CobraTest {
 
         cobra.delete();
 
-        float[] voice_probability_ref = {
+        float[] voiceProbabilityRef = {
             0.880f, 0.881f, 0.992f, 0.999f, 0.999f,
             0.999f, 0.999f, 0.999f, 0.999f, 0.999f,
             0.999f, 0.999f, 0.999f, 0.999f, 0.999f,
             0.999f, 0.997f, 0.978f, 0.901f
         };
 
-        assertSame(voice_probability_ref.length, detectionResults.size());
-        for (int i = 0; i < voice_probability_ref.length; i++) {
-            float error = voice_probability_ref[i] - detectionResults.get(i);
+        assertSame(voiceProbabilityRef.length, detectionResults.size());
+        for (int i = 0; i < voiceProbabilityRef.length; i++) {
+            float error = voiceProbabilityRef[i] - detectionResults.get(i);
             assertTrue(Math.abs(error) < 0.001);
         }
     }
