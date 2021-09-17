@@ -22,10 +22,9 @@ Create an instance of the engine
 ```python
 import pvcobra
 
-handle = pvcobra.create()
+handle = pvcobra.create(app_id=APP_ID)
 ```
-
-`handle` is an instance of Cobra that detects voice activities.
+where `APP_ID` is an AppID which should be obtained form [Picovoice Console](picovoice.ai/console/). `handle` is an instance of Cobra that detects voice activities.
 
 ```python
 def get_next_audio_frame():
