@@ -33,7 +33,7 @@ The Microphone demo opens an audio stream from a microphone and detects voice ac
 cobra_demo_mic --app_id APP_ID
 ```
 
-where `APP_ID` is an AppID which should be obtained from [Picovoice Console](picovoice.ai/console/). It is possible that the default audio input device recognized by PyAudio is not the one being used. There are a couple of debugging facilities baked into the demo application to solve this. First, type the following into the console:
+where `APP_ID` is an AppID which should be obtained from [Picovoice Console](https://picovoice.ai/console/). It is possible that the default audio input device recognized by PyAudio is not the one being used. There are a couple of debugging facilities baked into the demo application to solve this. First, type the following into the console:
 
 ```console
 cobra_demo_mic --show_audio_devices
@@ -90,7 +90,7 @@ provided it only processes the first (left) channel. The following processes a f
 ```console
 cobra_demo_file --app_id APP_ID --input_audio_path ${AUDIO_PATH}
 ```
-where `APP_ID` is an AppID which should be obtained from [Picovoice Console](picovoice.ai/console/). The threshold of the engine can be tuned using the `threshold` input argument:
+where `APP_ID` is an AppID which should be obtained from [Picovoice Console](https://picovoice.ai/console/). The threshold of the engine can be tuned using the `threshold` input argument:
 
 ```console
 cobra_demo_file --app_id APP_ID --input_audio_path ${AUDIO_PATH} \

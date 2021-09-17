@@ -24,7 +24,7 @@ import pvcobra
 
 handle = pvcobra.create(app_id=APP_ID)
 ```
-where `APP_ID` is an AppID which should be obtained from [Picovoice Console](picovoice.ai/console/). `handle` is an instance of Cobra that detects voice activities.
+where `APP_ID` is an AppID which should be obtained from [Picovoice Console](https://picovoice.ai/console/). `handle` is an instance of Cobra that detects voice activities.
 
 ```python
 def get_next_audio_frame():
