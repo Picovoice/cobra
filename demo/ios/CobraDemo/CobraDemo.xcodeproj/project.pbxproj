@@ -14,7 +14,21 @@
 		02A11961268D40AD00A2AC99 /* PvCobra.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02A11960268D40AD00A2AC99 /* PvCobra.xcframework */; };
 		02A11962268D40AD00A2AC99 /* PvCobra.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 02A11960268D40AD00A2AC99 /* PvCobra.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		02A11964268F941400A2AC99 /* Cobra.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A11963268F941300A2AC99 /* Cobra.swift */; };
+		C7969FC826F53FBB0013DD41 /* CobraDemoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7969FC726F53FBB0013DD41 /* CobraDemoUITests.swift */; };
+		C7969FCF26F547280013DD41 /* Cobra.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A11963268F941300A2AC99 /* Cobra.swift */; };
+		C7969FD126F5474F0013DD41 /* sample.wav in Resources */ = {isa = PBXBuildFile; fileRef = C7969FD026F5474F0013DD41 /* sample.wav */; };
+		C7969FD526F552530013DD41 /* PvCobra.xcframework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 02A11960268D40AD00A2AC99 /* PvCobra.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C7969FCA26F53FBB0013DD41 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 02A1193D268D39A700A2AC99 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 02A11944268D39A700A2AC99;
+			remoteInfo = CobraDemo;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		02A1195B268D39D200A2AC99 /* Embed Frameworks */ = {
@@ -28,6 +42,16 @@
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C7969FD426F552430013DD41 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				C7969FD526F552530013DD41 /* PvCobra.xcframework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -39,6 +63,10 @@
 		02A1195E268D3FD600A2AC99 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
 		02A11960268D40AD00A2AC99 /* PvCobra.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = PvCobra.xcframework; path = ../../../lib/ios/PvCobra.xcframework; sourceTree = "<group>"; };
 		02A11963268F941300A2AC99 /* Cobra.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Cobra.swift; path = ../../../../binding/ios/Cobra.swift; sourceTree = "<group>"; };
+		C7969FC526F53FBB0013DD41 /* CobraDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CobraDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C7969FC726F53FBB0013DD41 /* CobraDemoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CobraDemoUITests.swift; sourceTree = "<group>"; };
+		C7969FC926F53FBB0013DD41 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C7969FD026F5474F0013DD41 /* sample.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sample.wav; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,6 +78,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C7969FC226F53FBB0013DD41 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -57,6 +92,7 @@
 			isa = PBXGroup;
 			children = (
 				02A11947268D39A700A2AC99 /* CobraDemo */,
+				C7969FC626F53FBB0013DD41 /* CobraDemoUITests */,
 				02A11946268D39A700A2AC99 /* Products */,
 				02A11957268D39D100A2AC99 /* Frameworks */,
 			);
@@ -66,6 +102,7 @@
 			isa = PBXGroup;
 			children = (
 				02A11945268D39A700A2AC99 /* CobraDemo.app */,
+				C7969FC526F53FBB0013DD41 /* CobraDemoUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -91,6 +128,16 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		C7969FC626F53FBB0013DD41 /* CobraDemoUITests */ = {
+			isa = PBXGroup;
+			children = (
+				C7969FD026F5474F0013DD41 /* sample.wav */,
+				C7969FC726F53FBB0013DD41 /* CobraDemoUITests.swift */,
+				C7969FC926F53FBB0013DD41 /* Info.plist */,
+			);
+			path = CobraDemoUITests;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -112,6 +159,25 @@
 			productReference = 02A11945268D39A700A2AC99 /* CobraDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
+		C7969FC426F53FBB0013DD41 /* CobraDemoUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C7969FCE26F53FBB0013DD41 /* Build configuration list for PBXNativeTarget "CobraDemoUITests" */;
+			buildPhases = (
+				C7969FC126F53FBB0013DD41 /* Sources */,
+				C7969FC226F53FBB0013DD41 /* Frameworks */,
+				C7969FC326F53FBB0013DD41 /* Resources */,
+				C7969FD426F552430013DD41 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C7969FCB26F53FBB0013DD41 /* PBXTargetDependency */,
+			);
+			name = CobraDemoUITests;
+			productName = CobraDemoUITests;
+			productReference = C7969FC526F53FBB0013DD41 /* CobraDemoUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -123,6 +189,10 @@
 				TargetAttributes = {
 					02A11944268D39A700A2AC99 = {
 						CreatedOnToolsVersion = 12.5;
+					};
+					C7969FC426F53FBB0013DD41 = {
+						CreatedOnToolsVersion = 12.5.1;
+						TestTargetID = 02A11944268D39A700A2AC99;
 					};
 				};
 			};
@@ -140,6 +210,7 @@
 			projectRoot = "";
 			targets = (
 				02A11944268D39A700A2AC99 /* CobraDemo */,
+				C7969FC426F53FBB0013DD41 /* CobraDemoUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -150,6 +221,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				02A1194D268D39AB00A2AC99 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C7969FC326F53FBB0013DD41 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C7969FD126F5474F0013DD41 /* sample.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -167,7 +246,24 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C7969FC126F53FBB0013DD41 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C7969FC826F53FBB0013DD41 /* CobraDemoUITests.swift in Sources */,
+				C7969FCF26F547280013DD41 /* Cobra.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C7969FCB26F53FBB0013DD41 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 02A11944268D39A700A2AC99 /* CobraDemo */;
+			targetProxy = C7969FCA26F53FBB0013DD41 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		02A11952268D39AB00A2AC99 /* Debug */ = {
@@ -293,7 +389,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "";
-				DEVELOPMENT_TEAM = 65723695GD;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = CobraDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -315,7 +411,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "";
-				DEVELOPMENT_TEAM = 65723695GD;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = CobraDemo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -327,6 +423,44 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		C7969FCC26F53FBB0013DD41 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = EU9HUJJU2X;
+				INFOPLIST_FILE = CobraDemoUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = ai.picovoice.CobraDemoUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = CobraDemo;
+			};
+			name = Debug;
+		};
+		C7969FCD26F53FBB0013DD41 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = EU9HUJJU2X;
+				INFOPLIST_FILE = CobraDemoUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = ai.picovoice.CobraDemoUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = CobraDemo;
 			};
 			name = Release;
 		};
@@ -347,6 +481,15 @@
 			buildConfigurations = (
 				02A11955268D39AB00A2AC99 /* Debug */,
 				02A11956268D39AB00A2AC99 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C7969FCE26F53FBB0013DD41 /* Build configuration list for PBXNativeTarget "CobraDemoUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C7969FCC26F53FBB0013DD41 /* Debug */,
+				C7969FCD26F53FBB0013DD41 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
