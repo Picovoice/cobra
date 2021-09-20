@@ -47,10 +47,14 @@ jobs:
       run: chmod +x gradlew
 
     - name: Build app
-      run: ./gradlew assembleDebug
+      run: ./gradlew
+        -PtestingAppID="${{secrets.PV_VALID_APPID}}"
+        assembleDebug
 
     - name: Build androidTest
-      run: ./gradlew assembleAndroidTest
+      run: ./gradlew
+        -PtestingAppID="${{secrets.PV_VALID_APPID}}"
+        assembleAndroidTest
 
     - name: Run tests on AppCenter
       run: appcenter test run espresso 

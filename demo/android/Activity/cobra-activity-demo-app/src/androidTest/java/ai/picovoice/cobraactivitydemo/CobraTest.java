@@ -68,6 +68,8 @@ public class CobraTest {
         assetManager = testContext.getAssets();
         extractAssetsRecursively("test_resources");
         testResourcesPath = new File(appContext.getFilesDir(), "test_resources").getAbsolutePath();
+
+        appID = appContext.getString(R.string.testingAppID);
     }
 
     @Test
