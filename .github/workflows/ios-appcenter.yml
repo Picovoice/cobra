@@ -15,7 +15,7 @@ on:
       
 defaults:
   run:
-    working-directory: demo/ios
+    working-directory: demo/ios/CobraDemo
     
 jobs:
   build:
@@ -41,7 +41,7 @@ jobs:
       - name: XCode Build
         run: xcrun xcodebuild build-for-testing 
           -configuration Debug 
-          -workspace CobraDemo.xcworkspace
+          -project CobraDemo.xcodeproj
           -sdk iphoneos 
           -scheme CobraDemo
           -derivedDataPath ddp 
