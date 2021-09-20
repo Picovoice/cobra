@@ -6,13 +6,15 @@ on:
     branches: [ appcenter-github-actions ]
     paths: 
       - 'DELETEME.TXT'
-      - 'demo/android/Activity/cobra-activity-demo-app/build.gradle'
+      - 'demo/android/Activity'
+      - '!demo/android/Activity/README.md'
     
   pull_request:
     branches: [ appcenter-github-actions ]
     paths: 
       - 'DELETEME.TXT'
-      - 'demo/android/Activity/cobra-activity-demo-app/build.gradle'
+      - 'demo/android/Activity'
+      - '!demo/android/Activity/README.md'
 
 defaults:
   run:

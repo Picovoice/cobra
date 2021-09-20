@@ -6,12 +6,14 @@ on:
     branches: [ appcenter-github-actions ]
     paths: 
       - 'DELETEME.TXT'
-      - 'demo/ios/ForegroundApp/Podfile.lock'
+      - 'demo/ios'
+      - '!demo/ios/README.md'
   pull_request:
     branches: [ appcenter-github-actions ]
     paths: 
       - 'DELETEME.TXT'
-      - 'demo/ios/ForegroundApp/Podfile.lock'
+      - 'demo/ios'
+      - '!demo/ios/README.md'
       
 defaults:
   run:
