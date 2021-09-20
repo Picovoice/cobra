@@ -12,7 +12,7 @@ import CobraDemo
 
 class CobraDemoUITests: XCTestCase {
     
-    private var appID = "{TESTING_APP_ID_HERE}";
+    private let appID = "{TESTING_APP_ID_HERE}";
     
     override func setUpWithError() throws {
         continueAfterFailure = true
