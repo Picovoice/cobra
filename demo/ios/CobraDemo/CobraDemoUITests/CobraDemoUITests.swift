@@ -12,17 +12,18 @@ import CobraDemo
 
 class CobraDemoUITests: XCTestCase {
     
-    private let APP_ID = ""
+    private var appID = "";
     
     override func setUpWithError() throws {
         continueAfterFailure = true
+        appID = ProcessInfo.processInfo.environment["PV_TESTING_APP_ID"]!;
     }
 
     override func tearDownWithError() throws {
     }
 
     func testProcess() throws {
-        let cobra:Cobra = try Cobra(appID: APP_ID)
+        let cobra:Cobra = try Cobra(appID: appID)
         
         let bundle = Bundle(for: type(of: self))
         let fileURL:URL = bundle.url(forResource: "sample", withExtension: "wav")!

@@ -69,7 +69,7 @@ public class CobraTest {
         extractAssetsRecursively("test_resources");
         testResourcesPath = new File(appContext.getFilesDir(), "test_resources").getAbsolutePath();
 
-        appID = appContext.getString(R.string.testingAppID);
+        appID = appContext.getString(R.string.pvTestingAppID);
     }
 
     @Test
