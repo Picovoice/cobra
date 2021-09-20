@@ -52,6 +52,6 @@ jobs:
           --token ${{secrets.APPCENTERAPITOKEN}}
           --app "Picovoice/Cobra-iOS"
           --devices "Picovoice/ios-single" 
-          --test-series "porcupine-ios" 
+          --test-series "cobra-ios" 
           --locale "en_US" 
           --build-dir ddp/Build/Products/Debug-iphoneos

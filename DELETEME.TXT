@@ -3,4 +3,4 @@ AA
 QWERTY
 asdf2
 adrid
-trigger build
+trigger buildddy
