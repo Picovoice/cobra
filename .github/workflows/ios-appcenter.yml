@@ -3,15 +3,13 @@ name: iOS AppCenter Tests
 on:
   workflow_dispatch:
   push:
-    branches: [ appcenter-github-actions ]
+    branches: [ master ]
     paths: 
-      - 'DELETEME.TXT'
       - 'demo/ios'
       - '!demo/ios/README.md'
   pull_request:
-    branches: [ appcenter-github-actions ]
+    branches: [ master ]
     paths: 
-      - 'DELETEME.TXT'
       - 'demo/ios'
       - '!demo/ios/README.md'
       
