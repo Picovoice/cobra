@@ -38,9 +38,6 @@ jobs:
       - name: Make build dir
         run: mkdir ddp
 
-      - name: Run Cocoapods
-        run: pod install
-
       - name: XCode Build
         run: xcrun xcodebuild build-for-testing 
           -configuration Debug 
