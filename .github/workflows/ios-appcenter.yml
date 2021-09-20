@@ -40,6 +40,10 @@ jobs:
       - name: Make build dir
         run: mkdir ddp
 
+      - name: Inject AppID
+        run: sed -i '.bak' 's:{TESTING_APP_ID_HERE}:${{secrets.PV_VALID_APPID}}:'
+          CobraDemoUITests/CobraDemoUITests.swift
+
       - name: XCode Build
         run: xcrun xcodebuild build-for-testing 
           -configuration Debug 
@@ -47,7 +51,6 @@ jobs:
           -sdk iphoneos 
           -scheme CobraDemo
           -derivedDataPath ddp
-          PV_TESTING_APP_ID='${{secrets.PV_VALID_APPID}}'
           CODE_SIGNING_ALLOWED=NO
 
       - name: Run Tests on AppCenter

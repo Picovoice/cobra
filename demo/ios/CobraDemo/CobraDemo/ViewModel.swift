@@ -12,7 +12,7 @@ import Foundation
 
 class ViewModel: ObservableObject {
     
-    private let APP_ID = "{YOUR_APP_ID HERE}"
+    private let APP_ID = "{YOUR_APP_ID_HERE}"
     
     private let voiceDetectionThreshold:Float32 = 0.5
     

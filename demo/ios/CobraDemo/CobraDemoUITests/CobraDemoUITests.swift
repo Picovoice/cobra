@@ -12,11 +12,10 @@ import CobraDemo
 
 class CobraDemoUITests: XCTestCase {
     
-    private var appID = "";
+    private var appID = "{TESTING_APP_ID_HERE}";
     
     override func setUpWithError() throws {
         continueAfterFailure = true
-        appID = ProcessInfo.processInfo.environment["PV_TESTING_APP_ID"]!;
     }
 
     override func tearDownWithError() throws {
