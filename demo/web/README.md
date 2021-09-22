@@ -5,7 +5,7 @@ This is a basic demo to show how to use Cobra for web browsers, using the IIFE v
 ## Install & run
 
 1. Use `yarn` or `npm` to install the dependencies
-2. Run `start` script to start a local web server hosting the demo.
+1. Run `start` script to start a local web server hosting the demo.
 
 ```console
 yarn
