@@ -18,6 +18,7 @@ for (const flavour of ["factory"]) {
   const projectLocation = join(
     projectRootPath,
     `cobra-web-${flavour}`,
+    "test"
   );
 
   // Create the output directory structure, if it doesn't exist
