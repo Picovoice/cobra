@@ -38,9 +38,9 @@ async function init(appId: string, start = true): Promise<void> {
   postMessage(cobraReadyMessage, undefined);
 }
 
-function process(inputFrame: Int16Array): void {
+async function process(inputFrame: Int16Array): Promise<void> {
   if (cobraEngine !== null && !paused) {
-    const voiceProbability = cobraEngine.process(inputFrame);
+    const voiceProbability = await cobraEngine.process(inputFrame);
     const cobraDetectMessage: CobraWorkerResponseVoiceProbability = {
       command: 'cobra-detect',
       voiceProbability: voiceProbability,
@@ -50,9 +50,9 @@ function process(inputFrame: Int16Array): void {
   }
 }
 
-function release(): void {
+async function release(): Promise<void> {
   if (cobraEngine !== null) {
-    cobraEngine.release();
+    await cobraEngine.release();
   }
 
   cobraEngine = null;
