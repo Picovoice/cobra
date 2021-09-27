@@ -72,9 +72,9 @@ export type CobraWorkerResponse =
 
 export interface CobraEngine {
   /** Release all resources acquired by Cobra */
-  release(): void;
+  release(): Promise<void>;
   /** Process a single frame of 16-bit 16kHz PCM audio */
-  process(frame: Int16Array): number;
+  process(frame: Int16Array): Promise<number>;
   /** The version of the Cobra engine */
   readonly version: string;
   /** The sampling rate of audio expected by the Cobra engine */

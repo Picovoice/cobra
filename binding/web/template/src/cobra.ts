@@ -8,6 +8,7 @@
     an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
     specific language governing permissions and limitations under the License.
 */
+import * as Asyncify from "asyncify-wasm";
 
 import { CobraEngine } from './cobra_types';
 import { COBRA_WASM_BASE64 } from './cobra_b64';
@@ -90,8 +91,8 @@ export class Cobra implements CobraEngine {
   /**
    * Releases resources acquired by WebAssembly module.
    */
-  public release(): void {
-    this._pvCobraDelete(this._objectAddress);
+  public async release(): Promise<void> {
+    await this._pvCobraDelete(this._objectAddress);
   }
 
   /**
@@ -102,7 +103,7 @@ export class Cobra implements CobraEngine {
    * @param pcm - A frame of audio with properties described above.
    * @return Probability of voice activity. It is a floating-point number within [0, 1].
    */
-  public process(pcm: Int16Array): number {
+  public async process(pcm: Int16Array): Promise<number> {
     if (!(pcm instanceof Int16Array)) {
       throw new Error("The argument 'pcm' must be provided as an Int16Array");
     }
@@ -111,7 +112,7 @@ export class Cobra implements CobraEngine {
       this._inputBufferAddress / Int16Array.BYTES_PER_ELEMENT
     );
 
-    const status = this._pvCobraProcess(
+    const status = await this._pvCobraProcess(
       this._objectAddress,
       this._inputBufferAddress,
       this._voiceProbabilityAddress
@@ -121,7 +122,7 @@ export class Cobra implements CobraEngine {
       throw new Error(
         `process failed with status ${arrayBufferToStringAtIndex(
           memoryBuffer,
-          this._pvStatusToString(status)
+          await this._pvStatusToString(status)
         )}`
       );
     }
@@ -144,6 +145,7 @@ export class Cobra implements CobraEngine {
   get frameLength(): number {
     return Cobra._frameLength;
   }
+
   /**
    * Creates an instance of the the Picovoice Cobra voice activity detection (VAD) engine.
    * Behind the scenes, it requires the WebAssembly code to load and initialize before
@@ -274,95 +276,77 @@ export class Cobra implements CobraEngine {
       responseSizeAddress: number,
       responseCodeAddress: number
     ): Promise<void> {
-      if (!waitingForAsyncCall) {
-        const httpMethod = arrayBufferToStringAtIndex(
-          memoryBufferUint8,
-          httpMethodAddress
-        );
-        const serverName = arrayBufferToStringAtIndex(
-          memoryBufferUint8,
-          serverNameAddress
-        );
-        const endpoint = arrayBufferToStringAtIndex(
-          memoryBufferUint8,
-          endpointAddress
-        );
-        const header = arrayBufferToStringAtIndex(
-          memoryBufferUint8,
-          headerAddress
-        );
-        const body = arrayBufferToStringAtIndex(memoryBufferUint8, bodyAddress);
+      const httpMethod = arrayBufferToStringAtIndex(
+        memoryBufferUint8,
+        httpMethodAddress
+      );
+      const serverName = arrayBufferToStringAtIndex(
+        memoryBufferUint8,
+        serverNameAddress
+      );
+      const endpoint = arrayBufferToStringAtIndex(
+        memoryBufferUint8,
+        endpointAddress
+      );
+      const header = arrayBufferToStringAtIndex(
+        memoryBufferUint8,
+        headerAddress
+      );
+      const body = arrayBufferToStringAtIndex(memoryBufferUint8, bodyAddress);
 
-        const headerObject = stringHeaderToObject(header);
+      const headerObject = stringHeaderToObject(header);
 
-        asyncify_start_unwind(asyncDataAddress);
-        waitingForAsyncCall = true;
+      let response: Response;
+      let responseText: String;
+      let statusCode: number;
 
-        let response: Response;
-        let responseText: String;
-        let statusCode: number;
-
+      try {
+        response = await fetchWithTimeout(
+          'https://' + serverName + endpoint,
+          {
+            method: httpMethod,
+            headers: headerObject,
+            body: body,
+          },
+          timeoutMs
+        );
+        statusCode = response.status;
+      } catch (error) {
+        statusCode = 0;
+      }
+      // @ts-ignore
+      if (response !== undefined) {
         try {
-          response = await fetchWithTimeout(
-            'https://' + serverName + endpoint,
-            {
-              method: httpMethod,
-              headers: headerObject,
-              body: body,
-            },
-            timeoutMs
-          );
-          statusCode = response.status;
+          responseText = await response.text();
         } catch (error) {
-          statusCode = 0;
+          responseText = '';
+          statusCode = 1;
         }
-        // @ts-ignore
-        if (response !== undefined) {
-          try {
-            responseText = await response.text();
-          } catch (error) {
-            responseText = '';
-            statusCode = 1;
-          }
 
-          const responseAddress = aligned_alloc(
-            Int8Array.BYTES_PER_ELEMENT,
-            (responseText.length + 1) * Int8Array.BYTES_PER_ELEMENT
-          );
-          if (responseAddress === 0) {
-            throw new Error('malloc failed: Cannot allocate memory');
-          }
-
-          memoryBufferInt32[
-            responseSizeAddress / Int32Array.BYTES_PER_ELEMENT
-          ] = responseText.length + 1;
-          memoryBufferInt32[
-            responseAddressAddress / Int32Array.BYTES_PER_ELEMENT
-          ] = responseAddress;
-
-          for (let i = 0; i < responseText.length; i++) {
-            memoryBufferUint8[responseAddress + i] = responseText.charCodeAt(i);
-          }
-          memoryBufferUint8[responseAddress + responseText.length] = 0;
+        const responseAddress = await aligned_alloc(
+          Int8Array.BYTES_PER_ELEMENT,
+          (responseText.length + 1) * Int8Array.BYTES_PER_ELEMENT
+        );
+        if (responseAddress === 0) {
+          throw new Error('malloc failed: Cannot allocate memory');
         }
 
         memoryBufferInt32[
-          responseCodeAddress / Int32Array.BYTES_PER_ELEMENT
-        ] = statusCode;
+          responseSizeAddress / Int32Array.BYTES_PER_ELEMENT
+        ] = responseText.length + 1;
+        memoryBufferInt32[
+          responseAddressAddress / Int32Array.BYTES_PER_ELEMENT
+        ] = responseAddress;
 
-        asyncify_start_rewind(asyncDataAddress);
-        status = pv_cobra_init();
-        if (status !== 0) {
-          after_pv_cobra_init(
-            status,
-            asyncCallResolvePromise,
-            asyncCallRejectPromise
-          );
+        for (let i = 0; i < responseText.length; i++) {
+          memoryBufferUint8[responseAddress + i] = responseText.charCodeAt(i);
         }
-      } else {
-        asyncify_stop_rewind();
-        waitingForAsyncCall = false;
+        memoryBufferUint8[responseAddress + responseText.length] = 0;
       }
+
+      memoryBufferInt32[
+        responseCodeAddress / Int32Array.BYTES_PER_ELEMENT
+      ] = statusCode;
     };
 
     const pvFileLoadWasm = async function (
@@ -371,54 +355,36 @@ export class Cobra implements CobraEngine {
       contentAddressAddress: number,
       succeededAddress: number
     ): Promise<void> {
-      if (!waitingForAsyncCall) {
-        asyncify_start_unwind(asyncDataAddress);
-        waitingForAsyncCall = true;
+      const path = arrayBufferToStringAtIndex(memoryBufferUint8, pathAddress);
+      try {
+        const contentBase64 = await pvFileOperationHelper({
+          command: 'file-load',
+          path: path,
+        });
+        const contentBuffer = base64ToUint8Array(contentBase64);
+        const contentAddress = await aligned_alloc(
+          Uint8Array.BYTES_PER_ELEMENT,
+          contentBuffer.length * Uint8Array.BYTES_PER_ELEMENT
+        );
 
-        const path = arrayBufferToStringAtIndex(memoryBufferUint8, pathAddress);
-        try {
-          const contentBase64 = await pvFileOperationHelper({
-            command: 'file-load',
-            path: path,
-          });
-          const contentBuffer = base64ToUint8Array(contentBase64);
-          const contentAddress = aligned_alloc(
-            Uint8Array.BYTES_PER_ELEMENT,
-            contentBuffer.length * Uint8Array.BYTES_PER_ELEMENT
-          );
-
-          if (contentAddress === 0) {
-            throw new Error('malloc failed: Cannot allocate memory');
-          }
-
-          memoryBufferInt32[
-            numContentBytesAddress / Int32Array.BYTES_PER_ELEMENT
-          ] = contentBuffer.byteLength;
-          memoryBufferInt32[
-            contentAddressAddress / Int32Array.BYTES_PER_ELEMENT
-          ] = contentAddress;
-          memoryBufferUint8.set(contentBuffer, contentAddress);
-          memoryBufferInt32[
-            succeededAddress / Int32Array.BYTES_PER_ELEMENT
-          ] = 1;
-        } catch (error) {
-          memoryBufferInt32[
-            succeededAddress / Int32Array.BYTES_PER_ELEMENT
-          ] = 0;
+        if (contentAddress === 0) {
+          throw new Error('malloc failed: Cannot allocate memory');
         }
 
-        asyncify_start_rewind(asyncDataAddress);
-        status = pv_cobra_init();
-        if (status !== 0) {
-          after_pv_cobra_init(
-            status,
-            asyncCallResolvePromise,
-            asyncCallRejectPromise
-          );
-        }
-      } else {
-        asyncify_stop_rewind();
-        waitingForAsyncCall = false;
+        memoryBufferInt32[
+          numContentBytesAddress / Int32Array.BYTES_PER_ELEMENT
+        ] = contentBuffer.byteLength;
+        memoryBufferInt32[
+          contentAddressAddress / Int32Array.BYTES_PER_ELEMENT
+        ] = contentAddress;
+        memoryBufferUint8.set(contentBuffer, contentAddress);
+        memoryBufferInt32[
+          succeededAddress / Int32Array.BYTES_PER_ELEMENT
+        ] = 1;
+      } catch (error) {
+        memoryBufferInt32[
+          succeededAddress / Int32Array.BYTES_PER_ELEMENT
+        ] = 0;
       }
     };
 
@@ -428,43 +394,25 @@ export class Cobra implements CobraEngine {
       contentAddress: number,
       succeededAddress: number
     ) {
-      if (!waitingForAsyncCall) {
-        asyncify_start_unwind(asyncDataAddress);
-        waitingForAsyncCall = true;
-
-        const path = arrayBufferToStringAtIndex(memoryBufferUint8, pathAddress);
-        const content = arrayBufferToBase64AtIndex(
-          memoryBufferUint8,
-          numContentBytes,
-          contentAddress
-        );
-        try {
-          await pvFileOperationHelper({
-            command: 'file-save',
-            path: path,
-            content: content,
-          });
-          memoryBufferInt32[
-            succeededAddress / Int32Array.BYTES_PER_ELEMENT
-          ] = 1;
-        } catch (error) {
-          memoryBufferInt32[
-            succeededAddress / Int32Array.BYTES_PER_ELEMENT
-          ] = 0;
-        }
-
-        asyncify_start_rewind(asyncDataAddress);
-        status = pv_cobra_init();
-        if (status !== 0) {
-          after_pv_cobra_init(
-            status,
-            asyncCallResolvePromise,
-            asyncCallRejectPromise
-          );
-        }
-      } else {
-        asyncify_stop_rewind();
-        waitingForAsyncCall = false;
+      const path = arrayBufferToStringAtIndex(memoryBufferUint8, pathAddress);
+      const content = arrayBufferToBase64AtIndex(
+        memoryBufferUint8,
+        numContentBytes,
+        contentAddress
+      );
+      try {
+        await pvFileOperationHelper({
+          command: 'file-save',
+          path: path,
+          content: content,
+        });
+        memoryBufferInt32[
+          succeededAddress / Int32Array.BYTES_PER_ELEMENT
+        ] = 1;
+      } catch (error) {
+        memoryBufferInt32[
+          succeededAddress / Int32Array.BYTES_PER_ELEMENT
+        ] = 0;
       }
     };
 
@@ -473,39 +421,21 @@ export class Cobra implements CobraEngine {
       isExistsAddress: number,
       succeededAddress: number
     ) {
-      if (!waitingForAsyncCall) {
-        asyncify_start_unwind(asyncDataAddress);
-        waitingForAsyncCall = true;
+      const path = arrayBufferToStringAtIndex(memoryBufferUint8, pathAddress);
 
-        const path = arrayBufferToStringAtIndex(memoryBufferUint8, pathAddress);
-
-        try {
-          const isExists = await pvFileOperationHelper({
-            command: 'file-exists',
-            path: path,
-          });
-          memoryBufferUint8[isExistsAddress] = isExists === null ? 0 : 1;
-          memoryBufferInt32[
-            succeededAddress / Int32Array.BYTES_PER_ELEMENT
-          ] = 1;
-        } catch (error) {
-          memoryBufferInt32[
-            succeededAddress / Int32Array.BYTES_PER_ELEMENT
-          ] = 0;
-        }
-
-        asyncify_start_rewind(asyncDataAddress);
-        status = pv_cobra_init();
-        if (status !== 0) {
-          after_pv_cobra_init(
-            status,
-            asyncCallResolvePromise,
-            asyncCallRejectPromise
-          );
-        }
-      } else {
-        asyncify_stop_rewind();
-        waitingForAsyncCall = false;
+      try {
+        const isExists = await pvFileOperationHelper({
+          command: 'file-exists',
+          path: path,
+        });
+        memoryBufferUint8[isExistsAddress] = isExists === null ? 0 : 1;
+        memoryBufferInt32[
+          succeededAddress / Int32Array.BYTES_PER_ELEMENT
+        ] = 1;
+      } catch (error) {
+        memoryBufferInt32[
+          succeededAddress / Int32Array.BYTES_PER_ELEMENT
+        ] = 0;
       }
     };
 
@@ -513,45 +443,27 @@ export class Cobra implements CobraEngine {
       pathAddress: number,
       succeededAddress: number
     ) {
-      if (!waitingForAsyncCall) {
-        asyncify_start_unwind(asyncDataAddress);
-        waitingForAsyncCall = true;
-
-        const path = arrayBufferToStringAtIndex(memoryBufferUint8, pathAddress);
-        try {
-          await pvFileOperationHelper({
-            command: 'file-delete',
-            path: path,
-          });
-          memoryBufferInt32[
-            succeededAddress / Int32Array.BYTES_PER_ELEMENT
-          ] = 1;
-        } catch (error) {
-          memoryBufferInt32[
-            succeededAddress / Int32Array.BYTES_PER_ELEMENT
-          ] = 0;
-        }
-
-        asyncify_start_rewind(asyncDataAddress);
-        status = pv_cobra_init();
-        if (status !== 0) {
-          after_pv_cobra_init(
-            status,
-            asyncCallResolvePromise,
-            asyncCallRejectPromise
-          );
-        }
-      } else {
-        asyncify_stop_rewind();
-        waitingForAsyncCall = false;
+      const path = arrayBufferToStringAtIndex(memoryBufferUint8, pathAddress);
+      try {
+        await pvFileOperationHelper({
+          command: 'file-delete',
+          path: path,
+        });
+        memoryBufferInt32[
+          succeededAddress / Int32Array.BYTES_PER_ELEMENT
+        ] = 1;
+      } catch (error) {
+        memoryBufferInt32[
+          succeededAddress / Int32Array.BYTES_PER_ELEMENT
+        ] = 0;
       }
     };
 
-    const pvGetBrowserInfo = function (browserInfoAddressAddress: number) {
+    const pvGetBrowserInfo = async function (browserInfoAddressAddress: number) {
       const userAgent =
         navigator.userAgent !== undefined ? navigator.userAgent : 'unknown';
 
-      const browserInfoAddress = aligned_alloc(
+      const browserInfoAddress = await aligned_alloc(
         Uint8Array.BYTES_PER_ELEMENT,
         (userAgent.length + 1) * Uint8Array.BYTES_PER_ELEMENT
       );
@@ -596,20 +508,12 @@ export class Cobra implements CobraEngine {
     };
 
     const wasmCodeArray = base64ToUint8Array(COBRA_WASM_BASE64);
-    const { instance } = await WebAssembly.instantiate(
+    const { instance } = await Asyncify.instantiate(
       wasmCodeArray,
       importObject
     );
 
     const aligned_alloc = instance.exports.aligned_alloc as CallableFunction;
-    const asyncify_start_unwind = instance.exports
-      .asyncify_start_unwind as CallableFunction;
-    const asyncify_stop_unwind = instance.exports
-      .asyncify_stop_unwind as CallableFunction;
-    const asyncify_start_rewind = instance.exports
-      .asyncify_start_rewind as CallableFunction;
-    const asyncify_stop_rewind = instance.exports
-      .asyncify_stop_rewind as CallableFunction;
 
     const pv_cobra_version = instance.exports
       .pv_cobra_version as CallableFunction;
@@ -627,7 +531,7 @@ export class Cobra implements CobraEngine {
     const memoryBufferUint8 = new Uint8Array(memory.buffer);
     const memoryBufferInt32 = new Int32Array(memory.buffer);
 
-    const voiceProbabilityAddress = aligned_alloc(
+    const voiceProbabilityAddress = await aligned_alloc(
       Float32Array.BYTES_PER_ELEMENT,
       Float32Array.BYTES_PER_ELEMENT
     );
@@ -635,7 +539,7 @@ export class Cobra implements CobraEngine {
       throw new Error('malloc failed: Cannot allocate memory');
     }
 
-    const objectAddressAddress = aligned_alloc(
+    const objectAddressAddress = await aligned_alloc(
       Int32Array.BYTES_PER_ELEMENT,
       Int32Array.BYTES_PER_ELEMENT
     );
@@ -643,7 +547,7 @@ export class Cobra implements CobraEngine {
       throw new Error('malloc failed: Cannot allocate memory');
     }
 
-    const appIdAddress = aligned_alloc(
+    const appIdAddress = await aligned_alloc(
       Uint8Array.BYTES_PER_ELEMENT,
       (appId.length + 1) * Uint8Array.BYTES_PER_ELEMENT
     );
@@ -657,83 +561,49 @@ export class Cobra implements CobraEngine {
     }
     memoryBufferUint8[appIdAddress + appId.length] = 0;
 
-    let waitingForAsyncCall = false;
-
-    // allocate memory on stack for asyncify
-    // https://kripken.github.io/blog/wasm/2019/07/16/asyncify.html
-    const asyncDataAddress = 16;
-    memoryBufferInt32[asyncDataAddress >> 2] = asyncDataAddress + 8;
-    memoryBufferInt32[(asyncDataAddress + 4) >> 2] = 1024;
-
-    let asyncCallResolvePromise: EmptyPromise | null = null;
-    let asyncCallRejectPromise: EmptyPromise | null = null;
-
-    const returnPromise = new Promise((resolve, reject) => {
-      asyncCallResolvePromise = resolve;
-      asyncCallRejectPromise = reject;
-    });
-
-    let status = pv_cobra_init(appIdAddress, objectAddressAddress);
-    asyncify_stop_unwind();
-
-    if (status !== 0) {
-      after_pv_cobra_init(
-        status,
-        asyncCallResolvePromise,
-        asyncCallRejectPromise
+    let status = await pv_cobra_init(appIdAddress, objectAddressAddress);
+    if (status !== PV_STATUS_SUCCESS) {
+      throw new Error(
+        `'pv_cobra_init' failed with status ${arrayBufferToStringAtIndex(
+          memoryBufferUint8,
+          await pv_status_to_string(status)
+        )}`
       );
     }
+    const memoryBufferView = new DataView(memory.buffer);
+    const objectAddress = memoryBufferView.getInt32(
+      objectAddressAddress,
+      true
+    );
 
-    function after_pv_cobra_init(
-      status: number,
-      asyncCallResolvePromise: EmptyPromise | null,
-      asyncCallRejectPromise: EmptyPromise | null
-    ) {
-      if (status !== PV_STATUS_SUCCESS) {
-        // @ts-ignore
-        asyncCallRejectPromise(
-          `'pv_cobra_init' failed with status ${arrayBufferToStringAtIndex(
-            memoryBufferUint8,
-            pv_status_to_string(status)
-          )}`
-        );
-      }
+    const sampleRate = await pv_sample_rate();
+    const frameLength = await pv_cobra_frame_length();
+    const versionAddress = await pv_cobra_version();
+    const version = arrayBufferToStringAtIndex(
+      memoryBufferUint8,
+      versionAddress
+    );
 
-      const memoryBufferView = new DataView(memory.buffer);
-      const objectAddress = memoryBufferView.getInt32(
-        objectAddressAddress,
-        true
-      );
-
-      const sampleRate = pv_sample_rate();
-      const frameLength = pv_cobra_frame_length();
-      const version = arrayBufferToStringAtIndex(
-        memoryBufferUint8,
-        pv_cobra_version()
-      );
-
-      const inputBufferAddress = aligned_alloc(
-        Int16Array.BYTES_PER_ELEMENT,
-        frameLength * Int16Array.BYTES_PER_ELEMENT
-      );
-      if (inputBufferAddress === 0) {
-        throw new Error('malloc failed: Cannot allocate memory');
-      }
-      // @ts-ignore
-      asyncCallResolvePromise({
-        frameLength: frameLength,
-        inputBufferAddress: inputBufferAddress,
-        memory: memory,
-        objectAddress: objectAddress,
-        pvCobraDelete: pv_cobra_delete,
-        pvCobraProcess: pv_cobra_process,
-        pvStatusToString: pv_status_to_string,
-        sampleRate: sampleRate,
-        version: version,
-        voiceProbabilityAddress: voiceProbabilityAddress,
-      });
+    const inputBufferAddress = await aligned_alloc(
+      Int16Array.BYTES_PER_ELEMENT,
+      frameLength * Int16Array.BYTES_PER_ELEMENT
+    );
+    if (inputBufferAddress === 0) {
+      throw new Error('malloc failed: Cannot allocate memory');
     }
-    return returnPromise;
+
+    return {
+      frameLength: frameLength,
+      inputBufferAddress: inputBufferAddress,
+      memory: memory,
+      objectAddress: objectAddress,
+      pvCobraDelete: pv_cobra_delete,
+      pvCobraProcess: pv_cobra_process,
+      pvStatusToString: pv_status_to_string,
+      sampleRate: sampleRate,
+      version: version,
+      voiceProbabilityAddress: voiceProbabilityAddress,
+    };
   }
 }
 
