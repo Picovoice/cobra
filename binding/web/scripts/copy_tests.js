@@ -5,7 +5,7 @@ import { fileURLToPath } from "url";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 
-for (const flavour of ["worker"]) {
+for (const flavour of ["factory"]) {
   console.log(`Test: ${flavour}`);
 
   const projectRootPath = join(__dirname, "..");
