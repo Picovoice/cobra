@@ -4,6 +4,7 @@
 <head>
   <script src="dist/iife/index.js"></script>
   <script type="application/javascript">
+
     let pcmSample = new Int16Array([
       110, 103, 109, 123, 113, 116, 109, 107, 118, 118, 118, 121, 126, 116, 100, 103, 97, 93, 96, 93, 77, 81, 76, 80,
       62, 54, 35, 55, 58, 65, 66, 56, 61, 46, 38, 42, 47, 43, 37, 32, 32, 20, 13, 13, 25, 16, 2, 9, 5, 14, 8, 8, -9,
@@ -1016,34 +1017,100 @@
       90, 81, 88, 82, 72, 75, 61, 61, 51, 50, 53, 52, 43, 43, 32, 40, 33, 39, 27, 31, 43, 33, 18
     ]);
 
+    let voiceProbabilityReference = [
+      0.05310790240764618,
+      0.10980118811130524,
+      0.11981949210166931,
+      0.13050688803195953,
+      0.10706346482038498,
+      0.1916300505399704,
+      0.8803863525390625,
+      0.8818185925483704,
+      0.242923304438591,
+      0.15304215252399445,
+      0.9926825761795044,
+      0.9997114539146423,
+      0.9995206594467163,
+      0.9994011521339417,
+      0.9997903108596802,
+      0.9998562932014465,
+      0.9998350739479065,
+      0.9997572302818298,
+      0.9998230934143066,
+      0.9998173117637634,
+      0.9998412728309631,
+      0.9997569918632507,
+      0.9994766116142273,
+      0.9991728067398071,
+      0.9978904724121094,
+      0.9780936241149902,
+      0.9014878869056702,
+      0.5380124449729919,
+      0.29828691482543945,
+      0.17009404301643372,
+      0.08616955578327179,
+      0.05271640047430992,
+      0.036977555602788925,
+      0.057705316692590714,
+      0.05628819763660431,
+      0.03317983075976372,
+      0.02124669775366783,
+      0.08014123141765594,
+      0.04324442148208618,
+      0.02382536791265011,
+      0.05320620536804199,
+      0.05480259656906128,
+      0.05232762545347214
+    ]
+
     function writeMessage(message) {
-      console.log(message);
+        console.log(message);
+        let p = document.createElement("p");
+        let text = document.createTextNode(message);
+        p.appendChild(text);
+        document.body.appendChild(p);
     }
 
     async function startTest(appId) {
       writeMessage("Cobra is loading. Please wait...");
-      let engineHandle = null;
+      let handle = null;
       try {
-        engineHandle = await Cobra.create(appId);
+        handle = await CobraWebFactory.Cobra.create(appId);
       } catch (error) {
         writeMessage(error);
         throw new Error(error);
       }
       writeMessage("Cobra worker ready!");
-      let i = 0;
-      let voiceProbability = await Cobra.process(pcmSample.slice(i, i + Cobra.frameLength));
+
+      let frameLength = handle.frameLength;
+      let eps = 0.01;
+      let isPassed = true
+      for (let i = 0; i < (pcmSample.byteLength / pcmSample.BYTES_PER_ELEMENT); i += frameLength) {
+        let voiceProbability = await handle.process(pcmSample.slice(i, i + frameLength));
+        if (Math.abs(voiceProbability - voiceProbabilityReference[i / frameLength]) > eps) {
+          isPassed = false;
+          break;
+        }
+      }
+      if (isPassed) {
+        writeMessage("Test passed!");
+      } else {
+        writeMessage("Test failed!");
+      }
+
+      handle.release();
     }
   </script>
 </head>
 
 <body>
   <h1>Cobra web binding test</h1>
-  <p>After entering the AppID, click the "run Cobra" button.</p>
+  <p>After entering the AppID, click the "Test Cobra" button. For the result, refer to the browser console.</p>
 
   <label for="appId">AppID string provided by
     <a href="https://picovoice.ai/console/">Picovoice Console</a>:</label>
   <input type="text" id="appId" name="appId" />
-  <input type="button" id="sumbit" value="Run Cobra" onclick="startTest(document.getElementById('appId').value)" />
+  <input type="button" id="sumbit" value="Test Cobra" onclick="startTest(document.getElementById('appId').value)" />
   <hr />
 </body>
 
