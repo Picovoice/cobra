@@ -2,7 +2,7 @@ name: Web
 
 on:
   push:
-    branches: [ master ]
+#    branches: [ master ]
     paths:
       - 'binding/web/**'
       - '!binding/web/README.md'
@@ -64,4 +64,4 @@ jobs:
           yarn build
 
       - name: Test
-        run: python cobra-web-factory/test/selenium_test.py --root_path . --app_id ${{secrets.PV_VALID_APPID}}
+        run: python cobra-web-factory/test/selenium_test.py --app_id ${{secrets.PV_VALID_APPID}}

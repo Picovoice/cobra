@@ -8,63 +8,33 @@ from argparse import ArgumentParser
 from http.server import HTTPServer, SimpleHTTPRequestHandler
 
 from selenium import webdriver
+from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 
 
-def simple_http_server(host='localhost', port=4001, path='.'):
-    server = HTTPServer((host, port), SimpleHTTPRequestHandler)
-    thread = threading.Thread(target=server.serve_forever)
-    thread.deamon = True
+class SimpleHttpServer(threading.Thread):
+    def __init__(self, host='localhost', port=4001, path='.'):
+        self._base_url = f'http://{host}:{port}'
+        self._root_path = path
+        self._cwd = os.getcwd()
+        self._server = HTTPServer((host, port), SimpleHTTPRequestHandler)
+        super().__init__(daemon=True)
 
-    cwd = os.getcwd()
-    base_url = f'http://{host}:{port}'
+    @property
+    def base_url(self):
+        return self._base_url
 
-    def start():
-        os.chdir(path)
-        thread.start()
-        print(f'starting server on port {server.server_port}')
+    def run(self):
+        os.chdir(self._root_path)
+        print(f'starting server on port {self._server.server_port}')
+        self._server.serve_forever()
 
-    def stop():
-        os.chdir(cwd)
-        server.shutdown()
-        server.socket.close()
-        print(f'stopping server on port {server.server_port}')
-
-    return start, stop, base_url
-
-
-def main():
-    parser = ArgumentParser()
-
-    parser.add_argument(
-        '--root_path',
-        metavar='ROOT_PATH',
-        required=True,
-        type=str,
-        help='The root folder of the web binding')
-
-    parser.add_argument(
-        '--app_id',
-        metavar='APP_ID',
-        required=True,
-        type=str)
-
-    input_args = parser.parse_args()
-
-    start, stop, base_url = simple_http_server(port=4005, path=input_args.root_path)
-    test_url = base_url + "/cobra-web-factory/test"
-    start()
-    time.sleep(10)
-
-    try:
-        result = run_unit_test_selenium(test_url, input_args.app_id)
-        stop()
-        sys.exit(result)
-    except Exception as e:
-        print(e)
-        stop()
-        sys.exit(1)
+    def stop(self):
+        os.chdir(self._cwd)
+        self._server.shutdown()
+        self._server.socket.close()
+        print(f'stopping server on port {self._server.server_port}')
 
 
 def run_unit_test_selenium(url, app_id):
@@ -79,16 +49,41 @@ def run_unit_test_selenium(url, app_id):
 
     driver.find_element_by_id("appId").send_keys(app_id)
     driver.find_element_by_id("sumbit").click()
-    time.sleep(10)
+    time.sleep(5)
 
+    result = 0
     for entry in driver.get_log('browser'):
         if 'Test failed' in entry['message']:
             print(f"unit test failed with \n {entry['message']}")
-            driver.close()
-            return 1
+            result = 1
 
     driver.close()
-    return 0
+    return result
+
+
+def main():
+    parser = ArgumentParser()
+
+    parser.add_argument(
+        '--app_id',
+        required=True)
+
+    args = parser.parse_args()
+
+    simple_server = SimpleHttpServer(port=4005, path=os.path.join(os.path.dirname(__file__), '..', '..'))
+    test_url = f'{simple_server.base_url}/cobra-web-factory/test'
+    simple_server.start()
+    time.sleep(4)
+
+    result = 0
+    try:
+        result = run_unit_test_selenium(test_url, args.app_id)
+    except WebDriverException as e:
+        print(e)
+        result = 1
+    finally:
+        simple_server.stop()
+        sys.exit(result)
 
 
 if __name__ == '__main__':
