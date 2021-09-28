@@ -6,9 +6,11 @@ import threading
 import time
 from argparse import ArgumentParser
 from http.server import HTTPServer, SimpleHTTPRequestHandler
+
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+
 
 def simple_http_server(host='localhost', port=4001, path='.'):
     server = HTTPServer((host, port), SimpleHTTPRequestHandler)
@@ -16,18 +18,18 @@ def simple_http_server(host='localhost', port=4001, path='.'):
     thread.deamon = True
 
     cwd = os.getcwd()
-    base_url = 'http://{}:{}'.format(host, port)
+    base_url = f'http://{host}:{port}'
 
     def start():
         os.chdir(path)
         thread.start()
-        print('starting server on port {}'.format(server.server_port))
+        print(f'starting server on port {server.server_port}')
 
     def stop():
         os.chdir(cwd)
         server.shutdown()
         server.socket.close()
-        print('stopping server on port {}'.format(server.server_port))
+        print(f'stopping server on port {server.server_port}')
 
     return start, stop, base_url
 
@@ -39,8 +41,7 @@ def main():
                         metavar='ROOT_PATH',
                         required=True,
                         type=str,
-                        help='The root folder of zoo-dev repo')
-
+                        help='The root folder of the web binding')
 
     parser.add_argument('--app_id',
                         metavar='APP_ID',
@@ -53,7 +54,7 @@ def main():
     test_url = base_url + "/cobra-web-factory/test"
     start()
     time.sleep(10)
-    
+
     try:
         result = run_unit_test_selenium(test_url, input_args.app_id)
         stop()
