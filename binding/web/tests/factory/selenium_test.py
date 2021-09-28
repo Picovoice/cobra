@@ -37,16 +37,18 @@ def simple_http_server(host='localhost', port=4001, path='.'):
 def main():
     parser = ArgumentParser()
 
-    parser.add_argument('--root_path',
-                        metavar='ROOT_PATH',
-                        required=True,
-                        type=str,
-                        help='The root folder of the web binding')
+    parser.add_argument(
+        '--root_path',
+        metavar='ROOT_PATH',
+        required=True,
+        type=str,
+        help='The root folder of the web binding')
 
-    parser.add_argument('--app_id',
-                        metavar='APP_ID',
-                        required=True,
-                        type=str)
+    parser.add_argument(
+        '--app_id',
+        metavar='APP_ID',
+        required=True,
+        type=str)
 
     input_args = parser.parse_args()
 
