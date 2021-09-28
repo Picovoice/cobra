@@ -2,17 +2,17 @@ name: Web
 
 on:
   push:
-    branches: [master]
+    branches: [ master ]
     paths:
-      - "binding/web/**"
-      - "!binding/web/README.md"
-      - "lib/wasm/**"
+      - 'binding/web/**'
+      - '!binding/web/README.md'
+      - 'lib/wasm/**'
   pull_request:
-    branches: [master]
+    branches: [ master ]
     paths:
-      - "binding/web/**"
-      - "!binding/web/README.md"
-      - "lib/wasm/**"
+      - 'binding/web/**'
+      - '!binding/web/README.md'
+      - 'lib/wasm/**'
 
 defaults:
   run:
