@@ -73,7 +73,7 @@ def main():
     args = parser.parse_args()
 
     simple_server = SimpleHttpServer(port=4005, path=os.path.join(os.path.dirname(__file__), '..', '..'))
-    test_url = f'{simple_server.base_url}/cobra-web-factory/test'
+    test_url = f'{simple_server.base_url}/cobra-web-factory/test/index.html'
     simple_server.start()
     time.sleep(4)
 
