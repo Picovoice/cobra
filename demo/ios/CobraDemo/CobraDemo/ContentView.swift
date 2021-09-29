@@ -13,18 +13,42 @@ struct ContentView: View {
     @StateObject var viewModel = ViewModel()
     let activeBlue = Color(red: 55/255, green: 125/255, blue: 1, opacity: 1)
     let detectionBlue = Color(red: 0, green: 229/255, blue: 195/255, opacity: 1)
+    let dangerRed = Color(red: 1, green: 14/255, blue: 14/255, opacity: 1)
+    
     var body: some View {
+        let isError = viewModel.errorMessage.count > 0
+        let btnColor = (isError) ? Color.gray : activeBlue
+        let errorMsgColor = (isError) ? dangerRed : Color.white
+        
         VStack(alignment: .center){
+            Spacer()
+            Spacer()
+            
             Button(action: viewModel.toggleRecording){
                 Text(viewModel.recordToggleButtonText)
                     .font(.title)
-                    .background(activeBlue)
+                    .background(btnColor)
                     .foregroundColor(.white)
                     .padding(.horizontal, 35.0)
                     .padding(.vertical, 20.0)
             }.background(
-                Capsule().fill(activeBlue)
-            ).padding(12)
+                Capsule().fill(btnColor)
+            )
+                .padding(12)
+                .disabled(isError)
+            
+            Spacer()
+            
+            Text(viewModel.errorMessage)
+                .frame(minWidth: 0, maxWidth: UIScreen.main.bounds.width - 50)
+                .padding(.vertical, 10)
+                .padding(.horizontal, 10)
+                .font(.body)
+                .background(errorMsgColor)
+                .foregroundColor(.white)
+                .cornerRadius(.infinity)
+            
+            Spacer()
         }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity).background(viewModel.voiceActivityState ? detectionBlue : Color.white)
     }
 }

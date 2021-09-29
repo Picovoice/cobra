@@ -20,14 +20,25 @@ class ViewModel: ObservableObject {
     private let audioInputEngine: AudioInputEngine
     private var isListening = false
     
+    @Published var errorMessage = ""
     @Published var voiceActivityState = false
     @Published var recordToggleButtonText:String = "Start"
     
     init() {
         do {
             try cobra = Cobra(appID: APP_ID)
+        } catch CobraError.invalidArgument {
+            errorMessage = "APP_ID provided is invalid."
+        } catch CobraError.activationError {
+            errorMessage = "APP_ID activation error."
+        } catch CobraError.activationRefused {
+            errorMessage = "APP_ID activation refused."
+        } catch CobraError.activationLimitReached {
+            errorMessage = "APP_ID reached its limit."
+        } catch CobraError.activationThrottled {
+            errorMessage = "APP_ID is throttled."
         } catch {
-            print("\(error)")
+            errorMessage = "\(error)"
         }
         
         self.audioInputEngine = AudioInputEngine()
@@ -50,7 +61,8 @@ class ViewModel: ObservableObject {
                     }
                 }
             } catch {
-                print("\(error)")
+                self.errorMessage = "Failed to process pcm frames."
+                self.stop()
             }
         }
     }
@@ -71,7 +83,7 @@ class ViewModel: ObservableObject {
                 recordToggleButtonText = "Stop"
             }
         } catch {
-            print("\(error)")
+            self.errorMessage = "Failed to start audio session."
         }
     }
     
