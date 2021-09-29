@@ -51,14 +51,17 @@ def run_unit_test_selenium(url, app_id):
     driver.find_element_by_id("sumbit").click()
     time.sleep(5)
 
-    result = 0
+    test_result = 1
+    test_message = "Tests failed"
     for entry in driver.get_log('browser'):
-        if 'Test failed' in entry['message']:
-            print(f"unit test failed with \n {entry['message']}")
-            result = 1
+        print(entry['message'])
+        if 'Test passed!' in entry['message']:
+            test_message = "Tests passed"
+            test_result = 0
 
     driver.close()
-    return result
+    print(test_message)
+    return test_result
 
 
 def main():
@@ -71,7 +74,7 @@ def main():
     args = parser.parse_args()
 
     simple_server = SimpleHttpServer(port=4005, path=os.path.join(os.path.dirname(__file__), '..', '..'))
-    test_url = f'{simple_server.base_url}/cobra-web-factory/test'
+    test_url = f'{simple_server.base_url}/cobra-web-factory/test/index.html'
     simple_server.start()
     time.sleep(4)
 
