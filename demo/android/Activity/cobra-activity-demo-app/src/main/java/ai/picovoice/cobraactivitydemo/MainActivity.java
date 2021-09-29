@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     public Cobra cobra;
     private int voiceDetectedBackgroundColor;
 
-    private static final String APP_ID = "YOUR_APPID_HERE";
+    private static final String APP_ID = "${YOUR_APP_ID_HERE}";
 
     private ToggleButton recordButton;
     private TextView errorMessage;
