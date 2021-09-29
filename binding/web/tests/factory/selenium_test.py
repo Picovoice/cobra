@@ -51,13 +51,13 @@ def run_unit_test_selenium(url, app_id):
     driver.find_element_by_id("sumbit").click()
     time.sleep(5)
 
-    test_result = 0
-    test_message = "Tests passed"
+    test_result = 1
+    test_message = "Tests failed"
     for entry in driver.get_log('browser'):
         print(entry['message'])
-        # if 'Test failed' in entry['message']:
-        #     test_message = f" Tests failed with \n {entry['message']}"
-        #     test_result = 1
+        if 'Test passed!' in entry['message']:
+            test_message = "Tests passed"
+            test_result = 0
 
     driver.close()
     print(test_message)
