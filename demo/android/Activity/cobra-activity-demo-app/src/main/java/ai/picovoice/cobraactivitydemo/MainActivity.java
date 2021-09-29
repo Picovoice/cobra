@@ -63,7 +63,24 @@ public class MainActivity extends AppCompatActivity {
         try {
             cobra = new Cobra(APP_ID);
         } catch (CobraException e) {
-            String error = "Failed to initialize Cobra: \n" + e.getMessage();
+            String error;
+
+            if (e.getMessage() == null) {
+                error = "Failed to initialize Cobra.";
+            } else if (e.getMessage().contains("IllegalArgument")) {
+                error = "APP_ID provided is invalid.";
+            } else if (e.getMessage().contains("ACTIVATION_ERROR")) {
+                error = "APP_ID activation error.";
+            } else if (e.getMessage().contains("ACTIVATION_LIMIT_REACHED")) {
+                error = "APP_ID reached its limit.";
+            } else if (e.getMessage().contains("ACTIVATION_REFUSED")) {
+                error = "APP_ID activation refused.";
+            } else if (e.getMessage().contains("ACTIVATION_THROTTLED")) {
+                error = "APP_ID is throttled.";
+            } else {
+                error = "Failed to initialize Cobra: " + e.getMessage();
+            }
+
             errorMessage.setText(error);
             errorMessage.setVisibility(View.VISIBLE);
 
