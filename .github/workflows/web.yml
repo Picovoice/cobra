@@ -1,0 +1,67 @@
+name: Web
+
+on:
+  push:
+    branches: [ master ]
+    paths:
+      - 'binding/web/**'
+      - '!binding/web/README.md'
+      - 'lib/wasm/**'
+  pull_request:
+    branches: [ master ]
+    paths:
+      - 'binding/web/**'
+      - '!binding/web/README.md'
+      - 'lib/wasm/**'
+
+defaults:
+  run:
+    working-directory: binding/web
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    strategy:
+      matrix:
+        python-version: [3.8]
+        node-version: [14.x]
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install system dependencies
+        run: |
+          sudo apt install curl unzip
+          curl --output chromedriver_linux64.zip https://chromedriver.storage.googleapis.com/93.0.4577.63/chromedriver_linux64.zip
+          unzip chromedriver_linux64.zip
+          sudo mv chromedriver /usr/local/bin
+          pip install selenium
+
+      - name: Pre-build dependencies
+        run: npm install yarn
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: build
+        run: |
+          yarn build
+          cd cobra-web-factory
+          yarn
+          yarn build
+
+      - name: Test
+        run: python cobra-web-factory/test/selenium_test.py --app_id ${{secrets.PV_VALID_APPID}}
