@@ -22,6 +22,7 @@ import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Process;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -29,6 +30,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
@@ -45,6 +47,9 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String APP_ID = "${YOUR_APP_ID_HERE}";
 
+    private ToggleButton recordButton;
+    private TextView errorMessage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,10 +57,35 @@ public class MainActivity extends AppCompatActivity {
 
         voiceDetectedBackgroundColor = getResources().getColor(R.color.colorAccent);
 
+        recordButton = findViewById(R.id.startButton);
+        errorMessage = findViewById(R.id.errorMessage);
+
         try {
             cobra = new Cobra(APP_ID);
         } catch (CobraException e) {
-            displayError("Failed to initialize Cobra: \n" + e.toString());
+            String error;
+
+            if (e.getMessage() == null) {
+                error = "Failed to initialize Cobra.";
+            } else if (e.getMessage().contains("IllegalArgument")) {
+                error = "APP_ID provided is invalid.";
+            } else if (e.getMessage().contains("ACTIVATION_ERROR")) {
+                error = "APP_ID activation error.";
+            } else if (e.getMessage().contains("ACTIVATION_LIMIT_REACHED")) {
+                error = "APP_ID reached its limit.";
+            } else if (e.getMessage().contains("ACTIVATION_REFUSED")) {
+                error = "APP_ID activation refused.";
+            } else if (e.getMessage().contains("ACTIVATION_THROTTLED")) {
+                error = "APP_ID is throttled.";
+            } else {
+                error = "Failed to initialize Cobra: " + e.getMessage();
+            }
+
+            errorMessage.setText(error);
+            errorMessage.setVisibility(View.VISIBLE);
+
+            recordButton.setEnabled(false);
+            recordButton.setBackground(ContextCompat.getDrawable(this, R.drawable.button_disabled));
         }
     }
 
@@ -89,8 +119,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onClick(View view) {
-        ToggleButton recordButton = findViewById(R.id.startButton);
-
         try {
             if (recordButton.isChecked()) {
                 if (hasRecordPermission()) {
@@ -102,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
                 microphoneReader.stop();
             }
         } catch (InterruptedException e) {
-            displayError("Audio stop command interrupted\n" + e.toString());
+            displayError("Audio stop command interrupted\n" + e.getMessage());
         }
     }
 
