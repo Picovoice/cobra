@@ -1,0 +1,38 @@
+[package]
+name = "pv_cobra"
+version = "1.0.0"
+edition = "2018"
+description = "The Rust bindings for Picovoice's Cobra library"
+license = "Apache-2.0"
+homepage = "https://picovoice.ai/platform/cobra/"
+repository = "https://github.com/Picovoice/cobra"
+keywords = [
+	"voice-activity",
+	"voice-detection",
+	"VAD",
+]
+publish = false
+
+include = [
+	".gitignore",
+	"build.rs",
+	"Cargo.toml",
+	"data/",
+	"README.md",
+	"src/",
+]
+
+[lib]
+name = "cobra"
+path = "src/lib.rs"
+crate_type = ["lib"]
+
+[dependencies]
+libc = "0.2"
+libloading = "0.7"
+log = "0.4"
+lazy_static = "1.4.0"
+
+[dev-dependencies]
+rodio = "0.14"
+itertools = "0.10.1"
