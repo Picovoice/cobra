@@ -69,7 +69,7 @@ fn cobra_demo(input_audio_path: PathBuf, app_id: &str, threshold: f32) {
 }
 
 fn main() {
-    let matches = App::new("Picovoice Porcupine Rust File Demo")
+    let matches = App::new("Picovoice Cobra Rust File Demo")
         .arg(
             Arg::with_name("input_audio_path")
                 .long("input_audio_path")

@@ -48,4 +48,4 @@ loop {
 
 ## Demos
 
-Check out the Porcupine Rust demos [here](/demo/rust)
+Check out the Cobra Rust demos [here](/demo/rust)
