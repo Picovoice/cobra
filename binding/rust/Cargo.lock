@@ -615,6 +615,7 @@ name = "pv_cobra"
 version = "1.0.0"
 dependencies = [
  "itertools",
+ "lazy_static",
  "libc",
  "libloading",
  "log",

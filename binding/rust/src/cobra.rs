@@ -9,20 +9,27 @@
     specific language governing permissions and limitations under the License.
 */
 
+use lazy_static::lazy_static;
 use libc::c_char;
 use libloading::{Library, Symbol};
 use std::cmp::PartialEq;
-use std::convert::AsRef;
 use std::ffi::{CStr, CString};
-use std::path::Path;
 use std::ptr::addr_of_mut;
 use std::sync::Arc;
 
-#[cfg(target_family = "unix")]
-use libloading::os::unix::Symbol as RawSymbol;
-
-#[cfg(target_family = "windows")]
-use libloading::os::windows::Symbol as RawSymbol;
+lazy_static! {
+    static ref PV_COBRA_LIB: Result<Library, CobraError> = {
+        unsafe {
+            match Library::new(pv_library_path()) {
+                Ok(symbol) => Ok(symbol),
+                Err(err) => Err(CobraError::new(
+                    CobraErrorStatus::LibraryLoadError,
+                    &format!("Failed to load pvrecorder dynamic library: {}", err),
+                )),
+            }
+        }
+    };
+}
 
 use crate::util::*;
 
@@ -30,7 +37,7 @@ use crate::util::*;
 struct CCobra {}
 
 #[repr(C)]
-#[derive(PartialEq, Debug)]
+#[derive(PartialEq, Clone, Debug)]
 #[allow(non_camel_case_types)]
 pub enum PvStatus {
     SUCCESS = 0,
@@ -56,7 +63,7 @@ type PvCobraProcessFn =
     unsafe extern "C" fn(object: *mut CCobra, pcm: *const i16, is_voiced: *mut f32) -> PvStatus;
 type PvCobraDeleteFn = unsafe extern "C" fn(object: *mut CCobra);
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub enum CobraErrorStatus {
     LibraryError(PvStatus),
     LibraryLoadError,
@@ -64,7 +71,7 @@ pub enum CobraErrorStatus {
     ArgumentError,
 }
 
-#[derive(Debug)]
+#[derive(Clone, Debug)]
 pub struct CobraError {
     pub status: CobraErrorStatus,
     pub message: Option<String>,
@@ -95,8 +102,7 @@ pub struct Cobra {
 
 impl Cobra {
     pub fn new<S: Into<String>>(app_id: S) -> Result<Cobra, CobraError> {
-        let library_path = pv_library_path();
-        let inner = CobraInner::init(app_id.into(), library_path);
+        let inner = CobraInner::init(app_id.into());
         return match inner {
             Ok(inner) => Ok(Cobra {
                 inner: Arc::new(inner),
@@ -122,28 +128,44 @@ impl Cobra {
     }
 }
 
-macro_rules! load_library_fn {
-    ($lib:ident, $function_name:literal) => {
-        match $lib.get($function_name) {
-            Ok(symbol) => symbol,
-            Err(err) => {
-                return Err(CobraError::new(
+fn load_library_fn<T>(function_name: &[u8]) -> Result<Symbol<T>, CobraError> {
+    match &*PV_COBRA_LIB {
+        Ok(lib) => unsafe {
+            lib.get(function_name).map_err(|err| {
+                CobraError::new(
                     CobraErrorStatus::LibraryLoadError,
-                    &format!("Failed to load function symbol from Cobra library: {}", err),
-                ))
-            }
-        };
+                    &format!(
+                        "Failed to load function symbol from pvrecorder library: {}",
+                        err
+                    ),
+                )
+            })
+        },
+        Err(err) => Err((*err).clone()),
+    }
+}
+
+macro_rules! check_fn_call_status {
+    ($status:ident, $function_name:literal) => {
+        if $status != PvStatus::SUCCESS {
+            return Err(CobraError::new(
+                CobraErrorStatus::LibraryError($status),
+                &format!(
+                    "Function '{}' in the pvrecorder library failed",
+                    $function_name
+                ),
+            ));
+        }
     };
 }
 
 struct CobraInnerVTable {
-    pv_cobra_process: RawSymbol<PvCobraProcessFn>,
-    pv_cobra_delete: RawSymbol<PvCobraDeleteFn>,
+    pv_cobra_process: Symbol<'static, PvCobraProcessFn>,
+    pv_cobra_delete: Symbol<'static, PvCobraDeleteFn>,
 }
 
 struct CobraInner {
     ccobra: *mut CCobra,
-    _lib: Library,
     frame_length: i32,
     sample_rate: i32,
     version: String,
@@ -151,32 +173,9 @@ struct CobraInner {
 }
 
 impl CobraInner {
-    pub fn init<S: Into<String>, P: AsRef<Path>>(
-        app_id: S,
-        library_path: P,
-    ) -> Result<Self, CobraError> {
+    pub fn init<S: Into<String>>(app_id: S) -> Result<Self, CobraError> {
         unsafe {
-            if !library_path.as_ref().exists() {
-                return Err(CobraError::new(
-                    CobraErrorStatus::ArgumentError,
-                    &format!(
-                        "Couldn't find Cobra's dynamic library at {}",
-                        library_path.as_ref().display()
-                    ),
-                ));
-            }
-
-            let lib = match Library::new(library_path.as_ref()) {
-                Ok(symbol) => symbol,
-                Err(err) => {
-                    return Err(CobraError::new(
-                        CobraErrorStatus::LibraryLoadError,
-                        &format!("Failed to load cobra dynamic library: {}", err),
-                    ))
-                }
-            };
-
-            let pv_cobra_init: Symbol<PvCobraInitFn> = load_library_fn!(lib, b"pv_cobra_init");
+            let pv_cobra_init: Symbol<PvCobraInitFn> = load_library_fn(b"pv_cobra_init")?;
 
             let app_id = match CString::new(app_id.into()) {
                 Ok(app_id) => app_id,
@@ -197,19 +196,16 @@ impl CobraInner {
                 ));
             }
 
-            let pv_cobra_process: Symbol<PvCobraProcessFn> =
-                load_library_fn!(lib, b"pv_cobra_process");
+            let pv_cobra_process: Symbol<PvCobraProcessFn> = load_library_fn(b"pv_cobra_process")?;
 
-            let pv_cobra_delete: Symbol<PvCobraDeleteFn> =
-                load_library_fn!(lib, b"pv_cobra_delete");
+            let pv_cobra_delete: Symbol<PvCobraDeleteFn> = load_library_fn(b"pv_cobra_delete")?;
 
-            let pv_sample_rate: Symbol<PvSampleRateFn> = load_library_fn!(lib, b"pv_sample_rate");
+            let pv_sample_rate: Symbol<PvSampleRateFn> = load_library_fn(b"pv_sample_rate")?;
 
             let pv_cobra_frame_length: Symbol<PvCobraFrameLengthFn> =
-                load_library_fn!(lib, b"pv_cobra_frame_length");
+                load_library_fn(b"pv_cobra_frame_length")?;
 
-            let pv_cobra_version: Symbol<PvCobraVersionFn> =
-                load_library_fn!(lib, b"pv_cobra_version");
+            let pv_cobra_version: Symbol<PvCobraVersionFn> = load_library_fn(b"pv_cobra_version")?;
 
             let sample_rate = pv_sample_rate();
             let frame_length = pv_cobra_frame_length();
@@ -223,15 +219,13 @@ impl CobraInner {
                 }
             };
 
-            // Using the raw symbols means we have to ensure that "lib" outlives these refrences
             let vtable = CobraInnerVTable {
-                pv_cobra_process: pv_cobra_process.into_raw(),
-                pv_cobra_delete: pv_cobra_delete.into_raw(),
+                pv_cobra_process,
+                pv_cobra_delete,
             };
 
             return Ok(Self {
                 ccobra,
-                _lib: lib,
                 sample_rate,
                 frame_length,
                 version,
@@ -256,13 +250,7 @@ impl CobraInner {
         let status = unsafe {
             (self.vtable.pv_cobra_process)(self.ccobra, pcm.as_ptr(), addr_of_mut!(result))
         };
-
-        if status != PvStatus::SUCCESS {
-            return Err(CobraError::new(
-                CobraErrorStatus::LibraryError(status),
-                "Cobra library failed to process",
-            ));
-        }
+        check_fn_call_status!(status, "pv_cobra_process");
 
         return Ok(result);
     }
