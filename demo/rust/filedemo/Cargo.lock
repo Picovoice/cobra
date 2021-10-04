@@ -143,10 +143,8 @@ dependencies = [
 ]
 
 [[package]]
-name = "pv_porcupine"
-version = "1.9.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9e22e3faf830eb6da37c14594ea353c9c6a52b38de57e88268b89070683eb7ff"
+name = "pv_cobra"
+version = "1.0.0"
 dependencies = [
  "libc",
  "libloading",
@@ -161,7 +159,7 @@ dependencies = [
  "clap",
  "hound",
  "itertools",
- "pv_porcupine",
+ "pv_cobra",
 ]
 
 [[package]]

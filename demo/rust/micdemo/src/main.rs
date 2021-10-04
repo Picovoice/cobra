@@ -99,12 +99,14 @@ fn main() {
             Arg::with_name("app_id")
                 .long("app_id")
                 .value_name("APP_ID")
+                .help("AppID provided by Picovoice Console (https://picovoice.ai/console/)")
                 .takes_value(true),
         )
         .arg(
             Arg::with_name("threshold")
                 .long("threshold")
                 .value_name("THRESHOLD")
+                .help("Threshold for the probability of voice activity")
                 .takes_value(true)
                 .default_value("0.5"),
         )
