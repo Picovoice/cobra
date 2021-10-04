@@ -94,7 +94,7 @@ pub struct Cobra {
 }
 
 impl Cobra {
-    pub fn create<S: Into<String>>(app_id: S) -> Result<Cobra, CobraError> {
+    pub fn new<S: Into<String>>(app_id: S) -> Result<Cobra, CobraError> {
         let library_path = pv_library_path();
         let inner = CobraInner::init(app_id.into(), library_path);
         return match inner {

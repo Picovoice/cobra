@@ -26,7 +26,7 @@ Create an instance of the engine:
 use cobra::Cobra;
 
 let app_id = "..."; // AppID provided by Picovoice Console (https://picovoice.ai/console/)
-let cobra = Cobra::create(app_id);
+let cobra = Cobra::new(app_id);
 ```
 where `app_id` is an AppID which should be obtained from [Picovoice Console](https://picovoice.ai/console/). `cobra` is an instance of Cobra that detects voice activities.
 
