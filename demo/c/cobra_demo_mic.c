@@ -92,8 +92,7 @@ static struct option long_options[] = {
         {"show_audio_devices",  no_argument,        NULL, 's'},
         {"library_path",        required_argument,  NULL, 'l'},
         {"access_key",          required_argument,  NULL, 'a'},
-        {"audio_device_index",  required_argument,  NULL, 'd'},
-        {0, 0, 0, 0}
+        {"audio_device_index",  required_argument,  NULL, 'd'}
 };
 
 void print_usage(const char *program_name) {
@@ -141,7 +140,7 @@ int main(int argc, char *argv[]) {
 
     const char *library_path = NULL;
     const char *access_key = NULL;
-    int32_t device_index = -2;
+    int32_t device_index = -1;
 
     int c;
     while ((c = getopt_long(argc, argv, "hsl:a:d:", long_options, NULL)) != -1) {
@@ -163,7 +162,7 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    if (!library_path || !access_key || (device_index < -1)) {
+    if (!library_path || !access_key) {
         print_usage(argv[0]);
         exit(1);
     }
