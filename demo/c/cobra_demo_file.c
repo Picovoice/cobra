@@ -7,6 +7,7 @@
     specific language governing permissions and limitations under the License.
 */
 
+#include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -82,15 +83,42 @@ static void print_dl_error(const char *message) {
 
 }
 
+static struct option long_options[] = {
+        {"show_audio_devices", no_argument,       NULL, 's'},
+        {"library_path",       required_argument, NULL, 'l'},
+        {"wav_path",           required_argument, NULL, 'w'}
+};
+
+void print_usage(const char *program_name) {
+    fprintf(stdout, "Usage: %s [-l LIBRARY_PATH -a ACCESS_KEY -w WAV_PATH]\n", program_name);
+}
+
 int main(int argc, char *argv[]) {
-    if (argc != 4) {
-        fprintf(stderr, "usage : %s library_path access_key wav_path\n", argv[0]);
-        exit(1);
+    const char *library_path = NULL;
+    const char *access_key = NULL;
+    const char *wav_path = NULL;
+
+    int c;
+    while ((c = getopt_long(argc, argv, "l:a:w:", long_options, NULL)) != -1) {
+        switch (c) {
+            case 'l':
+                library_path = optarg;
+                break;
+            case 'a':
+                access_key = optarg;
+                break;
+            case 'w':
+                wav_path = optarg;
+                break;
+            default:
+                exit(1);
+        }
     }
 
-    const char *library_path = argv[1];
-    const char *access_key = argv[2];
-    const char *wav_path = argv[3];
+    if (!library_path || !access_key || !wav_path) {
+        print_usage(argv[0]);
+        exit(1);
+    }
 
     void *cobra_library = open_dl(library_path);
     if (!cobra_library) {

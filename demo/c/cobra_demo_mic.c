@@ -9,11 +9,11 @@
     specific language governing permissions and limitations under the License.
 */
 
+#include <getopt.h>
 #include <math.h>
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 #if defined(_WIN32) || defined(_WIN64)
 
@@ -85,8 +85,19 @@ static void print_dl_error(const char *message) {
 }
 
 static volatile bool is_interrupted = false;
-static const float alpha  = 0.15f;
+static const float alpha = 0.15f;
 static float voice_probability = 0.f;
+
+static struct option long_options[] = {
+        {"show_audio_devices", no_argument,       NULL, 's'},
+        {"library_path",       required_argument, NULL, 'l'},
+        {"access_key",         required_argument, NULL, 'a'},
+        {"audio_device_index", required_argument, NULL, 'd'}
+};
+
+void print_usage(const char *program_name) {
+    fprintf(stdout, "Usage: %s [-s] [-l LIBRARY_PATH -a ACCESS_KEY -d AUDIO_DEVICE_INDEX]\n", program_name);
+}
 
 void interrupt_handler(int _) {
     (void) _;
@@ -125,22 +136,36 @@ static void print_analog(float is_voiced) {
 }
 
 int main(int argc, char *argv[]) {
-    if (argc != 4) {
-        if ((argc == 2) && (strcmp(argv[1], "--show_audio_devices") == 0)) {
-            show_audio_devices();
-            return 0;
-        } else {
-            fprintf(stderr, "usage : %s --show_audio_devices\n"
-                            "        %s library_path access_key audio_device_index\n", argv[0], argv[0]);
-            exit(1);
+    signal(SIGINT, interrupt_handler);
+
+    const char *library_path = NULL;
+    const char *access_key = NULL;
+    int32_t device_index = -1;
+
+    int c;
+    while ((c = getopt_long(argc, argv, "hsl:a:d:", long_options, NULL)) != -1) {
+        switch (c) {
+            case 's':
+                show_audio_devices();
+                return 0;
+            case 'l':
+                library_path = optarg;
+                break;
+            case 'a':
+                access_key = optarg;
+                break;
+            case 'd':
+                device_index = (int32_t) strtol(optarg, NULL, 10);
+                break;
+            default:
+                exit(1);
         }
     }
 
-    signal(SIGINT, interrupt_handler);
-
-    const char *library_path = argv[1];
-    const char *access_key = argv[2];
-    const int32_t device_index = (int32_t) strtol(argv[3], NULL, 10);
+    if (!library_path || !access_key) {
+        print_usage(argv[0]);
+        exit(1);
+    }
 
     void *cobra_library = open_dl(library_path);
     if (!cobra_library) {
