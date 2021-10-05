@@ -84,9 +84,9 @@ static void print_dl_error(const char *message) {
 }
 
 static struct option long_options[] = {
-        {"show_audio_devices",  no_argument,        NULL, 's'},
-        {"library_path",        required_argument,  NULL, 'l'},
-        {"wav_path",            required_argument,  NULL, 'w'}
+        {"show_audio_devices", no_argument,       NULL, 's'},
+        {"library_path",       required_argument, NULL, 'l'},
+        {"wav_path",           required_argument, NULL, 'w'}
 };
 
 void print_usage(const char *program_name) {

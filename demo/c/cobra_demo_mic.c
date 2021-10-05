@@ -85,14 +85,14 @@ static void print_dl_error(const char *message) {
 }
 
 static volatile bool is_interrupted = false;
-static const float alpha  = 0.15f;
+static const float alpha = 0.15f;
 static float voice_probability = 0.f;
 
 static struct option long_options[] = {
-        {"show_audio_devices",  no_argument,        NULL, 's'},
-        {"library_path",        required_argument,  NULL, 'l'},
-        {"access_key",          required_argument,  NULL, 'a'},
-        {"audio_device_index",  required_argument,  NULL, 'd'}
+        {"show_audio_devices", no_argument,       NULL, 's'},
+        {"library_path",       required_argument, NULL, 'l'},
+        {"access_key",         required_argument, NULL, 'a'},
+        {"audio_device_index", required_argument, NULL, 'd'}
 };
 
 void print_usage(const char *program_name) {
