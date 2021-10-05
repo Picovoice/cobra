@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 #if defined(_WIN32) || defined(_WIN64)
 
@@ -84,6 +85,8 @@ static void print_dl_error(const char *message) {
 }
 
 static volatile bool is_interrupted = false;
+static const float alpha  = 0.25f;
+static float voice_probability = 0.f;
 
 void interrupt_handler(int _) {
     (void) _;
@@ -108,14 +111,27 @@ void show_audio_devices(void) {
     pv_recorder_free_device_list(count, devices);
 }
 
+static void print_analog(float is_voiced) {
+    voice_probability = (alpha * voice_probability) + ((1 - alpha) * is_voiced);
+
+    int32_t percentage = (int32_t) roundf(voice_probability * 100);
+    int32_t bar_length = ((int32_t) roundf(voice_probability * 20)) * 3;
+    int32_t empty_length = 20 - (bar_length / 3);
+    fprintf(stdout,
+            "\r[%3d%%]%.*s%.*s|", percentage,
+            bar_length, "████████████████████",
+            empty_length, "                    ");
+    fflush(stdout);
+}
+
 int main(int argc, char *argv[]) {
-    if (argc != 5) {
+    if (argc != 4) {
         if ((argc == 2) && (strcmp(argv[1], "--show_audio_devices") == 0)) {
             show_audio_devices();
             return 0;
         } else {
             fprintf(stderr, "usage : %s --show_audio_devices\n"
-                            "        %s library_path app_id threshold audio_device_index\n", argv[0], argv[0]);
+                            "        %s library_path access_key threshold audio_device_index\n", argv[0], argv[0]);
             exit(1);
         }
     }
@@ -123,9 +139,8 @@ int main(int argc, char *argv[]) {
     signal(SIGINT, interrupt_handler);
 
     const char *library_path = argv[1];
-    const char *app_id = argv[2];
-    const float threshold = (float) strtod(argv[3], NULL);
-    const int32_t device_index = (int32_t) strtol(argv[4], NULL, 10);
+    const char *access_key = argv[2];
+    const int32_t device_index = (int32_t) strtol(argv[3], NULL, 10);
 
     void *cobra_library = open_dl(library_path);
     if (!cobra_library) {
@@ -177,7 +192,7 @@ int main(int argc, char *argv[]) {
     }
 
     pv_cobra_t *cobra = NULL;
-    pv_status_t cobra_status = pv_cobra_init_func(app_id, &cobra);
+    pv_status_t cobra_status = pv_cobra_init_func(access_key, &cobra);
     if (cobra_status != PV_STATUS_SUCCESS) {
         fprintf(stderr, "failed to init with '%s'", pv_status_to_string_func(cobra_status));
         exit(1);
@@ -187,7 +202,7 @@ int main(int argc, char *argv[]) {
 
     const int32_t frame_length = 512;
     pv_recorder_t *recorder = NULL;
-    pv_recorder_status_t recorder_status = pv_recorder_init(device_index, frame_length, 100, true, &recorder);
+    pv_recorder_status_t recorder_status = pv_recorder_init(device_index, frame_length, 100, false, &recorder);
     if (recorder_status != PV_RECORDER_STATUS_SUCCESS) {
         fprintf(stderr, "Failed to initialize device with %s.\n", pv_recorder_status_to_string(recorder_status));
         exit(1);
@@ -209,7 +224,6 @@ int main(int argc, char *argv[]) {
         exit(1);
     }
 
-    bool is_clean = true;
     while (!is_interrupted) {
         recorder_status = pv_recorder_read(recorder, pcm);
         if (recorder_status != PV_RECORDER_STATUS_SUCCESS) {
@@ -224,20 +238,9 @@ int main(int argc, char *argv[]) {
             exit(1);
         }
 
-        if (is_voiced >= threshold) {
-            if (is_clean) {
-                fprintf(stdout, "voice detected...");
-            }
-            is_clean = false;
-        } else {
-            if (!is_clean) {
-                fprintf(stdout, "\r                  \r");
-            }
-            is_clean = true;
-        }
-
-        fflush(stdout);
+        print_analog(is_voiced);
     }
+    fprintf(stdout,"\n");
 
     recorder_status = pv_recorder_stop(recorder);
     if (recorder_status != PV_RECORDER_STATUS_SUCCESS) {
