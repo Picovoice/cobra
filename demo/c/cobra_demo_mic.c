@@ -85,7 +85,7 @@ static void print_dl_error(const char *message) {
 }
 
 static volatile bool is_interrupted = false;
-static const float alpha  = 0.25f;
+static const float alpha  = 0.15f;
 static float voice_probability = 0.f;
 
 void interrupt_handler(int _) {
@@ -240,7 +240,7 @@ int main(int argc, char *argv[]) {
 
         print_analog(is_voiced);
     }
-    fprintf(stdout,"\n");
+    fprintf(stdout, "\n");
 
     recorder_status = pv_recorder_stop(recorder);
     if (recorder_status != PV_RECORDER_STATUS_SUCCESS) {
