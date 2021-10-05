@@ -34,23 +34,37 @@ extern "C"
  */
 typedef struct pv_cobra pv_cobra_t;
 
+#ifdef __PV_NO_DYNAMIC_MEMORY__
+
 /**
  * Constructor.
  *
- * @param app_id AppID provided by Picovoice Console (https://picovoice.ai/console/)
- * @param object Constructed instance of Cobra.
- * @return Status code. Returns 'PV_STATUS_INVALID_ARGUMENT' or 'PV_STATUS_OUT_OF_MEMORY',
- * 'PV_STATUS_RUNTIME_ERROR', 'PV_STATUS_ACTIVATION_ERROR', 'PV_STATUS_ACTIVATION_LIMIT_REACHED',
- * 'PV_STATUS_ACTIVATION_THROTTLED', or 'PV_STATUS_ACTIVATION_REFUSED' on failure
+ * @param memory_size Memory size in bytes.
+ * @param memory_buffer Memory buffer needs to be 8-byte aligned.
+ * @param[out] object Constructed instance of Cobra.
+ * @return Status code. Returns 'PV_STATUS_INVALID_ARGUMENT' or 'PV_STATUS_OUT_OF_MEMORY' on failure.
  */
-PV_API pv_status_t pv_cobra_init(const char *app_id, pv_cobra_t **object);
+PV_API pv_status_t pv_cobra_init(int32_t memory_size, void *memory_buffer, pv_cobra_t **object);
+
+#else
+
+/**
+ * Constructor.
+ *
+ * @param access_key AccessKey provided by Picovoice Console (https://picovoice.ai/console/)
+ * @param object Constructed instance of Cobra.
+ * @return Status code. Returns 'PV_STATUS_INVALID_ARGUMENT' or 'PV_STATUS_OUT_OF_MEMORY' on failure.
+ */
+PV_API pv_status_t pv_cobra_init(const char *access_key, pv_cobra_t **object);
+
+#endif
 
 /**
  * Destructor.
  *
  * @param object Cobra object.
  */
-void pv_cobra_delete(pv_cobra_t *object);
+PV_API void pv_cobra_delete(pv_cobra_t *object);
 
 /**
  * Processes a frame of the incoming audio stream and emits the probability of voice activity.
@@ -62,24 +76,23 @@ void pv_cobra_delete(pv_cobra_t *object);
  * @param[out] is_voiced Probability of voice activity. It is a floating-point number within [0, 1].
  * @return Returns 'PV_STATUS_INVALID_ARGUMENT' or 'PV_STATUS_OUT_OF_MEMORY' on failure.
  */
-pv_status_t pv_cobra_process(pv_cobra_t *object, const int16_t *pcm, float *is_voiced);
+PV_API pv_status_t pv_cobra_process(pv_cobra_t *object, const int16_t *pcm, float *is_voiced);
 
 /**
  * Getter for number of audio samples per frame.
  *
  * @return Frame length.
  */
-int32_t pv_cobra_frame_length(void);
+PV_API int32_t pv_cobra_frame_length(void);
 
 /**
  * Getter for version.
  *
  * @return Version.
  */
-const char *pv_cobra_version(void);
+PV_API const char *pv_cobra_version(void);
 
 #ifdef __cplusplus
-
 }
 
 #endif

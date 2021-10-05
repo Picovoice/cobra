@@ -9,17 +9,17 @@
 # specific language governing permissions and limitations under the License.
 #
 
+import sys
 import unittest
 
 import soundfile
-import sys
+
 from cobra import Cobra
 from util import *
 
 
 class CobraTestCase(unittest.TestCase):
     def test_process(self):
-
         app_id = sys.argv[1]
         cobra = Cobra(library_path=pv_library_path('../..'), app_id=app_id)
         audio, sample_rate = soundfile.read(

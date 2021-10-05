@@ -1,7 +1,0 @@
-framework module PvCobra {
-  umbrella header "PvCobra.h"
-  header "pv_cobra.h"
-  header "picovoice.h"
-  export *
-  module * {export *}
-}
