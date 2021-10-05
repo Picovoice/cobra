@@ -84,12 +84,12 @@ static void print_dl_error(const char *message) {
 
 int main(int argc, char *argv[]) {
     if (argc != 4) {
-        fprintf(stderr, "usage : %s library_path app_id wav_path\n", argv[0]);
+        fprintf(stderr, "usage : %s library_path access_key wav_path\n", argv[0]);
         exit(1);
     }
 
     const char *library_path = argv[1];
-    const char *app_id = argv[2];
+    const char *access_key = argv[2];
     const char *wav_path = argv[3];
 
     void *cobra_library = open_dl(library_path);
@@ -170,7 +170,7 @@ int main(int argc, char *argv[]) {
     }
 
     pv_cobra_t *cobra = NULL;
-    pv_status_t status = pv_cobra_init_func(app_id, &cobra);
+    pv_status_t status = pv_cobra_init_func(access_key, &cobra);
     if (status != PV_STATUS_SUCCESS) {
         fprintf(stderr, "failed to init with '%s'", pv_status_to_string_func(status));
         exit(1);
