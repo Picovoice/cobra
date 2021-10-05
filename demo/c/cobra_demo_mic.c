@@ -112,7 +112,7 @@ void show_audio_devices(void) {
 }
 
 static void print_analog(float is_voiced) {
-    voice_probability = (alpha * voice_probability) + ((1 - alpha) * is_voiced);
+    voice_probability = (alpha * is_voiced) + ((1 - alpha) * voice_probability);
 
     int32_t percentage = (int32_t) roundf(voice_probability * 100);
     int32_t bar_length = ((int32_t) roundf(voice_probability * 20)) * 3;
