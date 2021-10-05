@@ -28,28 +28,26 @@ cmake -S demo/c/. -B demo/c/build && cmake --build demo/c/build --target cobra_d
 Running the executable without any command-line arguments prints the usage info to the console:
 
 ```console
-./demo/c/build/cobra_demo_mic
-usage : ./demo/c/build/cobra_demo_mic library_path app_id threshold audio_device_index
-        ./demo/c/build/cobra_demo_mic --show_audio_devices
+Usage: ./cobra_demo_mic [-s] [-l LIBRARY_PATH -a ACCESS_KEY -d AUDIO_DEVICE_INDEX]
 ```
 
 To list the available audio input devices:
 
 ```console
-./demo/c/build/cobra_demo_mic --show_audio_devices
+./demo/c/build/cobra_demo_mic -s
 ```
 
 To run the cobra microphone demo:
 
 ```console
-./demo/c/build/cobra_demo_mic ${LIBRARY_PATH} ${APP_ID} ${THRESHOLD} ${AUDIO_DEVICE_INDEX}
+./demo/c/build/cobra_demo_mic -l ${LIBRARY_PATH} -a ${ACCESS_KEY} -d ${AUDIO_DEVICE_INDEX}
 ```
 
 Replace `${LIBRARY_PATH}` with path to appropriate library available under [lib](/lib), `${THRESHOLD}` with a voice-detection
 threshold (a floating-point number within [0, 1]), and `${AUDIO_DEVICE_INDEX}` with the index of the audio device
 you wish to capture audio with. An `${AUDIO_DEVICE_INDEX}` of -1 will provide you with your system's default recording device.
 
-You must also provide an AppID in place of `${APP_ID}`, which can be obtained from the [Picovoice Console](https://console.picovoice.ai/).
+You must also provide an AccessKey in place of `${ACCESS_KEY}`, which can be obtained from the [Picovoice Console](https://console.picovoice.ai/).
 
 # File Demo
 
@@ -71,9 +69,9 @@ cmake -S demo/c/. -B demo/c/build && cmake --build demo/c/build --target cobra_d
 Run the demo:
 
 ```console
-./demo/c/build/cobra_demo_file ${LIBRARY_PATH} ${APP_ID} ${INPUT_AUDIO_FILE}
+./demo/c/build/cobra_demo_file -l ${LIBRARY_PATH} -a ${ACCESS_KEY} -d ${INPUT_AUDIO_FILE}
 ```
 
-Replace `${LIBRARY_PATH}` with the path to the appropriate Cobra library available under [lib](/lib), `${APP_ID}` with a
-Picovoice AppID obtained from the [Picovoice Console](https://console.picovoice.ai/), and `${INPUT_AUDIO_FILE}` with the
+Replace `${LIBRARY_PATH}` with the path to the appropriate Cobra library available under [lib](/lib), `${ACCESS_KEY}` with a
+Picovoice AccessKey obtained from the [Picovoice Console](https://console.picovoice.ai/), and `${INPUT_AUDIO_FILE}` with the
 path to the audio file you wish to analyze.
