@@ -9,11 +9,11 @@
     specific language governing permissions and limitations under the License.
 */
 
+#include <math.h>
 #include <signal.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <math.h>
 
 #if defined(_WIN32) || defined(_WIN64)
 
@@ -131,7 +131,7 @@ int main(int argc, char *argv[]) {
             return 0;
         } else {
             fprintf(stderr, "usage : %s --show_audio_devices\n"
-                            "        %s library_path access_key threshold audio_device_index\n", argv[0], argv[0]);
+                            "        %s library_path access_key audio_device_index\n", argv[0], argv[0]);
             exit(1);
         }
     }
