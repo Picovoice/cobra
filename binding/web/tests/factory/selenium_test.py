@@ -40,7 +40,7 @@ class SimpleHttpServer(threading.Thread):
         print(f'stopping server on port {self._server.server_port}')
 
 
-def run_unit_test_selenium(url, access_key, absolute_audio_file):
+def run_unit_test_selenium(url, access_key, audio_file_absolute_path):
     desired_capabilities = DesiredCapabilities.CHROME
     desired_capabilities['goog:loggingPrefs'] = {'browser': 'ALL'}
     opts = Options()
@@ -52,7 +52,7 @@ def run_unit_test_selenium(url, access_key, absolute_audio_file):
 
     wait = WebDriverWait(driver, 10)
 
-    driver.find_element_by_id("audioFile").send_keys(absolute_audio_file)
+    driver.find_element_by_id("audioFile").send_keys(audio_file_absolute_path)
     wait.until(EC.visibility_of_element_located((By.ID, "audioLoaded")))
 
     driver.find_element_by_id("accessKey").send_keys(access_key)
@@ -84,8 +84,6 @@ def main():
     
     args = parser.parse_args()
 
-    absolute_audio_file = os.path.abspath(args.audio_file)
-
     simple_server = SimpleHttpServer(port=4005, path=os.path.join(os.path.dirname(__file__), '..', '..'))
     test_url = f'{simple_server.base_url}/cobra-web-factory/test/index.html'
     simple_server.start()
@@ -93,7 +91,7 @@ def main():
 
     result = 0
     try:
-        result = run_unit_test_selenium(test_url, args.access_key, absolute_audio_file)
+        result = run_unit_test_selenium(test_url, args.access_key, os.path.abspath(args.audio_file))
     except WebDriverException as e:
         print(e)
         result = 1
