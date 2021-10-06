@@ -20,8 +20,8 @@ from util import *
 
 class CobraTestCase(unittest.TestCase):
     def test_process(self):
-        app_id = sys.argv[1]
-        cobra = Cobra(library_path=pv_library_path('../..'), app_id=app_id)
+        access_key = sys.argv[1]
+        cobra = Cobra(library_path=pv_library_path('../..'), access_key=access_key)
         audio, sample_rate = soundfile.read(
             os.path.join(os.path.dirname(__file__), '../../res/audio/sample.wav'),
             dtype='int16')
@@ -37,17 +37,15 @@ class CobraTestCase(unittest.TestCase):
                 results.append(voice_probability)
 
         cobra.delete()
-        voice_probability_ref = [0.880, 0.881, 0.992, 0.999, 0.999, 0.999, 0.999, 0.999, 0.999, 0.999, 0.999, 0.999,
-                                 0.999, 0.999, 0.999, 0.999, 0.997, 0.978, 0.901]
+        voice_probability_ref = [0.96, 0.97, 0.90, 0.86, 0.98, 0.99, 0.98, 0.99, 0.98, 0.99, 0.98, 0.98, 0.98, 0.98, 0.98, 0.96, 0.97]
         self.assertEqual(len(voice_probability_ref), len(results))
         error = [voice_probability_ref[results.index(result)] - result for result in results]
-        self.assertLess(max(abs(e) for e in error), 0.001)
+        self.assertLess(max(abs(e) for e in error), 0.01)
 
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
-        print("usage: test_cobra.py ${APP_ID}")
+        print("usage: test_cobra.py ${AccessKey}")
         exit(1)
 
-    # remove our args from the call to unittest main
     unittest.main(argv=sys.argv[:1])

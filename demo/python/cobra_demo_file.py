@@ -22,8 +22,8 @@ def main():
 
     parser.add_argument('--library_path', help='Absolute path to dynamic library.', default=pvcobra.LIBRARY_PATH)
 
-    parser.add_argument('--app_id',
-                        help='AppID provided by Picovoice Console (https://picovoice.ai/console/)',
+    parser.add_argument('--access_key',
+                        help='AccessKey provided by Picovoice Console (https://picovoice.ai/console/)',
                         required=True)
 
     parser.add_argument('--threshold', help="Threshold for the probability of voice activity",
@@ -32,7 +32,7 @@ def main():
 
     args = parser.parse_args()
 
-    cobra = pvcobra.create(library_path=args.library_path, app_id=args.app_id)
+    cobra = pvcobra.create(library_path=args.library_path, access_key=args.access_key)
     print("Cobra version: %s" % cobra.version)
     audio, sample_rate = soundfile.read(args.input_audio_path, dtype='int16')
     if audio.ndim == 2:
