@@ -55,12 +55,12 @@ class Cobra(object):
     class CCobra(Structure):
         pass
 
-    def __init__(self, library_path, app_id):
+    def __init__(self, library_path, access_key):
         """
         Constructor.
 
         :param library_path: Absolute path to Cobra's dynamic library.
-        :param app_id: AppID provided by Picovoice Console (https://picovoice.ai/console/)
+        :param access_key: AccessKey provided by Picovoice Console (https://picovoice.ai/console/)
         """
 
         if not os.path.exists(library_path):
@@ -77,7 +77,7 @@ class Cobra(object):
         self._handle = POINTER(self.CCobra)()
 
         status = init_func(
-            app_id.encode('utf-8'),
+            access_key.encode('utf-8'),
             byref(self._handle))
         if status is not self.PicovoiceStatuses.SUCCESS:
             raise self._PICOVOICE_STATUS_TO_EXCEPTION[status]()

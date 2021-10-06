@@ -30,7 +30,7 @@ class CobraDemo(Thread):
     def __init__(
             self,
             library_path,
-            app_id,
+            access_key,
             threshold=0.8,
             output_path=None,
             input_device_index=None):
@@ -48,7 +48,7 @@ class CobraDemo(Thread):
         super(CobraDemo, self).__init__()
 
         self._library_path = library_path
-        self._app_id = app_id
+        self._access_key = access_key
         self._threshold = threshold
         self._input_device_index = input_device_index
         self._output_path = output_path
@@ -65,7 +65,7 @@ class CobraDemo(Thread):
         pa = None
         audio_stream = None
         try:
-            cobra = pvcobra.create(library_path=self._library_path, app_id=self._app_id)
+            cobra = pvcobra.create(library_path=self._library_path, access_key=self._access_key)
             print("Cobra version: %s" % cobra.version)
             pa = pyaudio.PyAudio()
 
@@ -127,7 +127,7 @@ def main():
 
     parser.add_argument('--library_path', help='Absolute path to dynamic library.', default=pvcobra.LIBRARY_PATH)
 
-    parser.add_argument('--app_id',
+    parser.add_argument('--access_key',
                         help='AppID provided by Picovoice Console (https://picovoice.ai/console/)',
                         required=True)
 
@@ -148,7 +148,7 @@ def main():
     else:
         CobraDemo(
             library_path=args.library_path,
-            app_id=args.app_id,
+            access_key=args.access_key,
             threshold=0.8,
             output_path=args.output_path,
             input_device_index=args.audio_device_index).run()

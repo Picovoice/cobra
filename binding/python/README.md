@@ -22,9 +22,9 @@ Create an instance of the engine
 ```python
 import pvcobra
 
-handle = pvcobra.create(app_id=APP_ID)
+handle = pvcobra.create(access_key={AccessKey})
 ```
-where `APP_ID` is an AppID which should be obtained from [Picovoice Console](https://picovoice.ai/console/). `handle` is an instance of Cobra that detects voice activities.
+where `{AccessKey}` is an AccessKey which should be obtained from [Picovoice Console](https://picovoice.ai/console/). `handle` is an instance of Cobra that detects voice activities.
 
 ```python
 def get_next_audio_frame():
