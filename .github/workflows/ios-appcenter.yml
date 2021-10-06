@@ -38,8 +38,8 @@ jobs:
       - name: Make build dir
         run: mkdir ddp
 
-      - name: Inject AppID
-        run: sed -i '.bak' 's:{TESTING_APP_ID_HERE}:${{secrets.PV_VALID_APPID}}:'
+      - name: Inject AccessKey
+        run: sed -i '.bak' 's:{TESTING_ACCESS_KEY_HERE}:${{secrets.PV_VALID_ACCESS_KEY}}:'
           CobraDemoUITests/CobraDemoUITests.swift
 
       - name: XCode Build

@@ -55,7 +55,7 @@ pub enum PvStatus {
 }
 
 type PvCobraInitFn =
-    unsafe extern "C" fn(app_id: *const c_char, object: *mut *mut CCobra) -> PvStatus;
+    unsafe extern "C" fn(access_key: *const c_char, object: *mut *mut CCobra) -> PvStatus;
 type PvSampleRateFn = unsafe extern "C" fn() -> i32;
 type PvCobraFrameLengthFn = unsafe extern "C" fn() -> i32;
 type PvCobraVersionFn = unsafe extern "C" fn() -> *mut c_char;
@@ -101,8 +101,8 @@ pub struct Cobra {
 }
 
 impl Cobra {
-    pub fn new<S: Into<String>>(app_id: S) -> Result<Cobra, CobraError> {
-        let inner = CobraInner::init(app_id.into());
+    pub fn new<S: Into<String>>(access_key: S) -> Result<Cobra, CobraError> {
+        let inner = CobraInner::init(access_key.into());
         return match inner {
             Ok(inner) => Ok(Cobra {
                 inner: Arc::new(inner),
@@ -173,12 +173,12 @@ struct CobraInner {
 }
 
 impl CobraInner {
-    pub fn init<S: Into<String>>(app_id: S) -> Result<Self, CobraError> {
+    pub fn init<S: Into<String>>(access_key: S) -> Result<Self, CobraError> {
         unsafe {
             let pv_cobra_init: Symbol<PvCobraInitFn> = load_library_fn(b"pv_cobra_init")?;
 
-            let app_id = match CString::new(app_id.into()) {
-                Ok(app_id) => app_id,
+            let access_key = match CString::new(access_key.into()) {
+                Ok(access_key) => access_key,
                 Err(err) => {
                     return Err(CobraError::new(
                         CobraErrorStatus::ArgumentError,
@@ -188,7 +188,7 @@ impl CobraInner {
             };
             let mut ccobra = std::ptr::null_mut();
 
-            let status = pv_cobra_init(app_id.as_ptr(), addr_of_mut!(ccobra));
+            let status = pv_cobra_init(access_key.as_ptr(), addr_of_mut!(ccobra));
             if status != PvStatus::SUCCESS {
                 return Err(CobraError::new(
                     CobraErrorStatus::LibraryLoadError,

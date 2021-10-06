@@ -16,8 +16,8 @@ use hound;
 use itertools::Itertools;
 use std::path::PathBuf;
 
-fn cobra_demo(input_audio_path: PathBuf, app_id: &str, threshold: f32) {
-    let cobra = Cobra::new(app_id).expect("Failed to create Cobra");
+fn cobra_demo(input_audio_path: PathBuf, access_key: &str, threshold: f32) {
+    let cobra = Cobra::new(access_key).expect("Failed to create Cobra");
 
     let mut wav_reader = match hound::WavReader::open(input_audio_path.clone()) {
         Ok(reader) => reader,
@@ -79,10 +79,10 @@ fn main() {
                 .required(true),
         )
         .arg(
-            Arg::with_name("app_id")
-                .long("app_id")
-                .value_name("APP_ID")
-                .help("AppID provided by Picovoice Console (https://picovoice.ai/console/)")
+            Arg::with_name("access_key")
+                .long("access_key")
+                .value_name("ACCESS_KEY")
+                .help("AccessKey provided by Picovoice Console (https://picovoice.ai/console/)")
                 .takes_value(true)
                 .required(true),
         )
@@ -100,9 +100,9 @@ fn main() {
 
     let threshold = matches.value_of("threshold").unwrap().parse().unwrap();
 
-    let app_id = matches
-        .value_of("app_id")
-        .expect("AppID is REQUIRED for Cobra operation");
+    let access_key = matches
+        .value_of("access_key")
+        .expect("AccessKey is REQUIRED for Cobra operation");
 
-    cobra_demo(input_audio_path, app_id, threshold);
+    cobra_demo(input_audio_path, access_key, threshold);
 }

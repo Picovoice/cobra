@@ -48,12 +48,12 @@ jobs:
 
     - name: Build app
       run: ./gradlew
-        -PpvTestingAppID="${{secrets.PV_VALID_APPID}}"
+        -PpvTestingAccessKey="${{secrets.PV_VALID_ACCESS_KEY}}"
         assembleDebug
 
     - name: Build androidTest
       run: ./gradlew
-        -PpvTestingAppID="${{secrets.PV_VALID_APPID}}"
+        -PpvTestingAccessKey="${{secrets.PV_VALID_ACCESS_KEY}}"
         assembleAndroidTest
 
     - name: Run tests on AppCenter

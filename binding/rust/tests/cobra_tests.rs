@@ -22,9 +22,9 @@ mod tests {
     #[test]
     fn test_process() {
         let args: Vec<String> = env::args().collect();
-        let app_id = args[1].clone();
+        let access_key = args[1].clone();
 
-        let cobra = Cobra::new(app_id).expect("Unable to create Cobra");
+        let cobra = Cobra::new(access_key).expect("Unable to create Cobra");
 
         let soundfile_path = concat!(env!("CARGO_MANIFEST_DIR"), "/../../res/audio/sample.wav");
         let soundfile = BufReader::new(File::open(soundfile_path).expect(soundfile_path));
