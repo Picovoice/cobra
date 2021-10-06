@@ -12,11 +12,12 @@
 package ai.picovoice.cobra;
 
 /**
- *   Android binding for Cobra voice activity detection (VAD) engine. It detects speech signals within an incoming
- *   stream of audio in real-time. It processes incoming audio in consecutive frames and for each frame emits the
- *   probability of voice activity. The number of samples per frame can be attained by calling {@link #getFrameLength()}.
- *   The incoming audio needs to have a sample rate equal to {@link #getSampleRate()} and be 16-bit linearly-encoded. Cobra
- *   operates on single-channel audio.
+ *   Android binding for Cobra voice activity detection (VAD) engine. It detects speech signals
+ *   within an incoming stream of audio in real-time. It processes incoming audio in consecutive
+ *   frames and for each frame emits the probability of voice activity. The number of samples per
+ *   frame can be attained by calling {@link #getFrameLength()}. The incoming audio needs to have a
+ *   sample rate equal to {@link #getSampleRate()} and be 16-bit linearly-encoded. Cobra operates on
+ *   single-channel audio.
  **/
 public class Cobra {
 
@@ -29,12 +30,12 @@ public class Cobra {
     /**
      * Constructor.
      *
-     * @param appID AppID obtained from Picovoice Console
+     * @param accessKey AccessKey obtained from Picovoice Console
      * @throws CobraException if there is an error while initializing Cobra.
      */
-    public Cobra(String appID) throws CobraException {
+    public Cobra(String accessKey) throws CobraException {
         try {
-            handle = init(appID);
+            handle = init(accessKey);
         } catch (Exception e) {
             throw new CobraException(e);
         }
@@ -86,7 +87,7 @@ public class Cobra {
      */
     public native String getVersion();
 
-    private native long init(String appID);
+    private native long init(String accessKey);
 
     private native void delete(long object);
 

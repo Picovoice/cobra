@@ -45,10 +45,9 @@ public class MainActivity extends AppCompatActivity {
     public Cobra cobra;
     private int voiceDetectedBackgroundColor;
 
-    private static final String APP_ID = "${YOUR_APP_ID_HERE}";
+    private static final String ACCESS_KEY = "${YOUR_ACCESS_KEY_HERE}";
 
     private ToggleButton recordButton;
-    private TextView errorMessage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,25 +57,25 @@ public class MainActivity extends AppCompatActivity {
         voiceDetectedBackgroundColor = getResources().getColor(R.color.colorAccent);
 
         recordButton = findViewById(R.id.startButton);
-        errorMessage = findViewById(R.id.errorMessage);
+        TextView errorMessage = findViewById(R.id.errorMessage);
 
         try {
-            cobra = new Cobra(APP_ID);
+            cobra = new Cobra(ACCESS_KEY);
         } catch (CobraException e) {
             String error;
 
             if (e.getMessage() == null) {
                 error = "Failed to initialize Cobra.";
             } else if (e.getMessage().contains("IllegalArgument")) {
-                error = "APP_ID provided is invalid.";
+                error = "AccessKey provided is invalid.";
             } else if (e.getMessage().contains("ACTIVATION_ERROR")) {
-                error = "APP_ID activation error.";
+                error = "AccessKey activation error.";
             } else if (e.getMessage().contains("ACTIVATION_LIMIT_REACHED")) {
-                error = "APP_ID reached its limit.";
+                error = "AccessKey reached its limit.";
             } else if (e.getMessage().contains("ACTIVATION_REFUSED")) {
-                error = "APP_ID activation refused.";
+                error = "AccessKey activation refused.";
             } else if (e.getMessage().contains("ACTIVATION_THROTTLED")) {
-                error = "APP_ID is throttled.";
+                error = "AccessKey is throttled.";
             } else {
                 error = "Failed to initialize Cobra: " + e.getMessage();
             }

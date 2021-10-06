@@ -36,6 +36,7 @@ import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
+import java.util.List;
 
 import ai.picovoice.cobra.Cobra;
 import ai.picovoice.cobra.CobraException;
@@ -54,7 +55,7 @@ public class CobraTest {
     AssetManager assetManager;
     String testResourcesPath;
 
-    String appID = "";
+    String accessKey = "";
 
     @After
     public void TearDown() {
@@ -69,15 +70,17 @@ public class CobraTest {
         extractAssetsRecursively("test_resources");
         testResourcesPath = new File(appContext.getFilesDir(), "test_resources").getAbsolutePath();
 
-        appID = appContext.getString(R.string.pvTestingAppID);
+        accessKey = appContext.getString(R.string.pvTestingAccessKey);
     }
 
     @Test
     public void testProcess() throws CobraException {
-        Cobra cobra = new Cobra(appID);
+        Cobra cobra = new Cobra(accessKey);
 
         File testAudio = new File(testResourcesPath, "audio_samples/sample.wav");
         ArrayList<Float> detectionResults = new ArrayList<>();
+
+        List<Float> probs = new ArrayList<>();
 
         try {
             FileInputStream audioInputStream = new FileInputStream(testAudio);
@@ -88,35 +91,40 @@ public class CobraTest {
 
             audioInputStream.skip(44);
 
-            float threshold = 0.8f;
             while (audioInputStream.available() > 0) {
                 int numRead = audioInputStream.read(pcmBuff.array());
                 if (numRead == cobra.getFrameLength() * 2) {
                     pcmBuff.asShortBuffer().get(pcm);
-                    float voiceProbability = cobra.process(pcm);
-                    if (voiceProbability >= threshold) {
-                        detectionResults.add(voiceProbability);
-                    }
+                    probs.add(cobra.process(pcm));
                 }
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new CobraException(e);
         }
 
         cobra.delete();
 
-        float[] voiceProbabilityRef = {
-            0.880f, 0.881f, 0.992f, 0.999f, 0.999f,
-            0.999f, 0.999f, 0.999f, 0.999f, 0.999f,
-            0.999f, 0.999f, 0.999f, 0.999f, 0.999f,
-            0.999f, 0.997f, 0.978f, 0.901f
+        float[] labels = {
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
         };
 
-        assertSame(voiceProbabilityRef.length, detectionResults.size());
-        for (int i = 0; i < voiceProbabilityRef.length; i++) {
-            float error = voiceProbabilityRef[i] - detectionResults.get(i);
-            assertTrue(Math.abs(error) < 0.001);
+        assertSame(labels.length, probs.size());
+
+        float error = 0.f;
+
+        for (int i = 0; i < probs.size(); i++) {
+            error -= (labels[i] * Math.log(probs.get(i))) + ((1 - labels[i]) * Math.log(1 - probs.get(i)));
         }
+
+        error /= probs.size();
+        assertTrue(error < 0.1);
+    }
+
+    @Test
+    public void testVersion() throws CobraException {
+        Cobra cobra = new Cobra(accessKey);
+        assertTrue(cobra.getVersion().length() > 0);
     }
 
     private void extractAssetsRecursively(String path) throws IOException {
