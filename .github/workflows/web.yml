@@ -62,6 +62,7 @@ jobs:
           cd cobra-web-factory
           yarn
           yarn build
+          yarn lint
 
       - name: Test
-        run: python cobra-web-factory/test/selenium_test.py --app_id ${{secrets.PV_VALID_APPID}}
+        run: python cobra-web-factory/test/selenium_test.py --access_key ${{secrets.PV_VALID_ACCESS_KEY}} --audio_file ../../res/audio/sample.wav

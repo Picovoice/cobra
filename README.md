@@ -276,9 +276,9 @@ The Cobra package [@picovoice/cobra-web-worker](https://www.npmjs.com/package/@p
       }
 
       async function startCobra() {
-        const appId = // AppID string provided by Picovoice Console (picovoice.ai/console/)
+        const accessKey = // AccessKey string provided by Picovoice Console (picovoice.ai/console/)
         const cobraWorker = await CobraWorkerFactory.create(
-          appId,
+          accessKey,
           cobraCallback
         );
 
@@ -334,9 +334,9 @@ function cobraCallback(voiceProbability) {
 }
 
 async function startCobra() {
-  const appId = //AppID string provided by Picovoice Console (picovoice.ai/console/)
+  const accessKey = //AccessKey string provided by Picovoice Console (picovoice.ai/console/)
   const cobraWorker = await CobraWorkerFactory.create(
-      appId,
+      accessKey,
       cobraCallback
   );
 

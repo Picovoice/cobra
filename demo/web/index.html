@@ -25,12 +25,12 @@
         );
       }
 
-      async function startCobra(appId) {
+      async function startCobra(accessKey) {
         writeMessage("Cobra is loading. Please wait...");
         let engineHandle = null;
         try {
           engineHandle = await CobraWebWorker.CobraWorkerFactory.create(
-            appId,
+            accessKey,
             cobraCallback
           );
         } catch (error) {
@@ -61,19 +61,19 @@
     <p>
       This demo uses Cobra for Web and the WebVoiceProcessor packages to create
       an instance of Cobra that listens for voice activity and outputs them to
-      the page. After entering the AppID, click the "run Cobra" button.
+      the page. After entering the AccessKey, click the "run Cobra" button.
     </p>
 
-    <label for="appId"
-      >AppID string provided by
+    <label for="accessKey"
+      >AccessKey string provided by
       <a href="https://picovoice.ai/console/">Picovoice Console</a>:</label
     >
-    <input type="text" id="appId" name="appId" />
+    <input type="text" id="accessKey" name="accessKey" />
     <input
       type="button"
-      id="sumbit"
+      id="submit"
       value="Run Cobra"
-      onclick="startCobra(document.getElementById('appId').value)"
+      onclick="startCobra(document.getElementById('accessKey').value)"
     />
     <hr />
 

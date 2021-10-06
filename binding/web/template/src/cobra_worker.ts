@@ -20,10 +20,10 @@ import { Cobra } from './cobra';
 let paused = true;
 let cobraEngine: CobraEngine | null = null;
 
-async function init(appId: string, start = true): Promise<void> {
+async function init(accessKey: string, start = true): Promise<void> {
   let cobraReadyMessage: CobraWorkerResponseReady | CobraWorkerResponseFailed;
   try {
-    cobraEngine = await Cobra.create(appId);
+    cobraEngine = await Cobra.create(accessKey);
     cobraReadyMessage = {
       command: 'cobra-ready',
     };
@@ -64,7 +64,7 @@ onmessage = function (
 ): void {
   switch (event.data.command) {
     case 'init':
-      init(event.data.appId, event.data.start);
+      init(event.data.accessKey, event.data.start);
       break;
     case 'process':
       process(event.data.inputFrame);
@@ -111,6 +111,7 @@ onmessage = function (
       Cobra.clearFilePromises();
       break;
     default:
+      // eslint-disable-next-line no-console
       console.warn('Unhandled command in cobra_worker: ' + event.data.command);
   }
 };

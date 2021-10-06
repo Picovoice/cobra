@@ -9,6 +9,6 @@
     specific language governing permissions and limitations under the License.
 */
 
-import Cobra from "./cobra"
+import Cobra from './cobra';
 
-export { Cobra }
+export { Cobra };
