@@ -12,6 +12,7 @@
 import sys
 import unittest
 
+import numpy as np
 import soundfile
 
 from cobra import Cobra
@@ -19,28 +20,32 @@ from util import *
 
 
 class CobraTestCase(unittest.TestCase):
+    def setUp(self):
+        self._cobra = Cobra(access_key=sys.argv[1], library_path=pv_library_path('../..'))
+
+    def tearDown(self):
+        self._cobra.delete()
+
     def test_process(self):
-        access_key = sys.argv[1]
-        cobra = Cobra(library_path=pv_library_path('../..'), access_key=access_key)
         audio, sample_rate = soundfile.read(
             os.path.join(os.path.dirname(__file__), '../../res/audio/sample.wav'),
             dtype='int16')
-        assert sample_rate == cobra.sample_rate
+        assert sample_rate == self._cobra.sample_rate
 
-        num_frames = len(audio) // cobra.frame_length
-        results = []
-        threshold = 0.8
+        num_frames = len(audio) // self._cobra.frame_length
+        probs = np.zeros(num_frames, dtype=float)
         for i in range(num_frames):
-            frame = audio[i * cobra.frame_length:(i + 1) * cobra.frame_length]
-            voice_probability = cobra.process(frame)
-            if voice_probability >= threshold:
-                results.append(voice_probability)
+            frame = audio[i * self._cobra.frame_length:(i + 1) * self._cobra.frame_length]
+            probs[i] = self._cobra.process(frame)
 
-        cobra.delete()
-        voice_probability_ref = [0.96, 0.97, 0.90, 0.86, 0.98, 0.99, 0.98, 0.99, 0.98, 0.99, 0.98, 0.98, 0.98, 0.98, 0.98, 0.96, 0.97]
-        self.assertEqual(len(voice_probability_ref), len(results))
-        error = [voice_probability_ref[results.index(result)] - result for result in results]
-        self.assertLess(max(abs(e) for e in error), 0.01)
+        labels = np.zeros(num_frames, dtype=int)
+        labels[10:28] = 1
+
+        loss = -np.sum(labels * np.log(probs) + (1 - labels) * np.log(1 - probs)) / num_frames
+        self.assertLess(loss, 0.1)
+
+    def test_version(self):
+        self.assertIsInstance(self._cobra.version, str)
 
 
 if __name__ == '__main__':
