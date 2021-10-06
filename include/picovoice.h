@@ -16,12 +16,11 @@
 
 #ifdef __cplusplus
 
-extern "C"
-{
+extern "C" {
 
 #endif
 
-#define PV_API __attribute__((visibility ("default")))
+#define PV_API __attribute__((visibility("default")))
 
 /**
  * Audio sample rate accepted by Picovoice.
