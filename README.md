@@ -192,27 +192,24 @@ Create an instance of the engine
 import ai.picovoice.cobra.Cobra;
 import ai.picovoice.cobra.CobraException;
 
-String appID = // .. AppID provided by Picovoice Console (https://picovoice.ai/console/)
+String accessKey = // .. AccessKey provided by Picovoice Console (https://picovoice.ai/console/)
 try {
-    handle = new Cobra(appID);
+    handle = new Cobra(accessKey);
 } catch (CobraException e) {
     // handle error
 }
 ```
 
-When initialized, valid sample rate can be obtained using `handle.getSampleRate()`. The required frame length (number of audio samples in an input array) is `handle.getFrameLength()`. The object can be used to monitor incoming audio as follows:
+When initialized, valid sample rate can be obtained using `handle.getSampleRate()`. The required frame length
+(number of audio samples in an input array) is `handle.getFrameLength()`. The object can be used to monitor incoming
+audio as follows:
 
 ```java
 short[] getNextAudioFrame(){
 
-float threshold = // .. # detection threshold within [0, 1]
-
 while(true) {
     try {
-        float voiceProbability = handle.process(getNextAudioFrame());
-        if(voiceProbability >= threshold) {
-            // .. detection event callback
-        }
+        final float voiceProbability = handle.process(getNextAudioFrame());
     } catch (CobraException e) { }
 }
 ```
@@ -232,12 +229,10 @@ Create an instance of the engine
 ```swift
 import Cobra
 
-let appID : String = // .. AppID provided by Picovoice Console (https://picovoice.ai/console/)
+let accessKey : String = // .. AccessKey provided by Picovoice Console (https://picovoice.ai/console/)
 do {
-    handle = try Cobra(appID: appID)
+    handle = try Cobra(accessKey: accessKey)
 } catch { }
-
-let threshold = // .. detection threshold within [0, 1]
 
 func getNextAudioFrame() -> [Int16] {
     // .. get audioFrame
@@ -247,9 +242,6 @@ func getNextAudioFrame() -> [Int16] {
 while true {
     do {
         let voiceProbability = try handle.process(getNextAudioFrame())
-        if voiceProbability >= threshold {
-            // .. detection made!
-        }
     } catch { }
 }
 ```
