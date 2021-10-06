@@ -15,19 +15,16 @@ from .util import *
 LIBRARY_PATH = pv_library_path('')
 
 
-def create(library_path=None, access_key=None):
+def create(access_key, library_path=None):
     """
     Factory method for Cobra voice activity detection (VAD) engine.
 
-    :param library_path: Absolute path to Cobra's dynamic library. If not set it will be set to the default
     :param access_key: AccessKey provided by Picovoice Console (https://picovoice.ai/console/)
+    :param library_path: Absolute path to Cobra's dynamic library. If not set it will be set to the default
     :return: An instance of Cobra voice activity detection engine.
     """
 
     if library_path is None:
         library_path = LIBRARY_PATH
-
-    if access_key is None:
-        raise ValueError("missing AccessKey")
 
     return Cobra(library_path=library_path, access_key=access_key)

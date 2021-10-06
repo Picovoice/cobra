@@ -11,14 +11,10 @@
 
 import os
 import shutil
-import subprocess
 
 import setuptools
 
-command = 'git status'
-result = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT).decode('utf-8')
-if 'nothing to commit, working tree clean' not in result:
-    raise Exception('Clean the working tree first')
+os.system('git clean -dfx')
 
 package_folder = os.path.join(os.path.dirname(__file__), 'pvcobra')
 os.mkdir(package_folder)

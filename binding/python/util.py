@@ -9,19 +9,16 @@
 # specific language governing permissions and limitations under the License.
 #
 
-import logging
 import os
 import platform
 import subprocess
-
-log = logging.getLogger('CBR')
-log.setLevel(logging.WARNING)
 
 
 def _pv_linux_machine(machine):
     if machine == 'x86_64':
         return machine
-    elif machine == 'aarch64':
+
+    if machine == 'aarch64':
         arch_info = '-' + machine
     else:
         arch_info = ''
@@ -44,11 +41,8 @@ def _pv_linux_machine(machine):
         return 'cortex-a72' + arch_info
     elif '0xc08' == cpu_part:
         return 'beaglebone' + arch_info
-    else:
-        log.warning(
-            'WARNING: Please be advised that this device (CPU part = %s) is not officially supported by Picovoice. '
-            'Falling back to the armv6-based (Raspberry Pi Zero) library. This is not tested nor optimal.\n For the model, use Raspberry Pi\'s models' % cpu_part)
-        return 'arm11' + arch_info
+
+    raise NotImplementedError('Unsupported CPU.\n%s' % cpu_info)
 
 
 def _pv_platform():
@@ -95,36 +89,3 @@ def pv_library_path(relative):
         return os.path.join(os.path.dirname(__file__), relative, 'lib/windows/amd64/libpv_cobra.dll')
 
     raise NotImplementedError('Unsupported platform.')
-
-
-def pv_model_path(relative):
-    return os.path.join(os.path.dirname(__file__), relative, 'lib/common/cobra_params.pv')
-
-
-def _pv_keyword_files_subdir():
-    if _PV_SYSTEM == 'Darwin':
-        return 'mac'
-    elif _PV_SYSTEM == 'Linux':
-        if _PV_MACHINE == 'x86_64':
-            return 'linux'
-        elif _PV_MACHINE in _JETSON_MACHINES:
-            return 'jetson'
-        elif _PV_MACHINE in _RASPBERRY_PI_MACHINES:
-            return 'raspberry-pi'
-        elif _PV_MACHINE == 'beaglebone':
-            return 'beaglebone'
-    elif _PV_SYSTEM == 'Windows':
-        return 'windows'
-
-    raise NotImplementedError('Unsupported platform')
-
-
-def pv_keyword_paths(relative):
-    keyword_files_dir = \
-        os.path.join(os.path.dirname(__file__), relative, 'resources/keyword_files', _pv_keyword_files_subdir())
-
-    res = dict()
-    for x in os.listdir(keyword_files_dir):
-        res[x.rsplit('_')[0]] = os.path.join(keyword_files_dir, x)
-
-    return res
