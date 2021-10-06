@@ -20,6 +20,7 @@ public enum CobraError: Error {
     case activationLimitReached
     case activationThrottled
     case activationRefused
+    case internalError
 }
 
 /// iOS (Swift) binding for Cobra voice activity detection (VAD) engine. It detects speech signals within an incoming
@@ -70,22 +71,6 @@ public class Cobra {
     /// linearly-encoded. Cobra operates on single-channel audio.
     /// - Returns: Probability of voice activity. It is a floating-point number within [0, 1].
     /// - Throws: CobraError
-    public func process(pcm: UnsafePointer<Int16>) throws -> Float32 {
-        var result: Float32 = 0
-        let status = pv_cobra_process(self.handle, pcm, &result)
-        try checkStatus(status)
-        
-        return result
-    }
-    
-    /// Processes a frame of the incoming audio stream and emits the detection result.
-    ///
-    /// - Parameters:
-    ///   - pcm: A frame of audio samples. The number of samples per frame can be attained by calling
-    /// `.frameLength`. The incoming audio needs to have a sample rate equal to `.sampleRate` and be 16-bit
-    /// linearly-encoded. Cobra operates on single-channel audio.
-    /// - Returns: Probability of voice activity. It is a floating-point number within [0, 1].
-    /// - Throws: CobraError
     public func process(pcm: [Int16]) throws -> Float32 {
         if pcm.count != Cobra.frameLength {
             throw CobraError.invalidArgument(message: "Frame of audio data must contain \(Cobra.frameLength) samples - given frame contained \(pcm.count)")
@@ -100,6 +85,8 @@ public class Cobra {
     
     private func checkStatus(_ status: pv_status_t) throws {
         switch status {
+        case PV_STATUS_SUCCESS:
+            return
         case PV_STATUS_IO_ERROR:
             throw CobraError.io
         case PV_STATUS_OUT_OF_MEMORY:
@@ -121,7 +108,7 @@ public class Cobra {
         case PV_STATUS_ACTIVATION_REFUSED:
             throw CobraError.activationRefused
         default:
-            return
+            throw CobraError.internalError
         }
     }
 }
