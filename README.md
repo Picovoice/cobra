@@ -10,20 +10,20 @@ Cobra is a highly-accurate and lightweight voice activity detection (VAD) engine
   - [Table of Contents](#table-of-contents)
   - [Demos](#demos)
     - [Python Demos](#python-demos)
+    - [C Demos](#c-demos)
     - [Android Demos](#android-demos)
     - [iOS demos](#ios-demos)
-    - [C Demos](#c-demos)
     - [Web Demos](#web-demos)
   - [SDKs](#sdks)
     - [Python](#python)
+    - [C](#c)
     - [Android](#android)
     - [iOS](#ios)
-    - [C](#c)
     - [Web](#web)
       - [Vanilla JavaScript and HTML (CDN Script Tag)](#vanilla-javascript-and-html-cdn-script-tag)
       - [Vanilla JavaScript and HTML (ES Modules)](#vanilla-javascript-and-html-es-modules)
   - [Releases](#releases)
-    - [v1.0.0 June Sep 14, 2021](#v100-june-sep-14-2021)
+    - [v1.0.0 Oct 8th, 2021](#v100-oct-8th-2021)
 
 ## Demos
 
@@ -38,12 +38,13 @@ sudo pip3 install pvcobrademo
 With a working microphone connected to your device run the following in the terminal:
 
 ```console
-cobra_demo_mic --access_key {AccessKey}
+cobra_demo_mic --access_key ${AccessKey}
 ```
 
-where `{AccessKey}` is an AccessKey which should be obtained from [Picovoice Console](https://picovoice.ai/console/). The engine starts processing the audio input from the microphone in realtime and outputs to the terminal when it detects any voice activities.
+Replace `${AccessKey}` with your AccessKey obtained from [Picovoice Console](https://picovoice.ai/console/). Cobra
+starts processing the audio input from the microphone in realtime and outputs to the terminal when it detects any voice activities.
 
-For more information about Python demos go to [demo/python](/demo/python).
+For more information about the Python demos go to [demo/python](/demo/python).
 
 ### Android Demos
 
@@ -56,7 +57,7 @@ For more information about Android demos go to [demo/android](/demo/android).
 
 ### iOS demos
 
-1. Before building the demo app, run the following from this directory to install the Cobra-iOS Cocoapod:
+1. Before building the demo app, run the following from this directory to install the Cobra-iOS CocoaPod:
 ```console
 pod install
 ```
@@ -266,7 +267,7 @@ pv_cobra_delete(handle);
 
 Cobra is available on modern web browsers (i.e., not Internet Explorer) via [WebAssembly](https://webassembly.org/). Cobra is provided pre-packaged as a [Web Worker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers) to allow it to perform processing off the main thread.
 
-The Cobra package [@picovoice/cobra-web-worker](https://www.npmjs.com/package/@picovoice/cobra-web-worker) can be used with the [@picovoice/web-voice-processor](https://www.npmjs.com/package/@picovoice/web-voice-processor). Microphone audio is handled via the [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) and is abstracted by the WebVoiceProcessor, which also handles downsampling to the correct format.
+The Cobra package [@picovoice/cobra-web-worker](https://www.npmjs.com/package/@picovoice/cobra-web-worker) can be used with the [@picovoice/web-voice-processor](https://www.npmjs.com/package/@picovoice/web-voice-processor). Microphone audio is handled via the [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) and is abstracted by the WebVoiceProcessor, which also handles down-sampling to the correct format.
 
 #### Vanilla JavaScript and HTML (CDN Script Tag)
 
@@ -298,9 +299,7 @@ The Cobra package [@picovoice/cobra-web-worker](https://www.npmjs.com/package/@p
 
         console.log("Cobra worker ready!");
 
-        console.log(
-          "WebVoiceProcessor initializing. Microphone permissions requested ..."
-        );
+        console.log("WebVoiceProcessor initializing. Microphone permissions requested ...");
 
         try {
           let webVp = await window.WebVoiceProcessor.WebVoiceProcessor.init({
@@ -368,6 +367,6 @@ startCobra()
 
 ## Releases
 
-### v1.0.0 June Sep 14, 2021
+### v1.0.0 Oct 8th, 2021
 
 - Initial release.
