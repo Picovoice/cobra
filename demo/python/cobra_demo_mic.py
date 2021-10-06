@@ -10,21 +10,19 @@
 #
 
 import argparse
+import struct
+import sys
+from threading import Thread
+
 import numpy as np
 import pvcobra
 import pyaudio
 import soundfile
-import struct
-import sys
-from datetime import datetime
-from threading import Thread
 
 
 class CobraDemo(Thread):
     """
-    Microphone Demo for Cobra voice activity detection engine. It creates an input audio stream from a microphone, monitors it, and
-    upon detecting voice activities prints the detection time on console. It optionally saves
-    the recorded audio into a file for further debugging.
+    Microphone Demo for Cobra voice activity detection engine.
     """
 
     def __init__(
@@ -37,6 +35,7 @@ class CobraDemo(Thread):
         Constructor.
 
         :param library_path: Absolute path to Cobra's dynamic library.
+        :param access_key AccessKey obtained from Picovoice Console.
         :param output_path: If provided recorded audio will be stored in this location at the end of the run.
         :param input_device_index: Optional argument. If provided, audio is recorded from this input device. Otherwise,
         the default audio input device is used.
@@ -54,7 +53,7 @@ class CobraDemo(Thread):
     def run(self):
         """
          Creates an input audio stream, instantiates an instance of Cobra object, and monitors the audio stream for
-         voice activities. It prints the time of detection.
+         voice activities.
          """
 
         cobra = None
@@ -105,8 +104,11 @@ class CobraDemo(Thread):
             if self._output_path is not None and len(self._recorded_frames) > 0:
                 recorded_audio = np.concatenate(
                     self._recorded_frames, axis=0).astype(np.int16)
-                soundfile.write(self._output_path, recorded_audio,
-                                samplerate=cobra.sample_rate, subtype='PCM_16')
+                soundfile.write(
+                    self._output_path,
+                    recorded_audio,
+                    samplerate=cobra.sample_rate,
+                    subtype='PCM_16')
 
     @classmethod
     def show_audio_devices(cls):
@@ -128,7 +130,7 @@ def main():
         '--library_path', help='Absolute path to dynamic library.', default=pvcobra.LIBRARY_PATH)
 
     parser.add_argument('--access_key',
-                        help='AppID provided by Picovoice Console (https://picovoice.ai/console/)',
+                        help='AccessKey provided by Picovoice Console (https://picovoice.ai/console/)',
                         required=True)
 
     parser.add_argument('--audio_device_index',

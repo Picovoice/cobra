@@ -1,12 +1,9 @@
 import os
-import setuptools
 import shutil
-import subprocess
 
-command = 'git status'
-result = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT).decode('utf-8')
-if 'nothing to commit, working tree clean' not in result:
-    raise Exception('Clean the working tree first')
+import setuptools
+
+os.system('git clean -dfx')
 
 package_folder = os.path.join(os.path.dirname(__file__), 'pvcobrademo')
 os.mkdir(package_folder)
@@ -31,15 +28,15 @@ with open(os.path.join(os.path.dirname(__file__), 'README.md'), 'r') as f:
 
 setuptools.setup(
     name="pvcobrademo",
-    version="1.0.0",
+    version="1.0.2",
     author="Picovoice",
     author_email="hello@picovoice.ai",
-    description="Cobra voice activity detection (VAD) engine.",
+    description="Cobra voice activity detection (VAD) engine demos.",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/Picovoice/cobra",
     packages=["pvcobrademo"],
-    install_requires=["enum34", "numpy", "pvcobra==1.0.0", "pyaudio", "soundfile"],
+    install_requires=["enum34", "numpy", "pvcobra==1.0.2", "pyaudio", "soundfile"],
     include_package_data=True,
     classifiers=[
         "Development Status :: 5 - Production/Stable",
