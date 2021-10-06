@@ -1,4 +1,4 @@
-# Cobra Voice Activity Detection engine
+# Cobra Voice Activity Detection Engine
 
 Made in Vancouver, Canada by [Picovoice](https://picovoice.ai)
 
@@ -31,9 +31,9 @@ Create an instance of the engine
 ```swift
 import Cobra
 
-let appID : String = // .. AppID provided by Picovoice Console (https://picovoice.ai/console/)
+let accessKey : String = // .. accessKey provided by Picovoice Console (https://picovoice.ai/console/)
 do {
-    handle = try Cobra(appID: appID)
+    handle = try Cobra(accessKey: accessKey)
 } catch { }
 ```
 

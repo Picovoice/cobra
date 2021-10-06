@@ -1,4 +1,4 @@
-# Cobra Voice Activity Detection engine
+# Cobra Voice Activity Detection Engine
 
 Made in Vancouver, Canada by [Picovoice](https://picovoice.ai)
 
@@ -10,7 +10,8 @@ Cobra is a highly accurate and lightweight voice activity detection (VAD) engine
 
 ## Installation
 
-Cobra can be found on Maven Central. To include the package in your Android project, ensure you have included `mavenCentral()` in your top-level `build.gradle` file and then add the following to your app's `build.gradle`:
+Cobra can be found on Maven Central. To include the package in your Android project, ensure you have included `mavenCentral()`
+in your top-level `build.gradle` file and then add the following to your app's `build.gradle`:
 
 ```groovy
 dependencies {
@@ -35,9 +36,9 @@ Create an instance of the engine
 import ai.picovoice.cobra.Cobra;
 import ai.picovoice.cobra.CobraException;
 
-String appID = // .. AppID provided by Picovoice Console (https://picovoice.ai/console/)
+String accessKey = // .. AccessKey obtained from Picovoice Console (https://picovoice.ai/console/)
 try {
-    handle = new Cobra(appID);
+    handle = new Cobra(accessKey);
 } catch (CobraException e) {
     // handle error
 }

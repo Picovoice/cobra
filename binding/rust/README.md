@@ -1,4 +1,4 @@
-# Cobra Voice Activity Detection engine
+# Cobra Voice Activity Detection Engine
 
 Made in Vancouver, Canada by [Picovoice](https://picovoice.ai)
 
@@ -25,10 +25,10 @@ Create an instance of the engine:
 ```rust
 use cobra::Cobra;
 
-let app_id = "..."; // AppID provided by Picovoice Console (https://picovoice.ai/console/)
-let cobra = Cobra::new(app_id);
+let access_key = "..."; // AccessKey provided by Picovoice Console (https://picovoice.ai/console/)
+let cobra = Cobra::new(access_key);
 ```
-where `app_id` is an AppID which should be obtained from [Picovoice Console](https://picovoice.ai/console/). `cobra` is an instance of Cobra that detects voice activities.
+where `access_key` is an AccessKey which should be obtained from [Picovoice Console](https://picovoice.ai/console/). `cobra` is an instance of Cobra that detects voice activities.
 
 ```rust
 fn next_audio_frame() -> Vec<i16> {
