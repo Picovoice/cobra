@@ -43,10 +43,10 @@ public class Cobra {
     /// Constructor.
     ///
     /// - Parameters:
-    ///   - appID: AppID obtained from the Picvoice Console (https://picovoice.ai/console/)
+    ///   - accessKey: AccessKey obtained from the Picvoice Console (https://picovoice.ai/console/)
     /// - Throws: CobraError
-    public init(appID:String) throws {
-        let status = pv_cobra_init(appID, &handle)
+    public init(accessKey: String) throws {
+        let status = pv_cobra_init(accessKey, &handle)
         try checkStatus(status)
     }
     
@@ -70,7 +70,7 @@ public class Cobra {
     /// linearly-encoded. Cobra operates on single-channel audio.
     /// - Returns: Probability of voice activity. It is a floating-point number within [0, 1].
     /// - Throws: CobraError
-    public func process(pcm:UnsafePointer<Int16>) throws -> Float32 {
+    public func process(pcm: UnsafePointer<Int16>) throws -> Float32 {
         var result: Float32 = 0
         let status = pv_cobra_process(self.handle, pcm, &result)
         try checkStatus(status)
@@ -86,7 +86,7 @@ public class Cobra {
     /// linearly-encoded. Cobra operates on single-channel audio.
     /// - Returns: Probability of voice activity. It is a floating-point number within [0, 1].
     /// - Throws: CobraError
-    public func process(pcm:[Int16]) throws -> Float32 {
+    public func process(pcm: [Int16]) throws -> Float32 {
         if pcm.count != Cobra.frameLength {
             throw CobraError.invalidArgument(message: "Frame of audio data must contain \(Cobra.frameLength) samples - given frame contained \(pcm.count)")
         }
