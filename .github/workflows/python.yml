@@ -47,4 +47,4 @@ jobs:
       run: pip install -r requirements.txt
 
     - name: Test
-      run: python test_cobra.py ${{secrets.PV_VALID_APPID}}
+      run: python test_cobra.py ${{secrets.PV_VALID_ACCESS_KEY}}
