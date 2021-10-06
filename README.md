@@ -10,15 +10,15 @@ Cobra is a highly-accurate and lightweight voice activity detection (VAD) engine
   - [Table of Contents](#table-of-contents)
   - [Demos](#demos)
     - [Python Demos](#python-demos)
-    - [C Demos](#c-demos)
     - [Android Demos](#android-demos)
     - [iOS demos](#ios-demos)
+    - [C Demos](#c-demos)
     - [Web Demos](#web-demos)
   - [SDKs](#sdks)
     - [Python](#python)
-    - [C](#c)
     - [Android](#android)
     - [iOS](#ios)
+    - [C](#c)
     - [Web](#web)
       - [Vanilla JavaScript and HTML (CDN Script Tag)](#vanilla-javascript-and-html-cdn-script-tag)
       - [Vanilla JavaScript and HTML (ES Modules)](#vanilla-javascript-and-html-es-modules)
@@ -276,9 +276,9 @@ The Cobra package [@picovoice/cobra-web-worker](https://www.npmjs.com/package/@p
       }
 
       async function startCobra() {
-        const appId = // AppID string provided by Picovoice Console (picovoice.ai/console/)
+        const accessKey = // AccessKey string provided by Picovoice Console (picovoice.ai/console/)
         const cobraWorker = await CobraWorkerFactory.create(
-          appId,
+          accessKey,
           cobraCallback
         );
 
@@ -334,9 +334,9 @@ function cobraCallback(voiceProbability) {
 }
 
 async function startCobra() {
-  const appId = //AppID string provided by Picovoice Console (picovoice.ai/console/)
+  const accessKey = //AccessKey string provided by Picovoice Console (picovoice.ai/console/)
   const cobraWorker = await CobraWorkerFactory.create(
-      appId,
+      accessKey,
       cobraCallback
   );
 
