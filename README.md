@@ -46,6 +46,32 @@ starts processing the audio input from the microphone in realtime and outputs to
 
 For more information about the Python demos go to [demo/python](/demo/python).
 
+### C Demos
+
+Build the demo:
+
+```console
+cmake -S demo/c/ -B demo/c/build && cmake --build demo/c/build --target cobra_demo_mic
+```
+
+To list the available audio input devices:
+
+```console
+./demo/c/build/cobra_demo_mic -s
+```
+
+To run the demo:
+
+```console
+./demo/c/build/cobra_demo_mic -l ${LIBRARY_PATH} -a ${ACCESS_KEY} -d ${AUDIO_DEVICE_INDEX}
+```
+
+Replace `${LIBRARY_PATH}` with path to appropriate library available under [lib](/lib), Replace `${ACCESS_KEY}` with 
+AccessKey obtained from [Picovoice Console](https://picovoice.ai/console/), and `${INPUT_AUDIO_DEVICE}` with the index of
+your  microphone device.
+
+For more information about C demos go to [demo/c](/demo/c).
+
 ### Android Demos
 
 Using [Android Studio](https://developer.android.com/studio/index.html), open
@@ -70,33 +96,6 @@ private let APP_ID = "YOUR_APPID_HERE"
 Then, using Xcode, open the generated CobraDemo.xcworkspace and run the application. Press the start button and start talking. The background will change colour while you're talking.
 
 For more information about iOS demos go to [demo/ios](/demo/ios).
-
-### C Demos
-
-[Microphone demo](/demo/c/cobra_demo_mic.c) runs on Linux-based systems (e.g., Ubuntu, Raspberry Pi, and BeagleBone).
-Build the demo:
-
-```console
-cmake -S demo/c/. -B demo/c/build && cmake --build demo/c/build --target cobra_demo_mic
-```
-
-To list the available audio input devices:
-
-```console
-./demo/c/build/cobra_demo_mic --show_audio_devices
-```
-
-To run the demo:
-
-```console
-./demo/c/build/cobra_demo_mic ${LIBRARY_PATH} ${APP_ID} ${THRESHOLD} ${AUDIO_DEVICE_INDEX}
-```
-
-Replace `${LIBRARY_PATH}` with path to appropriate library available under [lib](/lib), Replace `${THRESHOLD}` with voice
-detection threshold (a floating-point number within [0, 1]), and `${INPUT_AUDIO_DEVICE}` with the name of your
-microphone device. The demo opens an audio stream and detects speech signal.
-
-For more information about C demos go to [demo/c](/demo/c).
 
 ### Web Demos
 

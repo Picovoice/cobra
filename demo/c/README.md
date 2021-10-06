@@ -20,7 +20,7 @@ The Cobra microphone demo opens an audio stream and detects the presence of spee
 Use CMake to build the Cobra microphone demo target:
 
 ```console
-cmake -S demo/c/. -B demo/c/build && cmake --build demo/c/build --target cobra_demo_mic
+cmake -S demo/c/ -B demo/c/build && cmake --build demo/c/build --target cobra_demo_mic
 ```
 
 ## Usage
@@ -43,11 +43,10 @@ To run the cobra microphone demo:
 ./demo/c/build/cobra_demo_mic -l ${LIBRARY_PATH} -a ${ACCESS_KEY} -d ${AUDIO_DEVICE_INDEX}
 ```
 
-Replace `${LIBRARY_PATH}` with path to appropriate library available under [lib](/lib), `${THRESHOLD}` with a voice-detection
-threshold (a floating-point number within [0, 1]), and `${AUDIO_DEVICE_INDEX}` with the index of the audio device
-you wish to capture audio with. An `${AUDIO_DEVICE_INDEX}` of -1 will provide you with your system's default recording device.
-
-You must also provide an AccessKey in place of `${ACCESS_KEY}`, which can be obtained from the [Picovoice Console](https://console.picovoice.ai/).
+Replace `${LIBRARY_PATH}` with path to appropriate library available under [lib](/lib), `${ACCESS_KEY}` with AccessKey
+obtained from [Picovoice Console](https://picovoice.ai/console/), and `${AUDIO_DEVICE_INDEX}` with the index of the
+audio device  you wish to capture audio with. An `${AUDIO_DEVICE_INDEX}` of -1 will provide you with your system's
+default recording device.
 
 # File Demo
 
@@ -61,7 +60,7 @@ frame of audio. This demo expects a single-channel WAV file with a sampling rate
 Use CMake to build the Cobra file demo target:
 
 ```console
-cmake -S demo/c/. -B demo/c/build && cmake --build demo/c/build --target cobra_demo_file
+cmake -S demo/c/ -B demo/c/build && cmake --build demo/c/build --target cobra_demo_file
 ```
 
 ## Usage
@@ -69,9 +68,9 @@ cmake -S demo/c/. -B demo/c/build && cmake --build demo/c/build --target cobra_d
 Run the demo:
 
 ```console
-./demo/c/build/cobra_demo_file -l ${LIBRARY_PATH} -a ${ACCESS_KEY} -d ${INPUT_AUDIO_FILE}
+./demo/c/build/cobra_demo_file -l ${LIBRARY_PATH} -a ${ACCESS_KEY} -w ${INPUT_WAV_FILE}
 ```
 
 Replace `${LIBRARY_PATH}` with the path to the appropriate Cobra library available under [lib](/lib), `${ACCESS_KEY}` with a
-Picovoice AccessKey obtained from the [Picovoice Console](https://console.picovoice.ai/), and `${INPUT_AUDIO_FILE}` with the
-path to the audio file you wish to analyze.
+Picovoice AccessKey obtained from the [Picovoice Console](https://console.picovoice.ai/), and `${INPUT_WAV_FILE}` with the
+path to the WAV file you wish to analyze.
