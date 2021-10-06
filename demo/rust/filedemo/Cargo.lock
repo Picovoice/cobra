@@ -159,7 +159,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "pv_porcupine_filedemo"
+name = "pv_cobra_filedemo"
 version = "0.1.0"
 dependencies = [
  "chrono",
