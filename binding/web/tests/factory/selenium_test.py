@@ -11,6 +11,9 @@ from selenium import webdriver
 from selenium.common.exceptions import WebDriverException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 class SimpleHttpServer(threading.Thread):
@@ -37,7 +40,7 @@ class SimpleHttpServer(threading.Thread):
         print(f'stopping server on port {self._server.server_port}')
 
 
-def run_unit_test_selenium(url, app_id):
+def run_unit_test_selenium(url, access_key, absolute_audio_file):
     desired_capabilities = DesiredCapabilities.CHROME
     desired_capabilities['goog:loggingPrefs'] = {'browser': 'ALL'}
     opts = Options()
@@ -47,9 +50,14 @@ def run_unit_test_selenium(url, app_id):
     driver.get(url)
     assert "unit test" in driver.title
 
-    driver.find_element_by_id("appId").send_keys(app_id)
-    driver.find_element_by_id("sumbit").click()
-    time.sleep(5)
+    wait = WebDriverWait(driver, 10)
+
+    driver.find_element_by_id("audioFile").send_keys(absolute_audio_file)
+    wait.until(EC.visibility_of_element_located((By.ID, "audioLoaded")))
+
+    driver.find_element_by_id("accessKey").send_keys(access_key)
+    driver.find_element_by_id("submit").click()
+    wait.until(EC.visibility_of_element_located((By.ID, "testComplete")))
 
     test_result = 1
     test_message = "Tests failed"
@@ -68,10 +76,15 @@ def main():
     parser = ArgumentParser()
 
     parser.add_argument(
-        '--app_id',
+        '--access_key',
         required=True)
-
+    parser.add_argument(
+        '--audio_file',
+        required=True)
+    
     args = parser.parse_args()
+
+    absolute_audio_file = os.path.abspath(args.audio_file)
 
     simple_server = SimpleHttpServer(port=4005, path=os.path.join(os.path.dirname(__file__), '..', '..'))
     test_url = f'{simple_server.base_url}/cobra-web-factory/test/index.html'
@@ -80,7 +93,7 @@ def main():
 
     result = 0
     try:
-        result = run_unit_test_selenium(test_url, args.app_id)
+        result = run_unit_test_selenium(test_url, args.access_key, absolute_audio_file)
     except WebDriverException as e:
         print(e)
         result = 1

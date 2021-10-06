@@ -1,18 +1,18 @@
 name: Web
 
-on:
-  push:
-    branches: [ master ]
-    paths:
-      - 'binding/web/**'
-      - '!binding/web/README.md'
-      - 'lib/wasm/**'
-  pull_request:
-    branches: [ master ]
-    paths:
-      - 'binding/web/**'
-      - '!binding/web/README.md'
-      - 'lib/wasm/**'
+on: push
+  # push:
+  #   branches: [ master ]
+  #   paths:
+  #     - 'binding/web/**'
+  #     - '!binding/web/README.md'
+  #     - 'lib/wasm/**'
+  # pull_request:
+  #   branches: [ master ]
+  #   paths:
+  #     - 'binding/web/**'
+  #     - '!binding/web/README.md'
+  #     - 'lib/wasm/**'
 
 defaults:
   run:
@@ -64,4 +64,4 @@ jobs:
           yarn build
 
       - name: Test
-        run: python cobra-web-factory/test/selenium_test.py --app_id ${{secrets.PV_VALID_APPID}}
+        run: python cobra-web-factory/test/selenium_test.py --access_key ${{secrets.PV_VALID_ACCESS_KEY}} --audio_file ../../res/audio/sample.wav

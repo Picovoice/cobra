@@ -11,7 +11,7 @@
 
 export type CobraWorkerRequestInit = {
   command: 'init';
-  appId: string;
+  accessKey: string;
   start?: boolean;
 };
 

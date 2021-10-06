@@ -63,9 +63,9 @@ function cobraCallback(voiceProbability) {
 async function startCobra() {
   // Create a Cobra Worker
   // Note: you receive a Worker object, _not_ an individual Cobra instance
-  const appId = // .. AppID string provided by Picovoice Console (https://picovoice.ai/console/)
+  const accessKey = // .. AccessKey string provided by Picovoice Console (https://picovoice.ai/console/)
   const cobraWorker = await CobraWorkerFactory.create(
-      appId,
+      accessKey,
       cobraCallback
   );
 
@@ -107,8 +107,8 @@ E.g.:
 import { Cobra } from "@picovoice/cobra-web-factory";
 
 async function startCobra() {
-  const appId = // .. AppID string provided by Picovoice Console (https://picovoice.ai/console/)
-  const handle = await Cobra.create(appId);
+  const accessKey = // .. AccessKey string provided by Picovoice Console (https://picovoice.ai/console/)
+  const handle = await Cobra.create(accessKey);
   return handle;
 }
 
