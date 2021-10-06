@@ -2,6 +2,11 @@ plugins {
     id 'com.android.application'
 }
 
+Properties properties = new Properties()
+if (rootProject.file("local.properties").exists()) {
+    properties.load(rootProject.file("local.properties").newDataInputStream())
+}
+
 android {
     compileSdkVersion 31
     buildToolsVersion "30.0.3"
@@ -15,7 +20,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        resValue 'string', 'pvTestingAccessKey', pvTestingAccessKey
+        resValue 'string', 'pvTestingAccessKey', properties.getProperty("pvTestingAccessKey")
     }
 
     buildTypes {
