@@ -36,7 +36,7 @@ public class CobraManager {
     ///   - accessKey: AccessKey obtained from the Picvoice Console (https://picovoice.ai/console/)
     ///   - onDetection: Invoked when voice activity is detected.
     ///   - errorCallback: Invoked if an error occurs while processing frames. If missing, error will be printed to console.
-    /// - Throws: PorcupineError
+    /// - Throws: CobraError
     public convenience init(
         accessKey: String,
         onDetection: ((Float32) -> Void)?,
@@ -52,7 +52,7 @@ public class CobraManager {
         self.delete()
     }
     
-    /// Stops recording and releases Porcupine resources
+    /// Stops recording and releases Cobra resources
     public func delete() {
         if isListening {
             stop()
@@ -66,8 +66,8 @@ public class CobraManager {
     
     ///  Starts recording audio from the microphone and monitors it for the utterances of the given set of keywords.
     ///
-    /// - Throws: AVAudioSession, AVAudioEngine errors. Additionally PorcupineManagerError if
-    ///           microphone permission is not granted or Porcupine has been disposed.
+    /// - Throws: AVAudioSession, AVAudioEngine errors. Additionally CobraManagerError if
+    ///           microphone permission is not granted or Cobra has been disposed.
     public func start() throws {
         
         guard !isListening else {
