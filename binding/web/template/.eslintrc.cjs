@@ -25,7 +25,7 @@ module.exports = {
         '@typescript-eslint/camelcase': 0,
         '@typescript-eslint/no-empty-interface': 2,
         '@typescript-eslint/explicit-function-return-type': 2,
-        '@typescript-eslint/ban-ts-ignore': 0,
+        '@typescript-eslint/ban-ts-comment': 0,
         '@typescript-eslint/no-empty-function' : [2, { "allow": ["constructors"] }],
         '@typescript-eslint/no-inferrable-types': [
           2,
@@ -97,7 +97,7 @@ module.exports = {
     'use-isnan': 2,
     // ensure JSDoc comments are valid
     'valid-jsdoc': [
-      2,
+      0,
       {
         requireReturn: false,
         requireReturnDescription: false

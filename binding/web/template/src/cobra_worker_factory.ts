@@ -113,8 +113,8 @@ export default class CobraWorkerFactory {
             }
             break;
           default:
-            // @ts-ignore
-            console.warn(`Unhandled message in main.js: ${event.data.command}`);
+            // eslint-disable-next-line no-console
+            console.warn(`Unhandled message in main.js: ${event.data}`);
             break;
         }
       };

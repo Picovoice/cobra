@@ -111,6 +111,7 @@ onmessage = function (
       Cobra.clearFilePromises();
       break;
     default:
+      // eslint-disable-next-line no-console
       console.warn('Unhandled command in cobra_worker: ' + event.data.command);
   }
 };

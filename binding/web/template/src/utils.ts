@@ -47,15 +47,15 @@ export function base64ToUint8Array(base64String: string): Uint8Array {
 
 /**
  * Encode an ArrayBuffer array to base64 string
- * 
+ *
  * @param arrayBuffer input array
  * @param size size of the phrase to be encoded
  * @param index the index at which the phrase is stored
  * @return base64 string
  */
 
-export function arrayBufferToBase64AtIndex(arrayBuffer: ArrayBuffer, size: number, index: number): String {
-  let binary = "";
+export function arrayBufferToBase64AtIndex(arrayBuffer: ArrayBuffer, size: number, index: number): string {
+  let binary = '';
   for (let i = 0; i < size; i++) {
     // @ts-ignore
     binary += String.fromCharCode(arrayBuffer[index + i]);
@@ -70,11 +70,12 @@ export function arrayBufferToBase64AtIndex(arrayBuffer: ArrayBuffer, size: numbe
  * @return retrieved object
  */
 
+// eslint-disable-next-line
 export function stringHeaderToObject(stringHeader: string): object {
-  let objectHeader = {};
-  for (let property of stringHeader.split("\r\n")) {
-    const keyValuePair = property.split(": ");
-    if (keyValuePair[0] !== "") {
+  const objectHeader = {};
+  for (const property of stringHeader.split('\r\n')) {
+    const keyValuePair = property.split(': ');
+    if (keyValuePair[0] !== '') {
       // @ts-ignore
       objectHeader[keyValuePair[0]] = keyValuePair[1];
     }
@@ -108,10 +109,9 @@ export async function fetchWithTimeout(uri: string, options = {}, time = 5000): 
  * @return a string containing the envirorment name
  */
 
-export function getRuntimeEnvironment() {
-  if (typeof window == "object" && typeof document == "object") {
-    return "browser";
-  } else {
-    return "worker";
+export function getRuntimeEnvironment(): string {
+  if (typeof window === 'object' && typeof document === 'object') {
+    return 'browser';
   }
+  return 'worker';
 }

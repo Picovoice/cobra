@@ -9,6 +9,8 @@
     specific language governing permissions and limitations under the License.
 */
 
+/* eslint camelcase: 0, arrow-body-style: 0, @typescript-eslint/no-unused-vars: 0, @typescript-eslint/explicit-module-boundary-types: 0 */
+
 export const wasiSnapshotPreview1Emulator = {
   args_get: (input: any): any => {
     return 0;
