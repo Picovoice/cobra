@@ -82,7 +82,7 @@ fn main() {
             Arg::with_name("access_key")
                 .long("access_key")
                 .value_name("ACCESS_KEY")
-                .help("AppID provided by Picovoice Console (https://picovoice.ai/console/)")
+                .help("AccessKey provided by Picovoice Console (https://picovoice.ai/console/)")
                 .takes_value(true)
                 .required(true),
         )
@@ -102,7 +102,7 @@ fn main() {
 
     let access_key = matches
         .value_of("access_key")
-        .expect("AppID is REQUIRED for Cobra operation");
+        .expect("AccessKey is REQUIRED for Cobra operation");
 
     cobra_demo(input_audio_path, access_key, threshold);
 }

@@ -22,7 +22,7 @@ The following processes a file looking for voice activities:
 cargo run --release -- --access_key ACCESS_KEY --input_audio_path "path/to/input.wav"
 ```
 
-Where `ACCESS_KEY` is an AppID which should be obtained from [Picovoice Console](https://picovoice.ai/console/).
+Where `ACCESS_KEY` is an AccessKey which should be obtained from [Picovoice Console](https://picovoice.ai/console/).
 The threshold of the engine can be tuned using the `threshold` input argument:
 
 ```console
@@ -40,7 +40,7 @@ The following opens the default microphone:
 cargo run --release -- --access_key ACCESS_KEY
 ```
 
-Where `ACCESS_KEY` is an AppID which should be obtained from [Picovoice Console](https://picovoice.ai/console/).
+Where `ACCESS_KEY` is an AccessKey which should be obtained from [Picovoice Console](https://picovoice.ai/console/).
 
 It is possible that the default audio input device is not the one you wish to use. There are a couple
 of debugging facilities baked into the demo application to solve this. First, type the following into the console:
