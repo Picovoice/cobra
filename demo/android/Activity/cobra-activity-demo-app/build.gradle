@@ -5,6 +5,9 @@ plugins {
 Properties properties = new Properties()
 if (rootProject.file("local.properties").exists()) {
     properties.load(rootProject.file("local.properties").newDataInputStream())
+    if (project.hasProperty("pvTestingAccessKey")) {
+        properties.put("pvTestingAccessKey", project.getProperty("pvTestingAccessKey"))
+    }
 }
 
 android {
