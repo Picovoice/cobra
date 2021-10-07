@@ -101,7 +101,7 @@ class CobraDemo(Thread):
     def show_audio_devices(cls):
         devices = PvRecorder.get_audio_devices()
         for i in range(len(devices)):
-            print(f"index: {i}, device name: {devices[i]}")
+            print('index: %d, device name: %s' % (i, devices[i]))
 
 
 def main():

@@ -16,8 +16,6 @@ Cobra is a highly accurate and lightweight voice activity detection (VAD) engine
 
 ## Installation
 
-The Microphone demo uses [pvrecorder](https://pypi.org/project/pvrecorder/) for recording input audio.
-For more information, take a look at [pvrecorder](https://pypi.org/project/pvrecorder/).
 
 ```console
 sudo pip3 install pvcobrademo
@@ -33,7 +31,7 @@ The Microphone demo opens an audio stream from a microphone and detects voice ac
 cobra_demo_mic --access_key {AccessKey}
 ```
 
-where `{AccessKey}` is an AccessKey which should be obtained from [Picovoice Console](https://picovoice.ai/console/). It is possible that the default audio input device recognized by pvrecorder is not the one being used. There are a couple of debugging facilities baked into the demo application to solve this. First, type the following into the console:
+where `{AccessKey}` is an AccessKey which should be obtained from [Picovoice Console](https://picovoice.ai/console/). It is possible that the default audio input device recognized by `pvrecorder` is not the one being used. There are a couple of debugging facilities baked into the demo application to solve this. First, type the following into the console:
 
 ```console
 cobra_demo_mic --show_audio_devices
