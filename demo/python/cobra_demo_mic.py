@@ -15,8 +15,8 @@ from threading import Thread
 
 import numpy as np
 import pvcobra
-from pvrecorder import PvRecorder
 import soundfile
+from pvrecorder import PvRecorder
 
 
 class CobraDemo(Thread):
