@@ -61,12 +61,12 @@ fn find_machine_type() -> String {
     return String::from(machine);
 }
 
-#[cfg(target_os = "macos", target_arch = "x86_64")]
+#[cfg(all(target_os = "macos", target_arch = "x86_64"))]
 fn base_library_path() -> PathBuf {
     return PathBuf::from("mac/x86_64/libpv_cobra.dylib");
 }
 
-#[cfg(target_os = "macos", target_arch = "aarch64")]
+#[cfg(all(target_os = "macos", target_arch = "aarch64"))]
 fn base_library_path() -> PathBuf {
     return PathBuf::from("mac/arm64/libpv_cobra.dylib");
 }
