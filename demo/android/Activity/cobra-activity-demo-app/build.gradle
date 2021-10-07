@@ -23,7 +23,7 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
-        resValue 'string', 'pvTestingAccessKey', properties.getProperty("pvTestingAccessKey")
+        resValue 'string', 'pvTestingAccessKey', properties.getProperty("pvTestingAccessKey", "")
     }
 
     buildTypes {
