@@ -44,8 +44,8 @@ struct ContentView: View {
                 .padding(.vertical, 10)
                 .padding(.horizontal, 10)
                 .font(.body)
-                .background(errorMsgColor)
-                .foregroundColor(.white)
+                .background(viewModel.voiceActivityState ? detectionBlue : errorMsgColor)
+                .foregroundColor(Color.white)
                 .cornerRadius(.infinity)
             
             Spacer()
