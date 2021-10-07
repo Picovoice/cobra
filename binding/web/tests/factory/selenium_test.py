@@ -84,6 +84,7 @@ def main():
     
     args = parser.parse_args()
 
+    audio_file_absolute_path = os.path.abspath(args.audio_file)
     simple_server = SimpleHttpServer(port=4005, path=os.path.join(os.path.dirname(__file__), '..', '..'))
     test_url = f'{simple_server.base_url}/cobra-web-factory/test/index.html'
     simple_server.start()
@@ -91,7 +92,7 @@ def main():
 
     result = 0
     try:
-        result = run_unit_test_selenium(test_url, args.access_key, os.path.abspath(args.audio_file))
+        result = run_unit_test_selenium(test_url, args.access_key, audio_file_absolute_path)
     except WebDriverException as e:
         print(e)
         result = 1
