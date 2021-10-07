@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -11,13 +11,10 @@
 		02A1194B268D39A700A2AC99 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A1194A268D39A700A2AC99 /* ContentView.swift */; };
 		02A1194D268D39AB00A2AC99 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 02A1194C268D39AB00A2AC99 /* Assets.xcassets */; };
 		02A1195F268D3FD600A2AC99 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A1195E268D3FD600A2AC99 /* ViewModel.swift */; };
-		02A11961268D40AD00A2AC99 /* PvCobra.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02A11960268D40AD00A2AC99 /* PvCobra.xcframework */; };
-		02A11962268D40AD00A2AC99 /* PvCobra.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 02A11960268D40AD00A2AC99 /* PvCobra.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		02A11964268F941400A2AC99 /* Cobra.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A11963268F941300A2AC99 /* Cobra.swift */; };
+		4A00B7EF2D4C1FA9D1C474E1 /* libPods-CobraDemo.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 7C8FD0A21A7AA22B5EB1EB2D /* libPods-CobraDemo.a */; };
 		C7969FC826F53FBB0013DD41 /* CobraDemoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7969FC726F53FBB0013DD41 /* CobraDemoUITests.swift */; };
-		C7969FCF26F547280013DD41 /* Cobra.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A11963268F941300A2AC99 /* Cobra.swift */; };
 		C7969FD126F5474F0013DD41 /* sample.wav in Resources */ = {isa = PBXBuildFile; fileRef = C7969FD026F5474F0013DD41 /* sample.wav */; };
-		C7969FD526F552530013DD41 /* PvCobra.xcframework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 02A11960268D40AD00A2AC99 /* PvCobra.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F0E5BF04E59C6ACAD7F213C9 /* libPods-CobraDemoUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 25220F02E797CC78BF7E6619 /* libPods-CobraDemoUITests.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,24 +28,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		02A1195B268D39D200A2AC99 /* Embed Frameworks */ = {
-			isa = PBXCopyFilesBuildPhase;
-			buildActionMask = 2147483647;
-			dstPath = "";
-			dstSubfolderSpec = 10;
-			files = (
-				02A11962268D40AD00A2AC99 /* PvCobra.xcframework in Embed Frameworks */,
-			);
-			name = "Embed Frameworks";
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		C7969FD426F552430013DD41 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				C7969FD526F552530013DD41 /* PvCobra.xcframework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,12 +46,16 @@
 		02A1194C268D39AB00A2AC99 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		02A11951268D39AB00A2AC99 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		02A1195E268D3FD600A2AC99 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
-		02A11960268D40AD00A2AC99 /* PvCobra.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = PvCobra.xcframework; path = ../../../lib/ios/PvCobra.xcframework; sourceTree = "<group>"; };
-		02A11963268F941300A2AC99 /* Cobra.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Cobra.swift; path = ../../../../binding/ios/Cobra.swift; sourceTree = "<group>"; };
+		25220F02E797CC78BF7E6619 /* libPods-CobraDemoUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CobraDemoUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		544345CBBDA09211F4620F3E /* Pods-CobraDemo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CobraDemo.release.xcconfig"; path = "Target Support Files/Pods-CobraDemo/Pods-CobraDemo.release.xcconfig"; sourceTree = "<group>"; };
+		72F8162D9843C0A1C546BE64 /* Pods-CobraDemoUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CobraDemoUITests.debug.xcconfig"; path = "Target Support Files/Pods-CobraDemoUITests/Pods-CobraDemoUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		7C8FD0A21A7AA22B5EB1EB2D /* libPods-CobraDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CobraDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8DC160B174C3E4AE3F56942D /* Pods-CobraDemo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CobraDemo.debug.xcconfig"; path = "Target Support Files/Pods-CobraDemo/Pods-CobraDemo.debug.xcconfig"; sourceTree = "<group>"; };
 		C7969FC526F53FBB0013DD41 /* CobraDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CobraDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7969FC726F53FBB0013DD41 /* CobraDemoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CobraDemoUITests.swift; sourceTree = "<group>"; };
 		C7969FC926F53FBB0013DD41 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C7969FD026F5474F0013DD41 /* sample.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = sample.wav; sourceTree = "<group>"; };
+		D2D9DCA10D9D1AB213098AEF /* Pods-CobraDemoUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CobraDemoUITests.release.xcconfig"; path = "Target Support Files/Pods-CobraDemoUITests/Pods-CobraDemoUITests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,7 +63,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				02A11961268D40AD00A2AC99 /* PvCobra.xcframework in Frameworks */,
+				4A00B7EF2D4C1FA9D1C474E1 /* libPods-CobraDemo.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -82,6 +71,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F0E5BF04E59C6ACAD7F213C9 /* libPods-CobraDemoUITests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -95,6 +85,7 @@
 				C7969FC626F53FBB0013DD41 /* CobraDemoUITests */,
 				02A11946268D39A700A2AC99 /* Products */,
 				02A11957268D39D100A2AC99 /* Frameworks */,
+				8DB92FF3DC81AB04D3FF7242 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -110,7 +101,6 @@
 		02A11947268D39A700A2AC99 /* CobraDemo */ = {
 			isa = PBXGroup;
 			children = (
-				02A11963268F941300A2AC99 /* Cobra.swift */,
 				02A11948268D39A700A2AC99 /* CobraDemoApp.swift */,
 				02A1194A268D39A700A2AC99 /* ContentView.swift */,
 				02A1194C268D39AB00A2AC99 /* Assets.xcassets */,
@@ -123,9 +113,21 @@
 		02A11957268D39D100A2AC99 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				02A11960268D40AD00A2AC99 /* PvCobra.xcframework */,
+				7C8FD0A21A7AA22B5EB1EB2D /* libPods-CobraDemo.a */,
+				25220F02E797CC78BF7E6619 /* libPods-CobraDemoUITests.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		8DB92FF3DC81AB04D3FF7242 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				8DC160B174C3E4AE3F56942D /* Pods-CobraDemo.debug.xcconfig */,
+				544345CBBDA09211F4620F3E /* Pods-CobraDemo.release.xcconfig */,
+				72F8162D9843C0A1C546BE64 /* Pods-CobraDemoUITests.debug.xcconfig */,
+				D2D9DCA10D9D1AB213098AEF /* Pods-CobraDemoUITests.release.xcconfig */,
+			);
+			path = Pods;
 			sourceTree = "<group>";
 		};
 		C7969FC626F53FBB0013DD41 /* CobraDemoUITests */ = {
@@ -145,10 +147,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 02A11954268D39AB00A2AC99 /* Build configuration list for PBXNativeTarget "CobraDemo" */;
 			buildPhases = (
+				9E7C8E83BA330F7017CD5C56 /* [CP] Check Pods Manifest.lock */,
 				02A11941268D39A700A2AC99 /* Sources */,
 				02A11942268D39A700A2AC99 /* Frameworks */,
 				02A11943268D39A700A2AC99 /* Resources */,
-				02A1195B268D39D200A2AC99 /* Embed Frameworks */,
+				4539DEE1E8D88EEDC69BC828 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -163,10 +166,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C7969FCE26F53FBB0013DD41 /* Build configuration list for PBXNativeTarget "CobraDemoUITests" */;
 			buildPhases = (
+				E1B0AC33F4AF0FC4909C5B08 /* [CP] Check Pods Manifest.lock */,
 				C7969FC126F53FBB0013DD41 /* Sources */,
 				C7969FC226F53FBB0013DD41 /* Frameworks */,
 				C7969FC326F53FBB0013DD41 /* Resources */,
 				C7969FD426F552430013DD41 /* CopyFiles */,
+				2CFB0F821ABE4578ACB4E8C8 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -234,13 +239,93 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		2CFB0F821ABE4578ACB4E8C8 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CobraDemoUITests/Pods-CobraDemoUITests-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CobraDemoUITests/Pods-CobraDemoUITests-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CobraDemoUITests/Pods-CobraDemoUITests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		4539DEE1E8D88EEDC69BC828 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CobraDemo/Pods-CobraDemo-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-CobraDemo/Pods-CobraDemo-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-CobraDemo/Pods-CobraDemo-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		9E7C8E83BA330F7017CD5C56 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-CobraDemo-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		E1B0AC33F4AF0FC4909C5B08 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-CobraDemoUITests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		02A11941268D39A700A2AC99 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				02A1194B268D39A700A2AC99 /* ContentView.swift in Sources */,
-				02A11964268F941400A2AC99 /* Cobra.swift in Sources */,
 				02A1195F268D3FD600A2AC99 /* ViewModel.swift in Sources */,
 				02A11949268D39A700A2AC99 /* CobraDemoApp.swift in Sources */,
 			);
@@ -251,7 +336,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				C7969FC826F53FBB0013DD41 /* CobraDemoUITests.swift in Sources */,
-				C7969FCF26F547280013DD41 /* Cobra.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -384,6 +468,7 @@
 		};
 		02A11955268D39AB00A2AC99 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8DC160B174C3E4AE3F56942D /* Pods-CobraDemo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -406,6 +491,7 @@
 		};
 		02A11956268D39AB00A2AC99 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 544345CBBDA09211F4620F3E /* Pods-CobraDemo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -428,9 +514,10 @@
 		};
 		C7969FCC26F53FBB0013DD41 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 72F8162D9843C0A1C546BE64 /* Pods-CobraDemoUITests.debug.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = EU9HUJJU2X;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = CobraDemoUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -447,9 +534,10 @@
 		};
 		C7969FCD26F53FBB0013DD41 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D2D9DCA10D9D1AB213098AEF /* Pods-CobraDemoUITests.release.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = EU9HUJJU2X;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = CobraDemoUITests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
