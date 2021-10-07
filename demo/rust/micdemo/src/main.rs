@@ -21,7 +21,20 @@ use std::sync::atomic::{AtomicBool, Ordering};
 
 static LISTENING: AtomicBool = AtomicBool::new(false);
 
-fn cobra_demo(audio_device_index: i32, access_key: &str, threshold: f32, output_path: Option<&str>) {
+fn print_voice_activity(voice_probability: f32) {
+    let voice_percentage = voice_probability * 100.0;
+    let bar_length = ((voice_percentage / 10.0) * 3.0).ceil() as usize;
+    let empty_length = 30 - bar_length;
+    print!(
+        "\r[{:3.0}]|{}{}|",
+        voice_percentage,
+        "█".repeat(bar_length),
+        " ".repeat(empty_length)
+    );
+    io::stdout().flush().expect("Unable to write to stdout");
+}
+
+fn cobra_demo(audio_device_index: i32, access_key: &str, output_path: Option<&str>) {
     let cobra = Cobra::new(access_key).expect("Failed to create Cobra");
 
     let recorder = RecorderBuilder::new()
@@ -31,26 +44,21 @@ fn cobra_demo(audio_device_index: i32, access_key: &str, threshold: f32, output_
         .expect("Failed to initialize pvrecorder");
     recorder.start().expect("Failed to start audio recording");
 
+    println!("Listening...");
     LISTENING.store(true, Ordering::SeqCst);
+
     ctrlc::set_handler(|| {
         LISTENING.store(false, Ordering::SeqCst);
     })
     .expect("Unable to setup signal handler");
-
-    println!("Listening [Threshold {:.2}]...", threshold);
 
     let mut audio_data = Vec::new();
     while LISTENING.load(Ordering::SeqCst) {
         let mut pcm = vec![0; recorder.frame_length()];
         recorder.read(&mut pcm).expect("Failed to read audio frame");
 
-        let voice_activity = cobra.process(&pcm).unwrap();
-        if voice_activity >= threshold {
-            print!("Voice activity...\r");
-        } else {
-            print!("                 \r");
-        }
-        io::stdout().flush().expect("Unable to write to stdout");
+        let voice_probability = cobra.process(&pcm).unwrap();
+        print_voice_activity(voice_probability);
 
         if !output_path.is_none() {
             audio_data.extend_from_slice(&pcm);
@@ -103,14 +111,6 @@ fn main() {
                 .takes_value(true),
         )
         .arg(
-            Arg::with_name("threshold")
-                .long("threshold")
-                .value_name("THRESHOLD")
-                .help("Threshold for the probability of voice activity")
-                .takes_value(true)
-                .default_value("0.5"),
-        )
-        .arg(
             Arg::with_name("audio_device_index")
                 .long("audio_device_index")
                 .value_name("INDEX")
@@ -138,12 +138,10 @@ fn main() {
         .parse()
         .unwrap();
 
-    let threshold = matches.value_of("threshold").unwrap().parse().unwrap();
-
     let access_key = matches
         .value_of("access_key")
         .expect("AccessKey is REQUIRED for Cobra operation");
     let output_path = matches.value_of("output_path");
 
-    cobra_demo(audio_device_index, access_key, threshold, output_path);
+    cobra_demo(audio_device_index, access_key, output_path);
 }
