@@ -38,11 +38,9 @@ jobs:
         java-version: '11'
         distribution: 'adopt'
 
-    - name: Build android binding
-      run: |
-        ./gradlew build
-      working-directory: binding/android
-
+    - name: Copy test_resources
+      run: ./copy_test_resources.sh
+      
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
