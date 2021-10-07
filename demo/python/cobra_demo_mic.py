@@ -10,14 +10,13 @@
 #
 
 import argparse
-import struct
 import sys
 from threading import Thread
 
 import numpy as np
 import pvcobra
-import pyaudio
 import soundfile
+from pvrecorder import PvRecorder
 
 
 class CobraDemo(Thread):
@@ -57,26 +56,18 @@ class CobraDemo(Thread):
          """
 
         cobra = None
-        pa = None
-        audio_stream = None
+        recorder = None
         try:
             cobra = pvcobra.create(
                 library_path=self._library_path, access_key=self._access_key)
             print("Cobra version: %s" % cobra.version)
-            pa = pyaudio.PyAudio()
+            recorder = PvRecorder(device_index=self._input_device_index, frame_length=512)
 
-            audio_stream = pa.open(
-                rate=cobra.sample_rate,
-                channels=1,
-                format=pyaudio.paInt16,
-                input=True,
-                frames_per_buffer=cobra.frame_length,
-                input_device_index=self._input_device_index)
+            recorder.start()
 
             print("Listening...")
             while True:
-                pcm = audio_stream.read(cobra.frame_length)
-                pcm = struct.unpack_from("h" * cobra.frame_length, pcm)
+                pcm = recorder.read()
 
                 if self._output_path is not None:
                     self._recorded_frames.append(pcm)
@@ -95,11 +86,7 @@ class CobraDemo(Thread):
             if cobra is not None:
                 cobra.delete()
 
-            if audio_stream is not None:
-                audio_stream.close()
-
-            if pa is not None:
-                pa.terminate()
+            recorder.delete()
 
             if self._output_path is not None and len(self._recorded_frames) > 0:
                 recorded_audio = np.concatenate(
@@ -112,15 +99,9 @@ class CobraDemo(Thread):
 
     @classmethod
     def show_audio_devices(cls):
-        fields = ('index', 'name', 'defaultSampleRate', 'maxInputChannels')
-
-        pa = pyaudio.PyAudio()
-
-        for i in range(pa.get_device_count()):
-            info = pa.get_device_info_by_index(i)
-            print(', '.join("'%s': '%s'" % (k, str(info[k])) for k in fields))
-
-        pa.terminate()
+        devices = PvRecorder.get_audio_devices()
+        for i in range(len(devices)):
+            print('index: %d, device name: %s' % (i, devices[i]))
 
 
 def main():
@@ -131,10 +112,10 @@ def main():
 
     parser.add_argument('--access_key',
                         help='AccessKey provided by Picovoice Console (https://picovoice.ai/console/)',
-                        required=True)
+                        default=None)
 
     parser.add_argument('--audio_device_index',
-                        help='Index of input audio device.', type=int, default=None)
+                        help='Index of input audio device.', type=int, default=-1)
 
     parser.add_argument(
         '--output_path', help='Absolute path to recorded audio for debugging.', default=None)
@@ -146,11 +127,14 @@ def main():
     if args.show_audio_devices:
         CobraDemo.show_audio_devices()
     else:
-        CobraDemo(
-            library_path=args.library_path,
-            access_key=args.access_key,
-            output_path=args.output_path,
-            input_device_index=args.audio_device_index).run()
+        if args.access_key is None:
+            print("missing AccessKey")
+        else:
+            CobraDemo(
+                library_path=args.library_path,
+                access_key=args.access_key,
+                output_path=args.output_path,
+                input_device_index=args.audio_device_index).run()
 
 
 if __name__ == '__main__':

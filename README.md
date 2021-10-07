@@ -29,7 +29,7 @@ Cobra is a highly-accurate and lightweight voice activity detection (VAD) engine
 
 ### Python Demos
 
-Install [PyAudio](https://people.csail.mit.edu/hubert/pyaudio/) and then the demo package:
+Install the demo package:
 
 ```console
 sudo pip3 install pvcobrademo
