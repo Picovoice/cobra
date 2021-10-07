@@ -47,7 +47,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
     implementation 'androidx.navigation:navigation-fragment:2.3.5'
     implementation 'androidx.navigation:navigation-ui:2.3.5'
-    implementation files('../../../../binding/android/cobra/build/outputs/aar/cobra-debug.aar')
+    implementation 'ai.picovoice:porcupine-cobra:1.0.0'
 
     // Espresso UI Testing
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
