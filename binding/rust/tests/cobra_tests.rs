@@ -11,7 +11,7 @@
 
 #[cfg(test)]
 mod tests {
-    use itertools::Itertools;
+    use itertools::{zip, Itertools};
     use rodio::{source::Source, Decoder};
     use std::env;
     use std::fs::File;
@@ -21,9 +21,8 @@ mod tests {
 
     #[test]
     fn test_process() {
-        let args: Vec<String> = env::args().collect();
-        let access_key = args[1].clone();
-
+        let access_key = env::var("PV_ACCESS_KEY")
+            .expect("Pass the AccessKey in using the PV_ACCESS_KEY env variable");
         let cobra = Cobra::new(access_key).expect("Unable to create Cobra");
 
         let soundfile_path = concat!(env!("CARGO_MANIFEST_DIR"), "/../../res/audio/sample.wav");
@@ -32,27 +31,39 @@ mod tests {
 
         assert_eq!(cobra.sample_rate(), source.sample_rate());
 
-        let threshold = 0.8;
-        let mut results = Vec::new();
+        let mut num_frames = 0;
+        let mut probabilities: Vec<f32> = Vec::new();
         for frame in &source.chunks(cobra.frame_length() as usize) {
             let frame = frame.collect_vec();
             if frame.len() == cobra.frame_length() as usize {
                 let voice_probability = cobra.process(&frame).unwrap();
-                if voice_probability >= threshold {
-                    results.push(voice_probability);
-                }
+                probabilities.push(voice_probability);
             }
+            num_frames += 1;
         }
 
-        let voice_probability_ref = vec![
-            0.880, 0.881, 0.992, 0.999, 0.999, 0.999, 0.999, 0.999, 0.999, 0.999, 0.999, 0.999,
-            0.999, 0.999, 0.999, 0.999, 0.997, 0.978, 0.901,
-        ];
-        assert_eq!(results.len(), voice_probability_ref.len());
-
-        for (prob, prob_ref) in results.iter().zip(voice_probability_ref) {
-            let error = prob - prob_ref;
-            assert!(error.abs() < 0.001);
+        let mut labels = vec![0.0; num_frames];
+        for i in 10..28 {
+            labels[i] = 1.0;
         }
+
+        let loss_fn = |(l, p): (f32, f32)| {
+            l * p.ln() + (1.0 - l) * (1.0 - p).ln()
+        };
+        let loss: f32 = zip(labels, probabilities)
+            .map(loss_fn)
+            .filter(|x| x.is_finite())
+            .sum::<f32>()
+            / num_frames as f32;
+        assert!(loss.abs() < 0.1);
+    }
+
+    #[test]
+    fn test_version() {
+        let access_key = env::var("PV_ACCESS_KEY")
+            .expect("Pass the AccessKey in using the PV_ACCESS_KEY env variable");
+        let cobra = Cobra::new(access_key).expect("Unable to create Cobra");
+
+        assert!(cobra.version().len() > 0);
     }
 }
