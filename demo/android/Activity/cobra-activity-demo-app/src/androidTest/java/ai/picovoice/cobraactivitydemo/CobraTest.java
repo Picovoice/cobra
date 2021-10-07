@@ -77,7 +77,7 @@ public class CobraTest {
     public void testProcess() throws CobraException {
         Cobra cobra = new Cobra(accessKey);
 
-        File testAudio = new File(testResourcesPath, "audio_samples/sample.wav");
+        File testAudio = new File(testResourcesPath, "audio/sample.wav");
         ArrayList<Float> detectionResults = new ArrayList<>();
 
         List<Float> probs = new ArrayList<>();
