@@ -16,8 +16,8 @@ Cobra is a highly accurate and lightweight voice activity detection (VAD) engine
 
 ## Installation
 
-The Microphone demo uses [PyAudio](https://people.csail.mit.edu/hubert/pyaudio/) for recording input audio. Consult the
-installation guide at [PyAudio](https://people.csail.mit.edu/hubert/pyaudio/).
+The Microphone demo uses [pvrecorder](https://pypi.org/project/pvrecorder/) for recording input audio.
+For more information, take a loot at [pvrecorder](https://pypi.org/project/pvrecorder/).
 
 ```console
 sudo pip3 install pvcobrademo

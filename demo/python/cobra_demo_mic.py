@@ -112,7 +112,7 @@ def main():
 
     parser.add_argument('--access_key',
                         help='AccessKey provided by Picovoice Console (https://picovoice.ai/console/)',
-                        required=True)
+                        default=None)
 
     parser.add_argument('--audio_device_index',
                         help='Index of input audio device.', type=int, default=-1)
@@ -127,11 +127,14 @@ def main():
     if args.show_audio_devices:
         CobraDemo.show_audio_devices()
     else:
-        CobraDemo(
-            library_path=args.library_path,
-            access_key=args.access_key,
-            output_path=args.output_path,
-            input_device_index=args.audio_device_index).run()
+        if args.access_key is None:
+            print("missing AccessKey")
+        else:
+            CobraDemo(
+                library_path=args.library_path,
+                access_key=args.access_key,
+                output_path=args.output_path,
+                input_device_index=args.audio_device_index).run()
 
 
 if __name__ == '__main__':
