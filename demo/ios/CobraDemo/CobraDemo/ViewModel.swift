@@ -12,7 +12,7 @@ import Cobra
 
 class ViewModel: ObservableObject {
     
-    private let ACCESS_KEY = "{YOUR_ACCESS_KEY_HERE}
+    private let ACCESS_KEY = "{YOUR_ACCESS_KEY_HERE}"
     
     private let voiceDetectionThreshold:Float32 = 0.5
     
