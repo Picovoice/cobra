@@ -9,8 +9,10 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
-"@picovoice/cobra-web-worker@file:../../binding/web/cobra-web-worker":
-  version "1.0.0"
+"@picovoice/cobra-web-worker@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@picovoice/cobra-web-worker/-/cobra-web-worker-1.0.1.tgz#d1f94a591c5d9bb014219823dc62c39c629ad1b6"
+  integrity sha512-VVQfj3hK2poyR2mk41vz+3dj3rHysNsqIgTJdusvbTQ2/ahpcs4i3XIR6d5icCLWN26j+KLTrA5EceClqXyOJg==
 
 "@picovoice/web-voice-processor@^2.1.0":
   version "2.1.0"
