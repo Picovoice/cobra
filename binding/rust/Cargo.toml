@@ -1,6 +1,6 @@
 [package]
 name = "pv_cobra"
-version = "1.0.1"
+version = "1.0.3"
 edition = "2018"
 description = "The Rust bindings for Picovoice's Cobra library"
 license = "Apache-2.0"
