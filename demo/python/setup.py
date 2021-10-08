@@ -28,7 +28,7 @@ with open(os.path.join(os.path.dirname(__file__), 'README.md'), 'r') as f:
 
 setuptools.setup(
     name="pvcobrademo",
-    version="1.0.4",
+    version="1.0.5",
     author="Picovoice",
     author_email="hello@picovoice.ai",
     description="Cobra voice activity detection (VAD) engine demos.",
@@ -36,7 +36,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/Picovoice/cobra",
     packages=["pvcobrademo"],
-    install_requires=["enum34", "numpy", "pvcobra==1.0.4", "pvrecorder", "soundfile"],
+    install_requires=["enum34", "numpy", "pvcobra==1.0.5", "pvrecorder", "soundfile"],
     include_package_data=True,
     classifiers=[
         "Development Status :: 5 - Production/Stable",
