@@ -40,19 +40,15 @@ jobs:
 
     - name: Copy test_resources
       run: ./copy_test_resources.sh
-      
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+
+    - name: Inject AccessKey
+      run: echo pvTestingAccessKey="${{secrets.PV_VALID_ACCESS_KEY}}" >> local.properties
 
     - name: Build app
-      run: ./gradlew
-        -PpvTestingAccessKey="${{secrets.PV_VALID_ACCESS_KEY}}"
-        assembleDebug
+      run: ./gradlew assembleDebug
 
     - name: Build androidTest
-      run: ./gradlew
-        -PpvTestingAccessKey="${{secrets.PV_VALID_ACCESS_KEY}}"
-        assembleAndroidTest
+      run: ./gradlew assembleAndroidTest
 
     - name: Run tests on AppCenter
       run: appcenter test run espresso 
