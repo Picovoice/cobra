@@ -53,7 +53,9 @@ PV_API pv_status_t pv_cobra_init(int32_t memory_size, void *memory_buffer, pv_co
  *
  * @param access_key AccessKey provided by Picovoice Console (https://picovoice.ai/console/)
  * @param object Constructed instance of Cobra.
- * @return Status code. Returns 'PV_STATUS_INVALID_ARGUMENT' or 'PV_STATUS_OUT_OF_MEMORY' on failure.
+ * @return Status code. Returns 'PV_STATUS_INVALID_ARGUMENT' or 'PV_STATUS_OUT_OF_MEMORY',
+ * 'PV_STATUS_RUNTIME_ERROR', 'PV_STATUS_ACTIVATION_ERROR', 'PV_STATUS_ACTIVATION_LIMIT_REACHED',
+ * 'PV_STATUS_ACTIVATION_THROTTLED', or 'PV_STATUS_ACTIVATION_REFUSED' on failure.
  */
 PV_API pv_status_t pv_cobra_init(const char *access_key, pv_cobra_t **object);
 
