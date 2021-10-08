@@ -2,14 +2,14 @@ name: Python
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
     paths:
       - 'binding/python/**'
       - '!binding/python/README.md'
       - 'lib/**'
       - 'res/**'
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
     paths:
       - 'binding/python/**'
       - '!binding/python/README.md'
