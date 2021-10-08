@@ -40,9 +40,9 @@ jobs:
 
     - name: Copy test_resources
       run: ./copy_test_resources.sh
-      
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
+
+    - name: Inject AccessKey
+      run: echo pvTestingAccessKey="${{secrets.PV_VALID_ACCESS_KEY}}" >> local.properties
 
     - name: Build app
       run: ./gradlew
