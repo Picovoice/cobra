@@ -2,12 +2,12 @@ name: C Demos
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
     paths:
       - 'demo/c/**'
       - '!demo/c/README.md'
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
     paths:
       - 'demo/c/**'
       - '!demo/c/README.md'

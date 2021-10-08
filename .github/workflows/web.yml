@@ -2,13 +2,13 @@ name: Web
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
     paths:
       - 'binding/web/**'
       - '!binding/web/README.md'
       - 'lib/wasm/**'
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
     paths:
       - 'binding/web/**'
       - '!binding/web/README.md'
