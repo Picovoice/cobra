@@ -24,7 +24,7 @@ lazy_static! {
                 Ok(symbol) => Ok(symbol),
                 Err(err) => Err(CobraError::new(
                     CobraErrorStatus::LibraryLoadError,
-                    &format!("Failed to load pvrecorder dynamic library: {}", err),
+                    &format!("Failed to load cobra dynamic library: {}", err),
                 )),
             }
         }
@@ -135,7 +135,7 @@ fn load_library_fn<T>(function_name: &[u8]) -> Result<Symbol<T>, CobraError> {
                 CobraError::new(
                     CobraErrorStatus::LibraryLoadError,
                     &format!(
-                        "Failed to load function symbol from pvrecorder library: {}",
+                        "Failed to load function symbol from cobra library: {}",
                         err
                     ),
                 )
@@ -151,7 +151,7 @@ macro_rules! check_fn_call_status {
             return Err(CobraError::new(
                 CobraErrorStatus::LibraryError($status),
                 &format!(
-                    "Function '{}' in the pvrecorder library failed",
+                    "Function '{}' in the cobra library failed",
                     $function_name
                 ),
             ));
