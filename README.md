@@ -1,6 +1,16 @@
 # Cobra
 
+[![GitHub](https://img.shields.io/github/license/Picovoice/cobra)](https://github.com/Picovoice/cobra/)
+
+[![PyPI](https://img.shields.io/pypi/v/pvcobra)](https://pypi.org/project/pvcobra/)
+[![Maven Central](https://img.shields.io/maven-central/v/ai.picovoice/cobra-android?label=maven-central%20%5Bandroid%5D)](https://repo1.maven.org/maven2/ai/picovoice/cobra-android/)
+[![Cocoapods](https://img.shields.io/cocoapods/v/Cobra-iOS)](https://github.com/Picovoice/cobra/tree/master/binding/ios)
+[![Crates.io](https://img.shields.io/crates/v/pv_cobra)](https://crates.io/crates/pv_cobra)
+
 Made in Vancouver, Canada by [Picovoice](https://picovoice.ai)
+
+[![Twitter URL](https://img.shields.io/twitter/url?label=%40AiPicovoice&style=social&url=https%3A%2F%2Ftwitter.com%2FAiPicovoice)](https://twitter.com/AiPicovoice)
+[![YouTube Channel Views](https://img.shields.io/youtube/channel/views/UCAdi9sTCXLosG1XeqDwLx7w?label=YouTube&style=social)](https://www.youtube.com/channel/UCAdi9sTCXLosG1XeqDwLx7w)
 
 Cobra is a highly-accurate and lightweight voice activity detection (VAD) engine.
 
