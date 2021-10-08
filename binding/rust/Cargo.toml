@@ -11,7 +11,7 @@ keywords = [
 	"voice-detection",
 	"VAD",
 ]
-publish = false
+publish = true
 
 include = [
 	".gitignore",
