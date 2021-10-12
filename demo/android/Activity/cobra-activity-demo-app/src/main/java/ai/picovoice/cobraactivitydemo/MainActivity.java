@@ -15,7 +15,6 @@ package ai.picovoice.cobraactivitydemo;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
@@ -28,7 +27,6 @@ import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -40,24 +38,23 @@ import ai.picovoice.cobra.Cobra;
 import ai.picovoice.cobra.CobraException;
 
 public class MainActivity extends AppCompatActivity {
-    private static final float VOICE_DETECTED_THRESHOLD = 0.5f;
     private final MicrophoneReader microphoneReader = new MicrophoneReader();
     public Cobra cobra;
-    private int voiceDetectedBackgroundColor;
 
     private static final String ACCESS_KEY = "${YOUR_ACCESS_KEY_HERE}";
 
     private ToggleButton recordButton;
+
+    private Analog analogView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cobra_activity_demo);
 
-        voiceDetectedBackgroundColor = getResources().getColor(R.color.colorAccent);
-
         recordButton = findViewById(R.id.startButton);
         TextView errorMessage = findViewById(R.id.errorMessage);
+        analogView = findViewById(R.id.analog);
 
         try {
             cobra = new Cobra(ACCESS_KEY);
@@ -127,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             } else {
                 microphoneReader.stop();
+                analogView.reset();
             }
         } catch (InterruptedException e) {
             displayError("Audio stop command interrupted\n" + e.getMessage());
@@ -189,24 +187,12 @@ public class MainActivity extends AppCompatActivity {
                         bufferSize);
                 audioRecord.startRecording();
 
-                boolean isAudioVoiceState = false;
                 while (!stop.get()) {
                     if (audioRecord.read(buffer, 0, buffer.length) == buffer.length) {
 
                         final float voiceProbability = cobra.process(buffer);
-                        final boolean newIsAudioVoiceState = voiceProbability >= VOICE_DETECTED_THRESHOLD;
-                        if (newIsAudioVoiceState != isAudioVoiceState) {
-                            runOnUiThread(() -> {
-                                final ConstraintLayout layout = findViewById(R.id.layout);
-                                if (newIsAudioVoiceState) {
-                                    layout.setBackgroundColor(voiceDetectedBackgroundColor);
-                                } else {
-                                    layout.setBackgroundColor(Color.TRANSPARENT);
-                                }
-
-                            });
-                        }
-                        isAudioVoiceState = newIsAudioVoiceState;
+                        analogView.setValue(voiceProbability);
+                        analogView.invalidate();
                     }
                 }
 

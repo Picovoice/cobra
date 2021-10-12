@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="Analog">
+        <attr name="radius" format="float" />
+        <attr name="startAngle" format="integer" />
+        <attr name="endAngle" format="integer" />
+        <attr name="threshold" format="float" />
+        <attr name="value" format="float" />
+    </declare-styleable>
+</resources>

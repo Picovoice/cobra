@@ -7,6 +7,18 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <ai.picovoice.cobraactivitydemo.Analog
+        android:id="@+id/analog"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:radius="400"
+        app:startAngle="180"
+        app:endAngle="180"
+        app:threshold="0.8"
+        app:layout_constraintStart_toStartOf="@+id/guidelineStart"
+        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/guidelineAnalogY" />
     <ToggleButton
         android:id="@+id/startButton"
         android:layout_width="128dp"
@@ -21,11 +33,11 @@
         android:textOff="Start"
         android:textOn="Stop"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/errorMessage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/analog" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineStart"
@@ -62,5 +74,12 @@
         app:layout_constraintBottom_toBottomOf="@id/guidelineButton"
         app:layout_constraintStart_toStartOf="@id/guidelineStart"
         app:layout_constraintEnd_toEndOf="@id/guidelineEnd" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guidelineAnalogY"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="216dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
