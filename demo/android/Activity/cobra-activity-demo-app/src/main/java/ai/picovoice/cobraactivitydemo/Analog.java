@@ -13,10 +13,10 @@ import android.view.View;
 public class Analog extends View {
     private static final float ALPHA = 0.5f;
     private float value = 0;
+    private float radius;
 
     private final int startAngle;
     private final int endAngle;
-    private final float radius;
     private final float threshold;
 
     private final Path belowPath;
@@ -42,7 +42,6 @@ public class Analog extends View {
         try {
             this.startAngle = a.getInt(R.styleable.Analog_startAngle, 0);
             this.endAngle = a.getInt(R.styleable.Analog_endAngle, 0);
-            this.radius = a.getFloat(R.styleable.Analog_radius, 0);
             this.threshold = a.getFloat(R.styleable.Analog_threshold, 0);
         } finally {
             a.recycle();
@@ -76,6 +75,7 @@ public class Analog extends View {
         int centerX = this.getWidth() / 2;
         int centerY = this.getBottom() - 20;
 
+        this.radius = centerX - 10;
         drawArcs(canvas, centerX, centerY);
         drawNeedle(canvas, centerX, centerY);
     }
