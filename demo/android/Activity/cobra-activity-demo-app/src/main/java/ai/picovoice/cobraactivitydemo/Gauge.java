@@ -24,13 +24,17 @@ import android.view.View;
 
 public class Gauge extends View {
     private final static int TEXT_SIZE = 26;
+
     private final int startAngle;
     private final int sweepAngle;
     private final float threshold;
+
     private final Paint belowPaint;
     private final RectF below;
+
     private final Paint abovePaint;
     private final RectF above;
+
     private final Paint textPaint;
 
     public Gauge(Context context, AttributeSet attrs) {
@@ -92,8 +96,6 @@ public class Gauge extends View {
 
         canvas.drawText("0%", this.getLeft(), this.getBottom(), textPaint);
         canvas.drawText("100%", centerX + radius - TEXT_SIZE * 2, this.getBottom(), textPaint);
-        float temp = getX(radius, .5f);
-        float temp2= getY(radius, .5f);
         canvas.drawText("50%", centerX + getX(radius, .5f), centerY - getY(radius, .5f) - TEXT_SIZE, textPaint);
         canvas.drawText("80%", centerX + getX(radius, threshold), centerY - getY(radius, threshold) - TEXT_SIZE, textPaint);
     }

@@ -66,7 +66,7 @@ public class Needle extends View {
 
     public void reset() {
         while (this.value > 0.001) {
-            setValue(this.value - 0.01f);
+            setValue(0);
         }
     }
 
