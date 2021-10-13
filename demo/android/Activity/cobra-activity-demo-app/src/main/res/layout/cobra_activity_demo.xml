@@ -18,14 +18,28 @@
         app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="@+id/guidelineAnalogY" />
+
+    <TextView
+        android:id="@+id/detectedText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/voice_detected"
+        android:textSize="24sp"
+        android:visibility="invisible"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@id/guidelineStart"
+        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+        app:layout_constraintTop_toBottomOf="@id/analog"
+        app:layout_constraintBottom_toTopOf="@id/startButton"/>
+
     <ToggleButton
         android:id="@+id/startButton"
         android:layout_width="128dp"
         android:layout_height="128dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="30dp"
         android:background="@drawable/button_background"
         android:onClick="onClick"
         android:textColor="@android:color/white"
@@ -36,7 +50,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/analog" />
+        app:layout_constraintTop_toBottomOf="@+id/detectedText" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineStart"
@@ -57,7 +71,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.90" />
+        app:layout_constraintGuide_percent="0.95" />
 
     <TextView
         android:id="@+id/errorMessage"
@@ -79,6 +93,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="216dp" />
+        app:layout_constraintGuide_percent="0.35" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

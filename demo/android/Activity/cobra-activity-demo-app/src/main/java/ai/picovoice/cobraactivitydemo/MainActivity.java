@@ -44,8 +44,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String ACCESS_KEY = "${YOUR_ACCESS_KEY_HERE}";
 
     private ToggleButton recordButton;
-
     private Analog analogView;
+    private TextView detectedText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         recordButton = findViewById(R.id.startButton);
         TextView errorMessage = findViewById(R.id.errorMessage);
         analogView = findViewById(R.id.analog);
+        detectedText = findViewById(R.id.detectedText);
 
         try {
             cobra = new Cobra(ACCESS_KEY);
@@ -189,10 +190,15 @@ public class MainActivity extends AppCompatActivity {
 
                 while (!stop.get()) {
                     if (audioRecord.read(buffer, 0, buffer.length) == buffer.length) {
-
                         final float voiceProbability = cobra.process(buffer);
-                        analogView.setValue(voiceProbability);
-                        analogView.invalidate();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                analogView.setValue(voiceProbability);
+                                detectedText.setVisibility((analogView.isDetected()) ? View.VISIBLE : View.INVISIBLE);
+                                analogView.invalidate();
+                            }
+                        });
                     }
                 }
 
