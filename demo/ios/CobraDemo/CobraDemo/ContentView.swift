@@ -9,19 +9,84 @@
 
 import SwiftUI
 
+struct Analog: Shape {
+    var startAngle: Angle
+    var endAngle: Angle
+    var clockwise: Bool
+    
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        path.addArc(
+            center: CGPoint(x: rect.midX, y: rect.maxY),
+            radius: (rect.width - 40) / 2,
+            startAngle: startAngle,
+            endAngle: endAngle,
+            clockwise: clockwise)
+        
+        return path
+    }
+}
+
+struct Needle: Shape {
+    var value: Float = 0
+    
+    func path(in rect: CGRect) -> Path {
+        let width = (rect.width - 40) / 2
+        
+        var path = Path()
+        path.move(to: CGPoint(x: width - 10, y: 0))
+        path.addLine(to: CGPoint(x: 0, y: 5))
+        path.addLine(to: CGPoint(x: -5, y: 0))
+        path.addLine(to: CGPoint(x: 0, y: -5))
+        path.addLine(to: CGPoint(x: width - 10, y: 0))
+        
+        let angle = CGFloat.pi + (CGFloat.pi * CGFloat(value))
+        path = path.applying(CGAffineTransform(rotationAngle: angle))
+        path = path.applying(CGAffineTransform(translationX: width + 20, y: rect.maxY))
+        
+        
+        return path
+    }
+}
+
 struct ContentView: View {
     @StateObject var viewModel = ViewModel()
     let activeBlue = Color(red: 55/255, green: 125/255, blue: 1, opacity: 1)
     let detectionBlue = Color(red: 0, green: 229/255, blue: 195/255, opacity: 1)
     let dangerRed = Color(red: 1, green: 14/255, blue: 14/255, opacity: 1)
+    let secondaryGrey = Color(red: 118/255, green: 131/255, blue: 142/255, opacity: 1)
     
     var body: some View {
+        let threshold: Float = 0.8
         let isError = viewModel.errorMessage.count > 0
-        let btnColor = (isError) ? Color.gray : activeBlue
+        let btnColor = (isError) ? secondaryGrey : activeBlue
         let errorMsgColor = (isError) ? dangerRed : Color.white
         
         VStack(alignment: .center){
             Spacer()
+            
+            ZStack(alignment: .leading) {
+                Analog(startAngle: .degrees(-180), endAngle: .degrees(-180 + (180 * 0.8)), clockwise: false)
+                    .stroke(Color.gray, style: StrokeStyle(lineWidth: 10, lineCap: .round))
+                Analog(startAngle: .degrees(-180 + (180 * 0.8)), endAngle: .degrees(0), clockwise: false)
+                    .stroke(activeBlue, style: StrokeStyle(lineWidth: 10, lineCap: .round))
+                Needle(value: viewModel.voiceProbability)
+                    .foregroundColor((viewModel.voiceProbability >= threshold) ? activeBlue : secondaryGrey)
+            }
+                .frame(maxHeight: 300)
+            
+            Spacer()
+            
+            if (viewModel.voiceProbability >= threshold) {
+                Text("Voice Detected...")
+                    .font(.system(size: 24))
+                    .frame(height: 80)
+                    .foregroundColor(secondaryGrey)
+            } else {
+                Text("")
+                    .frame(height: 80)
+            }
+            
             Spacer()
             
             Button(action: viewModel.toggleRecording){
