@@ -44,8 +44,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String ACCESS_KEY = "${YOUR_ACCESS_KEY_HERE}";
 
     private ToggleButton recordButton;
-    private Analog analogView;
     private TextView detectedText;
+    private Needle needleView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
 
         recordButton = findViewById(R.id.startButton);
         TextView errorMessage = findViewById(R.id.errorMessage);
-        analogView = findViewById(R.id.analog);
+        needleView = findViewById(R.id.needle);
         detectedText = findViewById(R.id.detectedText);
 
         try {
@@ -125,7 +125,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             } else {
                 microphoneReader.stop();
-                analogView.reset();
             }
         } catch (InterruptedException e) {
             displayError("Audio stop command interrupted\n" + e.getMessage());
@@ -194,9 +193,8 @@ public class MainActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                analogView.setValue(voiceProbability);
-                                detectedText.setVisibility((analogView.isDetected()) ? View.VISIBLE : View.INVISIBLE);
-                                analogView.invalidate();
+                                needleView.setValue(voiceProbability);
+                                detectedText.setVisibility((needleView.isDetected()) ? View.VISIBLE : View.INVISIBLE);
                             }
                         });
                     }
@@ -210,6 +208,13 @@ public class MainActivity extends AppCompatActivity {
                     audioRecord.release();
                 }
 
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        needleView.reset();
+                        detectedText.setVisibility(View.INVISIBLE);
+                    }
+                });
                 stopped.set(true);
             }
         }
