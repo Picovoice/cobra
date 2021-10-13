@@ -9,6 +9,18 @@
 
 import SwiftUI
 
+func deg2rad(_ number: Double) -> Double {
+    return number * .pi / 180
+}
+
+func getX(radius: Double, percentage: Double) -> CGFloat {
+    return radius * cos(deg2rad(180 * (1 - percentage)))
+}
+
+func getY(radius: Double, percentage: Double) -> CGFloat {
+    return radius * sin(deg2rad(180 * (1 - percentage)))
+}
+
 struct Analog: Shape {
     var startAngle: Angle
     var endAngle: Angle
@@ -17,7 +29,7 @@ struct Analog: Shape {
     func path(in rect: CGRect) -> Path {
         var path = Path()
         path.addArc(
-            center: CGPoint(x: rect.midX, y: rect.maxY),
+            center: CGPoint(x: rect.midX, y: rect.maxY - 10),
             radius: (rect.width - 40) / 2,
             startAngle: startAngle,
             endAngle: endAngle,
@@ -42,7 +54,7 @@ struct Needle: Shape {
         
         let angle = CGFloat.pi + (CGFloat.pi * CGFloat(value))
         path = path.applying(CGAffineTransform(rotationAngle: angle))
-        path = path.applying(CGAffineTransform(translationX: width + 20, y: rect.maxY))
+        path = path.applying(CGAffineTransform(translationX: width + 20, y: rect.maxY - 10))
         
         
         return path
@@ -65,6 +77,10 @@ struct ContentView: View {
         VStack(alignment: .center){
             Spacer()
             
+            Text("Probability of Voice")
+                .font(.system(size: 26))
+                .foregroundColor(.black)
+            
             ZStack(alignment: .leading) {
                 Analog(startAngle: .degrees(-180), endAngle: .degrees(-180 + (180 * 0.8)), clockwise: false)
                     .stroke(Color.gray, style: StrokeStyle(lineWidth: 10, lineCap: .round))
@@ -72,6 +88,36 @@ struct ContentView: View {
                     .stroke(activeBlue, style: StrokeStyle(lineWidth: 10, lineCap: .round))
                 Needle(value: viewModel.voiceProbability)
                     .foregroundColor((viewModel.voiceProbability >= threshold) ? activeBlue : secondaryGrey)
+                
+                GeometryReader { geometry in
+                    let centerX = geometry.size.width / 2
+                    let centerY = geometry.size.height
+                    let radius = (geometry.size.width - 40) / 2
+                    
+                    Text("0%")
+                        .font(.system(size: 12))
+                        .foregroundColor(.black)
+                        .position(x: 20, y: geometry.size.height)
+                    
+                    Text("100%")
+                        .font(.system(size: 12))
+                        .foregroundColor(.black)
+                        .position(x: geometry.size.width - 20, y: geometry.size.height)
+                    
+                    Text("50%")
+                        .font(.system(size: 12))
+                        .foregroundColor(.black)
+                        .position(
+                            x: centerX + getX(radius: radius, percentage: 0.5) + 5,
+                            y: centerY - getY(radius: radius, percentage: 0.5) - 25)
+                    
+                    Text("80%")
+                        .font(.system(size: 12))
+                        .foregroundColor(.black)
+                        .position(
+                            x: centerX + getX(radius: radius, percentage: Double(threshold)) + 15,
+                            y: centerY - getY(radius: radius, percentage: Double(threshold)) - 25)
+                }
             }
                 .frame(maxHeight: 300)
             
@@ -79,7 +125,7 @@ struct ContentView: View {
             
             if (viewModel.voiceProbability >= threshold) {
                 Text("Voice Detected...")
-                    .font(.system(size: 24))
+                    .font(.system(size: 20))
                     .frame(height: 80)
                     .foregroundColor(secondaryGrey)
             } else {
