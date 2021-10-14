@@ -14,11 +14,11 @@ func deg2rad(_ number: Double) -> Double {
 }
 
 func getX(radius: Double, percentage: Double) -> CGFloat {
-    return radius * cos(deg2rad(180 * (1 - percentage)))
+    return CGFloat(radius * cos(deg2rad(180 * (1 - percentage))))
 }
 
 func getY(radius: Double, percentage: Double) -> CGFloat {
-    return radius * sin(deg2rad(180 * (1 - percentage)))
+    return CGFloat(radius * sin(deg2rad(180 * (1 - percentage))))
 }
 
 struct Analog: Shape {
@@ -124,7 +124,7 @@ struct ContentView: View {
             Spacer()
             
             if (viewModel.voiceProbability >= threshold) {
-                Text("Voice Detected...")
+                Text("Voice Detected!")
                     .font(.system(size: 20))
                     .frame(height: 80)
                     .foregroundColor(secondaryGrey)
