@@ -20,10 +20,13 @@ class ViewModel: ObservableObject {
     private var cobra: Cobra!
     private var isListening = false
     
+    private var timer: Timer?
+    
     @Published var errorMessage = ""
-    @Published var voiceActivityState = false
     @Published var recordToggleButtonText:String = "Start"
     @Published var voiceProbability: Float = 0.0
+    @Published var THRESHOLD: Float = 0.8
+    @Published var detectedText = ""
     
     init() {
         do {
@@ -91,11 +94,20 @@ class ViewModel: ObservableObject {
         
         DispatchQueue.main.async {
             self.voiceProbability = 0
+            self.timer?.invalidate()
+            self.detectedText = ""
         }
     }
     
     private func setProbability(value: Float32) {
-        self.voiceProbability = (self.ALPHA * value) + (1 - self.ALPHA) * self.voiceProbability
+        self.voiceProbability = (self.ALPHA * value) + ((1 - self.ALPHA) * self.voiceProbability)
+        if self.voiceProbability >= self.THRESHOLD {
+            timer?.invalidate()
+            timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: false) {timer in
+                self.detectedText = ""
+            }
+            self.detectedText = "Voice Detected!"
+        }
     }
     
     private func audioCallback(pcm: [Int16]) -> Void {

@@ -68,8 +68,10 @@ struct ContentView: View {
     let dangerRed = Color(red: 1, green: 14/255, blue: 14/255, opacity: 1)
     let secondaryGrey = Color(red: 118/255, green: 131/255, blue: 142/255, opacity: 1)
     
+    let timer = Timer()
+    
     var body: some View {
-        let threshold: Float = 0.8
+        let threshold = viewModel.THRESHOLD
         let isError = viewModel.errorMessage.count > 0
         let btnColor = (isError) ? secondaryGrey : activeBlue
         let errorMsgColor = (isError) ? dangerRed : Color.white
@@ -119,19 +121,14 @@ struct ContentView: View {
                             y: centerY - getY(radius: radius, percentage: CGFloat(threshold)) - 25)
                 }
             }
-                .frame(maxHeight: 300)
+            .frame(maxHeight: 220)
             
             Spacer()
             
-            if (viewModel.voiceProbability >= threshold) {
-                Text("Voice Detected!")
-                    .font(.system(size: 20))
-                    .frame(height: 80)
-                    .foregroundColor(secondaryGrey)
-            } else {
-                Text("")
-                    .frame(height: 80)
-            }
+            Text(viewModel.detectedText)
+                .font(.system(size: 20))
+                .frame(height: 80)
+                .foregroundColor(secondaryGrey)
             
             Spacer()
             
@@ -155,12 +152,12 @@ struct ContentView: View {
                 .padding(.vertical, 10)
                 .padding(.horizontal, 10)
                 .font(.body)
-                .background(viewModel.voiceActivityState ? detectionBlue : errorMsgColor)
+                .background(errorMsgColor)
                 .foregroundColor(Color.white)
                 .cornerRadius(.infinity)
             
             Spacer()
-        }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity).background(viewModel.voiceActivityState ? detectionBlue : Color.white)
+        }.frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity).background(Color.white)
     }
 }
 
