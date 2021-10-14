@@ -96,7 +96,7 @@ public class Gauge extends View {
 
         canvas.drawText("0%", this.getLeft(), this.getBottom(), textPaint);
         canvas.drawText("100%", centerX + radius - TEXT_SIZE * 2, this.getBottom(), textPaint);
-        canvas.drawText("50%", centerX + getX(radius, .5f), centerY - getY(radius, .5f) - TEXT_SIZE, textPaint);
+        canvas.drawText("50%", centerX + getX(radius, .5f) - (TEXT_SIZE / 2), centerY - getY(radius, .5f) - TEXT_SIZE, textPaint);
         canvas.drawText("80%", centerX + getX(radius, threshold), centerY - getY(radius, threshold) - TEXT_SIZE, textPaint);
     }
 

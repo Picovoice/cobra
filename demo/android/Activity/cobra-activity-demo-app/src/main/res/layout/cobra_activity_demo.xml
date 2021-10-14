@@ -14,9 +14,9 @@
         android:text="Probability of Voice"
         android:textSize="24sp"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintTop_toTopOf="@id/guidelineTop"
         app:layout_constraintStart_toStartOf="@id/guidelineStart"
-        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"/>
+        app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
+        app:layout_constraintBottom_toTopOf="@id/analog"/>
 
     <FrameLayout
         android:id="@+id/analog"
@@ -24,7 +24,7 @@
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="@id/guidelineStart"
         app:layout_constraintEnd_toEndOf="@id/guidelineEnd"
-        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintTop_toTopOf="@id/guidelineTop"
         app:layout_constraintBottom_toTopOf="@id/guidelineAnalogY">
         <ai.picovoice.cobraactivitydemo.Gauge
             android:id="@+id/gauge"
@@ -93,7 +93,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.025" />
+        app:layout_constraintGuide_percent="0.125" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guidelineButton"
