@@ -19,6 +19,7 @@ import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Process;
 import android.view.View;
 import android.widget.TextView;
@@ -47,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView detectedText;
     private Needle needleView;
 
+    private CountDownTimer visibilityTimer;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +59,18 @@ public class MainActivity extends AppCompatActivity {
         TextView errorMessage = findViewById(R.id.errorMessage);
         needleView = findViewById(R.id.needle);
         detectedText = findViewById(R.id.detectedText);
+
+        visibilityTimer = new CountDownTimer(1000, 1000) {
+            @Override
+            public void onTick(long l) {
+                detectedText.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onFinish() {
+                detectedText.setVisibility(View.INVISIBLE);
+            }
+        };
 
         try {
             cobra = new Cobra(ACCESS_KEY);
@@ -194,7 +209,10 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 needleView.setValue(voiceProbability);
-                                detectedText.setVisibility((needleView.isDetected()) ? View.VISIBLE : View.INVISIBLE);
+                                if (needleView.isDetected()) {
+                                    visibilityTimer.cancel();
+                                    visibilityTimer.start();
+                                }
                             }
                         });
                     }
@@ -211,6 +229,7 @@ public class MainActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        visibilityTimer.cancel();
                         needleView.reset();
                         detectedText.setVisibility(View.INVISIBLE);
                     }
