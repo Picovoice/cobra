@@ -9,16 +9,16 @@
 
 import SwiftUI
 
-func deg2rad(_ number: Double) -> Double {
+func deg2rad(_ number: CGFloat) -> CGFloat {
     return number * .pi / 180
 }
 
-func getX(radius: Double, percentage: Double) -> CGFloat {
-    return CGFloat(radius * cos(deg2rad(180 * (1 - percentage))))
+func getX(radius: CGFloat, percentage: CGFloat) -> CGFloat {
+    return radius * cos(deg2rad(180 * (1 - percentage)))
 }
 
-func getY(radius: Double, percentage: Double) -> CGFloat {
-    return CGFloat(radius * sin(deg2rad(180 * (1 - percentage))))
+func getY(radius: CGFloat, percentage: CGFloat) -> CGFloat {
+    return radius * sin(deg2rad(180 * (1 - percentage)))
 }
 
 struct Analog: Shape {
@@ -115,8 +115,8 @@ struct ContentView: View {
                         .font(.system(size: 12))
                         .foregroundColor(.black)
                         .position(
-                            x: centerX + getX(radius: radius, percentage: Double(threshold)) + 15,
-                            y: centerY - getY(radius: radius, percentage: Double(threshold)) - 25)
+                            x: centerX + getX(radius: radius, percentage: CGFloat(threshold)) + 15,
+                            y: centerY - getY(radius: radius, percentage: CGFloat(threshold)) - 25)
                 }
             }
                 .frame(maxHeight: 300)
