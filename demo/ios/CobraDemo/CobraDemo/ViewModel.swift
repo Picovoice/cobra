@@ -103,7 +103,7 @@ class ViewModel: ObservableObject {
         self.voiceProbability = (self.ALPHA * value) + ((1 - self.ALPHA) * self.voiceProbability)
         if self.voiceProbability >= self.THRESHOLD {
             timer?.invalidate()
-            timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: false) {timer in
+            timer = Timer.scheduledTimer(withTimeInterval: 0.75, repeats: false) {timer in
                 self.detectedText = ""
             }
             self.detectedText = "Voice Detected!"
