@@ -15,11 +15,11 @@ package ai.picovoice.cobraactivitydemo;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Process;
 import android.view.View;
 import android.widget.TextView;
@@ -28,7 +28,6 @@ import android.widget.ToggleButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
@@ -40,24 +39,38 @@ import ai.picovoice.cobra.Cobra;
 import ai.picovoice.cobra.CobraException;
 
 public class MainActivity extends AppCompatActivity {
-    private static final float VOICE_DETECTED_THRESHOLD = 0.5f;
     private final MicrophoneReader microphoneReader = new MicrophoneReader();
     public Cobra cobra;
-    private int voiceDetectedBackgroundColor;
 
     private static final String ACCESS_KEY = "${YOUR_ACCESS_KEY_HERE}";
 
     private ToggleButton recordButton;
+    private TextView detectedText;
+    private Needle needleView;
+
+    private CountDownTimer visibilityTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cobra_activity_demo);
 
-        voiceDetectedBackgroundColor = getResources().getColor(R.color.colorAccent);
-
         recordButton = findViewById(R.id.startButton);
         TextView errorMessage = findViewById(R.id.errorMessage);
+        needleView = findViewById(R.id.needle);
+        detectedText = findViewById(R.id.detectedText);
+
+        visibilityTimer = new CountDownTimer(750, 750) {
+            @Override
+            public void onTick(long l) {
+                detectedText.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onFinish() {
+                detectedText.setVisibility(View.INVISIBLE);
+            }
+        };
 
         try {
             cobra = new Cobra(ACCESS_KEY);
@@ -189,24 +202,19 @@ public class MainActivity extends AppCompatActivity {
                         bufferSize);
                 audioRecord.startRecording();
 
-                boolean isAudioVoiceState = false;
                 while (!stop.get()) {
                     if (audioRecord.read(buffer, 0, buffer.length) == buffer.length) {
-
                         final float voiceProbability = cobra.process(buffer);
-                        final boolean newIsAudioVoiceState = voiceProbability >= VOICE_DETECTED_THRESHOLD;
-                        if (newIsAudioVoiceState != isAudioVoiceState) {
-                            runOnUiThread(() -> {
-                                final ConstraintLayout layout = findViewById(R.id.layout);
-                                if (newIsAudioVoiceState) {
-                                    layout.setBackgroundColor(voiceDetectedBackgroundColor);
-                                } else {
-                                    layout.setBackgroundColor(Color.TRANSPARENT);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                needleView.setValue(voiceProbability);
+                                if (needleView.isDetected()) {
+                                    visibilityTimer.cancel();
+                                    visibilityTimer.start();
                                 }
-
-                            });
-                        }
-                        isAudioVoiceState = newIsAudioVoiceState;
+                            }
+                        });
                     }
                 }
 
@@ -218,6 +226,14 @@ public class MainActivity extends AppCompatActivity {
                     audioRecord.release();
                 }
 
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        visibilityTimer.cancel();
+                        needleView.reset();
+                        detectedText.setVisibility(View.INVISIBLE);
+                    }
+                });
                 stopped.set(true);
             }
         }

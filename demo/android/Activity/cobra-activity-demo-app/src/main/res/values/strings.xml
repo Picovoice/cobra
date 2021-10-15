@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Cobra Activity</string>
+    <string name="voice_detected">Voice Detected!</string>
+    <string name="threshold">0.8</string>
 </resources>

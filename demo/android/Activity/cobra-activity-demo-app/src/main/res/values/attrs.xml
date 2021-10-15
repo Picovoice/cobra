@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="threshold" format="float" />
+    <declare-styleable name="Gauge">
+        <attr name="radius" format="float" />
+        <attr name="startAngle" format="integer" />
+        <attr name="sweepAngle" format="integer" />
+        <attr name="threshold" />
+    </declare-styleable>
+    <declare-styleable name="Needle">
+        <attr name="threshold" />
+    </declare-styleable>
+</resources>
