@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         needleView = findViewById(R.id.needle);
         detectedText = findViewById(R.id.detectedText);
 
-        visibilityTimer = new CountDownTimer(1000, 1000) {
+        visibilityTimer = new CountDownTimer(750, 750) {
             @Override
             public void onTick(long l) {
                 detectedText.setVisibility(View.VISIBLE);
