@@ -24,6 +24,7 @@ import {
   base64ToUint8Array,
   fetchWithTimeout,
   getRuntimeEnvironment,
+  isAccessKeyValid,
   stringHeaderToObject,
 } from './utils';
 
@@ -161,6 +162,9 @@ export class Cobra implements CobraEngine {
    * @returns An instance of the Cobra engine.
    */
   public static async create(accessKey: string): Promise<Cobra> {
+    if (!isAccessKeyValid(accessKey)) {
+      throw new Error('Invalid AccessKey');
+    }
     const wasmOutput = await Cobra.initWasm(accessKey);
     return new Cobra(wasmOutput);
   }
