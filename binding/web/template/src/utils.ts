@@ -115,3 +115,19 @@ export function getRuntimeEnvironment(): string {
   }
   return 'worker';
 }
+
+/**
+ * Checking whether the given AccessKey is valid
+ *
+ * @return true if the AccessKey is valid, false if not
+ */
+
+ export function isAccessKeyValid(accessKey: string): boolean {
+  const accessKeyCleaned = accessKey.trim();
+  if (accessKeyCleaned.length !== 56) { return false; }
+  try {
+    return btoa(atob(accessKeyCleaned)) === accessKeyCleaned;
+  } catch (err) {
+    return false;
+  }
+}
