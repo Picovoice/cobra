@@ -14,6 +14,54 @@ from ctypes import *
 from enum import Enum
 
 
+class CobraError(Exception):
+    pass
+
+
+class CobraMemoryError(CobraError):
+    pass
+
+
+class CobraIOError(CobraError):
+    pass
+
+
+class CobraInvalidArgumentError(CobraError):
+    pass
+
+
+class CobraStopIterationError(CobraError):
+    pass
+
+
+class CobraKeyError(CobraError):
+    pass
+
+
+class CobraInvalidStateError(CobraError):
+    pass
+
+
+class CobraRuntimeError(CobraError):
+    pass
+
+
+class CobraActivationError(CobraError):
+    pass
+
+
+class CobraActivationLimitError(CobraError):
+    pass
+
+
+class CobraActivationThrottledError(CobraError):
+    pass
+
+
+class CobraActivationRefusedError(CobraError):
+    pass
+
+
 class Cobra(object):
     """
     Python binding for Cobra voice activity detection (VAD) engine. It detects speech signals within an incoming
@@ -38,17 +86,17 @@ class Cobra(object):
         ACTIVATION_REFUSED = 11
 
     _PICOVOICE_STATUS_TO_EXCEPTION = {
-        PicovoiceStatuses.OUT_OF_MEMORY: MemoryError,
-        PicovoiceStatuses.IO_ERROR: IOError,
-        PicovoiceStatuses.INVALID_ARGUMENT: ValueError,
-        PicovoiceStatuses.STOP_ITERATION: StopIteration,
-        PicovoiceStatuses.KEY_ERROR: KeyError,
-        PicovoiceStatuses.INVALID_STATE: ValueError,
-        PicovoiceStatuses.RUNTIME_ERROR: RuntimeError,
-        PicovoiceStatuses.ACTIVATION_ERROR: RuntimeError,
-        PicovoiceStatuses.ACTIVATION_LIMIT_REACHED: PermissionError,
-        PicovoiceStatuses.ACTIVATION_THROTTLED: PermissionError,
-        PicovoiceStatuses.ACTIVATION_REFUSED: PermissionError
+        PicovoiceStatuses.OUT_OF_MEMORY: CobraMemoryError,
+        PicovoiceStatuses.IO_ERROR: CobraIOError,
+        PicovoiceStatuses.INVALID_ARGUMENT: CobraInvalidArgumentError,
+        PicovoiceStatuses.STOP_ITERATION: CobraStopIterationError,
+        PicovoiceStatuses.KEY_ERROR: CobraKeyError,
+        PicovoiceStatuses.INVALID_STATE: CobraInvalidStateError,
+        PicovoiceStatuses.RUNTIME_ERROR: CobraRuntimeError,
+        PicovoiceStatuses.ACTIVATION_ERROR: CobraActivationError,
+        PicovoiceStatuses.ACTIVATION_LIMIT_REACHED: CobraActivationLimitError,
+        PicovoiceStatuses.ACTIVATION_THROTTLED: CobraActivationThrottledError,
+        PicovoiceStatuses.ACTIVATION_REFUSED: CobraActivationRefusedError
     }
 
     class CCobra(Structure):
