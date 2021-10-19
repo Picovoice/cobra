@@ -43,6 +43,9 @@ export default class CobraWorkerFactory {
       cobraWorker.onmessage = (
         event: MessageEvent<CobraWorkerResponse>
       ): void => {
+        // @ts-ignore - hold the reference to it, gc doesn't clean worker
+        this.cobraWorker = cobraWorker;
+
         switch (event.data.command) {
           case 'cobra-ready':
             resolve(cobraWorker);
