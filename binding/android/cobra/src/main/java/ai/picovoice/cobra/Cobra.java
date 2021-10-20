@@ -34,11 +34,7 @@ public class Cobra {
      * @throws CobraException if there is an error while initializing Cobra.
      */
     public Cobra(String accessKey) throws CobraException {
-        try {
-            handle = init(accessKey);
-        } catch (Exception e) {
-            throw new CobraException(e);
-        }
+        handle = init(accessKey);
     }
 
     /**
@@ -59,11 +55,7 @@ public class Cobra {
      * @throws CobraException if there is an error while processing the audio frame.
      */
     public float process(short[] pcm) throws CobraException {
-        try {
-            return process(handle, pcm);
-        } catch (Exception e) {
-            throw new CobraException(e);
-        }
+        return process(handle, pcm);
     }
 
     /**
