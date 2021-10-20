@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             cobra = new Cobra(ACCESS_KEY);
         } catch (CobraInvalidArgumentException e) {
-            onCobraInitError("AccessKey provided is invalid");
+            onCobraInitError(String.format("AccessKey '%s' is invalid", ACCESS_KEY));
         } catch (CobraActivationException e) {
             onCobraInitError("AccessKey activation error");
         } catch (CobraActivationLimitException e) {
