@@ -10,13 +10,12 @@
 
 package ai.picovoice.cobra;
 
-public class CobraException extends Exception {
-    public CobraException(Throwable cause) {
+public class CobraActivationThrottledException extends CobraException {
+    public CobraActivationThrottledException(Throwable cause) {
         super(cause);
     }
 
-    public CobraException(String message) {
+    public CobraActivationThrottledException(String message) {
         super(message);
     }
 }
-

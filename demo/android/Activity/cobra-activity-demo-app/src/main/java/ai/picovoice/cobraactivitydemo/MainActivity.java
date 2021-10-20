@@ -35,8 +35,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import ai.picovoice.cobra.Cobra;
-import ai.picovoice.cobra.CobraException;
+import ai.picovoice.cobra.*;
 
 public class MainActivity extends AppCompatActivity {
     private final MicrophoneReader microphoneReader = new MicrophoneReader();
@@ -56,7 +55,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.cobra_activity_demo);
 
         recordButton = findViewById(R.id.startButton);
-        TextView errorMessage = findViewById(R.id.errorMessage);
         needleView = findViewById(R.id.needle);
         detectedText = findViewById(R.id.detectedText);
 
@@ -74,30 +72,18 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             cobra = new Cobra(ACCESS_KEY);
+        } catch (CobraInvalidArgumentException e) {
+            onCobraInitError(String.format("AccessKey '%s' is invalid", ACCESS_KEY));
+        } catch (CobraActivationException e) {
+            onCobraInitError("AccessKey activation error");
+        } catch (CobraActivationLimitException e) {
+            onCobraInitError("AccessKey reached its device limit");
+        } catch (CobraActivationRefusedException e) {
+            onCobraInitError("AccessKey refused");
+        } catch (CobraActivationThrottledException e) {
+            onCobraInitError("AccessKey has been throttled");
         } catch (CobraException e) {
-            String error;
-
-            if (e.getMessage() == null) {
-                error = "Failed to initialize Cobra.";
-            } else if (e.getMessage().contains("IllegalArgument")) {
-                error = "AccessKey provided is invalid.";
-            } else if (e.getMessage().contains("ACTIVATION_ERROR")) {
-                error = "AccessKey activation error.";
-            } else if (e.getMessage().contains("ACTIVATION_LIMIT_REACHED")) {
-                error = "AccessKey reached its limit.";
-            } else if (e.getMessage().contains("ACTIVATION_REFUSED")) {
-                error = "AccessKey activation refused.";
-            } else if (e.getMessage().contains("ACTIVATION_THROTTLED")) {
-                error = "AccessKey is throttled.";
-            } else {
-                error = "Failed to initialize Cobra: " + e.getMessage();
-            }
-
-            errorMessage.setText(error);
-            errorMessage.setVisibility(View.VISIBLE);
-
-            recordButton.setEnabled(false);
-            recordButton.setBackground(ContextCompat.getDrawable(this, R.drawable.button_disabled));
+            onCobraInitError("Failed to initialize Cobra " + e.getMessage());
         }
     }
 
@@ -105,6 +91,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         cobra.delete();
+    }
+
+    private void onCobraInitError(String error){
+        TextView errorMessage = findViewById(R.id.errorMessage);
+        errorMessage.setText(error);
+        errorMessage.setVisibility(View.VISIBLE);
+
+        recordButton.setEnabled(false);
+        recordButton.setBackground(ContextCompat.getDrawable(this, R.drawable.button_disabled));
     }
 
     private void displayError(String message) {
