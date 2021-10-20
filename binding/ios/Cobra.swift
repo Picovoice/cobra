@@ -10,17 +10,18 @@
 import PvCobra
 
 public enum CobraError: Error {
-    case invalidArgument(message:String)
-    case io
-    case outOfMemory
-    case keyError
-    case invalidState
-    case runtimeError
-    case activationError
-    case activationLimitReached
-    case activationThrottled
-    case activationRefused
-    case internalError
+    case CobraOutOfMemoryError(_ message:String)
+    case CobraIOError(_ message:String)
+    case CobraInvalidArgumentError(_ message:String)
+    case CobraStopIterationError(_ message:String)
+    case CobraKeyError(_ message:String)
+    case CobraInvalidStateError(_ message:String)
+    case CobraRuntimeError(_ message:String)
+    case CobraActivationError(_ message:String)
+    case CobraActivationLimitError(_ message:String)
+    case CobraActivationThrottledError(_ message:String)
+    case CobraActivationRefusedError(_ message:String)
+    case CobraInternalError(_ message:String)
 }
 
 /// iOS (Swift) binding for Cobra voice activity detection (VAD) engine. It detects speech signals within an incoming
@@ -48,7 +49,9 @@ public class Cobra {
     /// - Throws: CobraError
     public init(accessKey: String) throws {
         let status = pv_cobra_init(accessKey, &handle)
-        try checkStatus(status)
+        if(status != PV_STATUS_SUCCESS) {
+            throw pvStatusToCobraError(status, "Cobra init failed")
+        }
     }
     
     deinit {
@@ -73,42 +76,46 @@ public class Cobra {
     /// - Throws: CobraError
     public func process(pcm: [Int16]) throws -> Float32 {
         if pcm.count != Cobra.frameLength {
-            throw CobraError.invalidArgument(message: "Frame of audio data must contain \(Cobra.frameLength) samples - given frame contained \(pcm.count)")
+            throw CobraError.CobraInvalidArgumentError(
+                "Frame of audio data must contain \(Cobra.frameLength) samples - given frame contained \(pcm.count)")
         }
         
         var result: Float32 = 0
         let status = pv_cobra_process(self.handle, pcm, &result)
-        try checkStatus(status)
+        if(status != PV_STATUS_SUCCESS) {
+            throw pvStatusToCobraError(status, "Cobra process failed")
+        }
         
         return result
     }
     
-    private func checkStatus(_ status: pv_status_t) throws {
+    private func pvStatusToCobraError(_ status: pv_status_t, _ message: String) -> CobraError {
         switch status {
-        case PV_STATUS_SUCCESS:
-            return
-        case PV_STATUS_IO_ERROR:
-            throw CobraError.io
-        case PV_STATUS_OUT_OF_MEMORY:
-            throw CobraError.outOfMemory
-        case PV_STATUS_INVALID_ARGUMENT:
-            throw CobraError.invalidArgument(message:"Cobra rejected one of the provided arguments.")
-        case PV_STATUS_KEY_ERROR:
-            throw CobraError.keyError
-        case PV_STATUS_INVALID_STATE:
-            throw CobraError.invalidState
-        case PV_STATUS_RUNTIME_ERROR:
-            throw CobraError.runtimeError
-        case PV_STATUS_ACTIVATION_ERROR:
-            throw CobraError.activationError
-        case PV_STATUS_ACTIVATION_LIMIT_REACHED:
-            throw CobraError.activationLimitReached
-        case PV_STATUS_ACTIVATION_THROTTLED:
-            throw CobraError.activationThrottled
-        case PV_STATUS_ACTIVATION_REFUSED:
-            throw CobraError.activationRefused
-        default:
-            throw CobraError.internalError
+            case PV_STATUS_OUT_OF_MEMORY:
+                return CobraError.CobraOutOfMemoryError(message)
+            case PV_STATUS_IO_ERROR:
+                return CobraError.CobraIOError(message)
+            case PV_STATUS_INVALID_ARGUMENT:
+                return CobraError.CobraInvalidArgumentError(message)
+            case PV_STATUS_STOP_ITERATION:
+                return CobraError.CobraStopIterationError(message)
+            case PV_STATUS_KEY_ERROR:
+                return CobraError.CobraKeyError(message)
+            case PV_STATUS_INVALID_STATE:
+                return CobraError.CobraInvalidStateError(message)
+            case PV_STATUS_RUNTIME_ERROR:
+                return CobraError.CobraRuntimeError(message)
+            case PV_STATUS_ACTIVATION_ERROR:
+                return CobraError.CobraActivationError(message)
+            case PV_STATUS_ACTIVATION_LIMIT_REACHED:
+                return CobraError.CobraActivationLimitError(message)
+            case PV_STATUS_ACTIVATION_THROTTLED:
+                return CobraError.CobraActivationThrottledError(message)
+            case PV_STATUS_ACTIVATION_REFUSED:
+                return CobraError.CobraActivationRefusedError(message)
+            default:
+                let pvStatusString = String(cString: pv_status_to_string(status))
+                return CobraError.CobraInternalError("\(pvStatusString): \(message)")
         }
     }
 }

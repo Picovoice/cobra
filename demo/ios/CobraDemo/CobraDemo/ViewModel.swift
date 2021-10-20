@@ -31,15 +31,15 @@ class ViewModel: ObservableObject {
     init() {
         do {
             try cobra = Cobra(accessKey: ACCESS_KEY)
-        } catch CobraError.invalidArgument {
-            errorMessage = "ACCESS_KEY provided is invalid."
-        } catch CobraError.activationError {
+        } catch CobraError.CobraInvalidArgumentError {
+            errorMessage = "ACCESS_KEY '\(ACCESS_KEY)' is invalid."
+        } catch CobraError.CobraActivationError {
             errorMessage = "ACCESS_KEY activation error."
-        } catch CobraError.activationRefused {
+        } catch CobraError.CobraActivationRefusedError {
             errorMessage = "ACCESS_KEY activation refused."
-        } catch CobraError.activationLimitReached {
+        } catch CobraError.CobraActivationLimitError {
             errorMessage = "ACCESS_KEY reached its limit."
-        } catch CobraError.activationThrottled {
+        } catch CobraError.CobraActivationThrottledError  {
             errorMessage = "ACCESS_KEY is throttled."
         } catch {
             errorMessage = "\(error)"
