@@ -178,9 +178,9 @@ dependencies = [
 
 [[package]]
 name = "pv_cobra"
-version = "1.0.4"
+version = "1.0.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8c566603738f193406ded0f0bac7032db627d787257978e143b4d34dc18a4e19"
+checksum = "a487d0a7744430dc55e0b6b9fbcdd00947de4d7fa85b177838728f12746cc6ce"
 dependencies = [
  "lazy_static",
  "libc",
