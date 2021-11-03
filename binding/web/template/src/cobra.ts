@@ -13,6 +13,7 @@
 
 
 import * as Asyncify from 'asyncify-wasm';
+import { Mutex } from 'async-mutex';
 
 import { CobraEngine } from './cobra_types';
 import { COBRA_WASM_BASE64 } from './cobra_b64';
@@ -63,6 +64,7 @@ export class Cobra implements CobraEngine {
   private _wasmMemory: WebAssembly.Memory;
   private _memoryBuffer: Int16Array;
   private _memoryBufferView: DataView;
+  private _processMutex: Mutex;
 
   private _objectAddress: number;
   private _inputBufferAddress: number;
@@ -74,6 +76,7 @@ export class Cobra implements CobraEngine {
 
   private static _resolvePromise: EmptyPromise | null;
   private static _rejectPromise: EmptyPromise | null;
+  private static _cobraMutex = new Mutex;
 
   private constructor(handleWasm: CobraWasmOutput) {
     Cobra._frameLength = handleWasm.frameLength;
@@ -91,6 +94,7 @@ export class Cobra implements CobraEngine {
 
     this._memoryBuffer = new Int16Array(handleWasm.memory.buffer);
     this._memoryBufferView = new DataView(handleWasm.memory.buffer);
+    this._processMutex = new Mutex();
   }
 
   /**
@@ -112,31 +116,40 @@ export class Cobra implements CobraEngine {
     if (!(pcm instanceof Int16Array)) {
       throw new Error("The argument 'pcm' must be provided as an Int16Array");
     }
-    this._memoryBuffer.set(
-      pcm,
-      this._inputBufferAddress / Int16Array.BYTES_PER_ELEMENT
-    );
+    const returnPromise = new Promise<number>((resolve, reject) => {
+      this._processMutex.runExclusive(async () => {
+        this._memoryBuffer.set(
+          pcm,
+          this._inputBufferAddress / Int16Array.BYTES_PER_ELEMENT
+        );
 
-    const status = await this._pvCobraProcess(
-      this._objectAddress,
-      this._inputBufferAddress,
-      this._voiceProbabilityAddress
-    );
-    if (status !== PV_STATUS_SUCCESS) {
-      const memoryBuffer = new Uint8Array(this._wasmMemory.buffer);
-      throw new Error(
-        `process failed with status ${arrayBufferToStringAtIndex(
-          memoryBuffer,
-          await this._pvStatusToString(status)
-        )}`
-      );
-    }
-    const voiceProbability = this._memoryBufferView.getFloat32(
-      this._voiceProbabilityAddress,
-      true
-    );
+        const status = await this._pvCobraProcess(
+          this._objectAddress,
+          this._inputBufferAddress,
+          this._voiceProbabilityAddress
+        );
+        if (status !== PV_STATUS_SUCCESS) {
+          const memoryBuffer = new Uint8Array(this._wasmMemory.buffer);
+          throw new Error(
+            `process failed with status ${arrayBufferToStringAtIndex(
+              memoryBuffer,
+              await this._pvStatusToString(status)
+            )}`
+          );
+        }
+        const voiceProbability = this._memoryBufferView.getFloat32(
+          this._voiceProbabilityAddress,
+          true
+        );
 
-    return voiceProbability;
+        return voiceProbability;
+      }).then((result: number) => {
+        resolve(result);
+      }).catch((error: any) => {
+        reject(error);
+      });
+    });
+    return returnPromise;
   }
 
   get version(): string {
@@ -165,8 +178,17 @@ export class Cobra implements CobraEngine {
     if (!isAccessKeyValid(accessKey)) {
       throw new Error('Invalid AccessKey');
     }
-    const wasmOutput = await Cobra.initWasm(accessKey);
-    return new Cobra(wasmOutput);
+    const returnPromise = new Promise<Cobra>((resolve, reject) => {
+      Cobra._cobraMutex.runExclusive(async () => {
+        const wasmOutput = await Cobra.initWasm(accessKey.trim());
+        return new Cobra(wasmOutput);
+      }).then((result: Cobra) => {
+        resolve(result);
+      }).catch((error: any) => {
+        reject(error);
+      });
+    });
+    return returnPromise;
   }
 
   public static clearFilePromises(): void {
