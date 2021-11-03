@@ -46,7 +46,9 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt install curl unzip
-          curl --output chromedriver_linux64.zip https://chromedriver.storage.googleapis.com/93.0.4577.63/chromedriver_linux64.zip
+          google-chrome --version
+          echo $(google-chrome --version)
+          curl --output chromedriver_linux64.zip https://chromedriver.storage.googleapis.com/95.0.4638.54/chromedriver_linux64.zip
           unzip chromedriver_linux64.zip
           sudo mv chromedriver /usr/local/bin
           pip install selenium
