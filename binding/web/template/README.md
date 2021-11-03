@@ -116,7 +116,7 @@ const cobraHandle = startCobra()
 
 // Send Cobra frames of audio (check handle.frameLength for size of array)
 const audioFrames =  new Int16Array( /* Provide data with correct format and size*/ )
-const cobraResult = cobraHandle.process(audioFrames)
+const cobraResult = await cobraHandle.process(audioFrames)
 // cobraResult: Probability of voice activity. It is a floating-point number within [0, 1].
 
 ...
