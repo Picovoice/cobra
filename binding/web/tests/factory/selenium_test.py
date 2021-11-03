@@ -15,6 +15,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
+from webdriver_manager.chrome import ChromeDriverManager
+
 
 class SimpleHttpServer(threading.Thread):
     def __init__(self, host='localhost', port=4001, path='.'):
@@ -45,7 +47,7 @@ def run_unit_test_selenium(url, access_key, audio_file_absolute_path):
     desired_capabilities['goog:loggingPrefs'] = {'browser': 'ALL'}
     opts = Options()
     opts.headless = True
-    driver = webdriver.Chrome(desired_capabilities=desired_capabilities, options=opts)
+    driver = webdriver.Chrome(ChromeDriverManager().install(), desired_capabilities=desired_capabilities, options=opts)
 
     driver.get(url)
     assert "unit test" in driver.title
