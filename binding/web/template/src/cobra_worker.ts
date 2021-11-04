@@ -27,15 +27,16 @@ async function init(accessKey: string, start = true): Promise<void> {
     cobraReadyMessage = {
       command: 'cobra-ready',
     };
+    paused = !start;
+    // @ts-ignore
+    postMessage(cobraReadyMessage, undefined);
   } catch (error) {
     cobraReadyMessage = {
       command: 'cobra-failed',
       message: error as string,
     };
+    postMessage(cobraReadyMessage, undefined);
   }
-  paused = !start;
-  // @ts-ignore
-  postMessage(cobraReadyMessage, undefined);
 }
 
 async function process(inputFrame: Int16Array): Promise<void> {

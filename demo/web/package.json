@@ -17,7 +17,7 @@
   "author": "Picovoice Inc",
   "license": "Apache-2.0",
   "dependencies": {
-    "@picovoice/cobra-web-worker": "^1.0.3",
+    "@picovoice/cobra-web-worker": "^1.0.4",
     "@picovoice/web-voice-processor": "^2.1.0"
   },
   "devDependencies": {
