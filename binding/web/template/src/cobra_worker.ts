@@ -23,7 +23,7 @@ let cobraEngine: CobraEngine | null = null;
 async function init(accessKey: string, start = true): Promise<void> {
   try {
     cobraEngine = await Cobra.create(accessKey);
-    const cobraReadyMessage = {
+    const cobraReadyMessage: CobraWorkerResponseReady = {
       command: 'cobra-ready',
     };
     paused = !start;
@@ -31,11 +31,11 @@ async function init(accessKey: string, start = true): Promise<void> {
     postMessage(cobraReadyMessage, undefined);
   } catch (error) {
     const errorMessage = String(error);
-    const octopusFailedMessage = {
+    const cobraFailedMessage: CobraWorkerResponseFailed = {
       command: 'cobra-failed',
       message: errorMessage,
     };
-    postMessage(octopusFailedMessage, undefined);
+    postMessage(cobraFailedMessage, undefined);
   }
 }
 
