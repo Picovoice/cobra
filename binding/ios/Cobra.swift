@@ -61,7 +61,7 @@ public class Cobra {
     /// - Throws: CobraError
     public func process(pcm: [Int16]) throws -> Float32 {
         if pcm.count != Cobra.frameLength {
-            throw CobraError.CobraInvalidArgumentError(
+            throw CobraInvalidArgumentError(
                 "Frame of audio data must contain \(Cobra.frameLength) samples - given frame contained \(pcm.count)")
         }
         
@@ -77,7 +77,7 @@ public class Cobra {
     private func pvStatusToCobraError(_ status: pv_status_t, _ message: String) -> CobraError {
         switch status {
             case PV_STATUS_OUT_OF_MEMORY:
-                return CobraOutOfMemoryError(message)
+                return CobraMemoryError(message)
             case PV_STATUS_IO_ERROR:
                 return CobraIOError(message)
             case PV_STATUS_INVALID_ARGUMENT:
@@ -100,7 +100,7 @@ public class Cobra {
                 return CobraActivationRefusedError(message)
             default:
                 let pvStatusString = String(cString: pv_status_to_string(status))
-                return CobraInternalError("\(pvStatusString): \(message)")
+                return CobraError("\(pvStatusString): \(message)")
         }
     }
 }
