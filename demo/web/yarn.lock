@@ -9,15 +9,15 @@
   dependencies:
     regenerator-runtime "^0.13.4"
 
-"@picovoice/cobra-web-worker@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@picovoice/cobra-web-worker/-/cobra-web-worker-1.0.1.tgz#d1f94a591c5d9bb014219823dc62c39c629ad1b6"
-  integrity sha512-VVQfj3hK2poyR2mk41vz+3dj3rHysNsqIgTJdusvbTQ2/ahpcs4i3XIR6d5icCLWN26j+KLTrA5EceClqXyOJg==
+"@picovoice/cobra-web-worker@^1.0.5":
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/@picovoice/cobra-web-worker/-/cobra-web-worker-1.0.5.tgz#9518df1144dd3bc54a7088adfe845fcb032b6b4a"
+  integrity sha512-rgUCWEjDMl6BfAEYEI4xKgr3OKEKPkmtUirBSnB5z/JYwfT8BjctT/VgAGLg0PfhnTkLOnKJ7hbXW49sugxLzg==
 
-"@picovoice/web-voice-processor@^2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@picovoice/web-voice-processor/-/web-voice-processor-2.1.0.tgz#dfc0707d0f4f7b76bb5655fd721a5c40613c8b6c"
-  integrity sha512-n4P7TSwZA7q08HyUF+t5S2JA9zBi3y9BexP4Fs6AmGhuD8MkVtao6CaRyYZbQabRk4OYT5fzt0a81ENS3wDz1w==
+"@picovoice/web-voice-processor@^2.1.2":
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/@picovoice/web-voice-processor/-/web-voice-processor-2.1.2.tgz#cac4456b3ef06dee5664e27be6db348ae4e2d46a"
+  integrity sha512-tDOFQtB79SX4m44Oj3W7I2q7Qvdwc52gJDHT1JXw80mJaog7RLRRUd7vANlGT0nJmhUWjYE7fxlEctPf2dyJcA==
   dependencies:
     "@babel/runtime" "^7.12.18"
 
