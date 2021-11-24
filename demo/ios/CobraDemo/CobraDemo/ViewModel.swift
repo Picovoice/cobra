@@ -14,7 +14,7 @@ import Combine
 class ViewModel: ObservableObject {
     
     private let ACCESS_KEY = "{YOUR_ACCESS_KEY_HERE}"
-    
+
     private let ALPHA: Float = 0.5
     
     private var cobra: Cobra!
