@@ -12,7 +12,7 @@ import Cobra
 
 class CobraDemoUITests: XCTestCase {
     
-    private let accessKey = "{TESTING_ACCESS_KEY_HERE}"
+    private let accessKey = "Nj93iN5VjmLvoeefKxrfqMXtzxYTAYiWo/tFb8JftF7IrNkpyGoyWw=="
     
     override func setUpWithError() throws {
         continueAfterFailure = true

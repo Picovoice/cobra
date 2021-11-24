@@ -1,5 +1,5 @@
 PODS:
-  - Cobra-iOS (1.0.2)
+  - Cobra-iOS (1.0.3)
   - ios-voice-processor (1.0.3)
 
 DEPENDENCIES:
@@ -14,8 +14,13 @@ EXTERNAL SOURCES:
   Cobra-iOS:
     :podspec: https://raw.githubusercontent.com/Picovoice/cobra/ios-release/binding/ios/Cobra-iOS.podspec
 
+CHECKOUT OPTIONS:
+  Cobra-iOS:
+    :commit: 16a99c827a2b9eaa33117d3242acdc697133bb46
+    :git: https://github.com/Picovoice/cobra.git
+
 SPEC CHECKSUMS:
-  Cobra-iOS: 75806705fea0553511a22a76aae5fad755b308eb
+  Cobra-iOS: f772f101596d3bf47337d0f457d755b49489cf9e
   ios-voice-processor: 65b25a8db69ea25ffba0eeef37bae71a982f34cc
 
 PODFILE CHECKSUM: cdd18aa7427c51a66c28ecfb7ebe359da0ed3cc5
