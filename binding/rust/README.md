@@ -7,7 +7,7 @@ Cobra is a highly accurate and lightweight voice activity detection (VAD) engine
 ## Compatibility
 
 - Rust 1.54+
-- Runs on Linux (x86_64), macOS (x86_64), Windows (x86_64), Raspberry Pi, NVIDIA Jetson (Nano), and BeagleBone
+- Runs on Linux (x86_64), macOS (x86_64, arm64), Windows (x86_64), Raspberry Pi, NVIDIA Jetson (Nano), and BeagleBone
 
 ## Installation
 First you will need [Rust and Cargo](https://rustup.rs/) installed on your system.
