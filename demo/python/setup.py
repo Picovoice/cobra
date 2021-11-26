@@ -36,7 +36,7 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     url="https://github.com/Picovoice/cobra",
     packages=["pvcobrademo"],
-    install_requires=["enum34", "numpy", "pvcobra==1.0.8", "pvrecorder==1.0.2", "soundfile"],
+    install_requires=["pvcobra==1.0.8", "pvrecorder==1.0.2"],
     include_package_data=True,
     classifiers=[
         "Development Status :: 5 - Production/Stable",

@@ -1,4 +1,2 @@
-numpy
 pvcobra==1.0.8
-pvrecorder
-soundfile
+pvrecorder==1.0.2
