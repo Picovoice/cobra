@@ -11,11 +11,11 @@
 
 import argparse
 import sys
+import struct
+import wave
 from threading import Thread
 
-import numpy as np
 import pvcobra
-import soundfile
 from pvrecorder import PvRecorder
 
 
@@ -46,8 +46,6 @@ class CobraDemo(Thread):
         self._access_key = access_key
         self._input_device_index = input_device_index
         self._output_path = output_path
-        if self._output_path is not None:
-            self._recorded_frames = []
 
     def run(self):
         """
@@ -57,20 +55,25 @@ class CobraDemo(Thread):
 
         cobra = None
         recorder = None
+        wav_file = None
+
         try:
             cobra = pvcobra.create(
                 library_path=self._library_path, access_key=self._access_key)
             print("Cobra version: %s" % cobra.version)
             recorder = PvRecorder(device_index=self._input_device_index, frame_length=512)
-
             recorder.start()
+
+            if self._output_path is not None:
+                wav_file = wave.open(self._output_path, "w")
+                wav_file.setparams((1, 2, 16000, 512, "NONE", "NONE"))
 
             print("Listening...")
             while True:
                 pcm = recorder.read()
 
-                if self._output_path is not None:
-                    self._recorded_frames.append(pcm)
+                if wav_file is not None:
+                    wav_file.writeframes(struct.pack("h" * len(pcm), *pcm))
 
                 voice_probability = cobra.process(pcm)
                 percentage = voice_probability * 100
@@ -86,16 +89,10 @@ class CobraDemo(Thread):
             if cobra is not None:
                 cobra.delete()
 
-            recorder.delete()
+            if wav_file is not None:
+                wav_file.close()
 
-            if self._output_path is not None and len(self._recorded_frames) > 0:
-                recorded_audio = np.concatenate(
-                    self._recorded_frames, axis=0).astype(np.int16)
-                soundfile.write(
-                    self._output_path,
-                    recorded_audio,
-                    samplerate=cobra.sample_rate,
-                    subtype='PCM_16')
+            recorder.delete()
 
     @classmethod
     def show_audio_devices(cls):
