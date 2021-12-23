@@ -516,6 +516,27 @@ export class Cobra implements CobraEngine {
       memoryBufferUint8[browserInfoAddress + userAgent.length] = 0;
     };
 
+    const pvGetOriginInfo = async function(originInfoAddressAddress: number): Promise<void> {
+      const origin = self.origin ?? self.location.origin;
+      // eslint-disable-next-line
+      const originInfoAddress = await aligned_alloc(
+        Uint8Array.BYTES_PER_ELEMENT,
+        (origin.length + 1) * Uint8Array.BYTES_PER_ELEMENT
+      );
+
+      if (originInfoAddress === 0) {
+        throw new Error('malloc failed: Cannot allocate memory');
+      }
+
+      memoryBufferInt32[
+        originInfoAddressAddress / Int32Array.BYTES_PER_ELEMENT
+      ] = originInfoAddress;
+      for (let i = 0; i < origin.length; i++) {
+        memoryBufferUint8[originInfoAddress + i] = origin.charCodeAt(i);
+      }
+      memoryBufferUint8[originInfoAddress + origin.length] = 0;
+    };
+
     const importObject = {
       // eslint-disable-next-line camelcase
       wasi_snapshot_preview1: wasiSnapshotPreview1Emulator,
@@ -539,6 +560,8 @@ export class Cobra implements CobraEngine {
         pv_file_delete_wasm: pvFileDeleteWasm,
         // eslint-disable-next-line camelcase
         pv_get_browser_info: pvGetBrowserInfo,
+        // eslint-disable-next-line camelcase
+        pv_get_origin_info: pvGetOriginInfo,
       },
     };
 
