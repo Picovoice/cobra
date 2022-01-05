@@ -60,9 +60,7 @@ async function release(): Promise<void> {
   close();
 }
 
-onmessage = function (
-  event: MessageEvent<CobraWorkerRequest>
-): void {
+onmessage = function (event: MessageEvent<CobraWorkerRequest>): void {
   switch (event.data.command) {
     case 'init':
       init(event.data.accessKey, event.data.start);

@@ -11,7 +11,6 @@
 
 /* eslint camelcase: 0 */
 
-
 import * as Asyncify from 'asyncify-wasm';
 import { Mutex } from 'async-mutex';
 
@@ -72,7 +71,7 @@ export class Cobra implements CobraEngine {
   private static _sampleRate: number;
   private static _version: string;
 
-  private static _cobraMutex = new Mutex;
+  private static _cobraMutex = new Mutex();
 
   private constructor(handleWasm: CobraWasmOutput) {
     Cobra._frameLength = handleWasm.frameLength;
@@ -113,37 +112,40 @@ export class Cobra implements CobraEngine {
       throw new Error("The argument 'pcm' must be provided as an Int16Array");
     }
     const returnPromise = new Promise<number>((resolve, reject) => {
-      this._processMutex.runExclusive(async () => {
-        this._memoryBuffer.set(
-          pcm,
-          this._inputBufferAddress / Int16Array.BYTES_PER_ELEMENT
-        );
-
-        const status = await this._pvCobraProcess(
-          this._objectAddress,
-          this._inputBufferAddress,
-          this._voiceProbabilityAddress
-        );
-        if (status !== PV_STATUS_SUCCESS) {
-          const memoryBuffer = new Uint8Array(this._wasmMemory.buffer);
-          throw new Error(
-            `process failed with status ${arrayBufferToStringAtIndex(
-              memoryBuffer,
-              await this._pvStatusToString(status)
-            )}`
+      this._processMutex
+        .runExclusive(async () => {
+          this._memoryBuffer.set(
+            pcm,
+            this._inputBufferAddress / Int16Array.BYTES_PER_ELEMENT
           );
-        }
-        const voiceProbability = this._memoryBufferView.getFloat32(
-          this._voiceProbabilityAddress,
-          true
-        );
 
-        return voiceProbability;
-      }).then((result: number) => {
-        resolve(result);
-      }).catch((error: any) => {
-        reject(error);
-      });
+          const status = await this._pvCobraProcess(
+            this._objectAddress,
+            this._inputBufferAddress,
+            this._voiceProbabilityAddress
+          );
+          if (status !== PV_STATUS_SUCCESS) {
+            const memoryBuffer = new Uint8Array(this._wasmMemory.buffer);
+            throw new Error(
+              `process failed with status ${arrayBufferToStringAtIndex(
+                memoryBuffer,
+                await this._pvStatusToString(status)
+              )}`
+            );
+          }
+          const voiceProbability = this._memoryBufferView.getFloat32(
+            this._voiceProbabilityAddress,
+            true
+          );
+
+          return voiceProbability;
+        })
+        .then((result: number) => {
+          resolve(result);
+        })
+        .catch((error: any) => {
+          reject(error);
+        });
     });
     return returnPromise;
   }
@@ -175,14 +177,17 @@ export class Cobra implements CobraEngine {
       throw new Error('Invalid AccessKey');
     }
     const returnPromise = new Promise<Cobra>((resolve, reject) => {
-      Cobra._cobraMutex.runExclusive(async () => {
-        const wasmOutput = await Cobra.initWasm(accessKey.trim());
-        return new Cobra(wasmOutput);
-      }).then((result: Cobra) => {
-        resolve(result);
-      }).catch((error: any) => {
-        reject(error);
-      });
+      Cobra._cobraMutex
+        .runExclusive(async () => {
+          const wasmOutput = await Cobra.initWasm(accessKey.trim());
+          return new Cobra(wasmOutput);
+        })
+        .then((result: Cobra) => {
+          resolve(result);
+        })
+        .catch((error: any) => {
+          reject(error);
+        });
     });
     return returnPromise;
   }
@@ -284,9 +289,8 @@ export class Cobra implements CobraEngine {
           throw new Error('malloc failed: Cannot allocate memory');
         }
 
-        memoryBufferInt32[
-          responseSizeAddress / Int32Array.BYTES_PER_ELEMENT
-        ] = responseText.length + 1;
+        memoryBufferInt32[responseSizeAddress / Int32Array.BYTES_PER_ELEMENT] =
+          responseText.length + 1;
         memoryBufferInt32[
           responseAddressAddress / Int32Array.BYTES_PER_ELEMENT
         ] = responseAddress;
@@ -297,9 +301,8 @@ export class Cobra implements CobraEngine {
         memoryBufferUint8[responseAddress + responseText.length] = 0;
       }
 
-      memoryBufferInt32[
-        responseCodeAddress / Int32Array.BYTES_PER_ELEMENT
-      ] = statusCode;
+      memoryBufferInt32[responseCodeAddress / Int32Array.BYTES_PER_ELEMENT] =
+        statusCode;
     };
 
     const pvFileLoadWasm = async function (
@@ -329,13 +332,9 @@ export class Cobra implements CobraEngine {
           contentAddressAddress / Int32Array.BYTES_PER_ELEMENT
         ] = contentAddress;
         memoryBufferUint8.set(contentBuffer, contentAddress);
-        memoryBufferInt32[
-          succeededAddress / Int32Array.BYTES_PER_ELEMENT
-        ] = 1;
+        memoryBufferInt32[succeededAddress / Int32Array.BYTES_PER_ELEMENT] = 1;
       } catch (error) {
-        memoryBufferInt32[
-          succeededAddress / Int32Array.BYTES_PER_ELEMENT
-        ] = 0;
+        memoryBufferInt32[succeededAddress / Int32Array.BYTES_PER_ELEMENT] = 0;
       }
     };
 
@@ -353,13 +352,9 @@ export class Cobra implements CobraEngine {
       );
       try {
         await storage.setItem(path, content);
-        memoryBufferInt32[
-          succeededAddress / Int32Array.BYTES_PER_ELEMENT
-        ] = 1;
+        memoryBufferInt32[succeededAddress / Int32Array.BYTES_PER_ELEMENT] = 1;
       } catch (error) {
-        memoryBufferInt32[
-          succeededAddress / Int32Array.BYTES_PER_ELEMENT
-        ] = 0;
+        memoryBufferInt32[succeededAddress / Int32Array.BYTES_PER_ELEMENT] = 0;
       }
     };
 
@@ -372,14 +367,11 @@ export class Cobra implements CobraEngine {
 
       try {
         const isExists = await storage.getItem(path);
-        memoryBufferUint8[isExistsAddress] = (isExists === undefined || isExists === null) ? 0 : 1;
-        memoryBufferInt32[
-          succeededAddress / Int32Array.BYTES_PER_ELEMENT
-        ] = 1;
+        memoryBufferUint8[isExistsAddress] =
+          isExists === undefined || isExists === null ? 0 : 1;
+        memoryBufferInt32[succeededAddress / Int32Array.BYTES_PER_ELEMENT] = 1;
       } catch (error) {
-        memoryBufferInt32[
-          succeededAddress / Int32Array.BYTES_PER_ELEMENT
-        ] = 0;
+        memoryBufferInt32[succeededAddress / Int32Array.BYTES_PER_ELEMENT] = 0;
       }
     };
 
@@ -390,17 +382,15 @@ export class Cobra implements CobraEngine {
       const path = arrayBufferToStringAtIndex(memoryBufferUint8, pathAddress);
       try {
         await storage.removeItem(path);
-        memoryBufferInt32[
-          succeededAddress / Int32Array.BYTES_PER_ELEMENT
-        ] = 1;
+        memoryBufferInt32[succeededAddress / Int32Array.BYTES_PER_ELEMENT] = 1;
       } catch (error) {
-        memoryBufferInt32[
-          succeededAddress / Int32Array.BYTES_PER_ELEMENT
-        ] = 0;
+        memoryBufferInt32[succeededAddress / Int32Array.BYTES_PER_ELEMENT] = 0;
       }
     };
 
-    const pvGetBrowserInfo = async function (browserInfoAddressAddress: number): Promise<void> {
+    const pvGetBrowserInfo = async function (
+      browserInfoAddressAddress: number
+    ): Promise<void> {
       const userAgent =
         navigator.userAgent !== undefined ? navigator.userAgent : 'unknown';
       // eslint-disable-next-line
@@ -422,7 +412,9 @@ export class Cobra implements CobraEngine {
       memoryBufferUint8[browserInfoAddress + userAgent.length] = 0;
     };
 
-    const pvGetOriginInfo = async function(originInfoAddressAddress: number): Promise<void> {
+    const pvGetOriginInfo = async function (
+      originInfoAddressAddress: number
+    ): Promise<void> {
       const origin = self.origin ?? self.location.origin;
       // eslint-disable-next-line
       const originInfoAddress = await aligned_alloc(
@@ -532,10 +524,7 @@ export class Cobra implements CobraEngine {
       );
     }
     const memoryBufferView = new DataView(memory.buffer);
-    const objectAddress = memoryBufferView.getInt32(
-      objectAddressAddress,
-      true
-    );
+    const objectAddress = memoryBufferView.getInt32(objectAddressAddress, true);
 
     const sampleRate = await pv_sample_rate();
     const frameLength = await pv_cobra_frame_length();

@@ -12,83 +12,90 @@
 /**
  * Indexed DB configurations
  */
- const DB_NAME = 'pv_db';
- const STORE_NAME = 'pv_store';
- const V = 1;
-  
-  /**
-   * Storage Interface.
-   */
- interface PvStorage {
-   setItem: (key: string, value: string) => void | Promise<void>;
-   getItem: (key: string) => string | Promise<string>;
-   removeItem: (key: string) => void | Promise<void>;
- }
-  
-  /**
-   * Opens indexedDB connection, handles version changes and gets the db instance.
-   * 
-   * @returns The instance of indexedDB connection.
-   */
- function getDB(): Promise<IDBDatabase> {
-   return new Promise((resolve, reject) => {
-     const request = self.indexedDB.open(DB_NAME, V);
-     request.onerror = () => {
-       reject(request.error);
-     };
-     request.onsuccess = () => {
-       resolve(request.result);
-     };
-     request.onupgradeneeded = () => {
-       request.result.createObjectStore(STORE_NAME);
-     };
-   });
- }
-  
+const DB_NAME = 'pv_db';
+const STORE_NAME = 'pv_store';
+const V = 1;
+
+/**
+ * Storage Interface.
+ */
+interface PvStorage {
+  setItem: (key: string, value: string) => void | Promise<void>;
+  getItem: (key: string) => string | Promise<string>;
+  removeItem: (key: string) => void | Promise<void>;
+}
+
+/**
+ * Opens indexedDB connection, handles version changes and gets the db instance.
+ *
+ * @returns The instance of indexedDB connection.
+ */
+function getDB(): Promise<IDBDatabase> {
+  return new Promise((resolve, reject) => {
+    const request = self.indexedDB.open(DB_NAME, V);
+    request.onerror = (): void => {
+      reject(request.error);
+    };
+    request.onsuccess = (): void => {
+      resolve(request.result);
+    };
+    request.onupgradeneeded = (): void => {
+      request.result.createObjectStore(STORE_NAME);
+    };
+  });
+}
+
 /**
  * Gets the storage to use. Either tries to use IndexedDB or localStorage.
- * 
+ *
  * @returns PvStorage instance to use as storage.
  */
 export function getPvStorage(): PvStorage {
   if (self.indexedDB) {
-    const requestHelper = (request: IDBRequest): Promise<any> => {
-      return new Promise((resolve, reject) => {
-        request.onerror = () => {
-          reject(request.error);
-        };
-        request.onsuccess = () => {
-          resolve(request.result);
-        };
-      });
-    }
+    const requestHelper = (request: IDBRequest): Promise<any> => new Promise((resolve, reject) => {
+      request.onerror = (): void => {
+        reject(request.error);
+      };
+      request.onsuccess = (): void => {
+        resolve(request.result);
+      };
+    });
 
     return {
-      setItem: async (key: string, value: string) => {
+      setItem: async (key: string, value: string): Promise<void> => {
         const db = await getDB();
-        const request = db.transaction(STORE_NAME, 'readwrite').objectStore(STORE_NAME).put(value, key);
+        const request = db
+          .transaction(STORE_NAME, 'readwrite')
+          .objectStore(STORE_NAME)
+          .put(value, key);
         await requestHelper(request);
         db.close();
       },
-      getItem: async (key: string) => {
+      getItem: async (key: string): Promise<string> => {
         const db = await getDB();
-        const request = db.transaction(STORE_NAME, 'readonly').objectStore(STORE_NAME).get(key);
+        const request = db
+          .transaction(STORE_NAME, 'readonly')
+          .objectStore(STORE_NAME)
+          .get(key);
         const res = await requestHelper(request);
         db.close();
         return res;
       },
-      removeItem: async (key: string) => {
+      removeItem: async (key: string): Promise<void> => {
         const db = await getDB();
-        const request = db.transaction(STORE_NAME, 'readwrite').objectStore(STORE_NAME).delete(key);
+        const request = db
+          .transaction(STORE_NAME, 'readwrite')
+          .objectStore(STORE_NAME)
+          .delete(key);
         await requestHelper(request);
         db.close();
-      }
-    }
+      },
+    };
   } else if (self.localStorage) {
     return self.localStorage as PvStorage;
   }
 
-  throw new Error("Cannot get a presistent storage object.");
+  throw new Error('Cannot get a presistent storage object.');
 }
 
 /**
@@ -101,7 +108,7 @@ export function getPvStorage(): PvStorage {
 
 export function arrayBufferToStringAtIndex(
   arrayBuffer: Uint8Array,
-  index: number,
+  index: number
 ): string {
   let stringBuffer = '';
   let indexBuffer = index;
@@ -136,7 +143,11 @@ export function base64ToUint8Array(base64String: string): Uint8Array {
  * @return base64 string
  */
 
-export function arrayBufferToBase64AtIndex(arrayBuffer: ArrayBuffer, size: number, index: number): string {
+export function arrayBufferToBase64AtIndex(
+  arrayBuffer: ArrayBuffer,
+  size: number,
+  index: number
+): string {
   let binary = '';
   for (let i = 0; i < size; i++) {
     // @ts-ignore
@@ -174,7 +185,11 @@ export function stringHeaderToObject(stringHeader: string): object {
  * @return received response
  */
 
-export async function fetchWithTimeout(uri: string, options = {}, time = 5000): Promise<Response> {
+export async function fetchWithTimeout(
+  uri: string,
+  options = {},
+  time = 5000
+): Promise<Response> {
   const controller = new AbortController();
   const config = { ...options, signal: controller.signal };
   const timeout = setTimeout(() => {
@@ -191,9 +206,11 @@ export async function fetchWithTimeout(uri: string, options = {}, time = 5000): 
  * @return true if the AccessKey is valid, false if not
  */
 
- export function isAccessKeyValid(accessKey: string): boolean {
+export function isAccessKeyValid(accessKey: string): boolean {
   const accessKeyCleaned = accessKey.trim();
-  if (accessKeyCleaned === '') { return false; }
+  if (accessKeyCleaned === '') {
+    return false;
+  }
   try {
     return btoa(atob(accessKeyCleaned)) === accessKeyCleaned;
   } catch (err) {

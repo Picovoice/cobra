@@ -11,7 +11,7 @@ import CobraWorker from 'web-worker:./cobra_worker.ts';
 import { CobraWorkerRequestInit, CobraWorkerResponse } from './cobra_types';
 
 export default class CobraWorkerFactory {
-  private constructor() { }
+  private constructor() {}
 
   /**
    * Create Cobra web worker instances. The promise resolves when the worker is ready to process
