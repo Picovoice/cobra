@@ -1,17 +1,17 @@
 /*
-    Copyright 2018-2021 Picovoice Inc.
-    You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
-    file accompanying this source.
-    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
-    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
-    specific language governing permissions and limitations under the License.
+  Copyright 2018-2021 Picovoice Inc.
+  You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
+  file accompanying this source.
+  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+  an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+  specific language governing permissions and limitations under the License.
 */
 
 import CobraWorker from 'web-worker:./cobra_worker.ts';
 import { CobraWorkerRequestInit, CobraWorkerResponse } from './cobra_types';
 
 export default class CobraWorkerFactory {
-  private constructor() { }
+  private constructor() {}
 
   /**
    * Create Cobra web worker instances. The promise resolves when the worker is ready to process
@@ -55,65 +55,6 @@ export default class CobraWorkerFactory {
             break;
           case 'cobra-detect':
             callback(event.data.voiceProbability);
-            break;
-          case 'file-save':
-            try {
-              localStorage.setItem(event.data.path, event.data.content || '');
-              cobraWorker.postMessage({
-                command: 'file-save-succeeded',
-                message: `Saved ${event.data.path} successfully`,
-              });
-            } catch (error) {
-              cobraWorker.postMessage({
-                command: 'file-save-failed',
-                message: `${error}`,
-              });
-            }
-            break;
-          case 'file-load':
-            try {
-              const content = localStorage.getItem(event.data.path);
-              if (content === null) {
-                throw new Error('file does not exist.');
-              }
-              cobraWorker.postMessage({
-                command: 'file-load-succeeded',
-                content: content,
-              });
-            } catch (error) {
-              cobraWorker.postMessage({
-                command: 'file-load-failed',
-                message: `${error}`,
-              });
-            }
-            break;
-          case 'file-exists':
-            try {
-              const content = localStorage.getItem(event.data.path);
-              cobraWorker.postMessage({
-                command: 'file-exists-succeeded',
-                content: content,
-              });
-            } catch (error) {
-              cobraWorker.postMessage({
-                command: 'file-exists-failed',
-                message: `${error}`,
-              });
-            }
-            break;
-          case 'file-delete':
-            try {
-              localStorage.removeItem(event.data.path);
-              cobraWorker.postMessage({
-                command: 'file-delete-succeeded',
-                message: `Deleted ${event.data.path} successfully`,
-              });
-            } catch (error) {
-              cobraWorker.postMessage({
-                command: 'file-delete-failed',
-                message: `${error}`,
-              });
-            }
             break;
           default:
             // eslint-disable-next-line no-console
