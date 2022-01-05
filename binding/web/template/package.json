@@ -1,6 +1,6 @@
 {
   "name": "@picovoice/cobra-web-worker",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "Cobra library for web browsers (via WebAssembly)",
   "author": "Picovoice Inc",
   "license": "Apache-2.0",

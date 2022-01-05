@@ -1,12 +1,12 @@
 /*
-    Copyright 2018-2021 Picovoice Inc.
+  Copyright 2018-2021 Picovoice Inc.
 
-    You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
-    file accompanying this source.
+  You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
+  file accompanying this source.
 
-    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
-    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
-    specific language governing permissions and limitations under the License.
+  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
+  an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+  specific language governing permissions and limitations under the License.
 */
 
 /* eslint camelcase: 0 */
@@ -24,12 +24,10 @@ import {
   arrayBufferToStringAtIndex,
   base64ToUint8Array,
   fetchWithTimeout,
-  getRuntimeEnvironment,
+  getPvStorage,
   isAccessKeyValid,
   stringHeaderToObject,
 } from './utils';
-
-type EmptyPromise = (value: any) => void;
 
 /**
  * JavaScript/WebAssembly Binding for the Picovoice Cobra voice activity detection (VAD) engine.
@@ -74,8 +72,6 @@ export class Cobra implements CobraEngine {
   private static _sampleRate: number;
   private static _version: string;
 
-  private static _resolvePromise: EmptyPromise | null;
-  private static _rejectPromise: EmptyPromise | null;
   private static _cobraMutex = new Mutex;
 
   private constructor(handleWasm: CobraWasmOutput) {
@@ -191,94 +187,17 @@ export class Cobra implements CobraEngine {
     return returnPromise;
   }
 
-  public static clearFilePromises(): void {
-    Cobra._rejectPromise = null;
-    Cobra._resolvePromise = null;
-  }
-
-  // eslint-disable-next-line
-  public static resolveFilePromise(args: any): void {
-    // @ts-ignore
-    Cobra._resolvePromise(args);
-  }
-
-  // eslint-disable-next-line
-  public static rejectFilePromise(args: any): void {
-    // @ts-ignore
-    Cobra._rejectPromise(args);
-  }
-
   private static async initWasm(accessKey: string): Promise<any> {
     const memory = new WebAssembly.Memory({ initial: 100, maximum: 200 });
 
     const memoryBufferUint8 = new Uint8Array(memory.buffer);
     const memoryBufferInt32 = new Int32Array(memory.buffer);
 
+    const storage = getPvStorage();
+
     const pvConsoleLogWasm = function (index: number): void {
       // eslint-disable-next-line no-console
       console.log(arrayBufferToStringAtIndex(memoryBufferUint8, index));
-    };
-
-    const pvFileOperationHelper = function (args: any): Promise<any> {
-      let promise: any;
-      const runtimeEnvironment = getRuntimeEnvironment();
-      if (runtimeEnvironment === 'worker') {
-        promise = new Promise((resolve, reject) => {
-          Cobra._resolvePromise = resolve;
-          Cobra._rejectPromise = reject;
-        });
-        self.postMessage(
-          {
-            command: args.command,
-            path: args.path,
-            content: args.content,
-          },
-          // @ts-ignore
-          undefined
-        );
-      } else if (runtimeEnvironment === 'browser') {
-        promise = new Promise<string>((resolve, reject) => {
-          try {
-            switch (args.command) {
-              case 'file-save':
-                localStorage.setItem(args.path, args.content);
-                resolve('saved');
-                break;
-              case 'file-exists':
-                {
-                  const content = localStorage.getItem(args.path);
-                  resolve(content as string);
-                }
-                break;
-              case 'file-load':
-                {
-                  const content = localStorage.getItem(args.path);
-                  if (content === null) {
-                    reject(`${args.path} does not exist`);
-                  } else {
-                    resolve(content as string);
-                  }
-                }
-                break;
-              case 'file-delete':
-                localStorage.removeItem(args.path);
-                resolve('deleted');
-                break;
-              default:
-                // eslint-disable-next-line no-console
-                console.warn(`Unexpected command: ${args.command}`);
-                reject();
-            }
-          } catch (error) {
-            reject();
-          }
-        });
-      } else {
-        // eslint-disable-next-line no-console
-        console.error(`Unexpected environment: ${runtimeEnvironment}`);
-        return Promise.reject();
-      }
-      return promise;
     };
 
     const pvAssertWasm = function (
@@ -391,10 +310,7 @@ export class Cobra implements CobraEngine {
     ): Promise<void> {
       const path = arrayBufferToStringAtIndex(memoryBufferUint8, pathAddress);
       try {
-        const contentBase64 = await pvFileOperationHelper({
-          command: 'file-load',
-          path: path,
-        });
+        const contentBase64 = await storage.getItem(path);
         const contentBuffer = base64ToUint8Array(contentBase64);
         // eslint-disable-next-line
         const contentAddress = await aligned_alloc(
@@ -436,11 +352,7 @@ export class Cobra implements CobraEngine {
         contentAddress
       );
       try {
-        await pvFileOperationHelper({
-          command: 'file-save',
-          path: path,
-          content: content,
-        });
+        await storage.setItem(path, content);
         memoryBufferInt32[
           succeededAddress / Int32Array.BYTES_PER_ELEMENT
         ] = 1;
@@ -459,11 +371,8 @@ export class Cobra implements CobraEngine {
       const path = arrayBufferToStringAtIndex(memoryBufferUint8, pathAddress);
 
       try {
-        const isExists = await pvFileOperationHelper({
-          command: 'file-exists',
-          path: path,
-        });
-        memoryBufferUint8[isExistsAddress] = isExists === null ? 0 : 1;
+        const isExists = await storage.getItem(path);
+        memoryBufferUint8[isExistsAddress] = (isExists === undefined || isExists === null) ? 0 : 1;
         memoryBufferInt32[
           succeededAddress / Int32Array.BYTES_PER_ELEMENT
         ] = 1;
@@ -480,10 +389,7 @@ export class Cobra implements CobraEngine {
     ): Promise<void> {
       const path = arrayBufferToStringAtIndex(memoryBufferUint8, pathAddress);
       try {
-        await pvFileOperationHelper({
-          command: 'file-delete',
-          path: path,
-        });
+        await storage.removeItem(path);
         memoryBufferInt32[
           succeededAddress / Int32Array.BYTES_PER_ELEMENT
         ] = 1;
