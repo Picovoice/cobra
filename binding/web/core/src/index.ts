@@ -60,3 +60,15 @@ export interface CobraEngine {
   /** The frame length of audio expected by the Cobra engine */
   readonly frameLength: number;
 }
+
+export interface CobraWorker extends Omit<Worker, 'postMessage'> {
+  postMessage(command: CobraWorkerRequest): void;
+}
+
+export interface CobraWorkerFactory {
+  create: (
+    accessKey: string,
+    callback: (voiceProbability: number) => void,
+    start?: boolean
+  ) => Promise<CobraWorker>;
+}
