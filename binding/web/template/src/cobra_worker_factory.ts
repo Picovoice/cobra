@@ -8,7 +8,7 @@
 */
 
 import CobraWorker from 'web-worker:./cobra_worker.ts';
-import { CobraWorkerRequestInit, CobraWorkerResponse } from './cobra_types';
+import { CobraWorkerRequestInit, CobraWorkerResponse } from '@picovoice/cobra-web-core';
 
 export default class CobraWorkerFactory {
   private constructor() {}
@@ -23,7 +23,7 @@ export default class CobraWorkerFactory {
    */
   public static async create(
     accessKey: string,
-    callback: CallableFunction,
+    callback: (voiceProbability: number) => void,
     start?: boolean
   ): Promise<Worker> {
     // n.b. The *worker* creation is itself synchronous. But, inside the worker is an async
