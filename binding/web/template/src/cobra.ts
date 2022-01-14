@@ -14,7 +14,7 @@
 import * as Asyncify from 'asyncify-wasm';
 import { Mutex } from 'async-mutex';
 
-import { CobraEngine } from './cobra_types';
+import { CobraEngine } from '@picovoice/cobra-web-core';
 import { COBRA_WASM_BASE64 } from './cobra_b64';
 import { wasiSnapshotPreview1Emulator } from './wasi_snapshot';
 
@@ -27,6 +27,19 @@ import {
   isAccessKeyValid,
   stringHeaderToObject,
 } from './utils';
+
+/**
+ * WebAssembly function types
+ */
+
+ type aligned_alloc_type = (alignment: number, size: number) => Promise<number>;
+ type pv_cobra_init_type = (accessKey: number, object: number) => Promise<number>;
+ type pv_cobra_process_type = (object: number, buffer: number, isVoiced: number) => Promise<number>;
+ type pv_cobra_delete_type = (object: number) => Promise<void>;
+ type pv_status_to_string_type = (status: number) => Promise<number>
+ type pv_sample_rate_type = () => Promise<number>;
+ type pv_cobra_frame_length_type = () => Promise<number>;
+ type pv_cobra_version_type = () => Promise<number>;
 
 /**
  * JavaScript/WebAssembly Binding for the Picovoice Cobra voice activity detection (VAD) engine.
@@ -43,9 +56,9 @@ type CobraWasmOutput = {
   inputBufferAddress: number;
   memory: WebAssembly.Memory;
   objectAddress: number;
-  pvCobraDelete: CallableFunction;
-  pvCobraProcess: CallableFunction;
-  pvStatusToString: CallableFunction;
+  pvCobraDelete: pv_cobra_delete_type;
+  pvCobraProcess: pv_cobra_process_type;
+  pvStatusToString: pv_status_to_string_type;
   sampleRate: number;
   version: string;
   voiceProbabilityAddress: number;
@@ -54,9 +67,9 @@ type CobraWasmOutput = {
 const PV_STATUS_SUCCESS = 10000;
 
 export class Cobra implements CobraEngine {
-  private _pvCobraDelete: CallableFunction;
-  private _pvCobraProcess: CallableFunction;
-  private _pvStatusToString: CallableFunction;
+  private _pvCobraDelete: pv_cobra_delete_type;
+  private _pvCobraProcess: pv_cobra_process_type;
+  private _pvStatusToString: pv_status_to_string_type;
 
   private _wasmMemory: WebAssembly.Memory;
   private _memoryBuffer: Int16Array;
@@ -469,20 +482,20 @@ export class Cobra implements CobraEngine {
       importObject
     );
 
-    const aligned_alloc = instance.exports.aligned_alloc as CallableFunction;
+    const aligned_alloc = instance.exports.aligned_alloc as aligned_alloc_type;
 
     const pv_cobra_version = instance.exports
-      .pv_cobra_version as CallableFunction;
+      .pv_cobra_version as pv_cobra_version_type;
     const pv_cobra_frame_length = instance.exports
-      .pv_cobra_frame_length as CallableFunction;
+      .pv_cobra_frame_length as pv_cobra_frame_length_type;
     const pv_cobra_process = instance.exports
-      .pv_cobra_process as CallableFunction;
+      .pv_cobra_process as pv_cobra_process_type;
     const pv_cobra_delete = instance.exports
-      .pv_cobra_delete as CallableFunction;
-    const pv_cobra_init = instance.exports.pv_cobra_init as CallableFunction;
+      .pv_cobra_delete as pv_cobra_delete_type;
+    const pv_cobra_init = instance.exports.pv_cobra_init as pv_cobra_init_type;
     const pv_status_to_string = instance.exports
-      .pv_status_to_string as CallableFunction;
-    const pv_sample_rate = instance.exports.pv_sample_rate as CallableFunction;
+      .pv_status_to_string as pv_status_to_string_type;
+    const pv_sample_rate = instance.exports.pv_sample_rate as pv_sample_rate_type;
 
     const voiceProbabilityAddress = await aligned_alloc(
       Float32Array.BYTES_PER_ELEMENT,

@@ -13,7 +13,7 @@ import {
   CobraWorkerResponseReady,
   CobraWorkerResponseFailed,
   CobraWorkerResponseVoiceProbability,
-} from './cobra_types';
+} from '@picovoice/cobra-web-core';
 
 import { Cobra } from './cobra';
 
