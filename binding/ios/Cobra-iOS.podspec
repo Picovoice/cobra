@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
     DESC
     s.homepage = 'https://github.com/Picovoice/cobra/tree/master/binding/ios'
     s.author = { 'Picovoice' => 'hello@picovoice.ai' }
-    s.source = { :git => "https://github.com/Picovoice/cobra.git", :branch => "v1.1-ios" }
+    s.source = { :git => "https://github.com/Picovoice/cobra.git", :branch => "v1.1" }
     s.ios.deployment_target = '9.0'
     s.swift_version = '5.0'
     s.vendored_frameworks = 'lib/ios/PvCobra.xcframework'
