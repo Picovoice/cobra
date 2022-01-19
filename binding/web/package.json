@@ -1,7 +1,7 @@
 {
   "name": "cobra-web-template",
   "private": true,
-  "version": "1.0.2",
+  "version": "1.1.0",
   "type": "module",
   "description": "Template project for building cobra-web-* packages",
   "main": ".eslintrc.js",
