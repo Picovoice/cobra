@@ -16,7 +16,6 @@ The Cobra iOS binding is available via [Cocoapods](https://cocoapods.org/pods/Rh
 pod 'Cobra-iOS'
 ```
 
-
 ## Permissions
 
 To enable recording with your iOS device's microphone you must add the following to your app's `Info.plist` file:
