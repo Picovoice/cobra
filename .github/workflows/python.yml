@@ -3,18 +3,28 @@ name: Python
 on:
   workflow_dispatch:
   push:
-    branches: [ main, 1.1 ]
+    branches: [ main ]
     paths:
       - 'binding/python/**'
       - '!binding/python/README.md'
-      - 'lib/**'
+      - 'lib/beaglebone/**'      
+      - 'lib/jetson/**'
+      - 'lib/linux/**'
+      - 'lib/mac/**'
+      - 'lib/raspberry-pi/**'
+      - 'lib/windows/**'
       - 'res/**'
   pull_request:
-    branches: [ main, 1.1 ]
+    branches: [ main ]
     paths:
       - 'binding/python/**'
       - '!binding/python/README.md'
-      - 'lib/**'
+      - 'lib/beaglebone/**'      
+      - 'lib/jetson/**'
+      - 'lib/linux/**'
+      - 'lib/mac/**'
+      - 'lib/raspberry-pi/**'
+      - 'lib/windows/**'
       - 'res/**'
 
 defaults:
