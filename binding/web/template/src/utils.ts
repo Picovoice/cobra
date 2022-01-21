@@ -106,7 +106,7 @@ export function getPvStorage(): PvStorage {
  * @return retrieved string
  */
 
- export function arrayBufferToStringAtIndex(
+export function arrayBufferToStringAtIndex(
   arrayBuffer: Uint8Array,
   indexStart: number,
 ): string {
