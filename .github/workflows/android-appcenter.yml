@@ -5,15 +5,15 @@ on:
   push:
     branches: [ main, 1.1 ]
     paths:
-      - 'binding/android/cobra/build.gradle'
-      - 'demo/android/Activity/cobra-activity-demo-app/build.gradle'
+      - 'binding/android/cobra/**'
+      - 'demo/android/**'
       - '!demo/android/Activity/README.md'
     
   pull_request:
     branches: [ main, 1.1 ]
     paths: 
-      - 'binding/android/cobra/build.gradle'
-      - 'demo/android/Activity/cobra-activity-demo-app/build.gradle'
+      - 'binding/android/cobra/**'
+      - 'demo/android/**'
       - '!demo/android/Activity/README.md'
 
 defaults:
