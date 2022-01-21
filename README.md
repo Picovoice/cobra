@@ -362,6 +362,11 @@ startCobra()
 
 ## Releases
 
-### v1.0.0 Oct 8th, 2021
+### v1.1.0 January 21st, 2022
+
+- Improved types for web binding
+- Various bug fixes and improvments
+
+### v1.0.0 October 8th, 2021
 
 - Initial release.
