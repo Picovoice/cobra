@@ -3,13 +3,13 @@ name: Web
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
+    branches: [ main, 1.1 ]
     paths:
       - 'binding/web/**'
       - '!binding/web/README.md'
       - 'lib/wasm/**'
   pull_request:
-    branches: [ main ]
+    branches: [ main, 1.1 ]
     paths:
       - 'binding/web/**'
       - '!binding/web/README.md'
