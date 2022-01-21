@@ -1,2 +1,2 @@
-pvcobra==1.0.8
+pvcobra==1.1.0
 pvrecorder==1.0.2

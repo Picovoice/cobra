@@ -3,15 +3,13 @@ name: iOS AppCenter Tests
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
+    branches: [ main, 1.1 ]
     paths: 
-      - 'demo/ios'
-      - '!demo/ios/README.md'
+      - 'demo/ios/CobraDemo/Podfile.lock'
   pull_request:
-    branches: [ main ]
+    branches: [ main, 1.1 ]
     paths: 
-      - 'demo/ios'
-      - '!demo/ios/README.md'
+      - 'demo/ios/CobraDemo/Podfile.lock'
       
 defaults:
   run:

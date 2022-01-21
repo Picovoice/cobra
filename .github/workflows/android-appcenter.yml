@@ -3,16 +3,14 @@ name: Android AppCenter Tests
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
-    paths: 
-      - 'demo/android/Activity'
-      - '!demo/android/Activity/README.md'
+    branches: [ main, 1.1 ]
+    paths:
+      - 'demo/android/Activity/cobra-activity-demo-app/build.gradle'      
     
   pull_request:
-    branches: [ main ]
+    branches: [ main, 1.1 ]
     paths: 
-      - 'demo/android/Activity'
-      - '!demo/android/Activity/README.md'
+      - 'demo/android/Activity/cobra-activity-demo-app/build.gradle'
 
 defaults:
   run:
