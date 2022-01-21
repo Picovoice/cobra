@@ -14,10 +14,10 @@
   resolved "https://registry.yarnpkg.com/@picovoice/cobra-web-core/-/cobra-web-core-1.1.0.tgz#01362d328f8668076d1302e79861d38a3cd50f40"
   integrity sha512-M2wfR9QhH7sLGEfNiQBuBLrvXAsXi+rg5dLzbBILTt3KyNKBJwdA8UGhPPV6Q+cH+gAA0gdFCwM/epYRNjQRBw==
 
-"@picovoice/cobra-web-worker@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@picovoice/cobra-web-worker/-/cobra-web-worker-1.1.0.tgz#e341d2de315a281bd0dfe0fef7c5d8e6f00d4faa"
-  integrity sha512-sXcivIejrUNxWiF7ozpIGW+vPwq75hBFKrcphHSkT5ICV0qbFu3mQQIA2uoSQEvaCDOimp9ZGUG92kvLZJ4KFA==
+"@picovoice/cobra-web-worker@^1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@picovoice/cobra-web-worker/-/cobra-web-worker-1.1.2.tgz#d815fb88fad0569e071479b6497d3cab67d4ea8c"
+  integrity sha512-jtIq+tMF66oBc5aThhK4EFRoMlwGOWqPFMQEr6UjaFF23VgHs6w/Vw+hWttYJwari2hcPpFbQGK/BpBv3DMMHQ==
   dependencies:
     "@picovoice/cobra-web-core" "^1.1.0"
 
