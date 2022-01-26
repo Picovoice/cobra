@@ -52,7 +52,7 @@ jobs:
       run: appcenter test run espresso 
         --token ${{secrets.APPCENTERAPITOKEN}}
         --app "Picovoice/Cobra-Android-Activity"
-        --devices "Picovoice/android-5-12" 
+        --devices "Picovoice/android-min-max" 
         --app-path cobra-activity-demo-app/build/outputs/apk/debug/cobra-activity-demo-app-debug.apk
         --test-series "cobra-android"
         --locale "en_US" 

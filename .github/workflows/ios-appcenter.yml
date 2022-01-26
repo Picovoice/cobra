@@ -56,7 +56,7 @@ jobs:
         run: appcenter test run xcuitest 
           --token ${{secrets.APPCENTERAPITOKEN}}
           --app "Picovoice/Cobra-iOS"
-          --devices "Picovoice/ios-9-15.2" 
+          --devices "Picovoice/ios-min-max" 
           --test-series "cobra-ios" 
           --locale "en_US" 
           --build-dir ddp/Build/Products/Debug-iphoneos
