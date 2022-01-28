@@ -944,10 +944,15 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
-"@picovoice/cobra-web-core@^1.0.0":
+"@picovoice/cobra-web-core@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@picovoice/cobra-web-core/-/cobra-web-core-1.1.0.tgz#01362d328f8668076d1302e79861d38a3cd50f40"
+  integrity sha512-M2wfR9QhH7sLGEfNiQBuBLrvXAsXi+rg5dLzbBILTt3KyNKBJwdA8UGhPPV6Q+cH+gAA0gdFCwM/epYRNjQRBw==
+
+"@picovoice/web-utils@^1.0.0":
   version "1.0.0"
-  resolved "https://registry.yarnpkg.com/@picovoice/cobra-web-core/-/cobra-web-core-1.0.0.tgz#3c53d251676dd723269dc552de7cbfb444b6bb78"
-  integrity sha512-OAOeEHWi1MWw8ZZ+BpYCW4V7t0nXeHg8P8wRz9aRNhel6yzbiH8GpEnVitrqGisDKGqlyNUdKUoO03VOOUjyVw==
+  resolved "https://registry.yarnpkg.com/@picovoice/web-utils/-/web-utils-1.0.0.tgz#eec7d783c19cced58cb0893bc5ab7743c681085b"
+  integrity sha512-ed2kQcLOO1IGcDROydnnu6YvOx3EbG13dZrc8rjrDnDjDWfgdjLVGuBtGjkVSXe/+FnZRaZggd486SKvsTECxw==
 
 "@rollup/plugin-babel@^5.2.3":
   version "5.3.0"
@@ -1165,11 +1170,6 @@ async-mutex@^0.3.2:
   integrity sha512-HuTK7E7MT7jZEh1P9GtRW9+aTWiDWWi9InbZ5hjxrnRa39KS4BW04+xLBhYNS2aXhHUIKZSw3gj4Pn1pj+qGAA==
   dependencies:
     tslib "^2.3.1"
-
-asyncify-wasm@^1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/asyncify-wasm/-/asyncify-wasm-1.2.1.tgz#a15c0480e858619a4f971e44e6fc05c49015d9e8"
-  integrity sha512-ZS7tZ8H8EVbUxAZnkKHvMt9UkYoALue2jwrVl7cnLByjq+1MRrbq7rL5TS+EHQduwkfXD/cNZNa+I0ZyLEBBRQ==
 
 babel-plugin-dynamic-import-node@^2.3.3:
   version "2.3.3"
