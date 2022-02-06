@@ -612,7 +612,7 @@ dependencies = [
 
 [[package]]
 name = "pv_cobra"
-version = "1.1.0"
+version = "1.1.1"
 dependencies = [
  "itertools",
  "lazy_static",
