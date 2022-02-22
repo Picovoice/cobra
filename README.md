@@ -30,10 +30,7 @@ Cobra is a highly-accurate and lightweight voice activity detection (VAD) engine
     - [Android](#android)
     - [iOS](#ios)
     - [Web](#web)
-      - [Vanilla JavaScript and HTML (CDN Script Tag)](#vanilla-javascript-and-html-cdn-script-tag)
-      - [Vanilla JavaScript and HTML (ES Modules)](#vanilla-javascript-and-html-es-modules)
   - [Releases](#releases)
-    - [v1.0.0 Oct 8th, 2021](#v100-oct-8th-2021)
 
 ## Demos
 
