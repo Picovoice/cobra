@@ -200,7 +200,8 @@ export class Cobra implements CobraEngine {
   }
 
   private static async initWasm(accessKey: string): Promise<any> {
-    const memory = new WebAssembly.Memory({ initial: 10, maximum: 300 });
+    // A WebAssembly page has a constant size of 64KiB. -> 3MiB ~= 50 pages
+    const memory = new WebAssembly.Memory({ initial: 50, maximum: 150 });
 
     const memoryBufferUint8 = new Uint8Array(memory.buffer);
 
