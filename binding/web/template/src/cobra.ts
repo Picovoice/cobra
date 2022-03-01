@@ -200,7 +200,7 @@ export class Cobra implements CobraEngine {
   }
 
   private static async initWasm(accessKey: string): Promise<any> {
-    const memory = new WebAssembly.Memory({ initial: 100, maximum: 200 });
+    const memory = new WebAssembly.Memory({ initial: 10, maximum: 300 });
 
     const memoryBufferUint8 = new Uint8Array(memory.buffer);
 
