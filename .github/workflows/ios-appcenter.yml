@@ -5,15 +5,15 @@ on:
   push:
     branches: [ main ]
     paths: 
-      - 'demo/ios/CobraDemo/Podfile.lock'
+      - 'binding/ios/CobraAppTest/Podfile.lock'
   pull_request:
     branches: [ main ]
     paths: 
-      - 'demo/ios/CobraDemo/Podfile.lock'
+      - 'binding/ios/CobraAppTest/Podfile.lock'
       
 defaults:
   run:
-    working-directory: demo/ios/CobraDemo
+    working-directory: binding/ios/CobraAppTest
     
 jobs:
   build:
@@ -41,14 +41,14 @@ jobs:
 
       - name: Inject AccessKey
         run: sed -i '.bak' 's:{TESTING_ACCESS_KEY_HERE}:${{secrets.PV_VALID_ACCESS_KEY}}:'
-          CobraDemoUITests/CobraDemoUITests.swift
+          CobraAppTestUITests/CobraAppTestUITests.swift
 
       - name: XCode Build
         run: xcrun xcodebuild build-for-testing 
           -configuration Debug 
-          -workspace CobraDemo.xcworkspace
+          -workspace CobraAppTest.xcworkspace
           -sdk iphoneos 
-          -scheme CobraDemo
+          -scheme CobraAppTest
           -derivedDataPath ddp
           CODE_SIGNING_ALLOWED=NO
 

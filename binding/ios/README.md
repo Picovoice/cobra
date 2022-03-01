@@ -65,6 +65,10 @@ When done, resources have to be released explicitly:
 handle.delete()
 ```
 
+## Running Unit Tests
+
+Copy your `AccessKey` into the `accessKey` variable in [`CobraAppTestUITests.swift`](CobraAppTest/CobraAppTestUITests/CobraAppTestUITests.swift). Open `CobraAppTest.xcworkspace` with XCode and run the tests with `Product > Test`.
+
 ## Demo App
 
 For example usage refer to our [iOS demo application](/demo/ios).

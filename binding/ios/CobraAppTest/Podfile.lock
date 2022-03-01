@@ -1,0 +1,16 @@
+PODS:
+  - Cobra-iOS (1.1.0)
+
+DEPENDENCIES:
+  - Cobra-iOS (~> 1.1.0)
+
+SPEC REPOS:
+  trunk:
+    - Cobra-iOS
+
+SPEC CHECKSUMS:
+  Cobra-iOS: acda009fe093d19e8345a7fe9b60d7e1da1f528c
+
+PODFILE CHECKSUM: 05ba5ca9ab9cdf714fad1f924d938ca18ee68a0d
+
+COCOAPODS: 1.11.2

@@ -17,4 +17,5 @@ Pod::Spec.new do |s|
     s.swift_version = '5.0'
     s.vendored_frameworks = 'lib/ios/PvCobra.xcframework'
     s.source_files = 'binding/ios/*.{swift}'
+    s.exclude_files = 'binding/ios/CobraAppTest/**'
   end
