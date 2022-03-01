@@ -13,6 +13,7 @@
 		1E00645527CEDF9C006FF6E9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 1E00645427CEDF9C006FF6E9 /* Assets.xcassets */; };
 		1E00645827CEDF9C006FF6E9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1E00645627CEDF9C006FF6E9 /* LaunchScreen.storyboard */; };
 		1E00646D27CEDF9C006FF6E9 /* CobraAppTestUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E00646C27CEDF9C006FF6E9 /* CobraAppTestUITests.swift */; };
+		1E00647D27CEE658006FF6E9 /* sample.wav in Resources */ = {isa = PBXBuildFile; fileRef = 1E00647C27CEE658006FF6E9 /* sample.wav */; };
 		6A9164E4B0B1626D27DBA0A1 /* libPods-CobraAppTestUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EE8143D31713B4E8FB671A69 /* libPods-CobraAppTestUITests.a */; };
 		837665FCC740E76ED8323395 /* libPods-CobraAppTest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FFAEF3E81D2B0623D6C31C0 /* libPods-CobraAppTest.a */; };
 /* End PBXBuildFile section */
@@ -38,6 +39,7 @@
 		1E00646827CEDF9C006FF6E9 /* CobraAppTestUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CobraAppTestUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1E00646C27CEDF9C006FF6E9 /* CobraAppTestUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CobraAppTestUITests.swift; sourceTree = "<group>"; };
 		1E00647B27CEE128006FF6E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1E00647C27CEE658006FF6E9 /* sample.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = sample.wav; path = ../../../../res/audio/sample.wav; sourceTree = "<group>"; };
 		239D8F7DFD3E66DB68DD74C7 /* Pods-CobraAppTestUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CobraAppTestUITests.release.xcconfig"; path = "Target Support Files/Pods-CobraAppTestUITests/Pods-CobraAppTestUITests.release.xcconfig"; sourceTree = "<group>"; };
 		2C1B5037B36B1A9C62AE0816 /* Pods-CobraAppTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CobraAppTest.debug.xcconfig"; path = "Target Support Files/Pods-CobraAppTest/Pods-CobraAppTest.debug.xcconfig"; sourceTree = "<group>"; };
 		7F000751C879143D6999BEC4 /* Pods-CobraAppTestUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CobraAppTestUITests.debug.xcconfig"; path = "Target Support Files/Pods-CobraAppTestUITests/Pods-CobraAppTestUITests.debug.xcconfig"; sourceTree = "<group>"; };
@@ -102,6 +104,7 @@
 		1E00646B27CEDF9C006FF6E9 /* CobraAppTestUITests */ = {
 			isa = PBXGroup;
 			children = (
+				1E00647C27CEE658006FF6E9 /* sample.wav */,
 				1E00647B27CEE128006FF6E9 /* Info.plist */,
 				1E00646C27CEDF9C006FF6E9 /* CobraAppTestUITests.swift */,
 			);
@@ -223,6 +226,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1E00647D27CEE658006FF6E9 /* sample.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
