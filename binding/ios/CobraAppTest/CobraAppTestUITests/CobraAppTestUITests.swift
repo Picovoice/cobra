@@ -10,7 +10,7 @@
 import XCTest
 import Cobra
 
-class CobraDemoUITests: XCTestCase {
+class CobraAppTestUITests: XCTestCase {
     
     private let accessKey = "{TESTING_ACCESS_KEY_HERE}"
 
