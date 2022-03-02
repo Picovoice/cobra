@@ -56,7 +56,25 @@ jobs:
         run: appcenter test run xcuitest 
           --token ${{secrets.APPCENTERAPITOKEN}}
           --app "Picovoice/Cobra-iOS"
-          --devices "Picovoice/ios-single" 
+          --devices "Picovoice/ios-min" 
+          --test-series "cobra-ios" 
+          --locale "en_US" 
+          --build-dir ddp/Build/Products/Debug-iphoneos
+
+      - name: Run Tests on AppCenter
+        run: appcenter test run xcuitest 
+          --token ${{secrets.APPCENTERAPITOKEN}}
+          --app "Picovoice/Cobra-iOS"
+          --devices "Picovoice/ios-max" 
+          --test-series "cobra-ios" 
+          --locale "en_US" 
+          --build-dir ddp/Build/Products/Debug-iphoneos
+
+      - name: Run Tests on AppCenter
+        run: appcenter test run xcuitest 
+          --token ${{secrets.APPCENTERAPITOKEN}}
+          --app "Picovoice/Cobra-iOS"
+          --devices "Picovoice/ios-mid" 
           --test-series "cobra-ios" 
           --locale "en_US" 
           --build-dir ddp/Build/Products/Debug-iphoneos
