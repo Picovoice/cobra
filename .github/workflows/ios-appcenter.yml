@@ -17,6 +17,10 @@ defaults:
     
 jobs:
   build:
+    strategy: 
+      matrix:
+        device: ['ios-min', 'ios-mid', 'ios-max']
+
     name: Run iOS Tests on AppCenter
     runs-on: macos-latest
 
@@ -56,25 +60,7 @@ jobs:
         run: appcenter test run xcuitest 
           --token ${{secrets.APPCENTERAPITOKEN}}
           --app "Picovoice/Cobra-iOS"
-          --devices "Picovoice/ios-min" 
-          --test-series "cobra-ios" 
-          --locale "en_US" 
-          --build-dir ddp/Build/Products/Debug-iphoneos
-
-      - name: Run Tests on AppCenter
-        run: appcenter test run xcuitest 
-          --token ${{secrets.APPCENTERAPITOKEN}}
-          --app "Picovoice/Cobra-iOS"
-          --devices "Picovoice/ios-max" 
-          --test-series "cobra-ios" 
-          --locale "en_US" 
-          --build-dir ddp/Build/Products/Debug-iphoneos
-
-      - name: Run Tests on AppCenter
-        run: appcenter test run xcuitest 
-          --token ${{secrets.APPCENTERAPITOKEN}}
-          --app "Picovoice/Cobra-iOS"
-          --devices "Picovoice/ios-mid" 
+          --devices "Picovoice/${{ matrix.device}}" 
           --test-series "cobra-ios" 
           --locale "en_US" 
           --build-dir ddp/Build/Products/Debug-iphoneos
