@@ -12,6 +12,7 @@ private let ACCESS_KEY = "YOUR_ACCESS_KEY_HERE"
 ```
 
 ## Usage
+
 Open the CobraDemo XCode project and build. Launch the demo on a simulator or an physical iOS device.
 
 1. Press the Start button
