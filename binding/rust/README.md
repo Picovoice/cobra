@@ -46,6 +46,15 @@ loop {
 }
 ```
 
+Use `new_with_library` to override the default library path:
+
+```rust
+use cobra::Cobra;
+
+let access_key = "..."; // AccessKey provided by Picovoice Console (https://picovoice.ai/console/)
+let cobra = Cobra::new_with_library(access_key, "/path/to/library/file");
+```
+
 ## Demos
 
 Check out the Cobra Rust demos [here](/demo/rust)
