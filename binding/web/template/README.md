@@ -14,6 +14,12 @@ This library requires several modern browser features: WebAssembly, Web Workers,
 
 If you are using this library with the [@picovoice/web-voice-processor](https://www.npmjs.com/package/@picovoice/web-voice-processor) to access the microphone, that requires some additional browser features like Web Audio API. Its overall browser support is approximately the same.
 
+## AccessKey
+
+Cobra requires a valid Picovoice `AccessKey` at initialization. `AccessKey` acts as your credentials when using Cobra SDKs.
+You can get your `AccessKey` for free. Make sure to keep your `AccessKey` secret. 
+Signup or Login to [Picovoice Console](https://console.picovoice.ai/) to get your `AccessKey`.
+
 ## Packages
 
 The Cobra SDK for Web is split into separate worker and factory packages; import each as required.
