@@ -9,17 +9,17 @@ Cobra is a highly accurate and lightweight voice activity detection (VAD) engine
 - Python 3.5+
 - Runs on Linux (x86_64), macOS (x86_64), Windows (x86_64), Raspberry Pi, NVIDIA Jetson (Nano), and BeagleBone.
 
-## AccessKey
-
-Cobra requires a valid Picovoice `AccessKey` at initialization. `AccessKey` acts as your credentials when using Cobra SDKs.
-You can get your `AccessKey` for free. Make sure to keep your `AccessKey` secret. 
-Signup or Login to [Picovoice Console](https://console.picovoice.ai/) to get your `AccessKey`.
-
 ## Installation
 
 ```console
 pip3 install pvcobra
 ```
+
+## AccessKey
+
+Cobra requires a valid Picovoice `AccessKey` at initialization. `AccessKey` acts as your credentials when using Cobra SDKs.
+You can get your `AccessKey` for free. Make sure to keep your `AccessKey` secret. 
+Signup or Login to [Picovoice Console](https://console.picovoice.ai/) to get your `AccessKey`.
 
 ## Usage
 

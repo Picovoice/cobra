@@ -8,12 +8,6 @@ Cobra is a highly accurate and lightweight voice activity detection (VAD) engine
 
 - Android SDK 21 or higher
 
-## AccessKey
-
-Cobra requires a valid Picovoice `AccessKey` at initialization. `AccessKey` acts as your credentials when using Cobra SDKs.
-You can get your `AccessKey` for free. Make sure to keep your `AccessKey` secret. 
-Signup or Login to [Picovoice Console](https://console.picovoice.ai/) to get your `AccessKey`.
-
 ## Installation
 
 Cobra can be found on Maven Central. To include the package in your Android project, ensure you have included `mavenCentral()`
@@ -25,6 +19,12 @@ dependencies {
     implementation 'ai.picovoice:cobra-android:${version}'
 }
 ```
+
+## AccessKey
+
+Cobra requires a valid Picovoice `AccessKey` at initialization. `AccessKey` acts as your credentials when using Cobra SDKs.
+You can get your `AccessKey` for free. Make sure to keep your `AccessKey` secret. 
+Signup or Login to [Picovoice Console](https://console.picovoice.ai/) to get your `AccessKey`.
 
 ## Permissions
 
