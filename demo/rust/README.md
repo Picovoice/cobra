@@ -2,6 +2,12 @@
 
 This package contains demos for processing real-time audio (i.e. microphone) and audio files using Cobra voice activity detection engine.
 
+## AccessKey
+
+Cobra requires a valid Picovoice `AccessKey` at initialization. `AccessKey` acts as your credentials when using Cobra SDKs.
+You can get your `AccessKey` for free. Make sure to keep your `AccessKey` secret.
+Signup or Login to [Picovoice Console](https://console.picovoice.ai/) to get your `AccessKey`.
+
 ## Usage
 
 NOTE: The working directory for the following `Cargo` commands is:
@@ -22,7 +28,7 @@ The following processes a file looking for voice activities:
 cargo run --release -- --access_key ACCESS_KEY --input_audio_path "path/to/input.wav"
 ```
 
-Where `ACCESS_KEY` is an AccessKey which should be obtained from [Picovoice Console](https://picovoice.ai/console/).
+Where `ACCESS_KEY` is an AccessKey which should be obtained from [Picovoice Console](https://console.picovoice.ai/).
 The threshold of the engine can be tuned using the `threshold` input argument:
 
 ```console
@@ -40,7 +46,7 @@ The following opens the default microphone:
 cargo run --release -- --access_key ACCESS_KEY
 ```
 
-Where `ACCESS_KEY` is an AccessKey which should be obtained from [Picovoice Console](https://picovoice.ai/console/).
+Where `ACCESS_KEY` is an AccessKey which should be obtained from [Picovoice Console](https://console.picovoice.ai/).
 
 It is possible that the default audio input device is not the one you wish to use. There are a couple
 of debugging facilities baked into the demo application to solve this. First, type the following into the console:

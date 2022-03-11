@@ -15,6 +15,12 @@ Cobra is a highly accurate and lightweight voice activity detection (VAD) engine
 pip3 install pvcobra
 ```
 
+## AccessKey
+
+Cobra requires a valid Picovoice `AccessKey` at initialization. `AccessKey` acts as your credentials when using Cobra SDKs.
+You can get your `AccessKey` for free. Make sure to keep your `AccessKey` secret.
+Signup or Login to [Picovoice Console](https://console.picovoice.ai/) to get your `AccessKey`.
+
 ## Usage
 
 Create an instance of the engine
@@ -24,7 +30,7 @@ import pvcobra
 
 handle = pvcobra.create(access_key=${AccessKey})
 ```
-Replace `${AccessKey}` with your AccessKey obtained from [Picovoice Console](https://picovoice.ai/console/). `handle` is
+Replace `${AccessKey}` with your AccessKey obtained from [Picovoice Console](https://console.picovoice.ai/). `handle` is
 an instance of Cobra.
 
 When initialized, the valid sample rate is given by `handle.sample_rate`. Expected frame length (number of audio samples

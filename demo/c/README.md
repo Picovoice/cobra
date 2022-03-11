@@ -4,6 +4,12 @@
 
 You need a C99-compatible compiler to build these demos.
 
+## AccessKey
+
+Cobra requires a valid Picovoice `AccessKey` at initialization. `AccessKey` acts as your credentials when using Cobra SDKs.
+You can get your `AccessKey` for free. Make sure to keep your `AccessKey` secret.
+Signup or Login to [Picovoice Console](https://console.picovoice.ai/) to get your `AccessKey`.
+
 ## Requirements
 
 - The demo requires [CMake](https://cmake.org/) version 3.4 or higher.
@@ -44,7 +50,7 @@ To run the cobra microphone demo:
 ```
 
 Replace `${LIBRARY_PATH}` with path to appropriate library available under [lib](/lib), `${ACCESS_KEY}` with AccessKey
-obtained from [Picovoice Console](https://picovoice.ai/console/), and `${AUDIO_DEVICE_INDEX}` with the index of the
+obtained from [Picovoice Console](https://console.picovoice.ai/), and `${AUDIO_DEVICE_INDEX}` with the index of the
 audio device  you wish to capture audio with. An `${AUDIO_DEVICE_INDEX}` of -1 will provide you with your system's
 default recording device.
 

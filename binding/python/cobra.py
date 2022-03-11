@@ -107,7 +107,7 @@ class Cobra(object):
         Constructor.
 
         :param library_path: Absolute path to Cobra's dynamic library.
-        :param access_key: AccessKey provided by Picovoice Console (https://picovoice.ai/console/)
+        :param access_key: AccessKey provided by Picovoice Console (https://console.picovoice.ai/)
         """
 
         if not os.path.exists(library_path):

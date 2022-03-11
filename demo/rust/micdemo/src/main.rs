@@ -107,7 +107,7 @@ fn main() {
             Arg::with_name("access_key")
                 .long("access_key")
                 .value_name("ACCESS_KEY")
-                .help("AccessKey provided by Picovoice Console (https://picovoice.ai/console/)")
+                .help("AccessKey provided by Picovoice Console (https://console.picovoice.ai/)")
                 .takes_value(true),
         )
         .arg(

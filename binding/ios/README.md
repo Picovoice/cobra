@@ -16,6 +16,12 @@ The Cobra iOS binding is available via [Cocoapods](https://cocoapods.org/pods/Rh
 pod 'Cobra-iOS'
 ```
 
+## AccessKey
+
+Cobra requires a valid Picovoice `AccessKey` at initialization. `AccessKey` acts as your credentials when using Cobra SDKs.
+You can get your `AccessKey` for free. Make sure to keep your `AccessKey` secret.
+Signup or Login to [Picovoice Console](https://console.picovoice.ai/) to get your `AccessKey`.
+
 ## Permissions
 
 To enable recording with your iOS device's microphone you must add the following to your app's `Info.plist` file:
@@ -31,7 +37,7 @@ Create an instance of the engine
 ```swift
 import Cobra
 
-let accessKey : String = // .. accessKey provided by Picovoice Console (https://picovoice.ai/console/)
+let accessKey : String = // .. accessKey provided by Picovoice Console (https://console.picovoice.ai/)
 do {
     handle = try Cobra(accessKey: accessKey)
 } catch { }

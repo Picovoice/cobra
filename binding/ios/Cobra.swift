@@ -30,7 +30,7 @@ public class Cobra {
     /// Constructor.
     ///
     /// - Parameters:
-    ///   - accessKey: AccessKey obtained from the Picvoice Console (https://picovoice.ai/console/)
+    ///   - accessKey: AccessKey obtained from the Picvoice Console (https://console.picovoice.ai/)
     /// - Throws: CobraError
     public init(accessKey: String) throws {
         let status = pv_cobra_init(accessKey, &handle)

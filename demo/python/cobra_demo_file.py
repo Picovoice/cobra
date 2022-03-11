@@ -43,7 +43,7 @@ def main():
     parser.add_argument('--library_path', help='Absolute path to dynamic library.', default=pvcobra.LIBRARY_PATH)
 
     parser.add_argument('--access_key',
-                        help='AccessKey provided by Picovoice Console (https://picovoice.ai/console/)',
+                        help='AccessKey provided by Picovoice Console (https://console.picovoice.ai/)',
                         required=True)
 
     parser.add_argument('--threshold', help="Threshold for the probability of voice activity",
