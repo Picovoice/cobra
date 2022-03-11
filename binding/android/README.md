@@ -23,7 +23,7 @@ dependencies {
 ## AccessKey
 
 Cobra requires a valid Picovoice `AccessKey` at initialization. `AccessKey` acts as your credentials when using Cobra SDKs.
-You can get your `AccessKey` for free. Make sure to keep your `AccessKey` secret. 
+You can get your `AccessKey` for free. Make sure to keep your `AccessKey` secret.
 Signup or Login to [Picovoice Console](https://console.picovoice.ai/) to get your `AccessKey`.
 
 ## Permissions
@@ -42,7 +42,7 @@ Create an instance of the engine
 import ai.picovoice.cobra.Cobra;
 import ai.picovoice.cobra.CobraException;
 
-String accessKey = // .. AccessKey obtained from Picovoice Console (https://picovoice.ai/console/)
+String accessKey = // .. AccessKey obtained from Picovoice Console (https://console.picovoice.ai/)
 try {
     handle = new Cobra(accessKey);
 } catch (CobraException e) {

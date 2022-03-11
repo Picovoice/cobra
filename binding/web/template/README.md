@@ -17,7 +17,7 @@ If you are using this library with the [@picovoice/web-voice-processor](https://
 ## AccessKey
 
 Cobra requires a valid Picovoice `AccessKey` at initialization. `AccessKey` acts as your credentials when using Cobra SDKs.
-You can get your `AccessKey` for free. Make sure to keep your `AccessKey` secret. 
+You can get your `AccessKey` for free. Make sure to keep your `AccessKey` secret.
 Signup or Login to [Picovoice Console](https://console.picovoice.ai/) to get your `AccessKey`.
 
 ## Packages
@@ -69,7 +69,7 @@ function cobraCallback(voiceProbability) {
 async function startCobra() {
   // Create a Cobra Worker
   // Note: you receive a Worker object, _not_ an individual Cobra instance
-  const accessKey = // .. AccessKey string provided by Picovoice Console (https://picovoice.ai/console/)
+  const accessKey = // .. AccessKey string provided by Picovoice Console (https://console.picovoice.ai/)
   const cobraWorker = await CobraWorkerFactory.create(
       accessKey,
       cobraCallback
@@ -113,7 +113,7 @@ E.g.:
 import { Cobra } from "@picovoice/cobra-web-factory";
 
 async function startCobra() {
-  const accessKey = // .. AccessKey string provided by Picovoice Console (https://picovoice.ai/console/)
+  const accessKey = // .. AccessKey string provided by Picovoice Console (https://console.picovoice.ai/)
   const handle = await Cobra.create(accessKey);
   return handle;
 }

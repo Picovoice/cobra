@@ -19,7 +19,7 @@ pod 'Cobra-iOS'
 ## AccessKey
 
 Cobra requires a valid Picovoice `AccessKey` at initialization. `AccessKey` acts as your credentials when using Cobra SDKs.
-You can get your `AccessKey` for free. Make sure to keep your `AccessKey` secret. 
+You can get your `AccessKey` for free. Make sure to keep your `AccessKey` secret.
 Signup or Login to [Picovoice Console](https://console.picovoice.ai/) to get your `AccessKey`.
 
 ## Permissions
@@ -37,7 +37,7 @@ Create an instance of the engine
 ```swift
 import Cobra
 
-let accessKey : String = // .. accessKey provided by Picovoice Console (https://picovoice.ai/console/)
+let accessKey : String = // .. accessKey provided by Picovoice Console (https://console.picovoice.ai/)
 do {
     handle = try Cobra(accessKey: accessKey)
 } catch { }

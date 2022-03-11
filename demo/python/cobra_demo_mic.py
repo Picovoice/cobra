@@ -108,7 +108,7 @@ def main():
         '--library_path', help='Absolute path to dynamic library.', default=pvcobra.LIBRARY_PATH)
 
     parser.add_argument('--access_key',
-                        help='AccessKey provided by Picovoice Console (https://picovoice.ai/console/)',
+                        help='AccessKey provided by Picovoice Console (https://console.picovoice.ai/)',
                         default=None)
 
     parser.add_argument('--audio_device_index',

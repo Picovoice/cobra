@@ -17,7 +17,7 @@ Cobra is a highly accurate and lightweight voice activity detection (VAD) engine
 ## AccessKey
 
 Cobra requires a valid Picovoice `AccessKey` at initialization. `AccessKey` acts as your credentials when using Cobra SDKs.
-You can get your `AccessKey` for free. Make sure to keep your `AccessKey` secret. 
+You can get your `AccessKey` for free. Make sure to keep your `AccessKey` secret.
 Signup or Login to [Picovoice Console](https://console.picovoice.ai/) to get your `AccessKey`.
 
 ## Installation
@@ -37,7 +37,7 @@ The Microphone demo opens an audio stream from a microphone and detects voice ac
 cobra_demo_mic --access_key {AccessKey}
 ```
 
-where `{AccessKey}` is an AccessKey which should be obtained from [Picovoice Console](https://picovoice.ai/console/). It is possible that the default audio input device recognized by `pvrecorder` is not the one being used. There are a couple of debugging facilities baked into the demo application to solve this. First, type the following into the console:
+where `{AccessKey}` is an AccessKey which should be obtained from [Picovoice Console](https://console.picovoice.ai/). It is possible that the default audio input device recognized by `pvrecorder` is not the one being used. There are a couple of debugging facilities baked into the demo application to solve this. First, type the following into the console:
 
 ```console
 cobra_demo_mic --show_audio_devices
@@ -94,7 +94,7 @@ provided it only processes the first (left) channel. The following processes a f
 ```console
 cobra_demo_file --access_key {AccessKey} --input_audio_path ${AUDIO_PATH}
 ```
-where `{AccessKey}` is an AccessKey which should be obtained from [Picovoice Console](https://picovoice.ai/console/). The threshold of the engine can be tuned using the `threshold` input argument:
+where `{AccessKey}` is an AccessKey which should be obtained from [Picovoice Console](https://console.picovoice.ai/). The threshold of the engine can be tuned using the `threshold` input argument:
 
 ```console
 cobra_demo_file --access_key {AccessKey} --input_audio_path ${AUDIO_PATH} \
