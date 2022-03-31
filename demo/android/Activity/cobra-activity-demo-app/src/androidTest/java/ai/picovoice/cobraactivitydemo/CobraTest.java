@@ -20,6 +20,7 @@ import com.microsoft.appcenter.espresso.Factory;
 import com.microsoft.appcenter.espresso.ReportHelper;
 
 import org.junit.After;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -119,6 +120,54 @@ public class CobraTest {
 
         error /= probs.size();
         assertTrue(error < 0.1);
+    }
+
+    @Test
+    public void testPerformance() throws CobraException {
+        String thresholdString = appContext.getString(R.string.performanceThresholdSec);
+        Assume.assumeNotNull(thresholdString);
+        Assume.assumeFalse(thresholdString.equals(""));
+
+        double performanceThresholdSec = Double.parseDouble(thresholdString);
+
+        Cobra cobra = new Cobra(accessKey);
+
+        File testAudio = new File(testResourcesPath, "audio/sample.wav");
+        ArrayList<Float> detectionResults = new ArrayList<>();
+
+        List<Float> probs = new ArrayList<>();
+
+        try {
+            FileInputStream audioInputStream = new FileInputStream(testAudio);
+
+            byte[] rawData = new byte[cobra.getFrameLength() * 2];
+            short[] pcm = new short[cobra.getFrameLength()];
+            ByteBuffer pcmBuff = ByteBuffer.wrap(rawData).order(ByteOrder.LITTLE_ENDIAN);
+
+            audioInputStream.skip(44);
+
+            long totalNSec = 0;
+            while (audioInputStream.available() > 0) {
+                int numRead = audioInputStream.read(pcmBuff.array());
+                if (numRead == cobra.getFrameLength() * 2) {
+                    pcmBuff.asShortBuffer().get(pcm);
+                    long before = System.nanoTime();
+                    probs.add(cobra.process(pcm));
+                    long after = System.nanoTime();
+                    totalNSec += after - before;
+                }
+            }
+        } catch (Exception e) {
+            throw new CobraException(e);
+        }
+
+        cobra.delete();
+
+        double totalSec = Math.round(((double) totalNSec) * 1e-6) / 1000.0;
+        assertTrue(
+                String.format("Expected threshold (%.3fs), process took (%.3fs)", performanceThresholdSec, totalSec),
+                totalSec <= performanceThresholdSec
+        );
     }
 
     @Test
