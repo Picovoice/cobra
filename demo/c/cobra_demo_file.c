@@ -271,8 +271,7 @@ int main(int argc, char *argv[]) {
         // WideCharToMultiByte: https://docs.microsoft.com/en-us/windows/win32/api/stringapiset/nf-stringapiset-widechartomultibyte
         int arg_chars_num = WideCharToMultiByte(CP_UTF8, UTF8_COMPOSITION_FLAG, wargv[i], NULL_TERMINATED, NULL, 0, NULL, NULL);
         utf8_argv[i] = (char *)malloc(arg_chars_num * sizeof(char));
-        if (!utf8_argv[i])
-        {
+        if (!utf8_argv[i]) {
             fprintf(stderr, "failed to to allocate memory for converting args");
         }
         WideCharToMultiByte(CP_UTF8, UTF8_COMPOSITION_FLAG, wargv[i], NULL_TERMINATED, utf8_argv[i], arg_chars_num, NULL, NULL);
