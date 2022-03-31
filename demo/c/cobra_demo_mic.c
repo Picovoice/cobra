@@ -179,13 +179,14 @@ int picovoice_main(int argc, char *argv[]) {
         exit(1);
     }
 
-    int32_t (*pv_sample_rate_func)() = load_symbol(cobra_library, "pv_sample_rate");
+    int32_t(*pv_sample_rate_func)() = load_symbol(cobra_library, "pv_sample_rate");
     if (!pv_sample_rate_func) {
         print_dl_error("failed to load 'pv_sample_rate'");
         exit(1);
     }
 
-    pv_status_t (*pv_cobra_init_func)(const char *, pv_cobra_t **) = load_symbol(cobra_library, "pv_cobra_init");
+    pv_status_t(*pv_cobra_init_func)(
+    const char *, pv_cobra_t * *) = load_symbol(cobra_library, "pv_cobra_init");
     if (!pv_cobra_init_func) {
         print_dl_error("failed to load 'pv_cobra_init'");
         exit(1);
@@ -197,14 +198,15 @@ int picovoice_main(int argc, char *argv[]) {
         exit(1);
     }
 
-    pv_status_t (*pv_cobra_process_func)(pv_cobra_t *, const int16_t *, float *) =
+    pv_status_t(*pv_cobra_process_func)(pv_cobra_t * ,
+    const int16_t *, float *) =
     load_symbol(cobra_library, "pv_cobra_process");
     if (!pv_cobra_process_func) {
         print_dl_error("failed to load 'pv_cobra_process'");
         exit(1);
     }
 
-    int32_t (*pv_cobra_frame_length_func)() = load_symbol(cobra_library, "pv_cobra_frame_length");
+    int32_t(*pv_cobra_frame_length_func)() = load_symbol(cobra_library, "pv_cobra_frame_length");
     if (!pv_cobra_frame_length_func) {
         print_dl_error("failed to load 'pv_cobra_frame_length'");
         exit(1);
