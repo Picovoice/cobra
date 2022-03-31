@@ -48,7 +48,7 @@ jobs:
           CobraAppTestUITests/CobraAppTestUITests.swift
 
       - name: Inject Performance Threshold
-        run: sed -i '.bak' 's:{PERFORMANCE_THRESHOLD_SEC}:0.00001:'
+        run: sed -i '.bak' 's:{PERFORMANCE_THRESHOLD_SEC}:0.01:'
           CobraAppTestUITests/CobraAppTestUITests.swift
 
       - name: XCode Build
