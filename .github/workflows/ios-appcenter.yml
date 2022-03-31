@@ -6,10 +6,14 @@ on:
     branches: [ main ]
     paths: 
       - 'binding/ios/CobraAppTest/Podfile.lock'
+      - '.github/workflows/ios-appcenter.yml'
+
   pull_request:
     branches: [ main ]
     paths: 
       - 'binding/ios/CobraAppTest/Podfile.lock'
+      - '.github/workflows/ios-appcenter.yml'
+
       
 defaults:
   run:
@@ -41,6 +45,10 @@ jobs:
 
       - name: Inject AccessKey
         run: sed -i '.bak' 's:{TESTING_ACCESS_KEY_HERE}:${{secrets.PV_VALID_ACCESS_KEY}}:'
+          CobraAppTestUITests/CobraAppTestUITests.swift
+
+      - name: Inject Performance Threshold
+        run: sed -i '.bak' 's:{PERFORMANCE_THRESHOLD_SEC}:0.1:'
           CobraAppTestUITests/CobraAppTestUITests.swift
 
       - name: XCode Build

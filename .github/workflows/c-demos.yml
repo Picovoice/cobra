@@ -7,35 +7,148 @@ on:
     paths:
       - 'demo/c/**'
       - '!demo/c/README.md'
+      - '.github/workflows/c-demos.yml'
   pull_request:
     branches: [ main ]
     paths:
       - 'demo/c/**'
       - '!demo/c/README.md'
+      - '.github/workflows/c-demos.yml'
+
+defaults:
+  run:
+    working-directory: demo/c
 
 jobs:
-  build-micdemo:
-    runs-on: ubuntu-latest
+  build-micdemo-github-hosted:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
     - uses: actions/checkout@v2
       with:
         submodules: recursive
 
-    - name: Build Micdemo
-      run: |
-        cmake -S demo/c/. -B demo/c/build
-        cmake --build demo/c/build --target cobra_demo_mic
+    - name: Create build directory
+      run: cmake -B ./build
 
-  build-filedemo:
-    runs-on: ubuntu-latest
+    - name: Build micdemo
+      run: cmake --build ./build --target cobra_demo_mic
+
+  build-micdemo-self-hosted:
+    runs-on: ${{ matrix.machine }}
+
+    strategy:
+      matrix:
+        machine: [rpi2, rpi3-32, rpi3-64, rpi4-32, rpi4-64, jetson, beaglebone]
 
     steps:
     - uses: actions/checkout@v2
       with:
         submodules: recursive
 
-    - name: Build Filedemo
-      run: |
-        cmake -S demo/c/. -B demo/c/build
-        cmake --build demo/c/build --target cobra_demo_file
+    - name: Create build directory
+      run: cmake -B ./build
+
+    - name: Build micdemo
+      run: cmake --build ./build --target cobra_demo_mic
+
+  build-filedemo-github-hosted:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+        - os: ubuntu-latest
+          platform: linux
+          arch: x86_64
+          ext: so
+          performance_threshold_sec: 0.5
+        - os: windows-latest
+          platform: windows
+          arch: amd64
+          ext: dll
+          performance_threshold_sec: 0.5
+        - os: macos-latest
+          platform: mac
+          arch: x86_64
+          ext: dylib
+          performance_threshold_sec: 0.5
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
+    - name: Create build directory
+      run: cmake -B ./build
+
+    - name: Build filedemo
+      run: cmake --build ./build --target cobra_demo_file
+
+    - uses: ./.github/actions/c-filedemo
+      name: Run filedemo
+      with:
+        access_key: ${{ secrets.PV_VALID_ACCESS_KEY }}
+        library_path: ../../lib/${{ matrix.platform }}/${{ matrix.arch }}/libpv_cobra.${{ matrix.ext }}
+        audio_path: ../../res/audio/sample.wav
+        performance_threshold_sec: ${{ matrix.performance_threshold_sec }}
+
+  build-filedemo-self-hosted:
+    runs-on: ${{ matrix.machine }}
+
+    strategy:
+      matrix:
+        machine: [rpi2, rpi3-32, rpi3-64, rpi4-32, rpi4-64, jetson, beaglebone]
+        include:
+        - machine: rpi2
+          platform: raspberry-pi
+          arch: cortex-a7
+          performance_threshold_sec: 2.0
+        - machine: rpi3-32
+          platform: raspberry-pi
+          arch: cortex-a53
+          performance_threshold_sec: 0.7
+        - machine: rpi3-64
+          platform: raspberry-pi
+          arch: cortex-a53-aarch64
+          performance_threshold_sec: 0.7
+        - machine: rpi4-32
+          platform: raspberry-pi
+          arch: cortex-a72
+          performance_threshold_sec: 0.5
+        - machine: rpi4-64
+          platform: raspberry-pi
+          arch: cortex-a72-aarch64
+          performance_threshold_sec: 0.5
+        - machine: jetson
+          platform: jetson
+          arch: cortex-a57-aarch64
+          performance_threshold_sec: 0.5
+        - machine: beaglebone
+          platform: beaglebone
+          arch: ''
+          performance_threshold_sec: 2.5
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
+    - name: Create build directory
+      run: cmake -B ./build
+
+    - name: Build filedemo
+      run: cmake --build ./build --target cobra_demo_file
+
+    - uses: ./.github/actions/c-filedemo
+      name: Run filedemo
+      with:
+        access_key: ${{ secrets.PV_VALID_ACCESS_KEY }}
+        library_path: ../../lib/${{ matrix.platform }}/${{ matrix.arch }}/libpv_cobra.so
+        audio_path: ../../res/audio/sample.wav
+        performance_threshold_sec: ${{ matrix.performance_threshold_sec }}
