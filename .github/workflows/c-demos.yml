@@ -67,17 +67,17 @@ jobs:
           platform: linux
           arch: x86_64
           ext: so
-          performance_threshold_sec: 0.00001
+          performance_threshold_sec: 0.002
         - os: windows-latest
           platform: windows
           arch: amd64
           ext: dll
-          performance_threshold_sec: 0.00001
+          performance_threshold_sec: 0.002
         - os: macos-latest
           platform: mac
           arch: x86_64
           ext: dylib
-          performance_threshold_sec: 0.00001
+          performance_threshold_sec: 0.002
 
     steps:
     - uses: actions/checkout@v2
@@ -108,31 +108,31 @@ jobs:
         - machine: rpi2
           platform: raspberry-pi
           arch: cortex-a7
-          performance_threshold_sec: 0.00001
+          performance_threshold_sec: 0.01
         - machine: rpi3-32
           platform: raspberry-pi
           arch: cortex-a53
-          performance_threshold_sec: 0.00001
+          performance_threshold_sec: 0.01
         - machine: rpi3-64
           platform: raspberry-pi
           arch: cortex-a53-aarch64
-          performance_threshold_sec: 0.00001
+          performance_threshold_sec: 0.01
         - machine: rpi4-32
           platform: raspberry-pi
           arch: cortex-a72
-          performance_threshold_sec: 0.00001
+          performance_threshold_sec: 0.01
         - machine: rpi4-64
           platform: raspberry-pi
           arch: cortex-a72-aarch64
-          performance_threshold_sec: 0.00001
+          performance_threshold_sec: 0.01
         - machine: jetson
           platform: jetson
           arch: cortex-a57-aarch64
-          performance_threshold_sec: 0.00001
+          performance_threshold_sec: 0.01
         - machine: beaglebone
           platform: beaglebone
           arch: ''
-          performance_threshold_sec: 0.00001
+          performance_threshold_sec: 0.01
 
     steps:
     - uses: actions/checkout@v2

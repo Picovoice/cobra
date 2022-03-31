@@ -137,6 +137,7 @@ public class CobraTest {
 
         List<Float> probs = new ArrayList<>();
 
+        long totalNSec = 0;
         try {
             FileInputStream audioInputStream = new FileInputStream(testAudio);
 
@@ -146,7 +147,6 @@ public class CobraTest {
 
             audioInputStream.skip(44);
 
-            long totalNSec = 0;
             while (audioInputStream.available() > 0) {
                 int numRead = audioInputStream.read(pcmBuff.array());
                 if (numRead == cobra.getFrameLength() * 2) {
