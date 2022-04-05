@@ -13,6 +13,7 @@ import Cobra
 class CobraAppTestUITests: XCTestCase {
     
     private let accessKey = "{TESTING_ACCESS_KEY_HERE}"
+    let thresholdString: String = "{PERFORMANCE_THRESHOLD_SEC}"
 
     override func setUpWithError() throws {
         continueAfterFailure = true
@@ -55,6 +56,43 @@ class CobraAppTestUITests: XCTestCase {
         
         error /= Float32(results.count)
         XCTAssert(error < 0.1)
+        
+    }
+
+    func testPerformance() throws {
+
+        try XCTSkipIf(thresholdString == "{PERFORMANCE_THRESHOLD_SEC}")
+
+        let performanceThresholdSec = Double(thresholdString)
+        try XCTSkipIf(performanceThresholdSec == nil)
+
+        let cobra:Cobra = try Cobra(accessKey: accessKey)
+        
+        let bundle = Bundle(for: type(of: self))
+        let fileURL:URL = bundle.url(forResource: "sample", withExtension: "wav")!
+    
+        let data = try Data(contentsOf: fileURL)
+        let frameLengthBytes = Int(Cobra.frameLength) * 2
+        var pcmBuffer = Array<Int16>(repeating: 0, count: Int(Cobra.frameLength))
+        
+        var totalNSec = 0.0
+        var results:[Float32] = []
+        var index = 44
+        while(index + frameLengthBytes < data.count) {
+            _ = pcmBuffer.withUnsafeMutableBytes { data.copyBytes(to: $0, from: index..<(index + frameLengthBytes)) }
+            let before = CFAbsoluteTimeGetCurrent()
+            let voiceProbability:Float32 = try cobra.process(pcm:pcmBuffer)
+            let after = CFAbsoluteTimeGetCurrent()
+            totalNSec += (after - before)
+            results.append(voiceProbability)
+            
+            index += frameLengthBytes
+        }
+        
+        cobra.delete()
+
+        let totalSec = Double(round(totalNSec * 1000) / 1000)
+        XCTAssertLessThanOrEqual(totalSec, performanceThresholdSec!)
         
     }
 }

@@ -6,11 +6,13 @@ on:
     branches: [ main ]
     paths:
       - 'demo/android/Activity/cobra-activity-demo-app/build.gradle'      
-    
+      - '.github/workflows/android-appcenter.yml'
+
   pull_request:
     branches: [ main ]
     paths: 
       - 'demo/android/Activity/cobra-activity-demo-app/build.gradle'
+      - '.github/workflows/android-appcenter.yml'
 
 defaults:
   run:
@@ -41,6 +43,9 @@ jobs:
 
     - name: Inject AccessKey
       run: echo pvTestingAccessKey="${{secrets.PV_VALID_ACCESS_KEY}}" >> local.properties
+
+    - name: Inject Performance Threshold
+      run: echo performanceThresholdSec="0.02" >> local.properties
 
     - name: Build app
       run: ./gradlew assembleDebug

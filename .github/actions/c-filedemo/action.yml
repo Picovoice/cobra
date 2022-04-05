@@ -1,0 +1,36 @@
+name: Run filedemo
+
+inputs:
+  access_key:
+    required: true
+  library_path:
+    required: true
+  audio_path:
+    required: true
+  performance_threshold_sec:
+    required: false
+    type: number
+
+runs:
+  using: "composite"
+  steps:
+  - name: demo
+    run: >
+      ./build/cobra_demo_file
+      -a ${{ inputs.access_key }}
+      -l ${{ inputs.library_path }}
+      -w ${{ inputs.audio_path }}
+    if: "${{ inputs.performance_threshold_sec == '' }}"
+    working-directory: demo/c
+    shell: bash
+
+  - name: demo with performace measuring
+    run: >
+      ./build/cobra_demo_file
+      -a ${{ inputs.access_key }}
+      -l ${{ inputs.library_path }}
+      -w ${{ inputs.audio_path }}
+      -p ${{ inputs.performance_threshold_sec }}
+    if: "${{ inputs.performance_threshold_sec != '' }}"
+    working-directory: demo/c
+    shell: bash
