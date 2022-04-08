@@ -84,7 +84,7 @@ static struct option long_options[] = {
         {"show_audio_devices",        no_argument,       NULL, 's'},
         {"library_path",              required_argument, NULL, 'l'},
         {"wav_path",                  required_argument, NULL, 'w'},
-}
+};
 
 void print_usage(const char *program_name) {
     fprintf(stdout, "Usage: %s [-l LIBRARY_PATH -a ACCESS_KEY -w WAV_PATH]\n", program_name);
