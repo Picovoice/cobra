@@ -15,6 +15,7 @@ import unittest
 
 from cobra import Cobra
 from util import *
+from test_util import *
 
 
 class CobraPerformanceTestCase(unittest.TestCase):
@@ -24,15 +25,15 @@ class CobraPerformanceTestCase(unittest.TestCase):
 
     def test_performance(self):
         cobra = Cobra(access_key=sys.argv[1], library_path=pv_library_path('../..'))
-        audio = (
+        audio = read_wav_file(
             os.path.join(os.path.dirname(__file__), '../../res/audio/sample.wav'),
             cobra.sample_rate)
 
         num_frames = len(audio) // cobra.frame_length
-
         perf_results = []
         for i in range(self.NUM_TEST_ITERATIONS):
             proc_time = 0
+
             for j in range(num_frames):
                 frame = audio[j * cobra.frame_length:(j + 1) * cobra.frame_length]
                 start = time.time()
