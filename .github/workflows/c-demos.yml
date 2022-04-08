@@ -67,17 +67,14 @@ jobs:
           platform: linux
           arch: x86_64
           ext: so
-          performance_threshold_sec: 0.003
         - os: windows-latest
           platform: windows
           arch: amd64
           ext: dll
-          performance_threshold_sec: 0.003
         - os: macos-latest
           platform: mac
           arch: x86_64
           ext: dylib
-          performance_threshold_sec: 0.003
 
     steps:
     - uses: actions/checkout@v2
@@ -96,7 +93,6 @@ jobs:
         access_key: ${{ secrets.PV_VALID_ACCESS_KEY }}
         library_path: ../../lib/${{ matrix.platform }}/${{ matrix.arch }}/libpv_cobra.${{ matrix.ext }}
         audio_path: ../../res/audio/sample.wav
-        performance_threshold_sec: ${{ matrix.performance_threshold_sec }}
 
   build-filedemo-self-hosted:
     runs-on: ${{ matrix.machine }}
@@ -108,31 +104,24 @@ jobs:
         - machine: rpi2
           platform: raspberry-pi
           arch: cortex-a7
-          performance_threshold_sec: 0.03
         - machine: rpi3-32
           platform: raspberry-pi
           arch: cortex-a53
-          performance_threshold_sec: 0.01
         - machine: rpi3-64
           platform: raspberry-pi
           arch: cortex-a53-aarch64
-          performance_threshold_sec: 0.01
         - machine: rpi4-32
           platform: raspberry-pi
           arch: cortex-a72
-          performance_threshold_sec: 0.01
         - machine: rpi4-64
           platform: raspberry-pi
           arch: cortex-a72-aarch64
-          performance_threshold_sec: 0.01
         - machine: jetson
           platform: jetson
           arch: cortex-a57-aarch64
-          performance_threshold_sec: 0.01
         - machine: beaglebone
           platform: beaglebone
           arch: ''
-          performance_threshold_sec: 0.05
 
     steps:
     - uses: actions/checkout@v2
@@ -151,4 +140,3 @@ jobs:
         access_key: ${{ secrets.PV_VALID_ACCESS_KEY }}
         library_path: ../../lib/${{ matrix.platform }}/${{ matrix.arch }}/libpv_cobra.so
         audio_path: ../../res/audio/sample.wav
-        performance_threshold_sec: ${{ matrix.performance_threshold_sec }}

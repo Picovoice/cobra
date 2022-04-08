@@ -84,7 +84,7 @@ static struct option long_options[] = {
         {"show_audio_devices",        no_argument,       NULL, 's'},
         {"library_path",              required_argument, NULL, 'l'},
         {"wav_path",                  required_argument, NULL, 'w'},
-        {"performance_threshold_sec", optional_argument, NULL, 'p'}};
+};
 
 void print_usage(const char *program_name) {
     fprintf(stdout, "Usage: %s [-l LIBRARY_PATH -a ACCESS_KEY -w WAV_PATH]\n", program_name);
@@ -94,10 +94,9 @@ int picovoice_main(int argc, char *argv[]) {
     const char *library_path = NULL;
     const char *access_key = NULL;
     const char *wav_path = NULL;
-    double performance_threshold_sec = 0;
 
     int c;
-    while ((c = getopt_long(argc, argv, "l:a:w:p:", long_options, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "l:a:w:", long_options, NULL)) != -1) {
         switch (c) {
             case 'l':
                 library_path = optarg;
@@ -107,9 +106,6 @@ int picovoice_main(int argc, char *argv[]) {
                 break;
             case 'w':
                 wav_path = optarg;
-                break;
-            case 'p':
-                performance_threshold_sec = strtod(optarg, NULL);
                 break;
             default:
                 exit(1);
@@ -239,15 +235,6 @@ int picovoice_main(int argc, char *argv[]) {
     drwav_uninit(&f);
     pv_cobra_delete_func(cobra);
     close_dl(cobra_library);
-
-    if (performance_threshold_sec > 0) {
-        const double total_cpu_time_sec = total_cpu_time_usec * 1e-6;
-        if (total_cpu_time_sec > performance_threshold_sec) {
-            fprintf(stderr, "Expected threshold (%.3fs), process took (%.3fs)\n", performance_threshold_sec,
-                    total_cpu_time_sec);
-            exit(1);
-        }
-    }
 
     return 0;
 }
