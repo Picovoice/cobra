@@ -7,7 +7,7 @@ on:
     paths:
       - 'binding/python/**'
       - '!binding/python/README.md'
-      - 'lib/beaglebone/**'      
+      - 'lib/beaglebone/**'
       - 'lib/jetson/**'
       - 'lib/linux/**'
       - 'lib/mac/**'
@@ -19,7 +19,7 @@ on:
     paths:
       - 'binding/python/**'
       - '!binding/python/README.md'
-      - 'lib/beaglebone/**'      
+      - 'lib/beaglebone/**'
       - 'lib/jetson/**'
       - 'lib/linux/**'
       - 'lib/mac/**'
@@ -36,6 +36,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     strategy:
+      fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         python-version: ['3.5' , '3.6', '3.7', '3.8', '3.9', '3.10']
@@ -64,18 +65,18 @@ jobs:
 
     strategy:
       matrix:
-        machine: [rpi2, rpi3, rpi4, jetson, beaglebone]
+        machine: [rpi2, rpi3-32, rpi3-64, rpi4-32, rpi4-64, jetson, beaglebone]
 
     steps:
     - uses: actions/checkout@v2
       with:
-        submodules: recursive      
+        submodules: recursive
 
     - name: Pre-build dependencies
       run: python3 -m pip install --upgrade pip
 
     - name: Install dependencies
       run: pip3 install -r requirements.txt
-        
+
     - name: Test
       run: python3 test_cobra.py ${{secrets.PV_VALID_ACCESS_KEY}}
