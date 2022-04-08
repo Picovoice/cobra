@@ -1,14 +1,6 @@
-/*
-    Copyright 2021 Picovoice Inc.
-    You may not use this file except in compliance with the license. A copy of the license is
-    located in the "LICENSE" file accompanying this source.
-    Unless required by applicable law or agreed to in writing, software distributed under the
-    License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either
-    express or implied. See the License for the specific language governing permissions and
-    limitations under the License.
-*/
-
 package ai.picovoice.cobraactivitydemo;
+
+import static org.junit.Assert.assertTrue;
 
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -36,27 +28,18 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.util.ArrayList;
-import java.util.List;
 
 import ai.picovoice.cobra.Cobra;
-import ai.picovoice.cobra.CobraException;
-
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-
 
 @RunWith(AndroidJUnit4.class)
-public class CobraTest {
-
+public class PerformanceTest {
     @Rule
     public ReportHelper reportHelper = Factory.getReportHelper();
     Context testContext;
     Context appContext;
     AssetManager assetManager;
     String testResourcesPath;
-
-    String accessKey = "";
+    String accessKey;
 
     @After
     public void TearDown() {
@@ -74,16 +57,26 @@ public class CobraTest {
         accessKey = appContext.getString(R.string.pvTestingAccessKey);
     }
 
+
+
     @Test
-    public void testProcess() throws CobraException {
-        Cobra cobra = new Cobra(accessKey);
+    public void testPerformance() throws Exception {
+        String iterationString = appContext.getString(R.string.numTestIterations);
+        String thresholdString = appContext.getString(R.string.performanceThresholdSec);
+        Assume.assumeNotNull(thresholdString);
+        Assume.assumeFalse(thresholdString.equals(""));
 
-        File testAudio = new File(testResourcesPath, "audio/sample.wav");
-        ArrayList<Float> detectionResults = new ArrayList<>();
-
-        List<Float> probs = new ArrayList<>();
-
+        int numTestIterations = 100;
         try {
+            numTestIterations = Integer.parseInt(iterationString);
+        } catch (NumberFormatException ignored) {}
+        double performanceThresholdSec = Double.parseDouble(thresholdString);
+
+        Cobra cobra = new Cobra(accessKey);
+        File testAudio = new File(testResourcesPath, "audio/sample.wav");
+
+        long totalNSec = 0;
+        for (int i = 0; i < numTestIterations; i++) {
             FileInputStream audioInputStream = new FileInputStream(testAudio);
 
             byte[] rawData = new byte[cobra.getFrameLength() * 2];
@@ -96,40 +89,24 @@ public class CobraTest {
                 int numRead = audioInputStream.read(pcmBuff.array());
                 if (numRead == cobra.getFrameLength() * 2) {
                     pcmBuff.asShortBuffer().get(pcm);
-                    probs.add(cobra.process(pcm));
+                    long before = System.nanoTime();
+                    cobra.process(pcm);
+                    long after = System.nanoTime();
+                    totalNSec += after - before;
                 }
             }
-        } catch (Exception e) {
-            throw new CobraException(e);
         }
-
         cobra.delete();
 
-        float[] labels = {
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-        };
-
-        assertSame(labels.length, probs.size());
-
-        float error = 0.f;
-
-        for (int i = 0; i < probs.size(); i++) {
-            error -= (labels[i] * Math.log(probs.get(i))) + ((1 - labels[i]) * Math.log(1 - probs.get(i)));
-        }
-
-        error /= probs.size();
-        assertTrue(error < 0.1);
-    }
-
-    @Test
-    public void testVersion() throws CobraException {
-        Cobra cobra = new Cobra(accessKey);
-        assertTrue(cobra.getVersion().length() > 0);
+        double avgNSec = totalNSec / (double) numTestIterations;
+        double avgSec = ((double) Math.round(avgNSec * 1e-6)) / 1000.0;
+        assertTrue(
+                String.format("Expected threshold (%.3fs), process took (%.3fs)", performanceThresholdSec, avgSec),
+                avgSec <= performanceThresholdSec
+        );
     }
 
     private void extractAssetsRecursively(String path) throws IOException {
-
         String[] list = assetManager.list(path);
         if (list.length > 0) {
             File outputFile = new File(appContext.getFilesDir(), path);
@@ -147,7 +124,6 @@ public class CobraTest {
     }
 
     private void extractTestFile(String filepath) throws IOException {
-
         InputStream is = new BufferedInputStream(assetManager.open(filepath), 256);
         File absPath = new File(appContext.getFilesDir(), filepath);
         OutputStream os = new BufferedOutputStream(new FileOutputStream(absPath), 256);
