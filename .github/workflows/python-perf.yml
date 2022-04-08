@@ -1,0 +1,117 @@
+name: Python Performance
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths:
+      - 'binding/python/test_cobra_perf.py'
+      - 'lib/beaglebone/**'
+      - 'lib/jetson/**'
+      - 'lib/linux/**'
+      - 'lib/mac/**'
+      - 'lib/raspberry-pi/**'
+      - 'lib/windows/**'
+      - 'res/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'binding/python/test_cobra_perf.py'
+      - 'lib/beaglebone/**'
+      - 'lib/jetson/**'
+      - 'lib/linux/**'
+      - 'lib/mac/**'
+      - 'lib/raspberry-pi/**'
+      - 'lib/windows/**'
+      - 'res/**'
+
+defaults:
+  run:
+    working-directory: binding/python
+
+jobs:
+  perf-github-hosted:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+        - os: ubuntu-latest
+          performance_threshold_sec: 0.003
+        - os: windows-latest
+          performance_threshold_sec: 0.003
+        - os: macos-latest
+          performance_threshold_sec: 0.003
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
+    - name: Set up Python '3.10'
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.10'
+
+    - name: Pre-build dependencies
+      run: python -m pip install --upgrade pip
+
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+
+    - name: Test
+      run: python test_cobra_perf.py ${{secrets.PV_VALID_ACCESS_KEY}} 100 ${{matrix.performance_threshold_sec}}
+
+  perf-self-hosted:
+    runs-on: ${{ matrix.machine }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        machine: [rpi2, rpi3-32, rpi3-64, rpi4-32, rpi4-64, jetson, beaglebone]
+        include:
+        - machine: rpi2
+          num_test_iterations: 50
+          performance_threshold_sec: 0.03
+        - machine: rpi3-32
+          num_test_iterations: 100
+          performance_threshold_sec: 0.01
+        - machine: rpi3-64
+          num_test_iterations: 100
+          performance_threshold_sec: 0.01
+        - machine: rpi4-32
+          num_test_iterations: 100
+          performance_threshold_sec: 0.01
+        - machine: rpi4-64
+          num_test_iterations: 100
+          performance_threshold_sec: 0.01
+        - machine: jetson
+          num_test_iterations: 100
+          performance_threshold_sec: 0.01
+        - machine: beaglebone
+          num_test_iterations: 50
+          performance_threshold_sec: 0.05
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+
+    - name: Pre-build dependencies
+      run: python3 -m pip install --upgrade pip
+
+    - name: Install dependencies
+      run: pip3 install -r requirements.txt
+
+    - name: Machine state before
+      working-directory: resources/scripts
+      run: bash machine-state.sh
+
+    - name: Test
+      run: python3 test_cobra_perf.py ${{secrets.PV_VALID_ACCESS_KEY}} ${{matrix.num_test_iterations}} ${{matrix.performance_threshold_sec}}
+
+    - name: Machine state after
+      working-directory: resources/scripts
+      run: bash machine-state.sh
