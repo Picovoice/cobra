@@ -38,7 +38,9 @@ class CobraPerformanceTestCase(unittest.TestCase):
                 start = time.time()
                 cobra.process(frame)
                 proc_time += time.time() - start
-            perf_results.append(proc_time)
+
+            if i > 0:
+                perf_results.append(proc_time)
 
         cobra.delete()
 
