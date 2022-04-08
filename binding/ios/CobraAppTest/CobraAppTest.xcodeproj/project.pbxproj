@@ -14,7 +14,11 @@
 		1E00645827CEDF9C006FF6E9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1E00645627CEDF9C006FF6E9 /* LaunchScreen.storyboard */; };
 		1E00646D27CEDF9C006FF6E9 /* CobraAppTestUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E00646C27CEDF9C006FF6E9 /* CobraAppTestUITests.swift */; };
 		1E00647D27CEE658006FF6E9 /* sample.wav in Resources */ = {isa = PBXBuildFile; fileRef = 1E00647C27CEE658006FF6E9 /* sample.wav */; };
-		6A9164E4B0B1626D27DBA0A1 /* libPods-CobraAppTestUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EE8143D31713B4E8FB671A69 /* libPods-CobraAppTestUITests.a */; };
+		1E5B7AEE2800B2CF00F8BDDB /* PerformanceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5B7AED2800B2CF00F8BDDB /* PerformanceTest.swift */; };
+		1E5B7AF12800B4A600F8BDDB /* sample.wav in Resources */ = {isa = PBXBuildFile; fileRef = 1E5B7AF02800B4A600F8BDDB /* sample.wav */; };
+		392C5FC2C59B4299F5FB7D3B /* libPods-CobraAppTestUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B340446EF573C72BC1349E8E /* libPods-CobraAppTestUITests.a */; };
+		50CC58C08AAD59C8922AC105 /* libPods-PerformanceTest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C6572CB2CB09D2183B5C6617 /* libPods-PerformanceTest.a */; };
+		6A9164E4B0B1626D27DBA0A1 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
 		837665FCC740E76ED8323395 /* libPods-CobraAppTest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FFAEF3E81D2B0623D6C31C0 /* libPods-CobraAppTest.a */; };
 /* End PBXBuildFile section */
 
@@ -26,9 +30,17 @@
 			remoteGlobalIDString = 1E00644727CEDF9B006FF6E9;
 			remoteInfo = CobraAppTest;
 		};
+		1E5B7AE02800B29F00F8BDDB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 1E00644027CEDF9B006FF6E9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 1E00644727CEDF9B006FF6E9;
+			remoteInfo = CobraAppTest;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0402F655F9B10F18A7CE7EE2 /* Pods-PerformanceTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PerformanceTest.debug.xcconfig"; path = "Target Support Files/Pods-PerformanceTest/Pods-PerformanceTest.debug.xcconfig"; sourceTree = "<group>"; };
 		1E00644827CEDF9B006FF6E9 /* CobraAppTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CobraAppTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1E00644B27CEDF9B006FF6E9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		1E00644F27CEDF9B006FF6E9 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -40,11 +52,17 @@
 		1E00646C27CEDF9C006FF6E9 /* CobraAppTestUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CobraAppTestUITests.swift; sourceTree = "<group>"; };
 		1E00647B27CEE128006FF6E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1E00647C27CEE658006FF6E9 /* sample.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = sample.wav; path = ../../../../res/audio/sample.wav; sourceTree = "<group>"; };
+		1E5B7AEC2800B29F00F8BDDB /* PerformanceTest.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PerformanceTest.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		1E5B7AED2800B2CF00F8BDDB /* PerformanceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceTest.swift; sourceTree = "<group>"; };
+		1E5B7AEF2800B2E300F8BDDB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		1E5B7AF02800B4A600F8BDDB /* sample.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = sample.wav; path = ../../../../res/audio/sample.wav; sourceTree = "<group>"; };
 		239D8F7DFD3E66DB68DD74C7 /* Pods-CobraAppTestUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CobraAppTestUITests.release.xcconfig"; path = "Target Support Files/Pods-CobraAppTestUITests/Pods-CobraAppTestUITests.release.xcconfig"; sourceTree = "<group>"; };
 		2C1B5037B36B1A9C62AE0816 /* Pods-CobraAppTest.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CobraAppTest.debug.xcconfig"; path = "Target Support Files/Pods-CobraAppTest/Pods-CobraAppTest.debug.xcconfig"; sourceTree = "<group>"; };
 		7F000751C879143D6999BEC4 /* Pods-CobraAppTestUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CobraAppTestUITests.debug.xcconfig"; path = "Target Support Files/Pods-CobraAppTestUITests/Pods-CobraAppTestUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		8FFAEF3E81D2B0623D6C31C0 /* libPods-CobraAppTest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CobraAppTest.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		EE8143D31713B4E8FB671A69 /* libPods-CobraAppTestUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CobraAppTestUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B340446EF573C72BC1349E8E /* libPods-CobraAppTestUITests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CobraAppTestUITests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B9DD6D6C983DB5CCF60FA7F1 /* Pods-PerformanceTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PerformanceTest.release.xcconfig"; path = "Target Support Files/Pods-PerformanceTest/Pods-PerformanceTest.release.xcconfig"; sourceTree = "<group>"; };
+		C6572CB2CB09D2183B5C6617 /* libPods-PerformanceTest.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PerformanceTest.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBAD61DE59260B66EB60F57A /* Pods-CobraAppTest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CobraAppTest.release.xcconfig"; path = "Target Support Files/Pods-CobraAppTest/Pods-CobraAppTest.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -61,7 +79,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6A9164E4B0B1626D27DBA0A1 /* libPods-CobraAppTestUITests.a in Frameworks */,
+				6A9164E4B0B1626D27DBA0A1 /* BuildFile in Frameworks */,
+				392C5FC2C59B4299F5FB7D3B /* libPods-CobraAppTestUITests.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1E5B7AE42800B29F00F8BDDB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				50CC58C08AAD59C8922AC105 /* libPods-PerformanceTest.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,6 +98,7 @@
 		1E00643F27CEDF9B006FF6E9 = {
 			isa = PBXGroup;
 			children = (
+				1E5B7ADD2800B28C00F8BDDB /* PerformanceTest */,
 				1E00644A27CEDF9B006FF6E9 /* CobraAppTest */,
 				1E00646B27CEDF9C006FF6E9 /* CobraAppTestUITests */,
 				1E00644927CEDF9B006FF6E9 /* Products */,
@@ -84,6 +112,7 @@
 			children = (
 				1E00644827CEDF9B006FF6E9 /* CobraAppTest.app */,
 				1E00646827CEDF9C006FF6E9 /* CobraAppTestUITests.xctest */,
+				1E5B7AEC2800B29F00F8BDDB /* PerformanceTest.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -111,11 +140,22 @@
 			path = CobraAppTestUITests;
 			sourceTree = "<group>";
 		};
+		1E5B7ADD2800B28C00F8BDDB /* PerformanceTest */ = {
+			isa = PBXGroup;
+			children = (
+				1E5B7AED2800B2CF00F8BDDB /* PerformanceTest.swift */,
+				1E5B7AEF2800B2E300F8BDDB /* Info.plist */,
+				1E5B7AF02800B4A600F8BDDB /* sample.wav */,
+			);
+			path = PerformanceTest;
+			sourceTree = "<group>";
+		};
 		D7256B2AE1CB33B60277231D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				8FFAEF3E81D2B0623D6C31C0 /* libPods-CobraAppTest.a */,
-				EE8143D31713B4E8FB671A69 /* libPods-CobraAppTestUITests.a */,
+				C6572CB2CB09D2183B5C6617 /* libPods-PerformanceTest.a */,
+				B340446EF573C72BC1349E8E /* libPods-CobraAppTestUITests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -127,6 +167,8 @@
 				FBAD61DE59260B66EB60F57A /* Pods-CobraAppTest.release.xcconfig */,
 				7F000751C879143D6999BEC4 /* Pods-CobraAppTestUITests.debug.xcconfig */,
 				239D8F7DFD3E66DB68DD74C7 /* Pods-CobraAppTestUITests.release.xcconfig */,
+				0402F655F9B10F18A7CE7EE2 /* Pods-PerformanceTest.debug.xcconfig */,
+				B9DD6D6C983DB5CCF60FA7F1 /* Pods-PerformanceTest.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -173,6 +215,26 @@
 			productReference = 1E00646827CEDF9C006FF6E9 /* CobraAppTestUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		1E5B7ADE2800B29F00F8BDDB /* PerformanceTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 1E5B7AE92800B29F00F8BDDB /* Build configuration list for PBXNativeTarget "PerformanceTest" */;
+			buildPhases = (
+				1E5B7AE12800B29F00F8BDDB /* [CP] Check Pods Manifest.lock */,
+				1E5B7AE22800B29F00F8BDDB /* Sources */,
+				1E5B7AE42800B29F00F8BDDB /* Frameworks */,
+				1E5B7AE62800B29F00F8BDDB /* Resources */,
+				1E5B7AE82800B29F00F8BDDB /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				1E5B7ADF2800B29F00F8BDDB /* PBXTargetDependency */,
+			);
+			name = PerformanceTest;
+			productName = CobraAppTestUITests;
+			productReference = 1E5B7AEC2800B29F00F8BDDB /* PerformanceTest.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -188,6 +250,10 @@
 					};
 					1E00646727CEDF9C006FF6E9 = {
 						CreatedOnToolsVersion = 13.2.1;
+						TestTargetID = 1E00644727CEDF9B006FF6E9;
+					};
+					1E5B7ADE2800B29F00F8BDDB = {
+						LastSwiftMigration = 1320;
 						TestTargetID = 1E00644727CEDF9B006FF6E9;
 					};
 				};
@@ -207,6 +273,7 @@
 			targets = (
 				1E00644727CEDF9B006FF6E9 /* CobraAppTest */,
 				1E00646727CEDF9C006FF6E9 /* CobraAppTestUITests */,
+				1E5B7ADE2800B29F00F8BDDB /* PerformanceTest */,
 			);
 		};
 /* End PBXProject section */
@@ -227,6 +294,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				1E00647D27CEE658006FF6E9 /* sample.wav in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		1E5B7AE62800B29F00F8BDDB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1E5B7AF12800B4A600F8BDDB /* sample.wav in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -253,6 +328,45 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		1E5B7AE12800B29F00F8BDDB /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-PerformanceTest-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		1E5B7AE82800B29F00F8BDDB /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PerformanceTest/Pods-PerformanceTest-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-PerformanceTest/Pods-PerformanceTest-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PerformanceTest/Pods-PerformanceTest-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		29E6F72AA55D35729B883608 /* [CP] Embed Pods Frameworks */ = {
@@ -331,6 +445,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		1E5B7AE22800B29F00F8BDDB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1E5B7AEE2800B2CF00F8BDDB /* PerformanceTest.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -338,6 +460,11 @@
 			isa = PBXTargetDependency;
 			target = 1E00644727CEDF9B006FF6E9 /* CobraAppTest */;
 			targetProxy = 1E00646927CEDF9C006FF6E9 /* PBXContainerItemProxy */;
+		};
+		1E5B7ADF2800B29F00F8BDDB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 1E00644727CEDF9B006FF6E9 /* CobraAppTest */;
+			targetProxy = 1E5B7AE02800B29F00F8BDDB /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -579,6 +706,55 @@
 			};
 			name = Release;
 		};
+		1E5B7AEA2800B29F00F8BDDB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 0402F655F9B10F18A7CE7EE2 /* Pods-PerformanceTest.debug.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 65723695GD;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ai.picovoice.CobraAppTestUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = CobraAppTest;
+			};
+			name = Debug;
+		};
+		1E5B7AEB2800B29F00F8BDDB /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = B9DD6D6C983DB5CCF60FA7F1 /* Pods-PerformanceTest.release.xcconfig */;
+			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 65723695GD;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = ai.picovoice.CobraAppTestUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = CobraAppTest;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -605,6 +781,15 @@
 			buildConfigurations = (
 				1E00647927CEDF9C006FF6E9 /* Debug */,
 				1E00647A27CEDF9C006FF6E9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		1E5B7AE92800B29F00F8BDDB /* Build configuration list for PBXNativeTarget "PerformanceTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				1E5B7AEA2800B29F00F8BDDB /* Debug */,
+				1E5B7AEB2800B29F00F8BDDB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -1,19 +1,17 @@
-name: iOS AppCenter Tests
+name: iOS Performance
 
 on:
   workflow_dispatch:
   push:
     branches: [ main ]
     paths: 
-      - 'binding/ios/CobraAppTest/Podfile.lock'
-      - '.github/workflows/ios-appcenter.yml'
-
+      - 'lib/ios/**'
+      - '.github/workflows/ios-perf.yml'
   pull_request:
     branches: [ main ]
     paths: 
-      - 'binding/ios/CobraAppTest/Podfile.lock'
-      - '.github/workflows/ios-appcenter.yml'
-
+      - 'lib/ios/**'
+      - '.github/workflows/ios-perf.yml'
       
 defaults:
   run:
@@ -23,6 +21,15 @@ jobs:
   build:
     name: Run iOS Tests on AppCenter
     runs-on: macos-latest
+
+    strategy:
+      matrix:
+        device: [iOS-14.5, iOS-32bit]
+        include:
+        - device: iOS-14.5
+          performanceThresholdSec: 0.001
+        - device: iOS-32bit
+          performanceThresholdSec: 0.001
 
     steps:
       - name: Checkout
@@ -43,16 +50,24 @@ jobs:
       - name: Run Cocoapods
         run: pod install
 
-      - name: Inject AccessKey
+      - name: Inject AppID
         run: sed -i '.bak' 's:{TESTING_ACCESS_KEY_HERE}:${{secrets.PV_VALID_ACCESS_KEY}}:'
-          CobraAppTestUITests/CobraAppTestUITests.swift
+          PerformanceTest/PerformanceTest.swift
+
+      - name: Inject Number of Iterations
+        run: sed -i '.bak' 's:{NUM_TEST_ITERATIONS}:100:'
+          PerformanceTest/PerformanceTest.swift
+
+      - name: Inject Performance Threshold
+        run: sed -i '.bak' 's:{PERFORMANCE_THRESHOLD_SEC}:${{ matrix.performanceThresholdSec }}:'
+          PerformanceTest/PerformanceTest.swift
 
       - name: XCode Build
         run: xcrun xcodebuild build-for-testing 
           -configuration Debug 
           -workspace CobraAppTest.xcworkspace
           -sdk iphoneos 
-          -scheme CobraAppTest
+          -scheme PerformanceTest
           -derivedDataPath ddp
           CODE_SIGNING_ALLOWED=NO
 
@@ -60,7 +75,7 @@ jobs:
         run: appcenter test run xcuitest 
           --token ${{secrets.APPCENTERAPITOKEN}}
           --app "Picovoice/Cobra-iOS"
-          --devices "Picovoice/ios-min-max" 
+          --devices "Picovoice/${{ matrix.device }}" 
           --test-series "cobra-ios" 
           --locale "en_US" 
           --build-dir ddp/Build/Products/Debug-iphoneos
