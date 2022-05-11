@@ -16,8 +16,9 @@ import { Mutex } from 'async-mutex';
 import { CobraEngine } from '@picovoice/cobra-web-core';
 import { COBRA_WASM_BASE64 } from './cobra_b64';
 
-import { 
-  aligned_alloc_type, 
+import {
+  aligned_alloc_type,
+  pv_free_type,
   buildWasm,
   arrayBufferToStringAtIndex,
   isAccessKeyValid
@@ -49,6 +50,7 @@ type CobraWasmOutput = {
   frameLength: number;
   inputBufferAddress: number;
   memory: WebAssembly.Memory;
+  pvFree: pv_free_type;
   objectAddress: number;
   pvCobraDelete: pv_cobra_delete_type;
   pvCobraProcess: pv_cobra_process_type;
@@ -66,6 +68,7 @@ export class Cobra implements CobraEngine {
   private _pvStatusToString: pv_status_to_string_type;
 
   private _wasmMemory: WebAssembly.Memory;
+  private _pvFree: pv_free_type
   private _memoryBuffer: Int16Array;
   private _memoryBufferView: DataView;
   private _processMutex: Mutex;
@@ -90,6 +93,8 @@ export class Cobra implements CobraEngine {
     this._pvStatusToString = handleWasm.pvStatusToString;
 
     this._wasmMemory = handleWasm.memory;
+    this._pvFree = handleWasm.pvFree;
+
     this._objectAddress = handleWasm.objectAddress;
     this._inputBufferAddress = handleWasm.inputBufferAddress;
     this._voiceProbabilityAddress = handleWasm.voiceProbabilityAddress;
@@ -104,6 +109,8 @@ export class Cobra implements CobraEngine {
    */
   public async release(): Promise<void> {
     await this._pvCobraDelete(this._objectAddress);
+    await this._pvFree(this._voiceProbabilityAddress);
+    await this._pvFree(this._inputBufferAddress);
   }
 
   /**
@@ -209,6 +216,7 @@ export class Cobra implements CobraEngine {
     const exports = await buildWasm(memory, COBRA_WASM_BASE64);
 
     const aligned_alloc = exports.aligned_alloc as aligned_alloc_type;
+    const pv_free = exports.pv_free as pv_free_type;
     const pv_cobra_version = exports.pv_cobra_version as pv_cobra_version_type;
     const pv_cobra_frame_length = exports.pv_cobra_frame_length as pv_cobra_frame_length_type;
     const pv_cobra_process = exports.pv_cobra_process as pv_cobra_process_type;
@@ -248,6 +256,7 @@ export class Cobra implements CobraEngine {
     memoryBufferUint8[accessKeyAddress + accessKey.length] = 0;
 
     const status = await pv_cobra_init(accessKeyAddress, objectAddressAddress);
+    await pv_free(accessKeyAddress);
     if (status !== PV_STATUS_SUCCESS) {
       throw new Error(
         `'pv_cobra_init' failed with status ${arrayBufferToStringAtIndex(
@@ -258,6 +267,7 @@ export class Cobra implements CobraEngine {
     }
     const memoryBufferView = new DataView(memory.buffer);
     const objectAddress = memoryBufferView.getInt32(objectAddressAddress, true);
+    await pv_free(objectAddressAddress);
 
     const sampleRate = await pv_sample_rate();
     const frameLength = await pv_cobra_frame_length();
@@ -279,6 +289,7 @@ export class Cobra implements CobraEngine {
       frameLength: frameLength,
       inputBufferAddress: inputBufferAddress,
       memory: memory,
+      pvFree: pv_free,
       objectAddress: objectAddress,
       pvCobraDelete: pv_cobra_delete,
       pvCobraProcess: pv_cobra_process,
