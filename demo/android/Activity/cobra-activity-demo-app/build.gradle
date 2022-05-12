@@ -17,13 +17,13 @@ if (rootProject.file("local.properties").exists()) {
 }
 
 android {
-    compileSdkVersion 31
+    compileSdkVersion defaultTargetSdkVersion
     buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "ai.picovoice.cobraactivitydemo"
         minSdkVersion 21
-        targetSdkVersion 31
+        targetSdkVersion defaultTargetSdkVersion
         versionCode 1
         versionName "1.0"
 
@@ -66,7 +66,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
     implementation 'androidx.navigation:navigation-fragment:2.3.5'
     implementation 'androidx.navigation:navigation-ui:2.3.5'
-    implementation 'ai.picovoice:cobra-android:1.1.0'
+    implementation 'ai.picovoice:cobra-android:1.1.1'
 
     // Espresso UI Testing
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
