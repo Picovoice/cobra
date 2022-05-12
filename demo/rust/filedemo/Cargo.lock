@@ -99,12 +99,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "lazy_static"
-version = "1.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e2abad23fbc42b3700f2f279844dc832adb2b2eb069b2df918f455c4e18cc646"
-
-[[package]]
 name = "libc"
 version = "0.2.98"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -150,11 +144,10 @@ dependencies = [
 
 [[package]]
 name = "pv_cobra"
-version = "1.1.1"
+version = "1.1.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a5fc38cf16fe91212f538a6bdf4169ecb3c43acbb928c99081fe2dd6447de095"
+checksum = "2d66b2a2947c0259d71e9afe3e7ba1e47f4319ef6c0c76de9981a27b7003e00b"
 dependencies = [
- "lazy_static",
  "libc",
  "libloading",
  "log",
