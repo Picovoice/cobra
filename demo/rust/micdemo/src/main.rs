@@ -13,7 +13,7 @@ use clap::{App, Arg, ArgGroup};
 use cobra::Cobra;
 use ctrlc;
 use hound;
-use pv_recorder::{Recorder, RecorderBuilder};
+use pv_recorder::RecorderBuilder;
 use std::io;
 use std::io::Write;
 
@@ -84,7 +84,10 @@ fn cobra_demo(audio_device_index: i32, access_key: &str, output_path: Option<&st
 }
 
 fn show_audio_devices() {
-    let audio_devices = Recorder::get_audio_devices();
+    let audio_devices = RecorderBuilder::new()
+        .init()
+        .expect("Failed to initialize pvrecorder")
+        .get_audio_devices();
     match audio_devices {
         Ok(audio_devices) => {
             for (idx, device) in audio_devices.iter().enumerate() {
