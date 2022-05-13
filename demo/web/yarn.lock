@@ -14,17 +14,17 @@
   resolved "https://registry.yarnpkg.com/@picovoice/cobra-web-core/-/cobra-web-core-1.1.0.tgz#01362d328f8668076d1302e79861d38a3cd50f40"
   integrity sha512-M2wfR9QhH7sLGEfNiQBuBLrvXAsXi+rg5dLzbBILTt3KyNKBJwdA8UGhPPV6Q+cH+gAA0gdFCwM/epYRNjQRBw==
 
-"@picovoice/cobra-web-worker@^1.1.2":
-  version "1.1.2"
-  resolved "https://registry.yarnpkg.com/@picovoice/cobra-web-worker/-/cobra-web-worker-1.1.2.tgz#d815fb88fad0569e071479b6497d3cab67d4ea8c"
-  integrity sha512-jtIq+tMF66oBc5aThhK4EFRoMlwGOWqPFMQEr6UjaFF23VgHs6w/Vw+hWttYJwari2hcPpFbQGK/BpBv3DMMHQ==
+"@picovoice/cobra-web-worker@^1.1.6":
+  version "1.1.6"
+  resolved "https://registry.yarnpkg.com/@picovoice/cobra-web-worker/-/cobra-web-worker-1.1.6.tgz#00b2fcf06f677001eee7c8a329cd49b835ead1da"
+  integrity sha512-i+J/auxyruM5FnggV3yS1WozhiwjWKlssAIRO4mBd5ZsLZ4lIgeg18SEf8Kt/BzkvqJ6UjiTCX3gujmZbSvJIQ==
   dependencies:
     "@picovoice/cobra-web-core" "^1.1.0"
 
-"@picovoice/web-voice-processor@^2.1.4":
-  version "2.1.4"
-  resolved "https://registry.yarnpkg.com/@picovoice/web-voice-processor/-/web-voice-processor-2.1.4.tgz#3d7ebabbaa58ec2e4195a5c9e9d7fcd8de88f8a2"
-  integrity sha512-dFdhHnHjZkooSvzhSAdnhB2YrsFxQPjqQTpcpIYnfX3U0TU/KpdBprWaXpL7ShZ3Vbgpkogh/qmpEAzXoNuNBA==
+"@picovoice/web-voice-processor@^2.2.2":
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/@picovoice/web-voice-processor/-/web-voice-processor-2.2.2.tgz#dcaa18349e2539bb33555532ea0d172b2bf6ba7a"
+  integrity sha512-66DuOQiaZX2OYgBq0+8qJ3r964ai5ebhJkv07SdJudmrSGu/1cCocjt0plMlOkLTWO8SL2J41JZraRf2lSdnDw==
   dependencies:
     "@babel/runtime" "^7.12.18"
 
