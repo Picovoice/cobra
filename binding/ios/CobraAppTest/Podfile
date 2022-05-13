@@ -2,13 +2,13 @@ source 'https://cdn.cocoapods.org/'
 platform :ios, '9.0'
 
 target 'CobraAppTest' do
-  pod 'Cobra-iOS', '~> 1.1.0'
+  pod 'Cobra-iOS', '~> 1.1.1'
 end
 
 target 'CobraAppTestUITests' do
-  pod 'Cobra-iOS', '~> 1.1.0'
+  pod 'Cobra-iOS', '~> 1.1.1'
 end
 
 target 'PerformanceTest' do
-  pod 'Cobra-iOS', '~> 1.1.0'
+  pod 'Cobra-iOS', '~> 1.1.1'
 end
