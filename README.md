@@ -24,12 +24,14 @@ Cobra is a highly-accurate and lightweight voice activity detection (VAD) engine
     - [Android](#android-demos)
     - [iOS](#ios-demos)
     - [Web](#web-demos)
+    - [Rust](#rust-demos)
   - [SDKs](#sdks)
     - [Python](#python)
     - [C](#c)
     - [Android](#android)
     - [iOS](#ios)
     - [Web](#web)
+    - [Rust](#rust)
   - [Releases](#releases)
 
 ## Demos
@@ -122,6 +124,17 @@ npm run start
 ```
 
 Open `http://localhost:5000` in your browser to try the demo.
+
+### Rust Demos
+
+From [demo/rust/micdemo](/demo/rust/micdemo) build and run the demo:
+
+```console
+cargo run --release -- --access_key ${ACCESS_KEY}
+```
+
+For more information about Rust demos go to [demo/rust](/demo/rust).
+
 
 ## SDKs
 
@@ -356,6 +369,27 @@ async function startCobra() {
 
 startCobra()
 ```
+
+### Rust
+
+Create an instance of the engine and detect voice activity:
+
+```rust
+use cobra::Cobra;
+
+let cobra = Cobra::new("${ACCESS_KEY}");
+
+fn next_audio_frame() -> Vec<i16> {
+    // get audio frame
+}
+
+loop {
+    if let Ok(voice_probability) = cobra.process(&next_audio_frame()) {
+      // ...
+    }
+}
+```
+
 
 ## Releases
 
