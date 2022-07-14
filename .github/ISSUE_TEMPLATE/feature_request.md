@@ -1,6 +1,6 @@
 ---
 name: Feature request
-about: Porcupine suggestion
+about: Cobra suggestion
 title: ''
 labels: enhancement
 assignees: ''
