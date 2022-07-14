@@ -1,7 +1,7 @@
 ---
 name: Documentation
-about: Issues around documentation of Cobra
-title: Cobra Documentation Issue
+about: Issues around documentation of Porcupine
+title: Porcupine Documentation Issue
 labels: documentation
 assignees: ''
 
