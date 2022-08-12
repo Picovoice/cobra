@@ -41,7 +41,7 @@ class SimpleHttpServer(threading.Thread):
         print(f'stopping server on port {self._server.server_port}')
 
 
-def run_perf_test_selenium(url, access_key, absolute_audio_file, init_performance_threshold_sec, proc_performance_threshold_sec):
+def run_perf_test_selenium(url, access_key, absolute_audio_file, proc_performance_threshold_sec):
     desired_capabilities = DesiredCapabilities.CHROME
     desired_capabilities['goog:loggingPrefs'] = {'browser': 'ALL'}
     opts = Options()
@@ -61,21 +61,16 @@ def run_perf_test_selenium(url, access_key, absolute_audio_file, init_performanc
     test_result = 1
     test_message = "Tests failed"
 
-    init_test = False
     proc_test = False
 
     for entry in driver.get_log('browser'):
         print(entry['message'])
-        if 'Init Performance' in entry['message']:
-            time = float(entry['message'].replace('"', '').split()[-1])
-            if time < init_performance_threshold_sec:
-                init_test = True
         if 'Process Performance' in entry['message']:
             time = float(entry['message'].replace('"', '').split()[-1])
             if time < proc_performance_threshold_sec:
                 proc_test = True
 
-    if init_test and proc_test:
+    if proc_test:
         test_message = "Tests passed"
         test_result = 0
 
@@ -92,10 +87,6 @@ def main():
         required=True)
     parser.add_argument(
         '--audio_file',
-        required=True)
-    parser.add_argument(
-        '--init_performance_threshold_sec',
-        type=float,
         required=True)
     parser.add_argument(
         '--proc_performance_threshold_sec',
@@ -117,7 +108,6 @@ def main():
             test_url,
             args.access_key,
             absolute_audio_file,
-            args.init_performance_threshold_sec,
             args.proc_performance_threshold_sec)
     except Exception as e:
         print(e)
