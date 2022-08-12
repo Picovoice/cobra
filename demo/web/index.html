@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <script src="node_modules/@picovoice/cobra-web-worker/dist/iife/index.js"></script>
+    <script src="node_modules/@picovoice/cobra-web/dist/iife/index.js"></script>
     <script src="node_modules/@picovoice/web-voice-processor/dist/iife/index.js"></script>
     <script type="application/javascript">
       function writeMessage(message) {
@@ -17,7 +17,7 @@
         document.getElementById("voiceProbabilityRange").value = value * 100;
       }
 
-      function cobraCallback(voiceProbability) {
+      function voiceProbabilityCallback(voiceProbability) {
         const timestamp = new Date();
         writeVoiceProbability(
           `Voice detected with probability of ${voiceProbability.toFixed(2)} at ${timestamp.toString()}`,
@@ -27,11 +27,11 @@
 
       async function startCobra(accessKey) {
         writeMessage("Cobra is loading. Please wait...");
-        let engineHandle = null;
+        let cobra = null;
         try {
-          engineHandle = await CobraWebWorker.CobraWorkerFactory.create(
+          cobra = await CobraWeb.CobraWorker.create(
             accessKey,
-            cobraCallback
+            voiceProbabilityCallback
           );
         } catch (error) {
           writeMessage(error);
@@ -45,7 +45,8 @@
 
         try {
           let webVp = await window.WebVoiceProcessor.WebVoiceProcessor.init({
-            engines: [engineHandle],
+            engines: [cobra.worker],
+            start: true
           });
           writeMessage("WebVoiceProcessor ready and listening!");
         } catch (e) {
