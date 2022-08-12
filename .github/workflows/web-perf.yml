@@ -56,5 +56,5 @@ jobs:
       run: yarn build
 
     - name: Test
-      run: python test/perf_test.py --access_key ${{secrets.PV_VALID_ACCESS_KEY}} --audio_file ../../resources/audio_samples/test.wav
+      run: python test/perf_test.py --access_key ${{secrets.PV_VALID_ACCESS_KEY}} --audio_file ../../res/audio/sample.wav
         --proc_performance_threshold_sec ${{ matrix.procPerformanceThresholdSec }}
