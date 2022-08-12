@@ -9,6 +9,11 @@
   specific language governing permissions and limitations under the License.
 */
 
+export type CobraOptions = {
+  /** @defaultValue undefined */
+  processErrorCallback?: (error: string) => void;
+};
+
 export type CobraWorkerInitRequest = {
   command: 'init';
   accessKey: string;

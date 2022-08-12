@@ -12,6 +12,7 @@
 import PvWorker from 'web-worker:./cobra_worker_handler.ts';
 
 import {
+  CobraOptions,
   CobraWorkerInitResponse,
   CobraWorkerProcessResponse,
   CobraWorkerReleaseResponse,
@@ -93,16 +94,18 @@ export class CobraWorker {
    *
    * @param accessKey AccessKey obtained from Picovoice Console (https://console.picovoice.ai/)
    * @param voiceProbabilityCallback User-defined callback to run after receiving voice probability result.
-   * @param processErrorCallback User-defined callback invoked if any error happens.
+   * @param options Optional configuration arguments.
+   * @param options.processErrorCallback User-defined callback invoked if any error happens while processing audio.
    *
    * @returns An instance of CobraWorker.
    */
   private static async create(
     accessKey: string,
     voiceProbabilityCallback: (voiceProbability: number) => void,
-    processErrorCallback?: (error: string) => void
+    options: CobraOptions = {}
   ): Promise<CobraWorker> {
     const worker = new PvWorker();
+    const { processErrorCallback } = options;
     const returnPromise: Promise<CobraWorker> = new Promise(
       (resolve, reject) => {
         // @ts-ignore - block from GC

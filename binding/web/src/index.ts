@@ -2,6 +2,7 @@ import { Cobra } from './cobra';
 import { CobraWorker } from './cobra_worker';
 
 import {
+  CobraOptions,
   CobraWorkerInitRequest,
   CobraWorkerProcessRequest,
   CobraWorkerReleaseRequest,
@@ -23,6 +24,7 @@ CobraWorker.setWasmSimd(cobraWasmSimd);
 
 export {
   Cobra,
+  CobraOptions,
   CobraWorker,
   CobraWorkerInitRequest,
   CobraWorkerProcessRequest,

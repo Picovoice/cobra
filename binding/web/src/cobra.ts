@@ -193,10 +193,6 @@ export class Cobra {
    * @return Probability of voice activity. It is a floating-point number within [0, 1].
    */
   public async process(pcm: Int16Array): Promise<number> {
-    if (!(pcm instanceof Int16Array)) {
-      throw new Error("The argument 'pcm' must be provided as an Int16Array");
-    }
-
     return new Promise<number>((resolve, reject) => {
       this._processMutex
         .runExclusive(async () => {

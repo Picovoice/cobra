@@ -68,13 +68,15 @@ function voiceProbabilityCallback(voiceProbability: number) {
 }
 ```
 
-Define the optional `processErrorCallback` function if you would like
+Add a `processErrorCallback` function to the `options` object if you would like
 to catch errors that occur while processing audio:
 
 ```typescript
 function processErrorCallback(error: string) {
   ...
 }
+
+options.processErrorCallback = processErrorCallback;
 ```
 
 Use `CobraWorker` to initialize a worker thread:
@@ -83,7 +85,7 @@ Use `CobraWorker` to initialize a worker thread:
 const cobra = await CobraWorker.create(
   ${ACCESS_KEY},
   voiceProbabilityCallback,
-  processErrorCallback  
+  options
 );
 ```
 
