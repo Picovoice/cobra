@@ -1,5 +1,5 @@
 /*
-  Copyright 2018-2021 Picovoice Inc.
+  Copyright 2022 Picovoice Inc.
 
   You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
   file accompanying this source.
@@ -13,73 +13,78 @@
 
 import { Mutex } from 'async-mutex';
 
-import { CobraEngine } from '@picovoice/cobra-web-core';
-import { COBRA_WASM_BASE64 } from './cobra_b64';
-
 import {
   aligned_alloc_type,
-  pv_free_type,
-  buildWasm,
   arrayBufferToStringAtIndex,
-  isAccessKeyValid
+  buildWasm,
+  isAccessKeyValid,
+  pv_free_type,
 } from '@picovoice/web-utils';
+
+import { simd } from 'wasm-feature-detect';
 
 /**
  * WebAssembly function types
  */
 
- type pv_cobra_init_type = (accessKey: number, object: number) => Promise<number>;
- type pv_cobra_process_type = (object: number, buffer: number, isVoiced: number) => Promise<number>;
- type pv_cobra_delete_type = (object: number) => Promise<void>;
- type pv_status_to_string_type = (status: number) => Promise<number>
- type pv_sample_rate_type = () => Promise<number>;
- type pv_cobra_frame_length_type = () => Promise<number>;
- type pv_cobra_version_type = () => Promise<number>;
+type pv_cobra_init_type = (
+  accessKey: number,
+  object: number
+) => Promise<number>;
+type pv_cobra_process_type = (
+  object: number,
+  pcm: number,
+  voiceProbability: number
+) => Promise<number>;
+type pv_cobra_delete_type = (object: number) => Promise<void>;
+type pv_status_to_string_type = (status: number) => Promise<number>;
+type pv_cobra_frame_length_type = () => Promise<number>;
+type pv_sample_rate_type = () => Promise<number>;
+type pv_cobra_version_type = () => Promise<number>;
 
 /**
- * JavaScript/WebAssembly Binding for the Picovoice Cobra voice activity detection (VAD) engine.
- *
- * It initializes the WebAssembly module and exposes an async factory method `create` for creating
- * new instances of the engine.
- *
- * The instances have JavaScript bindings that wrap the calls to the C library and
- * do some rudimentary type checking and parameter validation.
+ * JavaScript/WebAssembly Binding for the Picovoice Cobra VAD engine.
  */
 
 type CobraWasmOutput = {
-  frameLength: number;
-  inputBufferAddress: number;
+  aligned_alloc: aligned_alloc_type;
   memory: WebAssembly.Memory;
   pvFree: pv_free_type;
   objectAddress: number;
   pvCobraDelete: pv_cobra_delete_type;
   pvCobraProcess: pv_cobra_process_type;
   pvStatusToString: pv_status_to_string_type;
+  frameLength: number;
   sampleRate: number;
   version: string;
+  inputBufferAddress: number;
   voiceProbabilityAddress: number;
 };
 
 const PV_STATUS_SUCCESS = 10000;
 
-export class Cobra implements CobraEngine {
-  private _pvCobraDelete: pv_cobra_delete_type;
-  private _pvCobraProcess: pv_cobra_process_type;
-  private _pvStatusToString: pv_status_to_string_type;
+export class Cobra {
+  private readonly _pvCobraDelete: pv_cobra_delete_type;
+  private readonly _pvCobraProcess: pv_cobra_process_type;
+  private readonly _pvStatusToString: pv_status_to_string_type;
 
-  private _wasmMemory: WebAssembly.Memory;
-  private _pvFree: pv_free_type
-  private _memoryBuffer: Int16Array;
-  private _memoryBufferView: DataView;
-  private _processMutex: Mutex;
+  private _wasmMemory: WebAssembly.Memory | undefined;
+  private readonly _pvFree: pv_free_type;
+  private readonly _memoryBuffer: Int16Array;
+  private readonly _memoryBufferUint8: Uint8Array;
+  private readonly _memoryBufferView: DataView;
+  private readonly _processMutex: Mutex;
 
-  private _objectAddress: number;
-  private _inputBufferAddress: number;
-  private _voiceProbabilityAddress: number;
+  private readonly _objectAddress: number;
+  private readonly _inputBufferAddress: number;
+  private readonly _alignedAlloc: CallableFunction;
+  private readonly _voiceProbabilityAddress: number;
 
   private static _frameLength: number;
   private static _sampleRate: number;
   private static _version: string;
+  private static _wasm: string;
+  private static _wasmSimd: string;
 
   private static _cobraMutex = new Mutex();
 
@@ -94,40 +99,111 @@ export class Cobra implements CobraEngine {
 
     this._wasmMemory = handleWasm.memory;
     this._pvFree = handleWasm.pvFree;
-
     this._objectAddress = handleWasm.objectAddress;
     this._inputBufferAddress = handleWasm.inputBufferAddress;
+    this._alignedAlloc = handleWasm.aligned_alloc;
     this._voiceProbabilityAddress = handleWasm.voiceProbabilityAddress;
 
     this._memoryBuffer = new Int16Array(handleWasm.memory.buffer);
+    this._memoryBufferUint8 = new Uint8Array(handleWasm.memory.buffer);
     this._memoryBufferView = new DataView(handleWasm.memory.buffer);
     this._processMutex = new Mutex();
   }
 
   /**
-   * Releases resources acquired by WebAssembly module.
+   * Get Cobra engine version.
    */
-  public async release(): Promise<void> {
-    await this._pvCobraDelete(this._objectAddress);
-    await this._pvFree(this._voiceProbabilityAddress);
-    await this._pvFree(this._inputBufferAddress);
+  get version(): string {
+    return Cobra._version;
   }
 
   /**
-   * Processes a frame of audio. The required sample rate can be retrieved from '.sampleRate' and the length
-   * of frame (number of audio samples per frame) can be retrieved from '.frameLength'. The audio needs to be
-   * 16-bit linearly-encoded. Furthermore, the engine operates on single-channel audio.
+   * Get frame length.
+   */
+  get frameLength(): number {
+    return Cobra._frameLength;
+  }
+
+  /**
+   * Get sample rate.
+   */
+  get sampleRate(): number {
+    return Cobra._sampleRate;
+  }
+
+  /**
+   * Set base64 wasm file.
+   * @param wasm Base64'd wasm file to use to initialize wasm.
+   */
+  public static setWasm(wasm: string): void {
+    if (this._wasm === undefined) {
+      this._wasm = wasm;
+    }
+  }
+
+  /**
+   * Set base64 wasm file with SIMD feature.
+   * @param wasmSimd Base64'd wasm file to use to initialize wasm.
+   */
+  public static setWasmSimd(wasmSimd: string): void {
+    if (this._wasmSimd === undefined) {
+      this._wasmSimd = wasmSimd;
+    }
+  }
+
+  /**
+   * Creates an instance of the Picovoice Cobra VAD engine.
+   * Behind the scenes, it requires the WebAssembly code to load and initialize before
+   * it can create an instance.
    *
-   * @param pcm - A frame of audio with properties described above.
+   * @param accessKey AccessKey obtained from Picovoice Console (https://console.picovoice.ai/)
+   *
+   * @returns An instance of the Cobra engine.
+   */
+  public static async create(accessKey: string): Promise<Cobra> {
+    if (!isAccessKeyValid(accessKey)) {
+      throw new Error('Invalid AccessKey');
+    }
+
+    return new Promise<Cobra>((resolve, reject) => {
+      Cobra._cobraMutex
+        .runExclusive(async () => {
+          const isSimd = await simd();
+          const wasmOutput = await Cobra.initWasm(
+            accessKey.trim(),
+            isSimd ? this._wasmSimd : this._wasm
+          );
+          return new Cobra(wasmOutput);
+        })
+        .then((result: Cobra) => {
+          resolve(result);
+        })
+        .catch((error: any) => {
+          reject(error);
+        });
+    });
+  }
+
+  /**
+   * Processes a frame of audio. The number of samples per frame can be attained by calling
+   * '.frameLength'. The incoming audio needs to have a sample rate equal to '.sampleRate' and be 16-bit
+   * linearly-encoded. Cobra operates on single-channel audio
+   *
+   * @param pcm A frame of audio with properties described above.
    * @return Probability of voice activity. It is a floating-point number within [0, 1].
    */
   public async process(pcm: Int16Array): Promise<number> {
     if (!(pcm instanceof Int16Array)) {
       throw new Error("The argument 'pcm' must be provided as an Int16Array");
     }
-    const returnPromise = new Promise<number>((resolve, reject) => {
+
+    return new Promise<number>((resolve, reject) => {
       this._processMutex
         .runExclusive(async () => {
+          if (this._wasmMemory === undefined) {
+            throw new Error('Attempted to call Cobra process after release.');
+          }
+
           this._memoryBuffer.set(
             pcm,
             this._inputBufferAddress / Int16Array.BYTES_PER_ELEMENT
@@ -147,12 +223,11 @@ export class Cobra implements CobraEngine {
               )}`
             );
           }
-          const voiceProbability = this._memoryBufferView.getFloat32(
+
+          return this._memoryBufferView.getFloat32(
             this._voiceProbabilityAddress,
             true
           );
-
-          return voiceProbability;
         })
         .then((result: number) => {
           resolve(result);
@@ -161,68 +236,40 @@ export class Cobra implements CobraEngine {
           reject(error);
         });
     });
-    return returnPromise;
-  }
-
-  get version(): string {
-    return Cobra._version;
-  }
-
-  get sampleRate(): number {
-    return Cobra._sampleRate;
-  }
-
-  get frameLength(): number {
-    return Cobra._frameLength;
   }
 
   /**
-   * Creates an instance of the the Picovoice Cobra voice activity detection (VAD) engine.
-   * Behind the scenes, it requires the WebAssembly code to load and initialize before
-   * it can create an instance.
-   *
-   * @param accessKey - AccessKey
-   * generated by Picovoice Console
-   *
-   * @returns An instance of the Cobra engine.
+   * Releases resources acquired by WebAssembly module.
    */
-  public static async create(accessKey: string): Promise<Cobra> {
-    if (!isAccessKeyValid(accessKey)) {
-      throw new Error('Invalid AccessKey');
-    }
-    const returnPromise = new Promise<Cobra>((resolve, reject) => {
-      Cobra._cobraMutex
-        .runExclusive(async () => {
-          const wasmOutput = await Cobra.initWasm(accessKey.trim());
-          return new Cobra(wasmOutput);
-        })
-        .then((result: Cobra) => {
-          resolve(result);
-        })
-        .catch((error: any) => {
-          reject(error);
-        });
-    });
-    return returnPromise;
+  public async release(): Promise<void> {
+    await this._pvCobraDelete(this._objectAddress);
+    await this._pvFree(this._inputBufferAddress);
+    delete this._wasmMemory;
+    this._wasmMemory = undefined;
   }
 
-  private static async initWasm(accessKey: string): Promise<any> {
+  private static async initWasm(
+    accessKey: string,
+    wasmBase64: string
+  ): Promise<any> {
     // A WebAssembly page has a constant size of 64KiB. -> 1MiB ~= 16 pages
     // minimum memory requirements for init: 3 pages
     const memory = new WebAssembly.Memory({ initial: 16, maximum: 64 });
 
     const memoryBufferUint8 = new Uint8Array(memory.buffer);
 
-    const exports = await buildWasm(memory, COBRA_WASM_BASE64);
+    const exports = await buildWasm(memory, wasmBase64);
 
     const aligned_alloc = exports.aligned_alloc as aligned_alloc_type;
     const pv_free = exports.pv_free as pv_free_type;
     const pv_cobra_version = exports.pv_cobra_version as pv_cobra_version_type;
-    const pv_cobra_frame_length = exports.pv_cobra_frame_length as pv_cobra_frame_length_type;
     const pv_cobra_process = exports.pv_cobra_process as pv_cobra_process_type;
     const pv_cobra_delete = exports.pv_cobra_delete as pv_cobra_delete_type;
     const pv_cobra_init = exports.pv_cobra_init as pv_cobra_init_type;
-    const pv_status_to_string = exports.pv_status_to_string as pv_status_to_string_type;
+    const pv_status_to_string =
+      exports.pv_status_to_string as pv_status_to_string_type;
+    const pv_cobra_frame_length =
+      exports.pv_cobra_frame_length as pv_cobra_frame_length_type;
     const pv_sample_rate = exports.pv_sample_rate as pv_sample_rate_type;
 
     const voiceProbabilityAddress = await aligned_alloc(
@@ -256,7 +303,6 @@ export class Cobra implements CobraEngine {
     memoryBufferUint8[accessKeyAddress + accessKey.length] = 0;
 
     const status = await pv_cobra_init(accessKeyAddress, objectAddressAddress);
-    await pv_free(accessKeyAddress);
     if (status !== PV_STATUS_SUCCESS) {
       throw new Error(
         `'pv_cobra_init' failed with status ${arrayBufferToStringAtIndex(
@@ -267,10 +313,9 @@ export class Cobra implements CobraEngine {
     }
     const memoryBufferView = new DataView(memory.buffer);
     const objectAddress = memoryBufferView.getInt32(objectAddressAddress, true);
-    await pv_free(objectAddressAddress);
 
-    const sampleRate = await pv_sample_rate();
     const frameLength = await pv_cobra_frame_length();
+    const sampleRate = await pv_sample_rate();
     const versionAddress = await pv_cobra_version();
     const version = arrayBufferToStringAtIndex(
       memoryBufferUint8,
@@ -286,19 +331,19 @@ export class Cobra implements CobraEngine {
     }
 
     return {
-      frameLength: frameLength,
-      inputBufferAddress: inputBufferAddress,
+      malloc: exports.malloc,
+      aligned_alloc,
       memory: memory,
       pvFree: pv_free,
       objectAddress: objectAddress,
       pvCobraDelete: pv_cobra_delete,
       pvCobraProcess: pv_cobra_process,
       pvStatusToString: pv_status_to_string,
+      frameLength: frameLength,
       sampleRate: sampleRate,
       version: version,
+      inputBufferAddress: inputBufferAddress,
       voiceProbabilityAddress: voiceProbabilityAddress,
     };
   }
 }
-
-export default Cobra;

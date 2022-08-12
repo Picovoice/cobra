@@ -1,4 +1,3 @@
 node_modules
-cobra-web-*
-*.log
-template/src/cobra_b64.ts
+dist
+lib/pv_cobra*.wasm

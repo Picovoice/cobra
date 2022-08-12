@@ -77,17 +77,16 @@
       let handle = null;
       try {
         writeMessage("Cobra is loading. Please wait...");
-        handle = await CobraWebFactory.Cobra.create(accessKey);
+        handle = await CobraWeb.Cobra.create(accessKey);
         writeMessage("Cobra worker ready!");
 
         let frameLength = handle.frameLength;
-        let isPassed = true
         let voiceProbability = []
         for (let i = 0; i < (pcm.byteLength / pcm.BYTES_PER_ELEMENT); i += frameLength) {
           const result = await handle.process(pcm.slice(i, i + frameLength));
           voiceProbability.push(result);
         }
-        labels = new Array(voiceProbability.length).fill(0);
+        let labels = new Array(voiceProbability.length).fill(0);
         for (let i = 10; i < 28; i++) {
           labels[i] = 1;
         }
