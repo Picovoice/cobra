@@ -327,7 +327,6 @@ export class Cobra {
     }
 
     return {
-      malloc: exports.malloc,
       aligned_alloc,
       memory: memory,
       pvFree: pv_free,
