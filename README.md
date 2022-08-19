@@ -270,105 +270,47 @@ Finally, when done be sure to explicitly release the resources using `handle.del
 
 ### Web
 
-Cobra is available on modern web browsers (i.e., not Internet Explorer) via [WebAssembly](https://webassembly.org/). Cobra is provided pre-packaged as a [Web Worker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers) to allow it to perform processing off the main thread.
-
-The Cobra package [@picovoice/cobra-web-worker](https://www.npmjs.com/package/@picovoice/cobra-web-worker) can be used with the [@picovoice/web-voice-processor](https://www.npmjs.com/package/@picovoice/web-voice-processor). Microphone audio is handled via the [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API) and is abstracted by the WebVoiceProcessor, which also handles down-sampling to the correct format.
-
-#### Vanilla JavaScript and HTML (CDN Script Tag)
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <script src="https://unpkg.com/@picovoice/cobra-web-worker/dist/iife/index.js"></script>
-    <script src="https://unpkg.com/@picovoice/web-voice-processor/dist/iife/index.js"></script>
-    <script type="application/javascript">
-      function cobraCallback(voiceProbability) {
-        const threshold = 0.8;
-        if voiceProbability >= threshold {
-          const timestamp = new Date();
-          console.log("Voice detected with probability of " +
-            voiceProbability.toFixed(2) +
-            " at " +
-            timestamp.toString()
-          );
-        }
-      }
-
-      async function startCobra() {
-        const accessKey = // AccessKey string provided by Picovoice Console (picovoice.ai/console/)
-        const cobraWorker = await CobraWorkerFactory.create(
-          accessKey,
-          cobraCallback
-        );
-
-        console.log("Cobra worker ready!");
-
-        console.log("WebVoiceProcessor initializing. Microphone permissions requested ...");
-
-        try {
-          let webVp = await window.WebVoiceProcessor.WebVoiceProcessor.init({
-            engines: [cobraWorker],
-          });
-          console.log("WebVoiceProcessor ready and listening!");
-        } catch (e) {
-          console.log("WebVoiceProcessor failed to initialize: " + e);
-        }
-      }
-
-      document.addEventListener("DOMContentLoaded", function () {
-        startCobra();
-      });
-    </script>
-  </head>
-  <body></body>
-</html>
-```
-
-#### Vanilla JavaScript and HTML (ES Modules)
+Install the web SDK using yarn:
 
 ```console
-yarn add @picovoice/cobra-web-worker @picovoice/web-voice-processor
+yarn add @picovoice/cobra-web
 ```
 
-(or)
+or using npm:
 
 ```console
-npm install @picovoice/cobra-web-worker @picovoice/web-voice-processor
+npm install --save @picovoice/cobra-web
 ```
 
-```javascript
-import { WebVoiceProcessor } from "@picovoice/web-voice-processor"
-import { CobraWorkerFactory } from "@picovoice/cobra-web-worker";
+Create an instance of the engine using `CobraWorker` and run the VAD on an audio input stream:
 
-function cobraCallback(voiceProbability) {
-  const threshold = 0.8;
-  if voiceProbability >= threshold {
-    const timestamp = new Date();
-    console.log("Voice detected with probability of " +
-      voiceProbability.toFixed(2) +
-      " at " +
-      timestamp.toString()
-    );
-  }
+```typescript
+import { CobraWorker } from "@picovoice/cobra-web";
+
+function voiceProbabilityCallback(voiceProbability: number) {
+  ... // use voice probability figure
 }
 
-async function startCobra() {
-  const accessKey = //AccessKey string provided by Picovoice Console (picovoice.ai/console/)
-  const cobraWorker = await CobraWorkerFactory.create(
-      accessKey,
-      cobraCallback
-  );
-
-  const webVp =
-      await WebVoiceProcessor.init({
-        engines: [cobraWorker],
-        start: true,
-      });
+function getAudioData(): Int16Array {
+  ... // function to get audio data
+  return new Int16Array();
 }
 
-startCobra()
+const cobra = await CobraWorker.create(
+  "${ACCESS_KEY}", 
+  voiceProbabilityCallback
+);
+
+for (; ;) {
+  cobra.process(getAudioData());
+  // break on some condition
+}
 ```
+
+Replace `${ACCESS_KEY}` with yours obtained from [Picovoice Console]((https://console.picovoice.ai/)). 
+
+When done, release the resources allocated to Cobra using `cobra.release()`.
+
 
 ### Rust
 

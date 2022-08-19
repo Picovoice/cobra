@@ -51,13 +51,13 @@ def run_unit_test_selenium(url, access_key, audio_file_absolute_path):
     driver.get(url)
     assert "unit test" in driver.title
 
-    wait = WebDriverWait(driver, 10)
+    wait = WebDriverWait(driver, 60)
 
-    driver.find_element_by_id("audioFile").send_keys(audio_file_absolute_path)
+    driver.find_element(By.ID, "audioFile").send_keys(audio_file_absolute_path)
     wait.until(EC.visibility_of_element_located((By.ID, "audioLoaded")))
 
-    driver.find_element_by_id("accessKey").send_keys(access_key)
-    driver.find_element_by_id("submit").click()
+    driver.find_element(By.ID, "accessKey").send_keys(access_key)
+    driver.find_element(By.ID, "submit").click()
     wait.until(EC.visibility_of_element_located((By.ID, "testComplete")))
 
     test_result = 1
@@ -86,8 +86,8 @@ def main():
     args = parser.parse_args()
 
     audio_file_absolute_path = os.path.abspath(args.audio_file)
-    simple_server = SimpleHttpServer(port=4005, path=os.path.join(os.path.dirname(__file__), '..', '..'))
-    test_url = f'{simple_server.base_url}/cobra-web-factory/test/index.html'
+    simple_server = SimpleHttpServer(port=4005, path=os.path.join(os.path.dirname(__file__), '..'))
+    test_url = f'{simple_server.base_url}/test/index.html'
     simple_server.start()
     time.sleep(4)
 

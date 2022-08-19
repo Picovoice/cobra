@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>unit test - CobraWebFactory</title>
+  <title>unit test - CobraWeb</title>
   <script src="../dist/iife/index.js"></script>
   <script type="application/javascript">
     let pcm = null;
@@ -62,6 +62,41 @@
       }
     }
 
+    const lossFunc = (a, b) => -a.map((x, i) => a[i] * Math.log(b[i]) + (1 - a[i]) * Math.log(1 - b[i])).reduce((m, n) => m + n) / a.length;
+
+    let results = [];
+    let callbackCount = 0;
+    function voiceProbabilityCallback(voiceProbability) {
+      results.push(voiceProbability);
+      callbackCount += 1;
+    }
+
+    async function engineProcess(engineInstance, pcm) {
+      results = [];
+      callbackCount = 0;
+
+      let totalCount = 0;
+      let frameLength = engineInstance.frameLength;
+      for (let i = 0; i < (pcm.byteLength / pcm.BYTES_PER_ELEMENT); i += frameLength) {
+        engineInstance.process(pcm.slice(i, i + frameLength));
+        totalCount += 1;
+      }
+
+      return new Promise(resolve => {
+        const interval = setInterval(() => {
+          if (callbackCount >= (totalCount)) {
+            clearInterval(interval);
+            let labels = new Array(results.length).fill(0);
+            for (let i = 10; i < 28; i++) {
+              labels[i] = 1;
+            }
+
+            resolve(lossFunc(labels, results));
+          }
+        }, 100);
+      });
+    }
+
     async function startTest() {
       document.getElementById("testComplete").style.display = "none";
 
@@ -74,31 +109,50 @@
         return
       }
 
-      let handle = null;
+      let cobra = null;
       try {
-        writeMessage("Cobra is loading. Please wait...");
-        handle = await CobraWebFactory.Cobra.create(accessKey);
-        writeMessage("Cobra worker ready!");
+        writeMessage("Test Cobra");
+        cobra = await CobraWeb.Cobra.create(accessKey, voiceProbabilityCallback);
+        let vadErrorValue = await engineProcess(cobra, pcm);
+        cobra.release();
+        assertLess(vadErrorValue, 0.1, `Received the error value of ${vadErrorValue}`)
+        writeMessage("Test Cobra... done!");
 
-        let frameLength = handle.frameLength;
-        let isPassed = true
-        let voiceProbability = []
-        for (let i = 0; i < (pcm.byteLength / pcm.BYTES_PER_ELEMENT); i += frameLength) {
-          const result = await handle.process(pcm.slice(i, i + frameLength));
-          voiceProbability.push(result);
-        }
-        labels = new Array(voiceProbability.length).fill(0);
-        for (let i = 10; i < 28; i++) {
-          labels[i] = 1;
-        }
-
-        const lossFunc = (a, b) => -a.map((x, i) => a[i] * Math.log(b[i]) + (1 - a[i]) * Math.log(1 - b[i])).reduce((m, n) => m + n) / a.length;
-        const error = lossFunc(labels, voiceProbability)
-        assertLess(error, 0.1, `Received the error value of ${error}`)
-        writeMessage("Test passed!");
+        writeMessage("Test Cobra Worker");
+        cobra = await CobraWeb.CobraWorker.create(accessKey, voiceProbabilityCallback);
+        vadErrorValue = await engineProcess(cobra, pcm);
+        cobra.release();
+        assertLess(vadErrorValue, 0.1, `Received the error value of ${vadErrorValue}`)
+        writeMessage("Test Cobra Worker... done!");
+        writeMessage("Test passed!")
       } catch (error) {
         writeMessage(error);
         writeMessage("Test failed!");
+      } finally {
+        document.getElementById("testComplete").style.display = "block";
+      }
+    }
+
+    const numIterations = 15;
+    async function performanceTest() {
+      document.getElementById("testComplete").style.display = "none";
+
+      const accessKey = document.getElementById("accessKey").value;
+
+      let cobra = null;
+      try {
+        cobra = await CobraWeb.CobraWorker.create(accessKey, voiceProbabilityCallback);
+        writeMessage("Starting process performance test!");
+        let start = Date.now();
+        for (let i = 0; i < numIterations; i++) {
+          await engineProcess(cobra, pcm);
+        }
+        let end = Date.now();
+        writeMessage(`Process Performance: ${((end - start) / 1000) / numIterations}`);
+        cobra.release();
+      } catch (e) {
+        console.log(e)
+        writeMessage("Test failed!")
       } finally {
         document.getElementById("testComplete").style.display = "block";
       }
@@ -123,6 +177,7 @@
   </p>
 
   <input type="button" id="submit" value="Test Cobra" onclick="startTest()" />
+  <input type="button" id="perfTest" value="Test Cobra Performance" onclick="performanceTest()"/>
 
   <br>
 
