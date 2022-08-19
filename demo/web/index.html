@@ -44,10 +44,9 @@
         );
 
         try {
-          let webVp = await window.WebVoiceProcessor.WebVoiceProcessor.init({
-            engines: [cobra.worker],
-            start: true
-          });
+          let webVp = await window.WebVoiceProcessor.WebVoiceProcessor.instance();
+          webVp.subscribe(cobra);
+          await webVp.start();
           writeMessage("WebVoiceProcessor ready and listening!");
         } catch (e) {
           writeMessage("WebVoiceProcessor failed to initialize: " + e);
