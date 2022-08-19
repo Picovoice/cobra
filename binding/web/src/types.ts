@@ -19,6 +19,7 @@ export type CobraWorkerInitRequest = {
   accessKey: string;
   wasm: string;
   wasmSimd: string;
+  options: CobraOptions;
 };
 
 export type CobraWorkerProcessRequest = {

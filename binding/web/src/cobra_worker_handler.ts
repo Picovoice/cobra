@@ -15,10 +15,25 @@
 import { Cobra } from './cobra';
 import { CobraWorkerRequest } from './types';
 
+let cobra: Cobra | null = null;
+
+const voiceProbabilityCallback = (voiceProbability: number): void => {
+  self.postMessage({
+    command: 'ok',
+    voiceProbability: voiceProbability,
+  });
+};
+
+const processErrorCallback = (error: string): void => {
+  self.postMessage({
+    command: 'error',
+    message: error,
+  });
+};
+
 /**
  * Cobra worker handler.
  */
-let cobra: Cobra | null = null;
 self.onmessage = async function (
   event: MessageEvent<CobraWorkerRequest>
 ): Promise<void> {
@@ -32,9 +47,16 @@ self.onmessage = async function (
         return;
       }
       try {
+        event.data.options.processErrorCallback = processErrorCallback;
+
         Cobra.setWasm(event.data.wasm);
         Cobra.setWasmSimd(event.data.wasmSimd);
-        cobra = await Cobra.create(event.data.accessKey);
+        cobra = await Cobra.create(
+          event.data.accessKey,
+          voiceProbabilityCallback,
+          event.data.options
+        );
+
         self.postMessage({
           command: 'ok',
           version: cobra.version,
@@ -56,18 +78,8 @@ self.onmessage = async function (
         });
         return;
       }
-      try {
-        const voiceProbability = await cobra.process(event.data.inputFrame);
-        self.postMessage({
-          command: 'ok',
-          voiceProbability: voiceProbability,
-        });
-      } catch (e: any) {
-        self.postMessage({
-          command: 'error',
-          message: e.message,
-        });
-      }
+
+      await cobra.process(event.data.inputFrame);
       break;
     case 'release':
       if (cobra !== null) {

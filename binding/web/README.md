@@ -34,37 +34,15 @@ Signup or Login to [Picovoice Console](https://console.picovoice.ai/) to get you
 
 ### Usage
 
-#### Initialize in Main Thread
-
-Use `Cobra` to initialize on the main thread:
-
-```typescript
-const cobra = await Cobra.create(${ACCESS_KEY});
-```
-
-#### Process Audio in Main thread
-
-The result of `process` is a floating-point value between [0, 1] that represents the
-probability of voice being present in the given audio frame.
-
-```typescript
-function getAudioData(): Int16Array {
-  ... // function to get audio data
-  return new Int16Array();
-}
-
-const voiceProbability = await cobra.process(getAudioData());
-```
-
-#### Initialize in Worker Thread
+#### Initialization
 
 Create a `voiceProbabilityCallback` function to get voice probability results
-from the worker:
+from the engine:
 
 ```typescript
 
 function voiceProbabilityCallback(voiceProbability: number) {
-  
+
 }
 ```
 
@@ -73,13 +51,23 @@ to catch errors that occur while processing audio:
 
 ```typescript
 function processErrorCallback(error: string) {
-  ...
+
 }
 
 options.processErrorCallback = processErrorCallback;
 ```
 
-Use `CobraWorker` to initialize a worker thread:
+Use `Cobra` to initialize the engine on the main thread:
+
+```typescript
+const cobra = await Cobra.create(
+    ${ACCESS_KEY},
+    voiceProbabilityCallback,
+    options
+);
+```
+
+Use `CobraWorker` to initialize the engine on a worker thread:
 
 ```typescript
 const cobra = await CobraWorker.create(
@@ -89,10 +77,10 @@ const cobra = await CobraWorker.create(
 );
 ```
 
-#### Process Audio in Worker Thread
+#### Process Audio
 
-In a worker thread, the `process` function will send the input frames to the worker.
-The engine results are received from `voiceProbabilityCallback` as mentioned above.
+The `process` function will send the input frames to the engine.
+The engine results are received via the `voiceProbabilityCallback` that's passed in during initialization.
 
 ```typescript
 function getAudioData(): Int16Array {
@@ -101,7 +89,7 @@ function getAudioData(): Int16Array {
 }
 
 for (;;) {
-  handle.process(getAudioData());
+  cobra.process(getAudioData());
   // break on some condition
 }
 ```
@@ -114,7 +102,7 @@ Clean up used resources by `Cobra` or `CobraWorker`:
 await cobra.release();
 ```
 
-#### Terminate
+#### Terminate (Worker only)
 
 Terminate `CobraWorker` instance:
 

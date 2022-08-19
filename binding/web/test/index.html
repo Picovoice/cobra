@@ -64,31 +64,16 @@
 
     const lossFunc = (a, b) => -a.map((x, i) => a[i] * Math.log(b[i]) + (1 - a[i]) * Math.log(1 - b[i])).reduce((m, n) => m + n) / a.length;
 
-    async function processMain(engineInstance, pcm) {
-      let frameLength = engineInstance.frameLength;
-      let engineResults = []
-      for (let i = 0; i < (pcm.byteLength / pcm.BYTES_PER_ELEMENT); i += frameLength) {
-        const result = await engineInstance.process(pcm.slice(i, i + frameLength));
-        engineResults.push(result);
-      }
-      let labels = new Array(engineResults.length).fill(0);
-      for (let i = 10; i < 28; i++) {
-        labels[i] = 1;
-      }
-
-      return lossFunc(labels, engineResults)
-    }
-
-    let workerResults = [];
-    let workerCbCount = 0;
+    let results = [];
+    let callbackCount = 0;
     function voiceProbabilityCallback(voiceProbability) {
-      workerResults.push(voiceProbability);
-      workerCbCount += 1;
+      results.push(voiceProbability);
+      callbackCount += 1;
     }
 
-    async function processWorker(engineInstance, pcm) {
-      workerResults = [];
-      workerCbCount = 0;
+    async function engineProcess(engineInstance, pcm) {
+      results = [];
+      callbackCount = 0;
 
       let totalCount = 0;
       let frameLength = engineInstance.frameLength;
@@ -99,14 +84,14 @@
 
       return new Promise(resolve => {
         const interval = setInterval(() => {
-          if (workerCbCount >= (totalCount)) {
+          if (callbackCount >= (totalCount)) {
             clearInterval(interval);
-            let labels = new Array(workerResults.length).fill(0);
+            let labels = new Array(results.length).fill(0);
             for (let i = 10; i < 28; i++) {
               labels[i] = 1;
             }
 
-            resolve(lossFunc(labels, workerResults));
+            resolve(lossFunc(labels, results));
           }
         }, 100);
       });
@@ -127,15 +112,15 @@
       let cobra = null;
       try {
         writeMessage("Test Cobra");
-        cobra = await CobraWeb.Cobra.create(accessKey);
-        let vadErrorValue = await processMain(cobra, pcm);
+        cobra = await CobraWeb.Cobra.create(accessKey, voiceProbabilityCallback);
+        let vadErrorValue = await engineProcess(cobra, pcm);
         cobra.release();
         assertLess(vadErrorValue, 0.1, `Received the error value of ${vadErrorValue}`)
         writeMessage("Test Cobra... done!");
 
         writeMessage("Test Cobra Worker");
         cobra = await CobraWeb.CobraWorker.create(accessKey, voiceProbabilityCallback);
-        vadErrorValue = await processWorker(cobra, pcm);
+        vadErrorValue = await engineProcess(cobra, pcm);
         cobra.release();
         assertLess(vadErrorValue, 0.1, `Received the error value of ${vadErrorValue}`)
         writeMessage("Test Cobra Worker... done!");
@@ -160,7 +145,7 @@
         writeMessage("Starting process performance test!");
         let start = Date.now();
         for (let i = 0; i < numIterations; i++) {
-          await processWorker(cobra, pcm);
+          await engineProcess(cobra, pcm);
         }
         let end = Date.now();
         writeMessage(`Process Performance: ${((end - start) / 1000) / numIterations}`);
