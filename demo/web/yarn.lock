@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@picovoice/cobra-web@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@picovoice/cobra-web/-/cobra-web-1.1.0.tgz#a0a7b8b69acee3331ab2f7dc12e628d2d25eb04a"
-  integrity sha512-3GS+sTmTVWk1pH66UHlJ2DPtcxlXClp3347WyRTqOHSkxswmvOBj0X6aEokfH9wxxlfqdL0wwUKr3eLRiB2R+g==
+"@picovoice/cobra-web@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@picovoice/cobra-web/-/cobra-web-1.1.1.tgz#03f6d14a7abeb992c9159b423a2a0d4c9266b372"
+  integrity sha512-YFKladRvmRKrwl8bRrMHoa1Rd/z0tKVLhd2HTQ7XLOGmwxZNm8cKG7Rm7TYEiYk5nMJPgLR6lVDkrmhD3kuO6w==
   dependencies:
     "@picovoice/web-utils" "=1.2.3"
 
@@ -16,10 +16,10 @@
   dependencies:
     commander "^9.2.0"
 
-"@picovoice/web-voice-processor@^3.0.1":
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/@picovoice/web-voice-processor/-/web-voice-processor-3.0.1.tgz#e2adf41efe31971a58fa5f5ac09f34daab7dff72"
-  integrity sha512-+B23Yj+leSm6Kk+Pv2K94X2yZF2ccapFrCOMZ90G4uJmZqeLpTkSrz7UI43vJgdxMc0dp+lS0lP2zMtpzxW5HA==
+"@picovoice/web-voice-processor@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@picovoice/web-voice-processor/-/web-voice-processor-4.0.1.tgz#9a47dcd56efa5431870a25f0c8093f3eee6923ea"
+  integrity sha512-RmzeovecBG7WpxTksqTCDNID1lcbJse8rdp/R+HrriufDgkilNXAfKyIm7VknzHA48Pw9e/eJJPLrntAQwzdcw==
 
 ansi-styles@^4.1.0:
   version "4.3.0"
