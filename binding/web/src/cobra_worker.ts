@@ -99,7 +99,7 @@ export class CobraWorker {
    *
    * @returns An instance of CobraWorker.
    */
-  private static async create(
+  public static async create(
     accessKey: string,
     voiceProbabilityCallback: (voiceProbability: number) => void,
     options: CobraOptions = {}
