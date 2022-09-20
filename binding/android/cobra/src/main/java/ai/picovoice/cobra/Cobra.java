@@ -1,5 +1,5 @@
 /*
-    Copyright 2021 Picovoice Inc.
+    Copyright 2021-2022 Picovoice Inc.
     You may not use this file except in compliance with the license. A copy of the license is
     located in the "LICENSE" file accompanying this source.
     Unless required by applicable law or agreed to in writing, software distributed under the
@@ -25,7 +25,7 @@ public class Cobra {
         System.loadLibrary("pv_cobra");
     }
 
-    private final long handle;
+    private long handle;
 
     /**
      * Constructor.
@@ -34,14 +34,17 @@ public class Cobra {
      * @throws CobraException if there is an error while initializing Cobra.
      */
     public Cobra(String accessKey) throws CobraException {
-        handle = init(accessKey);
+        handle = CobraNative.init(accessKey);
     }
 
     /**
      * Releases resources acquired by Cobra.
      */
     public void delete() {
-        delete(handle);
+        if (handle != 0) {
+            CobraNative.delete(handle);
+            handle = 0;
+        }
     }
 
     /**
@@ -55,7 +58,19 @@ public class Cobra {
      * @throws CobraException if there is an error while processing the audio frame.
      */
     public float process(short[] pcm) throws CobraException {
-        return process(handle, pcm);
+        if (handle == 0) {
+            throw new CobraInvalidStateException("Attempted to call Cobra process after delete.");
+        }
+        if (pcm == null) {
+            throw new CobraInvalidArgumentException("Passed null frame to Cobra process.");
+        }
+
+        if (pcm.length != getFrameLength()) {
+            throw new CobraInvalidArgumentException(
+                    String.format("Cobra process requires frames of length %d. " +
+                            "Received frame of size %d.", getFrameLength(), pcm.length));
+        }
+        return CobraNative.process(handle, pcm);
     }
 
     /**
@@ -63,25 +78,26 @@ public class Cobra {
      *
      * @return Required number of audio samples per frame.
      */
-    public native int getFrameLength();
+    public int getFrameLength() {
+        return CobraNative.getFrameLength();
+    }
 
     /**
      * Getter for required audio sample rate.
      *
      * @return Required audio sample rate.
      */
-    public native int getSampleRate();
+    public int getSampleRate() {
+        return CobraNative.getSampleRate();
+    }
 
     /**
      * Getter for Cobra version.
      *
      * @return Cobra version.
      */
-    public native String getVersion();
+    public String getVersion() {
+        return CobraNative.getVersion();
+    }
 
-    private native long init(String accessKey);
-
-    private native void delete(long object);
-
-    private native float process(long object, short[] pcm);
 }
