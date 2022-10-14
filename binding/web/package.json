@@ -3,7 +3,7 @@
   "description": "Cobra VAD engine for web browsers (via WebAssembly)",
   "author": "Picovoice Inc",
   "license": "Apache-2.0",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "keywords": [
     "cobra",
     "web",
@@ -33,7 +33,7 @@
     "copywasm": "node scripts/copy_wasm.js"
   },
   "dependencies": {
-    "@picovoice/web-utils": "=1.2.6"
+    "@picovoice/web-utils": "=1.2.8"
   },
   "devDependencies": {
     "@babel/core": "^7.18.2",

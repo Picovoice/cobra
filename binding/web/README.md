@@ -12,6 +12,11 @@ Cobra is a highly accurate and lightweight voice activity detection (VAD) engine
 - Firefox
 - Safari
 
+### Restrictions
+
+IndexedDB is required to use `Octopus` in a worker thread. Browsers without IndexedDB support
+(i.e. Firefox Incognito Mode) should use `Octopus` in the main thread.
+
 ## Installation
 
 Using `yarn`:
