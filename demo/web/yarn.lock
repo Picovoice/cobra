@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@picovoice/cobra-web@~1.1.3":
-  version "1.1.3"
-  resolved "https://registry.yarnpkg.com/@picovoice/cobra-web/-/cobra-web-1.1.3.tgz#add8c736102fb170804ac5aee23dd47c0dfc0ce6"
-  integrity sha512-GdQHMbIL1bIytNvXMiDLS5zvs+u3EmojKUDF5TZjKJ7hPolskoLNRE7LqGHXonYKGlbVhGveHK31wm63GFlfUQ==
+"@picovoice/cobra-web@latest":
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/@picovoice/cobra-web/-/cobra-web-1.1.4.tgz#0f6d64e3f55e8e9e3fac58c9d3a62ba674b613ce"
+  integrity sha512-g33C3bSiFQ2GXS51UXUDvG4qXSW4Osm4p9X7xSUaNXDAqe9YzNSMv+jZtUg47xDNawzquhduy+PRExX4VjFdwA==
   dependencies:
     "@picovoice/web-utils" "=1.2.8"
 
