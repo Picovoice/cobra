@@ -91,8 +91,9 @@ class CobraDemo(Thread):
 
             if wav_file is not None:
                 wav_file.close()
-
-            recorder.delete()
+            
+            if recorder is not None:
+                recorder.delete()
 
     @classmethod
     def show_audio_devices(cls):
