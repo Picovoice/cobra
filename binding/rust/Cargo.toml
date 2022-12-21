@@ -33,5 +33,5 @@ libloading = "0.7"
 log = "0.4"
 
 [dev-dependencies]
-rodio = "0.14"
-itertools = "0.10.1"
+rodio = "0.16"
+itertools = "0.10"
