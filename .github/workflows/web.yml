@@ -17,9 +17,13 @@ on:
       - 'lib/wasm/**'
       - '.github/workflows/web.yml'
 
+defaults:
+  run:
+    working-directory: binding/web
+
 jobs:
   build:
-    if: github.base_ref == 'main' && !startsWith(github.head_ref, 'v[0-9]+.[0-9]+')
+    if: github.base_ref != 'main'
     runs-on: ubuntu-latest
 
     strategy:
@@ -28,10 +32,6 @@ jobs:
         node-version: [lts/*]
 
     steps:
-      - name: echo base branch
-        run: echo "base branch is ${{github.base_ref}}"
-      - name: echo head branch
-        run: echo "head branch is ${{github.head_ref}}"
       - uses: actions/checkout@v2
         with:
           submodules: recursive
