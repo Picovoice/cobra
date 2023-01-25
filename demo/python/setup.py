@@ -28,7 +28,7 @@ with open(os.path.join(os.path.dirname(__file__), 'README.md'), 'r') as f:
 
 setuptools.setup(
     name="pvcobrademo",
-    version="1.1.3",
+    version="1.2.0",
     author="Picovoice",
     author_email="hello@picovoice.ai",
     description="Cobra voice activity detection (VAD) engine demos.",
