@@ -4,21 +4,21 @@ on:
   workflow_dispatch:
   push:
     branches: [ main ]
-    paths: 
+    paths:
       - 'binding/ios/CobraAppTest/Podfile.lock'
       - '.github/workflows/ios-appcenter.yml'
 
   pull_request:
-    branches: [ main ]
-    paths: 
+    branches: [ main, 'v[0-9]+.[0-9]+*' ]
+    paths:
       - 'binding/ios/CobraAppTest/Podfile.lock'
       - '.github/workflows/ios-appcenter.yml'
 
-      
+
 defaults:
   run:
     working-directory: binding/ios/CobraAppTest
-    
+
 jobs:
   build:
     name: Run iOS Tests on AppCenter
@@ -48,19 +48,19 @@ jobs:
           CobraAppTestUITests/CobraAppTestUITests.swift
 
       - name: XCode Build
-        run: xcrun xcodebuild build-for-testing 
-          -configuration Debug 
+        run: xcrun xcodebuild build-for-testing
+          -configuration Debug
           -workspace CobraAppTest.xcworkspace
-          -sdk iphoneos 
+          -sdk iphoneos
           -scheme CobraAppTest
           -derivedDataPath ddp
           CODE_SIGNING_ALLOWED=NO
 
       - name: Run Tests on AppCenter
-        run: appcenter test run xcuitest 
+        run: appcenter test run xcuitest
           --token ${{secrets.APPCENTERAPITOKEN}}
           --app "Picovoice/Cobra-iOS"
-          --devices "Picovoice/ios-min-max" 
-          --test-series "cobra-ios" 
-          --locale "en_US" 
+          --devices "Picovoice/ios-min-max"
+          --test-series "cobra-ios"
+          --locale "en_US"
           --build-dir ddp/Build/Products/Debug-iphoneos
