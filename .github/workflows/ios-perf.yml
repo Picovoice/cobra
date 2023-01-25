@@ -26,9 +26,7 @@ jobs:
       matrix:
         device: [iOS-14.5, iOS-32bit]
         include:
-        - device: iOS-14.5
-          performanceThresholdSec: 0.001
-        - device: iOS-32bit
+        - device: iOS-perf
           performanceThresholdSec: 0.001
 
     steps:
