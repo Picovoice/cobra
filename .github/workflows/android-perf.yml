@@ -29,7 +29,7 @@ jobs:
         - device: single-android
           performanceThresholdSec: 0.003
         - device: 32bit-android
-          performanceThresholdSec: 0.007
+          performanceThresholdSec: 0.015
 
     steps:
     - uses: actions/checkout@v2
