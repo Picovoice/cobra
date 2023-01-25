@@ -11,11 +11,12 @@
 
 #[cfg(test)]
 mod tests {
-    use itertools::{zip, Itertools};
+    use itertools::Itertools;
     use rodio::{source::Source, Decoder};
     use std::env;
     use std::fs::File;
     use std::io::BufReader;
+    use std::iter::zip;
 
     use cobra::Cobra;
 
