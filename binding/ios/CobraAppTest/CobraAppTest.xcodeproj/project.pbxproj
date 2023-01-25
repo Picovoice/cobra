@@ -18,7 +18,7 @@
 		1E5B7AF12800B4A600F8BDDB /* sample.wav in Resources */ = {isa = PBXBuildFile; fileRef = 1E5B7AF02800B4A600F8BDDB /* sample.wav */; };
 		392C5FC2C59B4299F5FB7D3B /* libPods-CobraAppTestUITests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B340446EF573C72BC1349E8E /* libPods-CobraAppTestUITests.a */; };
 		50CC58C08AAD59C8922AC105 /* libPods-PerformanceTest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C6572CB2CB09D2183B5C6617 /* libPods-PerformanceTest.a */; };
-		6A9164E4B0B1626D27DBA0A1 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		6A9164E4B0B1626D27DBA0A1 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		837665FCC740E76ED8323395 /* libPods-CobraAppTest.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8FFAEF3E81D2B0623D6C31C0 /* libPods-CobraAppTest.a */; };
 /* End PBXBuildFile section */
 
@@ -79,7 +79,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6A9164E4B0B1626D27DBA0A1 /* BuildFile in Frameworks */,
+				6A9164E4B0B1626D27DBA0A1 /* (null) in Frameworks */,
 				392C5FC2C59B4299F5FB7D3B /* libPods-CobraAppTestUITests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -539,7 +539,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -593,7 +593,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
