@@ -10,7 +10,7 @@ on:
       - 'lib/wasm/**'
       - '.github/workflows/web.yml'
   pull_request:
-    branches: [ main ]
+    branches: [ main, 'v[0-9]+.[0-9]+' ]
     paths:
       - 'binding/web/**'
       - '!binding/web/README.md'
@@ -23,6 +23,7 @@ defaults:
 
 jobs:
   build:
+    if: github.base_ref == 'main' && github.head_ref != 'v[0-9]+.[0-9]+'
     runs-on: ubuntu-latest
 
     strategy:
