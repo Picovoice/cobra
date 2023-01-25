@@ -1,2 +1,2 @@
 pvcobra==1.2.0
-pvrecorder==1.1.0
+pvrecorder==1.1.1
