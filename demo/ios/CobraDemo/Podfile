@@ -1,7 +1,7 @@
 source 'https://cdn.cocoapods.org/'
-platform :ios, '9.0'
+platform :ios, '11.0'
 
 target 'CobraDemo' do
-  pod 'Cobra-iOS', '~> 1.1.1'
+  pod 'Cobra-iOS', :podspec => 'https://raw.githubusercontent.com/Picovoice/cobra/v1.2-ios/binding/ios/Cobra-iOS.podspec'
   pod 'ios-voice-processor', '~> 1.0.3'
 end
