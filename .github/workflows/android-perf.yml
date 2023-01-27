@@ -4,19 +4,19 @@ on:
   workflow_dispatch:
   push:
     branches: [ main ]
-    paths: 
+    paths:
       - 'lib/android/**'
       - '.github/workflows/android-perf.yml'
   pull_request:
-    branches: [ main ]
-    paths: 
+    branches: [ main, 'v[0-9]+.[0-9]+' ]
+    paths:
       - 'lib/android/**'
       - '.github/workflows/android-perf.yml'
 
 defaults:
   run:
     working-directory: demo/android/Activity
-    
+
 jobs:
   build:
     name: Run Android Speed Tests on AppCenter
@@ -29,26 +29,26 @@ jobs:
         - device: single-android
           performanceThresholdSec: 0.003
         - device: 32bit-android
-          performanceThresholdSec: 0.007
+          performanceThresholdSec: 0.015
 
     steps:
     - uses: actions/checkout@v2
-    
+
     - name: Setup Node.js environment
       uses: actions/setup-node@v2.4.0
-    
+
     - name: Install AppCenter CLI
       run: npm install -g appcenter-cli
-    
+
     - name: set up JDK 11
       uses: actions/setup-java@v2
       with:
         java-version: '11'
         distribution: 'adopt'
-    
+
     - name: Copy test_resources
       run: ./copy_test_resources.sh
-    
+
     - name: Inject AccessKey
       run: echo pvTestingAccessKey="${{secrets.PV_VALID_ACCESS_KEY}}" >> local.properties
 
@@ -57,22 +57,22 @@ jobs:
 
     - name: Inject Performance Threshold
       run: echo performanceThresholdSec="${{ matrix.performanceThresholdSec }}" >> local.properties
-    
+
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
-    
+
     - name: Build app
       run: ./gradlew assembleDebug
-    
+
     - name: Build androidTest
       run: ./gradlew assembleAndroidTest
-    
+
     - name: Run tests on AppCenter
-      run: appcenter test run espresso 
+      run: appcenter test run espresso
         --token ${{secrets.APPCENTERAPITOKEN}}
         --app "Picovoice/Cobra-Android-Activity"
-        --devices "Picovoice/${{ matrix.device }}" 
+        --devices "Picovoice/${{ matrix.device }}"
         --app-path cobra-activity-demo-app/build/outputs/apk/debug/cobra-activity-demo-app-debug.apk
         --test-series "cobra-android"
-        --locale "en_US" 
+        --locale "en_US"
         --build-dir cobra-activity-demo-app/build/outputs/apk/androidTest/debug

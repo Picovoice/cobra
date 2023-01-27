@@ -4,19 +4,19 @@ on:
   workflow_dispatch:
   push:
     branches: [ main ]
-    paths: 
+    paths:
       - 'lib/ios/**'
       - '.github/workflows/ios-perf.yml'
   pull_request:
-    branches: [ main ]
-    paths: 
+    branches: [ main, 'v[0-9]+.[0-9]+*' ]
+    paths:
       - 'lib/ios/**'
       - '.github/workflows/ios-perf.yml'
-      
+
 defaults:
   run:
     working-directory: binding/ios/CobraAppTest
-    
+
 jobs:
   build:
     name: Run iOS Tests on AppCenter
@@ -24,11 +24,9 @@ jobs:
 
     strategy:
       matrix:
-        device: [iOS-14.5, iOS-32bit]
+        device: [ ios-perf ]
         include:
-        - device: iOS-14.5
-          performanceThresholdSec: 0.001
-        - device: iOS-32bit
+        - device: ios-perf
           performanceThresholdSec: 0.001
 
     steps:
@@ -63,19 +61,19 @@ jobs:
           PerformanceTest/PerformanceTest.swift
 
       - name: XCode Build
-        run: xcrun xcodebuild build-for-testing 
-          -configuration Debug 
+        run: xcrun xcodebuild build-for-testing
+          -configuration Debug
           -workspace CobraAppTest.xcworkspace
-          -sdk iphoneos 
+          -sdk iphoneos
           -scheme PerformanceTest
           -derivedDataPath ddp
           CODE_SIGNING_ALLOWED=NO
 
       - name: Run Tests on AppCenter
-        run: appcenter test run xcuitest 
+        run: appcenter test run xcuitest
           --token ${{secrets.APPCENTERAPITOKEN}}
           --app "Picovoice/Cobra-iOS"
-          --devices "Picovoice/${{ matrix.device }}" 
-          --test-series "cobra-ios" 
-          --locale "en_US" 
+          --devices "Picovoice/${{ matrix.device }}"
+          --test-series "cobra-ios"
+          --locale "en_US"
           --build-dir ddp/Build/Products/Debug-iphoneos

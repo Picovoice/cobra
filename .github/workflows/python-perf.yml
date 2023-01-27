@@ -14,7 +14,7 @@ on:
       - 'lib/windows/**'
       - 'res/**'
   pull_request:
-    branches: [ main ]
+    branches: [ main, 'v[0-9]+.[0-9]+' ]
     paths:
       - 'binding/python/test_cobra_perf.py'
       - 'lib/beaglebone/**'
