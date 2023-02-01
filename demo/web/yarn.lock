@@ -2,17 +2,17 @@
 # yarn lockfile v1
 
 
-"@picovoice/cobra-web@~1.2.1":
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@picovoice/cobra-web/-/cobra-web-1.2.1.tgz#219e31038967a87e6e9317dbf97f0c8f52483ae7"
-  integrity sha512-S0TVuyopwUJEcqE0RvCFGsRBdjZiTVwlsn7nHh6c6coZhfoZmXBEwXno8sc7EFF4rwxmUQlPfTzU5f9UQb0ntA==
+"@picovoice/cobra-web@~1.2.2":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@picovoice/cobra-web/-/cobra-web-1.2.2.tgz#87b06cfe72b7d3dbe9187648aae2ccc60bfc6c2f"
+  integrity sha512-ZX1nEBNEy0vjUTo2BzEZR7tSr2O+76h/j4fexKb+7DIdQmcr3FxRb4kDWuLijBHBgECPMcOxhzj55aCf68/4xA==
   dependencies:
-    "@picovoice/web-utils" "=1.2.9"
+    "@picovoice/web-utils" "=1.2.11"
 
-"@picovoice/web-utils@=1.2.9":
-  version "1.2.9"
-  resolved "https://registry.yarnpkg.com/@picovoice/web-utils/-/web-utils-1.2.9.tgz#080bc377e2fa71388f40655904d2485ef586f517"
-  integrity sha512-vYAV/izQuzy/+3QF/6LlSSJh7l9cIIvD4t9ZJ91vYg2XA9yk0k7V5S+6jxPcyiVMSy8Zlc9kBwCOWZchhlSMwA==
+"@picovoice/web-utils@=1.2.11":
+  version "1.2.11"
+  resolved "https://registry.yarnpkg.com/@picovoice/web-utils/-/web-utils-1.2.11.tgz#4a9564eacbacf1b74ba9d0df27c78646fe200e7d"
+  integrity sha512-DtgRXr618LjNLHvcIMKehy7THiJm6Lm1DFaHjHEDLFmIh9NrfYrbw9yosytHq1+n/mV2VfePQPhWsrPMI1JlVw==
   dependencies:
     commander "^9.2.0"
 
