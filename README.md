@@ -335,6 +335,12 @@ loop {
 
 ## Releases
 
+### v1.2.0 January 27th, 2023
+
+- updated Cobra engine for improved accuracy and performance
+- iOS minimum requirement moved to iOS 11.0
+- minor bug fixes
+
 ### v1.1.0 January 21st, 2022
 
 - Improved types for web binding
