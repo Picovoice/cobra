@@ -1,5 +1,5 @@
 #
-# Copyright 2021 Picovoice Inc.
+# Copyright 2021-2023 Picovoice Inc.
 #
 # You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
 # file accompanying this source.
@@ -14,14 +14,17 @@ import platform
 import subprocess
 
 
+def _is_64bit():
+    return '64bit' in platform.architecture()[0]
+
+
 def _pv_linux_machine(machine):
     if machine == 'x86_64':
         return machine
-
-    if machine == 'aarch64':
-        arch_info = '-' + machine
+    elif machine in ['aarch64', 'armv7l', 'armv6l']:
+        arch_info = ('-' + machine) if _is_64bit() else ''
     else:
-        arch_info = ''
+        raise NotImplementedError("Unsupported CPU architecture: `%s`" % machine)
 
     cpu_info = subprocess.check_output(['cat', '/proc/cpuinfo']).decode()
     cpu_part_list = [x for x in cpu_info.split('\n') if 'CPU part' in x]
