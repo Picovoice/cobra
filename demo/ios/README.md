@@ -12,7 +12,7 @@ Signup or Login to [Picovoice Console](https://console.picovoice.ai/) to get you
 ```console
 pod install
 ```
-2. Replace `let ACCESS_KEY = "..."` inside [`ViewModel.swift`](/demo/ios/CobraDemo/CobraDemo/ViewModel.swift) with your AccessKey.
+2. Replace `let ACCESS_KEY = "..."` inside [`ViewModel.swift`](CobraDemo/CobraDemo/ViewModel.swift) with your AccessKey.
 ```swift
 private let ACCESS_KEY = "YOUR_ACCESS_KEY_HERE"
 ```

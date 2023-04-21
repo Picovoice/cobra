@@ -13,7 +13,7 @@ Signup or Login to [Picovoice Console](https://console.picovoice.ai/) to get you
 ## Requirements
 
 - The demo requires [CMake](https://cmake.org/) version 3.4 or higher.
-- **For Windows Only**: [MinGW](http://mingw-w64.org/doku.php) is required to build the demo.
+- **For Windows Only**: [MinGW](http://mingw-w64.org/) is required to build the demo.
 
 # Microphone Demo
 
