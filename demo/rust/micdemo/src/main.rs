@@ -1,5 +1,5 @@
 /*
-    Copyright 2021 Picovoice Inc.
+    Copyright 2021-2023 Picovoice Inc.
 
     You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
     file accompanying this source.
@@ -11,8 +11,8 @@
 
 use clap::{App, Arg, ArgGroup};
 use cobra::Cobra;
-use ctrlc;
-use hound;
+
+
 use pv_recorder::RecorderBuilder;
 use std::io;
 use std::io::Write;
@@ -60,7 +60,7 @@ fn cobra_demo(audio_device_index: i32, access_key: &str, output_path: Option<&st
         let voice_probability = cobra.process(&pcm).unwrap();
         print_voice_activity(voice_probability);
 
-        if !output_path.is_none() {
+        if output_path.is_some() {
             audio_data.extend_from_slice(&pcm);
         }
     }
