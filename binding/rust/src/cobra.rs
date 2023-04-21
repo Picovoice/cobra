@@ -1,5 +1,5 @@
 /*
-    Copyright 2021-2022 Picovoice Inc.
+    Copyright 2021-2023 Picovoice Inc.
 
     You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
     file accompanying this source.
@@ -29,7 +29,7 @@ use libloading::os::windows::Symbol as RawSymbol;
 struct CCobra {}
 
 #[repr(C)]
-#[derive(PartialEq, Clone, Debug)]
+#[derive(PartialEq, Eq, Clone, Debug)]
 #[allow(non_camel_case_types)]
 pub enum PvStatus {
     SUCCESS = 0,
@@ -95,38 +95,38 @@ pub struct Cobra {
 impl Cobra {
     pub fn new<S: Into<String>>(access_key: S) -> Result<Cobra, CobraError> {
         let inner = CobraInner::init(access_key.into(), pv_library_path());
-        return match inner {
+        match inner {
             Ok(inner) => Ok(Cobra {
                 inner: Arc::new(inner),
             }),
             Err(err) => Err(err),
-        };
+        }
     }
 
     pub fn new_with_library<S: Into<String>, P: Into<PathBuf>>(access_key: S, library_path: P) -> Result<Cobra, CobraError> {
         let inner = CobraInner::init(access_key.into(), library_path);
-        return match inner {
+        match inner {
             Ok(inner) => Ok(Cobra {
                 inner: Arc::new(inner),
             }),
             Err(err) => Err(err),
-        };
+        }
     }
 
     pub fn process(&self, pcm: &[i16]) -> Result<f32, CobraError> {
-        return self.inner.process(pcm);
+        self.inner.process(pcm)
     }
 
     pub fn frame_length(&self) -> u32 {
-        return self.inner.frame_length as u32;
+        self.inner.frame_length as u32
     }
 
     pub fn sample_rate(&self) -> u32 {
-        return self.inner.sample_rate as u32;
+        self.inner.sample_rate as u32
     }
 
     pub fn version(&self) -> String {
-        return self.inner.version.clone();
+        self.inner.version.clone()
     }
 }
 
@@ -282,7 +282,7 @@ impl CobraInner {
         };
         check_fn_call_status(status, "pv_cobra_process")?;
 
-        return Ok(result);
+        Ok(result)
     }
 }
 

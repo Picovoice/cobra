@@ -1,5 +1,5 @@
 /*
-    Copyright 2021 Picovoice Inc.
+    Copyright 2021-2023 Picovoice Inc.
 
     You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
     file accompanying this source.
@@ -33,16 +33,16 @@ fn find_machine_type() -> String {
         .expect("Failed to retrieve cpu info");
     let cpu_part_list = std::str::from_utf8(&cpu_info.stdout)
         .unwrap()
-        .split("\n")
+        .split('\n')
         .filter(|x| x.contains("CPU part"))
         .collect::<Vec<_>>();
 
-    if cpu_part_list.len() == 0 {
+    if cpu_part_list.is_empty() {
         panic!("Unsupported CPU");
     }
 
     let cpu_part = cpu_part_list[0]
-        .split(" ")
+        .split(' ')
         .collect::<Vec<_>>()
         .pop()
         .unwrap()
@@ -58,7 +58,7 @@ fn find_machine_type() -> String {
         _ => "unsupported",
     };
 
-    return String::from(machine);
+    String::from(machine)
 }
 
 #[cfg(all(target_os = "macos", target_arch = "x86_64"))]
@@ -78,7 +78,7 @@ fn base_library_path() -> PathBuf {
 
 #[cfg(all(target_os = "linux", target_arch = "x86_64"))]
 fn base_library_path() -> PathBuf {
-    return PathBuf::from("linux/x86_64/libpv_cobra.so");
+    PathBuf::from("linux/x86_64/libpv_cobra.so")
 }
 
 #[cfg(all(target_os = "linux", any(target_arch = "arm", target_arch = "aarch64")))]
@@ -107,5 +107,5 @@ pub fn pv_library_path() -> PathBuf {
     let mut path = PathBuf::from(env!("OUT_DIR"));
     path.push(DEFAULT_RELATIVE_LIBRARY_DIR);
     path.push(base_library_path());
-    return path;
+    path
 }

@@ -1,5 +1,5 @@
 /*
-    Copyright 2021 Picovoice Inc.
+    Copyright 2021-2023 Picovoice Inc.
 
     You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
     file accompanying this source.
@@ -65,6 +65,6 @@ mod tests {
             .expect("Pass the AccessKey in using the PV_ACCESS_KEY env variable");
         let cobra = Cobra::new(access_key).expect("Unable to create Cobra");
 
-        assert!(cobra.version().len() > 0);
+        assert!(!cobra.version().is_empty());
     }
 }
