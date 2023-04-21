@@ -1,0 +1,56 @@
+{
+    "language": "en",
+    "dictionaries": [
+      "dict"
+    ],
+    "dictionaryDefinitions": [
+      {
+        "name": "dict",
+        "path": "./dict.txt",
+        "addWords": true
+      }
+    ],
+    "ignorePaths": [
+      // submodules
+      "../../../demo/c/dr_libs/**/*",
+      "../../../demo/c/pvrecorder/**/*",
+  
+      // binaries
+      "**/*.a",
+      "**/*.dll",
+      "**/*.dylib",
+      "**/*.jar",
+      "**/*.mp3",
+      "**/*.node",
+      "**/*.ppn",
+      "**/*.pv",
+      "**/*.so",
+      "**/*.wasm",
+      "**/*.wav",
+      "../../../lib/ios/**/*",
+  
+      // android
+      "**/AndroidManifest.xml",
+      "**/activity_main.xml",
+  
+      // ios
+      "**/*.xcconfig",
+      "**/*.podspec",
+      "**/Podfile",
+      "**/*.plist",
+      "**/contents.xcworkspacedata",
+      "**/*.storyboard",
+      "**/*.pbxproj",
+      "**/*.xcscheme",
+      "**/*.m",
+  
+      // javascript
+      "**/package.json",
+      "**/packages-lock.json",
+      "**/tsconfig.json",
+      "**/tslint.json",
+  
+      // rust
+      "**/Cargo.toml"
+    ]
+  }
