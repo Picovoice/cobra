@@ -357,7 +357,7 @@ export class Cobra {
       const msg = `'pv_cobra_init' failed with status ${arrayBufferToStringAtIndex(
         memoryBufferUint8,
         await pv_status_to_string(status)
-      )}`
+      )}`;
 
       throw new Error(
         `${msg}\nDetails: ${pvError.getErrorString()}`
