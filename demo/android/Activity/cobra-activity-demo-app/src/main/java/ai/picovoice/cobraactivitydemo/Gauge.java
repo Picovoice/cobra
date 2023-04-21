@@ -1,5 +1,5 @@
 /*
-    Copyright 2021 Picovoice Inc.
+    Copyright 2021-2023 Picovoice Inc.
 
     You may not use this file except in compliance with the license. A copy of the license is
     located in the "LICENSE" file accompanying this source.
@@ -23,7 +23,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 public class Gauge extends View {
-    private final static int TEXT_SIZE = 26;
+    private static final int TEXT_SIZE = 26;
 
     private final int startAngle;
     private final int sweepAngle;
@@ -96,8 +96,16 @@ public class Gauge extends View {
 
         canvas.drawText("0%", this.getLeft(), this.getBottom(), textPaint);
         canvas.drawText("100%", centerX + radius - TEXT_SIZE * 2, this.getBottom(), textPaint);
-        canvas.drawText("50%", centerX + getX(radius, .5f) - (TEXT_SIZE / 2), centerY - getY(radius, .5f) - TEXT_SIZE, textPaint);
-        canvas.drawText("80%", centerX + getX(radius, threshold), centerY - getY(radius, threshold) - TEXT_SIZE, textPaint);
+        canvas.drawText(
+                "50%",
+                centerX + getX(radius, .5f) - (TEXT_SIZE / 2),
+                centerY - getY(radius, .5f) - TEXT_SIZE,
+                textPaint);
+        canvas.drawText(
+                "80%",
+                centerX + getX(radius, threshold),
+                centerY - getY(radius, threshold) - TEXT_SIZE,
+                textPaint);
     }
 
     private float getX(int radius, float percentage) {
