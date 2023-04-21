@@ -91,7 +91,7 @@ class CobraDemo(Thread):
 
             if wav_file is not None:
                 wav_file.close()
-            
+
             if recorder is not None:
                 recorder.delete()
 
