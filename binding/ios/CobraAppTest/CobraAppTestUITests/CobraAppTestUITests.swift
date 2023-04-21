@@ -11,7 +11,7 @@ import XCTest
 import Cobra
 
 class CobraAppTestUITests: XCTestCase {
-    
+
     private let accessKey = "{TESTING_ACCESS_KEY_HERE}"
     let thresholdString: String = "{PERFORMANCE_THRESHOLD_SEC}"
 
@@ -23,40 +23,40 @@ class CobraAppTestUITests: XCTestCase {
     }
 
     func testProcess() throws {
-        let cobra:Cobra = try Cobra(accessKey: accessKey)
-        
+        let cobra: Cobra = try Cobra(accessKey: accessKey)
+
         let bundle = Bundle(for: type(of: self))
-        let fileURL:URL = bundle.url(forResource: "sample", withExtension: "wav")!
-    
+        let fileURL: URL = bundle.url(forResource: "sample", withExtension: "wav")!
+
         let data = try Data(contentsOf: fileURL)
         let frameLengthBytes = Int(Cobra.frameLength) * 2
-        var pcmBuffer = Array<Int16>(repeating: 0, count: Int(Cobra.frameLength))
-        
-        var results:[Float32] = []
+        var pcmBuffer = [Int16](repeating: 0, count: Int(Cobra.frameLength))
+
+        var results: [Float32] = []
         var index = 44
-        while(index + frameLengthBytes < data.count) {
+        while index + frameLengthBytes < data.count {
             _ = pcmBuffer.withUnsafeMutableBytes { data.copyBytes(to: $0, from: index..<(index + frameLengthBytes)) }
-            let voiceProbability:Float32 = try cobra.process(pcm:pcmBuffer)
+            let voiceProbability: Float32 = try cobra.process(pcm: pcmBuffer)
             results.append(voiceProbability)
-            
+
             index += frameLengthBytes
         }
-        
+
         cobra.delete()
-        
-        let labels:[Float32] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+
+        let labels: [Float32] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                                              0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
         XCTAssert(labels.count == results.count)
-        
+
         var error: Float32 = 0
-        
+
         for i in 0..<labels.count {
             error -= (labels[i] * logf(results[i])) + ((1 - labels[i]) * logf(1 - results[i]))
         }
-        
+
         error /= Float32(results.count)
         XCTAssert(error < 0.1)
-        
+
     }
 
     func testPerformance() throws {
@@ -66,33 +66,33 @@ class CobraAppTestUITests: XCTestCase {
         let performanceThresholdSec = Double(thresholdString)
         try XCTSkipIf(performanceThresholdSec == nil)
 
-        let cobra:Cobra = try Cobra(accessKey: accessKey)
-        
+        let cobra: Cobra = try Cobra(accessKey: accessKey)
+
         let bundle = Bundle(for: type(of: self))
-        let fileURL:URL = bundle.url(forResource: "sample", withExtension: "wav")!
-    
+        let fileURL: URL = bundle.url(forResource: "sample", withExtension: "wav")!
+
         let data = try Data(contentsOf: fileURL)
         let frameLengthBytes = Int(Cobra.frameLength) * 2
-        var pcmBuffer = Array<Int16>(repeating: 0, count: Int(Cobra.frameLength))
-        
+        var pcmBuffer = [Int16](repeating: 0, count: Int(Cobra.frameLength))
+
         var totalNSec = 0.0
-        var results:[Float32] = []
+        var results: [Float32] = []
         var index = 44
-        while(index + frameLengthBytes < data.count) {
+        while index + frameLengthBytes < data.count {
             _ = pcmBuffer.withUnsafeMutableBytes { data.copyBytes(to: $0, from: index..<(index + frameLengthBytes)) }
             let before = CFAbsoluteTimeGetCurrent()
-            let voiceProbability:Float32 = try cobra.process(pcm:pcmBuffer)
+            let voiceProbability: Float32 = try cobra.process(pcm: pcmBuffer)
             let after = CFAbsoluteTimeGetCurrent()
             totalNSec += (after - before)
             results.append(voiceProbability)
-            
+
             index += frameLengthBytes
         }
-        
+
         cobra.delete()
 
         let totalSec = Double(round(totalNSec * 1000) / 1000)
         XCTAssertLessThanOrEqual(totalSec, performanceThresholdSec!)
-        
+
     }
 }

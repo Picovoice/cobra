@@ -7,42 +7,40 @@
 //  specific language governing permissions and limitations under the License.
 //
 
-public class CobraError : LocalizedError {
-    private let message: String;
-    
+public class CobraError: LocalizedError {
+    private let message: String
+
     public init (_ message: String) {
         self.message = message
     }
-    
+
     public var errorDescription: String? {
         return message
     }
 
     public var name: String {
-        get {
-            return String(describing: type(of: self))
-        }
+        return String(describing: type(of: self))
     }
 }
 
-public class CobraMemoryError : CobraError {}
+public class CobraMemoryError: CobraError {}
 
-public class CobraIOError : CobraError {}
+public class CobraIOError: CobraError {}
 
-public class CobraInvalidArgumentError : CobraError {}
+public class CobraInvalidArgumentError: CobraError {}
 
-public class CobraStopIterationError : CobraError {}
+public class CobraStopIterationError: CobraError {}
 
-public class CobraKeyError : CobraError {}
+public class CobraKeyError: CobraError {}
 
-public class CobraInvalidStateError : CobraError {}
+public class CobraInvalidStateError: CobraError {}
 
-public class CobraRuntimeError : CobraError {}
+public class CobraRuntimeError: CobraError {}
 
-public class CobraActivationError : CobraError {}
+public class CobraActivationError: CobraError {}
 
-public class CobraActivationLimitError : CobraError {}
+public class CobraActivationLimitError: CobraError {}
 
-public class CobraActivationThrottledError : CobraError {}
+public class CobraActivationThrottledError: CobraError {}
 
-public class CobraActivationRefusedError : CobraError {}
+public class CobraActivationRefusedError: CobraError {}
