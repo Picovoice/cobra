@@ -5,8 +5,9 @@
 [![PyPI](https://img.shields.io/pypi/v/pvcobra)](https://pypi.org/project/pvcobra/)
 [![Maven Central](https://img.shields.io/maven-central/v/ai.picovoice/cobra-android?label=maven-central%20%5Bandroid%5D)](https://repo1.maven.org/maven2/ai/picovoice/cobra-android/)
 [![Cocoapods](https://img.shields.io/cocoapods/v/Cobra-iOS)](https://github.com/Picovoice/cobra/tree/master/binding/ios)
+<!-- markdown-link-check-disable -->
 [![Crates.io](https://img.shields.io/crates/v/pv_cobra)](https://crates.io/crates/pv_cobra)
-
+<!-- markdown-link-check-enable -->
 Made in Vancouver, Canada by [Picovoice](https://picovoice.ai)
 
 [![Twitter URL](https://img.shields.io/twitter/url?label=%40AiPicovoice&style=social&url=https%3A%2F%2Ftwitter.com%2FAiPicovoice)](https://twitter.com/AiPicovoice)
@@ -170,7 +171,7 @@ Finally, when done be sure to explicitly release the resources using `handle.del
 
 ### C
 
-[include/pv_cobra.h](/include/pv_cobra.h) header file contains relevant information. Build an instance of the object:
+[include/pv_cobra.h](include/pv_cobra.h) header file contains relevant information. Build an instance of the object:
 
 ```c
     pv_cobra_t *handle = NULL;
@@ -307,7 +308,7 @@ for (; ;) {
 }
 ```
 
-Replace `${ACCESS_KEY}` with yours obtained from [Picovoice Console]((https://console.picovoice.ai/)). 
+Replace `${ACCESS_KEY}` with yours obtained from [Picovoice Console](https://console.picovoice.ai/). 
 
 When done, release the resources allocated to Cobra using `cobra.release()`.
 

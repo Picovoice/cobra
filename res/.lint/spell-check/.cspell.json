@@ -43,12 +43,21 @@
       "**/*.pbxproj",
       "**/*.xcscheme",
       "**/*.m",
+
+      // java
+      "**/build.gradle",
+      "**/gradle-wrapper.properties",
+      "**/gradle.properties",
+      "**/gradlew",
+      "**/gradlew.bat",
+      "**/proguard-rules.pro",
   
       // javascript
       "**/package.json",
       "**/packages-lock.json",
       "**/tsconfig.json",
       "**/tslint.json",
+      "**/node_modules",
   
       // rust
       "**/Cargo.toml"
