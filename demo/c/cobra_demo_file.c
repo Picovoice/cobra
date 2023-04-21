@@ -1,9 +1,10 @@
 /*
-    Copyright 2021-2022 Picovoice Inc.
-    You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
-    file accompanying this source.
-    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
-    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
+    Copyright 2021-2023 Picovoice Inc.
+    You may not use this file except in compliance with the license. A copy of
+   the license is located in the "LICENSE" file accompanying this source. Unless
+   required by applicable law or agreed to in writing, software distributed
+   under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
+   CONDITIONS OF ANY KIND, either express or implied. See the License for the
     specific language governing permissions and limitations under the License.
 */
 
@@ -45,7 +46,7 @@ static void *load_symbol(void *handle, const char *symbol) {
 
 #if defined(_WIN32) || defined(_WIN64)
 
-    return GetProcAddress((HMODULE)handle, symbol);
+    return GetProcAddress((HMODULE) handle, symbol);
 
 #else
 
@@ -58,7 +59,7 @@ static void close_dl(void *handle) {
 
 #if defined(_WIN32) || defined(_WIN64)
 
-    FreeLibrary((HMODULE)handle);
+    FreeLibrary((HMODULE) handle);
 
 #else
 
@@ -81,9 +82,9 @@ static void print_dl_error(const char *message) {
 }
 
 static struct option long_options[] = {
-        {"show_audio_devices",        no_argument,       NULL, 's'},
-        {"library_path",              required_argument, NULL, 'l'},
-        {"wav_path",                  required_argument, NULL, 'w'},
+        {"show_audio_devices", no_argument,       NULL, 's'},
+        {"library_path",       required_argument, NULL, 'l'},
+        {"wav_path",           required_argument, NULL, 'w'},
 };
 
 void print_usage(const char *program_name) {
@@ -123,44 +124,50 @@ int picovoice_main(int argc, char *argv[]) {
         exit(1);
     }
 
-    const char *(*pv_status_to_string_func)(pv_status_t) = load_symbol(cobra_library, "pv_status_to_string");
+    const char *(*pv_status_to_string_func)(pv_status_t) =
+            load_symbol(cobra_library, "pv_status_to_string");
     if (!pv_status_to_string_func) {
         print_dl_error("failed to load 'pv_status_to_string'");
         exit(1);
     }
 
-    int32_t(*pv_sample_rate_func)() = load_symbol(cobra_library, "pv_sample_rate");
+    int32_t (*pv_sample_rate_func)() =
+            load_symbol(cobra_library, "pv_sample_rate");
     if (!pv_sample_rate_func) {
         print_dl_error("failed to load 'pv_sample_rate'");
         exit(1);
     }
 
-    pv_status_t(*pv_cobra_init_func)( const char *, pv_cobra_t * *) = load_symbol(cobra_library, "pv_cobra_init");
+    pv_status_t (*pv_cobra_init_func)(const char *, pv_cobra_t **) =
+            load_symbol(cobra_library, "pv_cobra_init");
     if (!pv_cobra_init_func) {
         print_dl_error("failed to load 'pv_cobra_init'");
         exit(1);
     }
 
-    void (*pv_cobra_delete_func)(pv_cobra_t *) = load_symbol(cobra_library, "pv_cobra_delete");
+    void (*pv_cobra_delete_func)(pv_cobra_t *) =
+            load_symbol(cobra_library, "pv_cobra_delete");
     if (!pv_cobra_delete_func) {
         print_dl_error("failed to load 'pv_cobra_delete'");
         exit(1);
     }
 
-    pv_status_t(*pv_cobra_process_func)(pv_cobra_t * , const int16_t *, float *) =
-    load_symbol(cobra_library, "pv_cobra_process");
+    pv_status_t (*pv_cobra_process_func)(pv_cobra_t *, const int16_t *, float *) =
+            load_symbol(cobra_library, "pv_cobra_process");
     if (!pv_cobra_process_func) {
         print_dl_error("failed to load 'pv_cobra_process'");
         exit(1);
     }
 
-    int32_t(*pv_cobra_frame_length_func)() = load_symbol(cobra_library, "pv_cobra_frame_length");
+    int32_t (*pv_cobra_frame_length_func)() =
+            load_symbol(cobra_library, "pv_cobra_frame_length");
     if (!pv_cobra_frame_length_func) {
         print_dl_error("failed to load 'pv_cobra_frame_length'");
         exit(1);
     }
 
-    const char *(*pv_cobra_version_func)() = load_symbol(cobra_library, "pv_cobra_version");
+    const char *(*pv_cobra_version_func)() =
+            load_symbol(cobra_library, "pv_cobra_version");
     if (!pv_cobra_version_func) {
         print_dl_error("failed to load 'pv_cobra_version'");
         exit(1);
@@ -206,7 +213,8 @@ int picovoice_main(int argc, char *argv[]) {
     double total_cpu_time_usec = 0;
     double total_processed_time_usec = 0;
 
-    while ((int32_t) drwav_read_pcm_frames_s16(&f, pv_cobra_frame_length_func(), pcm) == pv_cobra_frame_length_func()) {
+    while ((int32_t) drwav_read_pcm_frames_s16(&f, pv_cobra_frame_length_func(), pcm) ==
+           pv_cobra_frame_length_func()) {
         struct timeval before;
         gettimeofday(&before, NULL);
 
@@ -221,12 +229,14 @@ int picovoice_main(int argc, char *argv[]) {
         struct timeval after;
         gettimeofday(&after, NULL);
 
-        total_cpu_time_usec +=
-                (double) (after.tv_sec - before.tv_sec) * 1e6 + (double) (after.tv_usec - before.tv_usec);
-        total_processed_time_usec += (pv_cobra_frame_length_func() * 1e6) / pv_sample_rate_func();
+        total_cpu_time_usec += (double) (after.tv_sec - before.tv_sec) * 1e6 +
+                               (double) (after.tv_usec - before.tv_usec);
+        total_processed_time_usec +=
+                (pv_cobra_frame_length_func() * 1e6) / pv_sample_rate_func();
     }
 
-    const double real_time_factor = total_cpu_time_usec / total_processed_time_usec;
+    const double real_time_factor =
+            total_cpu_time_usec / total_processed_time_usec;
     fprintf(stdout, "real time factor : %.3f\n", real_time_factor);
 
     fprintf(stdout, "\n");
@@ -244,7 +254,7 @@ int main(int argc, char *argv[]) {
 #if defined(_WIN32) || defined(_WIN64)
 
 #define UTF8_COMPOSITION_FLAG (0)
-#define NULL_TERMINATED (-1)
+#define NULL_TERMINATED       (-1)
 
     LPWSTR *wargv = CommandLineToArgvW(GetCommandLineW(), &argc);
     if (wargv == NULL) {
@@ -255,9 +265,11 @@ int main(int argc, char *argv[]) {
     char *utf8_argv[argc];
 
     for (int i = 0; i < argc; ++i) {
-        // WideCharToMultiByte: https://docs.microsoft.com/en-us/windows/win32/api/stringapiset/nf-stringapiset-widechartomultibyte
-        int arg_chars_num = WideCharToMultiByte(CP_UTF8, UTF8_COMPOSITION_FLAG, wargv[i], NULL_TERMINATED, NULL, 0, NULL, NULL);
-        utf8_argv[i] = (char *)malloc(arg_chars_num * sizeof(char));
+        // WideCharToMultiByte:
+        // https://docs.microsoft.com/en-us/windows/win32/api/stringapiset/nf-stringapiset-widechartomultibyte
+        int arg_chars_num =
+                WideCharToMultiByte(CP_UTF8, UTF8_COMPOSITION_FLAG, wargv[i], NULL_TERMINATED, NULL, 0, NULL, NULL);
+        utf8_argv[i] = (char *) malloc(arg_chars_num * sizeof(char));
         if (!utf8_argv[i]) {
             fprintf(stderr, "failed to to allocate memory for converting args");
         }

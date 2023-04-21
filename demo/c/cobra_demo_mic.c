@@ -1,12 +1,14 @@
 /*
-    Copyright 2021 Picovoice Inc.
+    Copyright 2021-2023 Picovoice Inc.
 
-    You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
-    file accompanying this source.
+    You may not use this file except in compliance with the license. A copy of
+   the license is located in the "LICENSE" file accompanying this source.
 
-    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
-    an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
-    specific language governing permissions and limitations under the License.
+    Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+   WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+   License for the specific language governing permissions and limitations under
+   the License.
 */
 
 #include <getopt.h>
@@ -39,7 +41,6 @@ static void *open_dl(const char *dl_path) {
     return dlopen(dl_path, RTLD_NOW);
 
 #endif
-
 }
 
 static void *load_symbol(void *handle, const char *symbol) {
@@ -53,7 +54,6 @@ static void *load_symbol(void *handle, const char *symbol) {
     return dlsym(handle, symbol);
 
 #endif
-
 }
 
 static void close_dl(void *handle) {
@@ -67,7 +67,6 @@ static void close_dl(void *handle) {
     dlclose(handle);
 
 #endif
-
 }
 
 static void print_dl_error(const char *message) {
@@ -81,7 +80,6 @@ static void print_dl_error(const char *message) {
     fprintf(stderr, "%s with '%s'.\n", message, dlerror());
 
 #endif
-
 }
 
 static volatile bool is_interrupted = false;
@@ -96,7 +94,10 @@ static struct option long_options[] = {
 };
 
 void print_usage(const char *program_name) {
-    fprintf(stdout, "Usage: %s [-s] [-l LIBRARY_PATH -a ACCESS_KEY -d AUDIO_DEVICE_INDEX]\n", program_name);
+    fprintf(
+            stdout,
+            "Usage: %s [-s] [-l LIBRARY_PATH -a ACCESS_KEY -d AUDIO_DEVICE_INDEX]\n",
+            program_name);
 }
 
 void interrupt_handler(int _) {
@@ -128,10 +129,7 @@ static void print_analog(float is_voiced) {
     int32_t percentage = (int32_t) roundf(voice_probability * 100);
     int32_t bar_length = ((int32_t) roundf(voice_probability * 20)) * 3;
     int32_t empty_length = 20 - (bar_length / 3);
-    fprintf(stdout,
-            "\r[%3d%%]%.*s%.*s|", percentage,
-            bar_length, "████████████████████",
-            empty_length, "                    ");
+    fprintf(stdout, "\r[%3d%%]%.*s%.*s|", percentage, bar_length, "████████████████████", empty_length, "                    ");
     fflush(stdout);
 }
 
@@ -173,44 +171,50 @@ int picovoice_main(int argc, char *argv[]) {
         exit(1);
     }
 
-    const char *(*pv_status_to_string_func)(pv_status_t) = load_symbol(cobra_library, "pv_status_to_string");
+    const char *(*pv_status_to_string_func)(pv_status_t) =
+            load_symbol(cobra_library, "pv_status_to_string");
     if (!pv_status_to_string_func) {
         print_dl_error("failed to load 'pv_status_to_string'");
         exit(1);
     }
 
-    int32_t(*pv_sample_rate_func)() = load_symbol(cobra_library, "pv_sample_rate");
+    int32_t (*pv_sample_rate_func)() =
+            load_symbol(cobra_library, "pv_sample_rate");
     if (!pv_sample_rate_func) {
         print_dl_error("failed to load 'pv_sample_rate'");
         exit(1);
     }
 
-    pv_status_t(*pv_cobra_init_func)(const char *, pv_cobra_t **) = load_symbol(cobra_library, "pv_cobra_init");
+    pv_status_t (*pv_cobra_init_func)(const char *, pv_cobra_t **) =
+            load_symbol(cobra_library, "pv_cobra_init");
     if (!pv_cobra_init_func) {
         print_dl_error("failed to load 'pv_cobra_init'");
         exit(1);
     }
 
-    void (*pv_cobra_delete_func)(pv_cobra_t *) = load_symbol(cobra_library, "pv_cobra_delete");
+    void (*pv_cobra_delete_func)(pv_cobra_t *) =
+            load_symbol(cobra_library, "pv_cobra_delete");
     if (!pv_cobra_delete_func) {
         print_dl_error("failed to load 'pv_cobra_delete'");
         exit(1);
     }
 
-    pv_status_t(*pv_cobra_process_func)(pv_cobra_t *, const int16_t *, float *) =
-    load_symbol(cobra_library, "pv_cobra_process");
+    pv_status_t (*pv_cobra_process_func)(pv_cobra_t *, const int16_t *, float *) =
+            load_symbol(cobra_library, "pv_cobra_process");
     if (!pv_cobra_process_func) {
         print_dl_error("failed to load 'pv_cobra_process'");
         exit(1);
     }
 
-    int32_t(*pv_cobra_frame_length_func)() = load_symbol(cobra_library, "pv_cobra_frame_length");
+    int32_t (*pv_cobra_frame_length_func)() =
+            load_symbol(cobra_library, "pv_cobra_frame_length");
     if (!pv_cobra_frame_length_func) {
         print_dl_error("failed to load 'pv_cobra_frame_length'");
         exit(1);
     }
 
-    const char *(*pv_cobra_version_func)() = load_symbol(cobra_library, "pv_cobra_version");
+    const char *(*pv_cobra_version_func)() =
+            load_symbol(cobra_library, "pv_cobra_version");
     if (!pv_cobra_version_func) {
         print_dl_error("failed to load 'pv_cobra_version'");
         exit(1);
@@ -227,7 +231,8 @@ int picovoice_main(int argc, char *argv[]) {
 
     const int32_t frame_length = 512;
     pv_recorder_t *recorder = NULL;
-    pv_recorder_status_t recorder_status = pv_recorder_init(device_index, frame_length, 100, true, true, &recorder);
+    pv_recorder_status_t recorder_status =
+            pv_recorder_init(device_index, frame_length, 100, true, true, &recorder);
     if (recorder_status != PV_RECORDER_STATUS_SUCCESS) {
         fprintf(stderr, "Failed to initialize device with %s.\n", pv_recorder_status_to_string(recorder_status));
         exit(1);
@@ -286,7 +291,7 @@ int main(int argc, char *argv[]) {
 #if defined(_WIN32) || defined(_WIN64)
 
 #define UTF8_COMPOSITION_FLAG (0)
-#define NULL_TERMINATED (-1)
+#define NULL_TERMINATED       (-1)
 
     LPWSTR *wargv = CommandLineToArgvW(GetCommandLineW(), &argc);
     if (wargv == NULL) {
@@ -297,8 +302,10 @@ int main(int argc, char *argv[]) {
     char *utf8_argv[argc];
 
     for (int i = 0; i < argc; ++i) {
-        // WideCharToMultiByte: https://docs.microsoft.com/en-us/windows/win32/api/stringapiset/nf-stringapiset-widechartomultibyte
-        int arg_chars_num = WideCharToMultiByte(CP_UTF8, UTF8_COMPOSITION_FLAG, wargv[i], NULL_TERMINATED, NULL, 0, NULL, NULL);
+        // WideCharToMultiByte:
+        // https://docs.microsoft.com/en-us/windows/win32/api/stringapiset/nf-stringapiset-widechartomultibyte
+        int arg_chars_num =
+                WideCharToMultiByte(CP_UTF8, UTF8_COMPOSITION_FLAG, wargv[i], NULL_TERMINATED, NULL, 0, NULL, NULL);
         utf8_argv[i] = (char *) malloc(arg_chars_num * sizeof(char));
         if (!utf8_argv[i]) {
             fprintf(stderr, "failed to to allocate memory for converting args");
