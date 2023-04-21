@@ -242,7 +242,7 @@ impl CobraInner {
                 Err(err) => {
                     return Err(CobraError::new(
                         CobraErrorStatus::LibraryLoadError,
-                        &format!("Failed to get version info from Cobra Library: {}", err),
+                        format!("Failed to get version info from Cobra Library: {}", err),
                     ))
                 }
             };
@@ -268,7 +268,7 @@ impl CobraInner {
         if pcm.len() as i32 != self.frame_length {
             return Err(CobraError::new(
                 CobraErrorStatus::FrameLengthError,
-                &format!(
+                format!(
                     "Found a frame length of {} Expected {}",
                     pcm.len(),
                     self.frame_length
