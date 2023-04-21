@@ -78,4 +78,4 @@ handle.delete()
 
 ## Demos
 
-For example usage refer to the [Activity demo](/demo/android/Activity)
+For example usage refer to the [Activity demo](../../demo/android/Activity)

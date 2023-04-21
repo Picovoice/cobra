@@ -63,4 +63,4 @@ let cobra = Cobra::new_with_library(access_key, "/path/to/library/file");
 
 ## Demos
 
-Check out the Cobra Rust demos [here](/demo/rust)
+Check out the Cobra Rust demos [here](../../demo/rust)

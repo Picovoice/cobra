@@ -77,4 +77,4 @@ Copy your `AccessKey` into the `accessKey` variable in [`CobraAppTestUITests.swi
 
 ## Demo App
 
-For example usage refer to our [iOS demo application](/demo/ios).
+For example usage refer to our [iOS demo application](../../demo/ios).
