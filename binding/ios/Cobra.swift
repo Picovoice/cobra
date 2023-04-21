@@ -15,18 +15,18 @@ import PvCobra
 /// The incoming audio needs to have a sample rate equal to '.sampleRate' and be 16-bit linearly-encoded. Cobra
 /// operates on single-channel audio.
 public class Cobra {
-    
+
     private var handle: OpaquePointer?
-    
+
     /// Required number of samples per frame of audio
     public static let frameLength = UInt32(pv_cobra_frame_length())
-    
+
     /// Required audio sample rate
     public static let sampleRate = UInt32(pv_sample_rate())
-    
+
     /// Cobra version string
     public static let version = String(cString: pv_cobra_version())
-    
+
     /// Constructor.
     ///
     /// - Parameters:
@@ -34,23 +34,23 @@ public class Cobra {
     /// - Throws: CobraError
     public init(accessKey: String) throws {
         let status = pv_cobra_init(accessKey, &handle)
-        if(status != PV_STATUS_SUCCESS) {
+        if status != PV_STATUS_SUCCESS {
             throw pvStatusToCobraError(status, "Cobra init failed")
         }
     }
-    
+
     deinit {
         self.delete()
     }
-    
+
     /// Releases native resources that were allocated to Cobra
-    public func delete(){
+    public func delete() {
         if handle != nil {
             pv_cobra_delete(handle)
             handle = nil
         }
     }
-    
+
     /// Processes a frame of the incoming audio stream and emits the detection result.
     ///
     /// - Parameters:
@@ -64,42 +64,42 @@ public class Cobra {
             throw CobraInvalidArgumentError(
                 "Frame of audio data must contain \(Cobra.frameLength) samples - given frame contained \(pcm.count)")
         }
-        
+
         var result: Float32 = 0
         let status = pv_cobra_process(self.handle, pcm, &result)
-        if(status != PV_STATUS_SUCCESS) {
+        if status != PV_STATUS_SUCCESS {
             throw pvStatusToCobraError(status, "Cobra process failed")
         }
-        
+
         return result
     }
-    
+
     private func pvStatusToCobraError(_ status: pv_status_t, _ message: String) -> CobraError {
         switch status {
-            case PV_STATUS_OUT_OF_MEMORY:
-                return CobraMemoryError(message)
-            case PV_STATUS_IO_ERROR:
-                return CobraIOError(message)
-            case PV_STATUS_INVALID_ARGUMENT:
-                return CobraInvalidArgumentError(message)
-            case PV_STATUS_STOP_ITERATION:
-                return CobraStopIterationError(message)
-            case PV_STATUS_KEY_ERROR:
-                return CobraKeyError(message)
-            case PV_STATUS_INVALID_STATE:
-                return CobraInvalidStateError(message)
-            case PV_STATUS_RUNTIME_ERROR:
-                return CobraRuntimeError(message)
-            case PV_STATUS_ACTIVATION_ERROR:
-                return CobraActivationError(message)
-            case PV_STATUS_ACTIVATION_LIMIT_REACHED:
-                return CobraActivationLimitError(message)
-            case PV_STATUS_ACTIVATION_THROTTLED:
-                return CobraActivationThrottledError(message)
-            case PV_STATUS_ACTIVATION_REFUSED:
-                return CobraActivationRefusedError(message)
-            default:
-                let pvStatusString = String(cString: pv_status_to_string(status))
+        case PV_STATUS_OUT_OF_MEMORY:
+            return CobraMemoryError(message)
+        case PV_STATUS_IO_ERROR:
+            return CobraIOError(message)
+        case PV_STATUS_INVALID_ARGUMENT:
+            return CobraInvalidArgumentError(message)
+        case PV_STATUS_STOP_ITERATION:
+            return CobraStopIterationError(message)
+        case PV_STATUS_KEY_ERROR:
+            return CobraKeyError(message)
+        case PV_STATUS_INVALID_STATE:
+            return CobraInvalidStateError(message)
+        case PV_STATUS_RUNTIME_ERROR:
+            return CobraRuntimeError(message)
+        case PV_STATUS_ACTIVATION_ERROR:
+            return CobraActivationError(message)
+        case PV_STATUS_ACTIVATION_LIMIT_REACHED:
+            return CobraActivationLimitError(message)
+        case PV_STATUS_ACTIVATION_THROTTLED:
+            return CobraActivationThrottledError(message)
+        case PV_STATUS_ACTIVATION_REFUSED:
+            return CobraActivationRefusedError(message)
+        default:
+            let pvStatusString = String(cString: pv_status_to_string(status))
                 return CobraError("\(pvStatusString): \(message)")
         }
     }

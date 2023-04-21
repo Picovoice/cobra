@@ -29,24 +29,26 @@ class PerformanceTest: XCTestCase {
         let performanceThresholdSec = Double(thresholdString)
         try XCTSkipIf(performanceThresholdSec == nil)
 
-        let cobra:Cobra = try Cobra(accessKey: accessKey)
-        
+        let cobra: Cobra = try Cobra(accessKey: accessKey)
+
         let bundle = Bundle(for: type(of: self))
-        let fileURL:URL = bundle.url(forResource: "sample", withExtension: "wav")!
-    
+        let fileURL: URL = bundle.url(forResource: "sample", withExtension: "wav")!
+
         let data = try Data(contentsOf: fileURL)
         let frameLengthBytes = Int(Cobra.frameLength) * 2
-        
+
         var results: [Double] = []
         for _ in 0...numTestIterations {
-            var pcmBuffer = Array<Int16>(repeating: 0, count: Int(Cobra.frameLength))
-            
+            var pcmBuffer = [Int16](repeating: 0, count: Int(Cobra.frameLength))
+
             var totalNSec = 0.0
             var index = 44
-            while(index + frameLengthBytes < data.count) {
-                _ = pcmBuffer.withUnsafeMutableBytes { data.copyBytes(to: $0, from: index..<(index + frameLengthBytes)) }
+            while index + frameLengthBytes < data.count {
+                _ = pcmBuffer.withUnsafeMutableBytes {
+                    data.copyBytes(to: $0, from: index..<(index + frameLengthBytes))
+                }
                 let before = CFAbsoluteTimeGetCurrent()
-                let _ = try cobra.process(pcm:pcmBuffer)
+                _ = try cobra.process(pcm: pcmBuffer)
                 let after = CFAbsoluteTimeGetCurrent()
                 totalNSec += (after - before)
                 index += frameLengthBytes

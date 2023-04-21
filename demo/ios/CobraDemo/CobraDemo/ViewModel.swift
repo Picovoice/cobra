@@ -12,22 +12,22 @@ import Cobra
 import Combine
 
 class ViewModel: ObservableObject {
-    
+
     private let ACCESS_KEY = "{YOUR_ACCESS_KEY_HERE}"
 
     private let ALPHA: Float = 0.5
-    
+
     private var cobra: Cobra!
     private var isListening = false
-    
+
     private var timer: Timer?
-    
+
     @Published var errorMessage = ""
-    @Published var recordToggleButtonText:String = "Start"
+    @Published var recordToggleButtonText: String = "Start"
     @Published var voiceProbability: Float = 0.0
     @Published var THRESHOLD: Float = 0.8
     @Published var detectedText = ""
-    
+
     init() {
         do {
             try cobra = Cobra(accessKey: ACCESS_KEY)
@@ -39,39 +39,39 @@ class ViewModel: ObservableObject {
             errorMessage = "ACCESS_KEY activation refused."
         } catch is CobraActivationLimitError {
             errorMessage = "ACCESS_KEY reached its limit."
-        } catch is CobraActivationThrottledError  {
+        } catch is CobraActivationThrottledError {
             errorMessage = "ACCESS_KEY is throttled."
         } catch {
             errorMessage = "\(error)"
         }
     }
-    
+
     deinit {
         stop()
         cobra.delete()
     }
-    
-    public func toggleRecording(){
-        
+
+    public func toggleRecording() {
+
         do {
             if isListening {
-                stop();
+                stop()
                 recordToggleButtonText = "Start"
             } else {
-                try start();
+                try start()
                 recordToggleButtonText = "Stop"
             }
         } catch {
             self.errorMessage = "Failed to start audio session."
         }
     }
-    
+
     public func start() throws {
-        
+
         guard !isListening else {
             return
         }
-        
+
         guard try VoiceProcessor.shared.hasPermissions() else {
             print("Permissions denied.")
             return
@@ -83,36 +83,36 @@ class ViewModel: ObservableObject {
             audioCallback: self.audioCallback)
         isListening = true
     }
-    
+
     public func stop() {
         guard isListening else {
             return
         }
-        
+
         VoiceProcessor.shared.stop()
         isListening = false
-        
+
         DispatchQueue.main.async {
             self.voiceProbability = 0
             self.timer?.invalidate()
             self.detectedText = ""
         }
     }
-    
+
     private func setProbability(value: Float32) {
         self.voiceProbability = (self.ALPHA * value) + ((1 - self.ALPHA) * self.voiceProbability)
         if self.voiceProbability >= self.THRESHOLD {
             timer?.invalidate()
-            timer = Timer.scheduledTimer(withTimeInterval: 0.75, repeats: false) {timer in
+            timer = Timer.scheduledTimer(withTimeInterval: 0.75, repeats: false) {_ in
                 self.detectedText = ""
             }
             self.detectedText = "Voice Detected!"
         }
     }
-    
-    private func audioCallback(pcm: [Int16]) -> Void {
+
+    private func audioCallback(pcm: [Int16]) {
         do {
-            let result:Float32 = try self.cobra!.process(pcm: pcm)
+            let result: Float32 = try self.cobra!.process(pcm: pcm)
             DispatchQueue.main.async {
                 self.setProbability(value: result)
             }
