@@ -73,8 +73,7 @@ PV_API void pv_cobra_delete(pv_cobra_t *object);
  * @return Returns 'PV_STATUS_INVALID_ARGUMENT' or 'PV_STATUS_OUT_OF_MEMORY' on
  * failure.
  */
-PV_API pv_status_t pv_cobra_process(pv_cobra_t *object, const int16_t *pcm,
-                                    float *is_voiced);
+PV_API pv_status_t pv_cobra_process(pv_cobra_t *object, const int16_t *pcm, float *is_voiced);
 
 /**
  * Getter for number of audio samples per frame.
