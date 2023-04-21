@@ -69,7 +69,7 @@ public class PerformanceTest {
         int numTestIterations = 100;
         try {
             numTestIterations = Integer.parseInt(iterationString);
-        } catch (NumberFormatException ignored) {}
+        } catch (NumberFormatException ignored) { }
         double performanceThresholdSec = Double.parseDouble(thresholdString);
 
         Cobra cobra = new Cobra(accessKey);
