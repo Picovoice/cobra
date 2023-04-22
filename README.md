@@ -4,7 +4,6 @@
 
 [![PyPI](https://img.shields.io/pypi/v/pvcobra)](https://pypi.org/project/pvcobra/)
 [![Maven Central](https://img.shields.io/maven-central/v/ai.picovoice/cobra-android?label=maven-central%20%5Bandroid%5D)](https://repo1.maven.org/maven2/ai/picovoice/cobra-android/)
-[![Cocoapods](https://img.shields.io/cocoapods/v/Cobra-iOS)](https://github.com/Picovoice/cobra/tree/master/binding/ios)
 <!-- markdown-link-check-disable -->
 [![Crates.io](https://img.shields.io/crates/v/pv_cobra)](https://crates.io/crates/pv_cobra)
 <!-- markdown-link-check-enable -->
