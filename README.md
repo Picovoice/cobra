@@ -9,7 +9,9 @@
 <!-- markdown-link-check-enable -->
 Made in Vancouver, Canada by [Picovoice](https://picovoice.ai)
 
+<!-- markdown-link-check-disable -->
 [![Twitter URL](https://img.shields.io/twitter/url?label=%40AiPicovoice&style=social&url=https%3A%2F%2Ftwitter.com%2FAiPicovoice)](https://twitter.com/AiPicovoice)
+<!-- markdown-link-check-enable -->
 [![YouTube Channel Views](https://img.shields.io/youtube/channel/views/UCAdi9sTCXLosG1XeqDwLx7w?label=YouTube&style=social)](https://www.youtube.com/channel/UCAdi9sTCXLosG1XeqDwLx7w)
 
 Cobra is a highly-accurate and lightweight voice activity detection (VAD) engine.
@@ -75,7 +77,7 @@ To run the demo:
 ./demo/c/build/cobra_demo_mic -l ${LIBRARY_PATH} -a ${ACCESS_KEY} -d ${AUDIO_DEVICE_INDEX}
 ```
 
-Replace `${LIBRARY_PATH}` with path to appropriate library available under [lib](/lib), Replace `${ACCESS_KEY}` with 
+Replace `${LIBRARY_PATH}` with path to appropriate library available under [lib](/lib), Replace `${ACCESS_KEY}` with
 AccessKey obtained from [Picovoice Console](https://console.picovoice.ai/), and `${INPUT_AUDIO_DEVICE}` with the index of
 your  microphone device.
 
@@ -99,7 +101,7 @@ Run the following from this directory to install the Cobra-iOS CocoaPod:
 pod install
 ```
 
-Replace `let ACCESS_KEY = "..."` inside [ViewModel.swift](demo/ios/CobraDemo/CobraDemo/ViewModel.swift) with yours 
+Replace `let ACCESS_KEY = "..."` inside [ViewModel.swift](demo/ios/CobraDemo/CobraDemo/ViewModel.swift) with yours
 obtained from [Picovoice Console](https://console.picovoice.ai/).
 
 Then, using Xcode, open the generated CobraDemo.xcworkspace and run the application. Press the start button and start
@@ -297,7 +299,7 @@ function getAudioData(): Int16Array {
 }
 
 const cobra = await CobraWorker.create(
-  "${ACCESS_KEY}", 
+  "${ACCESS_KEY}",
   voiceProbabilityCallback
 );
 
@@ -307,7 +309,7 @@ for (; ;) {
 }
 ```
 
-Replace `${ACCESS_KEY}` with yours obtained from [Picovoice Console](https://console.picovoice.ai/). 
+Replace `${ACCESS_KEY}` with yours obtained from [Picovoice Console](https://console.picovoice.ai/).
 
 When done, release the resources allocated to Cobra using `cobra.release()`.
 
