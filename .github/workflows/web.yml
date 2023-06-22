@@ -27,7 +27,6 @@ jobs:
 
     strategy:
       matrix:
-        python-version: [3.8]
         node-version: [14.x, 16.x, 18.x, 20.x]
 
     steps:
@@ -35,21 +34,10 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
-        with:
-          python-version: ${{ matrix.python-version }}
-
       - name: Set up Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-
-      - name: Install system dependencies
-        run: |
-          pip install packaging
-          pip install selenium
-          pip install webdriver-manager
 
       - name: Pre-build dependencies
         run: npm install yarn
@@ -64,4 +52,4 @@ jobs:
         run: yarn build
 
       - name: Test
-        run: python test/selenium_test.py --access_key ${{secrets.PV_VALID_ACCESS_KEY}} --audio_file ../../res/audio/sample.wav
+        run: yarn test --env ACCESS_KEY=${{secrets.PV_VALID_ACCESS_KEY}}
