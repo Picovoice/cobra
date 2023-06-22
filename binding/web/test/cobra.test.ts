@@ -3,7 +3,7 @@ import { Cobra, CobraWorker } from "../";
 const ACCESS_KEY: string = Cypress.env("ACCESS_KEY");
 
 const testParam = {
-  audio_file: 'sample.wav',
+  audioFile: 'sample.wav',
   expectedLoss: 0.1,
   labels: new Array(28).fill(0).fill(1, 10)
 };
@@ -141,7 +141,7 @@ describe("Cobra Binding", function () {
 
     it(`should be able to process (${instanceString})`, () => {
       try {
-        cy.getFramesFromFile(`audio_samples/${testParam.audio_file}`).then( async pcm => {
+        cy.getFramesFromFile(`audio_samples/${testParam.audioFile}`).then( async pcm => {
           await runProcTest(
             instance,
             pcm,
