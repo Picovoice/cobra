@@ -48,5 +48,8 @@ jobs:
     - name: Build
       run: yarn build
 
+    - name: Prepare Test
+      run: yarn setup-test
+
     - name: Test
       run: yarn test-perf --env ACCESS_KEY=${{secrets.PV_VALID_ACCESS_KEY}},NUM_TEST_ITERATIONS=20,PROC_PERFORMANCE_THRESHOLD_SEC=${{matrix.procPerformanceThresholdSec}}
