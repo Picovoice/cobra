@@ -14,7 +14,7 @@ const sourceDirectory = join(
 );
 
 try {
-  fs.mkdirSync(join(fixturesDirectory, 'audio'), { recursive: true });
+  fs.mkdirSync(join(fixturesDirectory, 'audio_samples'), { recursive: true });
   fs.readdirSync(join(sourceDirectory, 'audio')).forEach(file => {
     fs.copyFileSync(join(sourceDirectory, 'audio', file), join(fixturesDirectory, 'audio_samples', file));
   });
