@@ -1,5 +1,5 @@
 #
-# Copyright 2021 Picovoice Inc.
+# Copyright 2021-2023 Picovoice Inc.
 #
 # You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
 # file accompanying this source.
@@ -61,7 +61,7 @@ class CobraDemo(Thread):
             cobra = pvcobra.create(
                 library_path=self._library_path, access_key=self._access_key)
             print("Cobra version: %s" % cobra.version)
-            recorder = PvRecorder(device_index=self._input_device_index, frame_length=512)
+            recorder = PvRecorder(frame_length=512, device_index=self._input_device_index)
             recorder.start()
 
             if self._output_path is not None:
@@ -96,8 +96,8 @@ class CobraDemo(Thread):
                 recorder.delete()
 
     @classmethod
-    def show_audio_devices(cls):
-        devices = PvRecorder.get_audio_devices()
+    def show_available_devices(cls):
+        devices = PvRecorder.get_available_devices()
         for i in range(len(devices)):
             print('index: %d, device name: %s' % (i, devices[i]))
 
@@ -123,7 +123,7 @@ def main():
     args = parser.parse_args()
 
     if args.show_audio_devices:
-        CobraDemo.show_audio_devices()
+        CobraDemo.show_available_devices()
     else:
         if args.access_key is None:
             print("missing AccessKey")
