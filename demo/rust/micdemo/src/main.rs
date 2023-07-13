@@ -12,8 +12,7 @@
 use clap::{App, Arg, ArgGroup};
 use cobra::Cobra;
 
-
-use pv_recorder::RecorderBuilder;
+use pv_recorder::PvRecorderBuilder;
 use std::io;
 use std::io::Write;
 
@@ -37,9 +36,8 @@ fn print_voice_activity(voice_probability: f32) {
 fn cobra_demo(audio_device_index: i32, access_key: &str, output_path: Option<&str>) {
     let cobra = Cobra::new(access_key).expect("Failed to create Cobra");
 
-    let recorder = RecorderBuilder::new()
+    let recorder = PvRecorderBuilder::new(cobra.frame_length() as i32)
         .device_index(audio_device_index)
-        .frame_length(cobra.frame_length() as i32)
         .init()
         .expect("Failed to initialize pvrecorder");
     recorder.start().expect("Failed to start audio recording");
@@ -54,14 +52,13 @@ fn cobra_demo(audio_device_index: i32, access_key: &str, output_path: Option<&st
 
     let mut audio_data = Vec::new();
     while LISTENING.load(Ordering::SeqCst) {
-        let mut pcm = vec![0; recorder.frame_length()];
-        recorder.read(&mut pcm).expect("Failed to read audio frame");
+        let frame = recorder.read().expect("Failed to read audio frame");
 
-        let voice_probability = cobra.process(&pcm).unwrap();
+        let voice_probability = cobra.process(&frame).unwrap();
         print_voice_activity(voice_probability);
 
         if output_path.is_some() {
-            audio_data.extend_from_slice(&pcm);
+            audio_data.extend_from_slice(&frame);
         }
     }
 
@@ -84,10 +81,7 @@ fn cobra_demo(audio_device_index: i32, access_key: &str, output_path: Option<&st
 }
 
 fn show_audio_devices() {
-    let audio_devices = RecorderBuilder::new()
-        .init()
-        .expect("Failed to initialize pvrecorder")
-        .get_audio_devices();
+    let audio_devices = PvRecorderBuilder::default().get_available_devices();
     match audio_devices {
         Ok(audio_devices) => {
             for (idx, device) in audio_devices.iter().enumerate() {
