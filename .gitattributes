@@ -1,0 +1,6 @@
+binding/web/** linguist-detectable=false
+binding/web/src/cobra.ts linguist-detectable=true
+demo/** linguist-detectable=false
+lib/** linguist-detectable=false
+resources/** linguist-detectable=false
+*.py linguist-detectable=true
