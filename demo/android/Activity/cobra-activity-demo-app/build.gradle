@@ -1,6 +1,4 @@
-plugins {
-    id 'com.android.application'
-}
+apply plugin: 'com.android.application'
 
 Properties properties = new Properties()
 if (rootProject.file("local.properties").exists()) {
@@ -18,7 +16,6 @@ if (rootProject.file("local.properties").exists()) {
 
 android {
     compileSdkVersion defaultTargetSdkVersion
-    buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "ai.picovoice.cobraactivitydemo"
@@ -51,12 +48,8 @@ android {
             }
         }
     }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    buildFeatures {
-        viewBinding true
+    lint {
+        abortOnError false
     }
 }
 
@@ -67,6 +60,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.3.5'
     implementation 'androidx.navigation:navigation-ui:2.3.5'
     implementation 'ai.picovoice:cobra-android:1.2.0'
+    implementation 'ai.picovoice:android-voice-processor:1.0.1'
 
     // Espresso UI Testing
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
