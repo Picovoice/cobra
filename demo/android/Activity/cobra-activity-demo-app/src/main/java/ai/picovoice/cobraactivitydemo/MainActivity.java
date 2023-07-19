@@ -98,12 +98,12 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
             } catch (CobraException e) {
-                displayError(e.toString());
+                runOnUiThread(() -> displayError(e.toString()));
             }
         });
 
         voiceProcessor.addErrorListener(error -> {
-            displayError(error.toString());
+            runOnUiThread(() -> displayError(error.toString()));
         });
     }
 
