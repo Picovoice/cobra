@@ -15,12 +15,8 @@ package ai.picovoice.cobraactivitydemo;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.media.AudioFormat;
-import android.media.AudioRecord;
-import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Process;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,18 +27,21 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import ai.picovoice.android.voiceprocessor.VoiceProcessor;
 import ai.picovoice.android.voiceprocessor.VoiceProcessorException;
-import ai.picovoice.cobra.*;
+import ai.picovoice.cobra.Cobra;
+import ai.picovoice.cobra.CobraActivationException;
+import ai.picovoice.cobra.CobraActivationLimitException;
+import ai.picovoice.cobra.CobraActivationRefusedException;
+import ai.picovoice.cobra.CobraActivationThrottledException;
+import ai.picovoice.cobra.CobraException;
+import ai.picovoice.cobra.CobraInvalidArgumentException;
 
 public class MainActivity extends AppCompatActivity {
     private static final String ACCESS_KEY = "${YOUR_ACCESS_KEY_HERE}";
 
     private final VoiceProcessor voiceProcessor = VoiceProcessor.getInstance();
+
     private Cobra cobra;
 
     private ToggleButton recordButton;
