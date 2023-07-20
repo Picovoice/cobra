@@ -15,12 +15,8 @@ package ai.picovoice.cobraactivitydemo;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.media.AudioFormat;
-import android.media.AudioRecord;
-import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Process;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,17 +27,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import java.util.concurrent.Callable;
-import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicBoolean;
-
-import ai.picovoice.cobra.*;
+import ai.picovoice.android.voiceprocessor.VoiceProcessor;
+import ai.picovoice.android.voiceprocessor.VoiceProcessorException;
+import ai.picovoice.cobra.Cobra;
+import ai.picovoice.cobra.CobraActivationException;
+import ai.picovoice.cobra.CobraActivationLimitException;
+import ai.picovoice.cobra.CobraActivationRefusedException;
+import ai.picovoice.cobra.CobraActivationThrottledException;
+import ai.picovoice.cobra.CobraException;
+import ai.picovoice.cobra.CobraInvalidArgumentException;
 
 public class MainActivity extends AppCompatActivity {
-    private final MicrophoneReader microphoneReader = new MicrophoneReader();
-    public Cobra cobra;
-
     private static final String ACCESS_KEY = "${YOUR_ACCESS_KEY_HERE}";
+
+    private final VoiceProcessor voiceProcessor = VoiceProcessor.getInstance();
+
+    private Cobra cobra;
 
     private ToggleButton recordButton;
     private TextView detectedText;
@@ -85,6 +86,25 @@ public class MainActivity extends AppCompatActivity {
         } catch (CobraException e) {
             onCobraInitError("Failed to initialize Cobra " + e.getMessage());
         }
+
+        voiceProcessor.addFrameListener(frame -> {
+            try {
+                final float voiceProbability = cobra.process(frame);
+                runOnUiThread(() -> {
+                    needleView.setValue(voiceProbability);
+                    if (needleView.isDetected()) {
+                        visibilityTimer.cancel();
+                        visibilityTimer.start();
+                    }
+                });
+            } catch (CobraException e) {
+                runOnUiThread(() -> displayError(e.toString()));
+            }
+        });
+
+        voiceProcessor.addErrorListener(error -> {
+            runOnUiThread(() -> displayError(error.toString()));
+        });
     }
 
     @Override
@@ -106,11 +126,6 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    private boolean hasRecordPermission() {
-        return ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) ==
-            PackageManager.PERMISSION_GRANTED;
-    }
-
     private void requestRecordPermission() {
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.RECORD_AUDIO}, 0);
     }
@@ -126,116 +141,27 @@ public class MainActivity extends AppCompatActivity {
             ToggleButton toggleButton = findViewById(R.id.startButton);
             toggleButton.toggle();
         } else {
-            microphoneReader.start();
+            try {
+                voiceProcessor.start(cobra.getFrameLength(), cobra.getSampleRate());
+            } catch (VoiceProcessorException e) {
+                displayError(e.toString());
+            }
         }
     }
 
     public void onClick(View view) {
         try {
             if (recordButton.isChecked()) {
-                if (hasRecordPermission()) {
-                    microphoneReader.start();
+                if (voiceProcessor.hasRecordAudioPermission(this)) {
+                    voiceProcessor.start(cobra.getFrameLength(), cobra.getSampleRate());
                 } else {
                     requestRecordPermission();
                 }
             } else {
-                microphoneReader.stop();
+                voiceProcessor.stop();
             }
-        } catch (InterruptedException e) {
-            displayError("Audio stop command interrupted\n" + e.getMessage());
-        }
-    }
-
-    private class MicrophoneReader {
-        private final AtomicBoolean started = new AtomicBoolean(false);
-        private final AtomicBoolean stop = new AtomicBoolean(false);
-        private final AtomicBoolean stopped = new AtomicBoolean(false);
-
-        void start() {
-
-            if (started.get()) {
-                return;
-            }
-
-            started.set(true);
-
-            Executors.newSingleThreadExecutor().submit((Callable<Void>) () -> {
-                Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO);
-                read();
-                return null;
-            });
-        }
-
-        void stop() throws InterruptedException {
-            if (!started.get()) {
-                return;
-            }
-
-            stop.set(true);
-
-            while (!stopped.get()) {
-                Thread.sleep(10);
-            }
-
-            started.set(false);
-            stop.set(false);
-            stopped.set(false);
-        }
-
-        private void read() throws CobraException {
-            final int minBufferSize = AudioRecord.getMinBufferSize(
-                    cobra.getSampleRate(),
-                    AudioFormat.CHANNEL_IN_MONO,
-                    AudioFormat.ENCODING_PCM_16BIT);
-            final int bufferSize = Math.max(cobra.getSampleRate() / 2, minBufferSize);
-
-            AudioRecord audioRecord = null;
-
-            short[] buffer = new short[cobra.getFrameLength()];
-
-            try {
-                audioRecord = new AudioRecord(
-                        MediaRecorder.AudioSource.MIC,
-                        cobra.getSampleRate(),
-                        AudioFormat.CHANNEL_IN_MONO,
-                        AudioFormat.ENCODING_PCM_16BIT,
-                        bufferSize);
-                audioRecord.startRecording();
-
-                while (!stop.get()) {
-                    if (audioRecord.read(buffer, 0, buffer.length) == buffer.length) {
-                        final float voiceProbability = cobra.process(buffer);
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                needleView.setValue(voiceProbability);
-                                if (needleView.isDetected()) {
-                                    visibilityTimer.cancel();
-                                    visibilityTimer.start();
-                                }
-                            }
-                        });
-                    }
-                }
-
-                audioRecord.stop();
-            } catch (IllegalArgumentException | IllegalStateException e) {
-                throw new CobraException(e);
-            } finally {
-                if (audioRecord != null) {
-                    audioRecord.release();
-                }
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        visibilityTimer.cancel();
-                        needleView.reset();
-                        detectedText.setVisibility(View.INVISIBLE);
-                    }
-                });
-                stopped.set(true);
-            }
+        } catch (VoiceProcessorException e) {
+            displayError(e.getMessage());
         }
     }
 }
