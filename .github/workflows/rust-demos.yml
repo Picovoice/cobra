@@ -50,7 +50,7 @@ jobs:
       working-directory: demo/rust/filedemo
 
     - name: Test
-      run: cargo run --release -- --access_key ${{secrets.PV_VALID_ACCESS_KEY}} --input_audio_path ../../../resources/audio/sample.wav
+      run: cargo run --release -- --access_key ${{secrets.PV_VALID_ACCESS_KEY}} --input_audio_path ../../../res/audio/sample.wav
       working-directory: demo/rust/filedemo
 
   build-self-hosted:
@@ -82,5 +82,5 @@ jobs:
       working-directory: demo/rust/filedemo
 
     - name: Test
-      run: cargo run --release -- --access_key ${{secrets.PV_VALID_ACCESS_KEY}} --input_audio_path ../../../resources/audio/sample.wav
+      run: cargo run --release -- --access_key ${{secrets.PV_VALID_ACCESS_KEY}} --input_audio_path ../../../res/audio/sample.wav
       working-directory: demo/rust/filedemo

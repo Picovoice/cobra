@@ -43,7 +43,7 @@ jobs:
       run: pip install -r requirements.txt
 
     - name: Test
-      run: python cobra_demo_file.py --access_key ${{secrets.PV_VALID_ACCESS_KEY}} --input_audio_path ../../resources/audio/sample.wav
+      run: python cobra_demo_file.py --access_key ${{secrets.PV_VALID_ACCESS_KEY}} --input_audio_path ../../res/audio/sample.wav
 
   build-self-hosted:
     runs-on: ${{ matrix.machine }}
@@ -59,4 +59,4 @@ jobs:
       run: pip3 install -r requirements.txt
 
     - name: Test
-      run: python3 cobra_demo_file.py --access_key ${{secrets.PV_VALID_ACCESS_KEY}} --input_audio_path ../../resources/audio/sample.wav
+      run: python3 cobra_demo_file.py --access_key ${{secrets.PV_VALID_ACCESS_KEY}} --input_audio_path ../../res/audio/sample.wav
