@@ -72,9 +72,6 @@ export class Cobra {
 
   private _wasmMemory: WebAssembly.Memory | undefined;
   private readonly _pvFree: pv_free_type;
-  private readonly _memoryBuffer: Int16Array;
-  private readonly _memoryBufferUint8: Uint8Array;
-  private readonly _memoryBufferView: DataView;
   private readonly _processMutex: Mutex;
 
   private readonly _objectAddress: number;
@@ -115,9 +112,6 @@ export class Cobra {
     this._alignedAlloc = handleWasm.aligned_alloc;
     this._voiceProbabilityAddress = handleWasm.voiceProbabilityAddress;
 
-    this._memoryBuffer = new Int16Array(handleWasm.memory.buffer);
-    this._memoryBufferUint8 = new Uint8Array(handleWasm.memory.buffer);
-    this._memoryBufferView = new DataView(handleWasm.memory.buffer);
     this._processMutex = new Mutex();
 
     this._voiceProbabilityCallback = voiceProbabilityCallback;
@@ -238,7 +232,9 @@ export class Cobra {
           throw new Error('Attempted to call Cobra process after release.');
         }
 
-        this._memoryBuffer.set(
+        const memoryBuffer = new Int16Array(this._wasmMemory.buffer);
+
+        memoryBuffer.set(
           pcm,
           this._inputBufferAddress / Int16Array.BYTES_PER_ELEMENT
         );
@@ -248,17 +244,20 @@ export class Cobra {
           this._inputBufferAddress,
           this._voiceProbabilityAddress
         );
+
+        const memoryBufferUint8 = new Uint8Array(this._wasmMemory.buffer);
+        const memoryBufferView = new DataView(this._wasmMemory.buffer);
+
         if (status !== PV_STATUS_SUCCESS) {
-          const memoryBuffer = new Uint8Array(this._wasmMemory.buffer);
           throw new Error(
             `process failed with status ${arrayBufferToStringAtIndex(
-              memoryBuffer,
+              memoryBufferUint8,
               await this._pvStatusToString(status)
             )}`
           );
         }
 
-        const voiceProbability = this._memoryBufferView.getFloat32(
+        const voiceProbability = memoryBufferView.getFloat32(
           this._voiceProbabilityAddress,
           true
         );
