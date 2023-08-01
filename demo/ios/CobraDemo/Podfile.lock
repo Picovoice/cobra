@@ -1,10 +1,10 @@
 PODS:
   - Cobra-iOS (1.2.0)
-  - ios-voice-processor (1.0.3)
+  - ios-voice-processor (1.1.0)
 
 DEPENDENCIES:
   - Cobra-iOS (~> 1.2.0)
-  - ios-voice-processor (~> 1.0.3)
+  - ios-voice-processor (~> 1.1.0)
 
 SPEC REPOS:
   trunk:
@@ -13,8 +13,8 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   Cobra-iOS: ff2e2622be1b37cc49935bb400938cb68cca6c18
-  ios-voice-processor: 65b25a8db69ea25ffba0eeef37bae71a982f34cc
+  ios-voice-processor: 8e32d7f980a06d392d128ef1cd19cf6ddcaca3c1
 
-PODFILE CHECKSUM: ab4bc47f3256d1298800a3cbedf5b4adc5fe2138
+PODFILE CHECKSUM: dcc8350eed61872fda34cda940969c6923f2c3e0
 
-COCOAPODS: 1.11.2
+COCOAPODS: 1.11.3

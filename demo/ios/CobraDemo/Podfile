@@ -3,5 +3,5 @@ platform :ios, '11.0'
 
 target 'CobraDemo' do
   pod 'Cobra-iOS','~> 1.2.0'
-  pod 'ios-voice-processor', '~> 1.0.3'
+  pod 'ios-voice-processor', '~> 1.1.0'
 end
