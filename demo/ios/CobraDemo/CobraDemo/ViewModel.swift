@@ -31,6 +31,7 @@ class ViewModel: ObservableObject {
     init() {
         do {
             try cobra = Cobra(accessKey: ACCESS_KEY)
+
             VoiceProcessor.instance.addErrorListener(VoiceProcessorErrorListener(errorCallback))
             VoiceProcessor.instance.addFrameListener(VoiceProcessorFrameListener(audioCallback))
 
