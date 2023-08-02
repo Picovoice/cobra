@@ -1,5 +1,5 @@
 //
-//  Copyright 2021 Picovoice Inc.
+//  Copyright 2021-2023 Picovoice Inc.
 //  You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
 //  file accompanying this source.
 //  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
@@ -31,6 +31,10 @@ class ViewModel: ObservableObject {
     init() {
         do {
             try cobra = Cobra(accessKey: ACCESS_KEY)
+
+            VoiceProcessor.instance.addErrorListener(VoiceProcessorErrorListener(errorCallback))
+            VoiceProcessor.instance.addFrameListener(VoiceProcessorFrameListener(audioCallback))
+
         } catch is CobraInvalidArgumentError {
             errorMessage = "ACCESS_KEY '\(ACCESS_KEY)' is invalid."
         } catch is CobraActivationError {
@@ -52,36 +56,46 @@ class ViewModel: ObservableObject {
     }
 
     public func toggleRecording() {
-
-        do {
-            if isListening {
-                stop()
-                recordToggleButtonText = "Start"
-            } else {
-                try start()
-                recordToggleButtonText = "Stop"
-            }
-        } catch {
-            self.errorMessage = "Failed to start audio session."
+        if isListening {
+            stop()
+            recordToggleButtonText = "Start"
+        } else {
+            start()
+            recordToggleButtonText = "Stop"
         }
     }
 
-    public func start() throws {
+    public func start() {
 
         guard !isListening else {
             return
         }
 
-        guard try VoiceProcessor.shared.hasPermissions() else {
-            print("Permissions denied.")
+        guard VoiceProcessor.hasRecordAudioPermission else {
+            VoiceProcessor.requestRecordAudioPermission { isGranted in
+                guard isGranted else {
+                    DispatchQueue.main.async {
+                        self.errorMessage = "Demo requires microphone permission"
+                    }
+                    return
+                }
+
+                DispatchQueue.main.async {
+                    self.start()
+                }
+            }
             return
         }
 
-        try VoiceProcessor.shared.start(
-            frameLength: Cobra.frameLength,
-            sampleRate: Cobra.sampleRate,
-            audioCallback: self.audioCallback)
-        isListening = true
+        do {
+            try VoiceProcessor.instance.start(
+                frameLength: Cobra.frameLength,
+                sampleRate: Cobra.sampleRate)
+            isListening = true
+        } catch {
+            self.errorMessage = "\(error)"
+        }
+
     }
 
     public func stop() {
@@ -89,13 +103,17 @@ class ViewModel: ObservableObject {
             return
         }
 
-        VoiceProcessor.shared.stop()
-        isListening = false
+        do {
+            try VoiceProcessor.instance.stop()
+            isListening = false
 
-        DispatchQueue.main.async {
-            self.voiceProbability = 0
-            self.timer?.invalidate()
-            self.detectedText = ""
+            DispatchQueue.main.async {
+                self.voiceProbability = 0
+                self.timer?.invalidate()
+                self.detectedText = ""
+            }
+        } catch {
+            self.errorMessage = "\(error)"
         }
     }
 
@@ -110,15 +128,23 @@ class ViewModel: ObservableObject {
         }
     }
 
-    private func audioCallback(pcm: [Int16]) {
+    private func audioCallback(frame: [Int16]) {
         do {
-            let result: Float32 = try self.cobra!.process(pcm: pcm)
+            let result: Float32 = try self.cobra!.process(pcm: frame)
             DispatchQueue.main.async {
                 self.setProbability(value: result)
             }
         } catch {
-            self.errorMessage = "Failed to process pcm frames."
-            self.stop()
+            DispatchQueue.main.async {
+                self.errorMessage = "Failed to process pcm frames."
+                self.stop()
+            }
+        }
+    }
+
+    private func errorCallback(error: VoiceProcessorError) {
+        DispatchQueue.main.async {
+            self.errorMessage = "\(error.localizedDescription)"
         }
     }
 }
