@@ -106,6 +106,19 @@ public class MainActivity extends AppCompatActivity {
             results.add(result);
         }
 
+        result = new TestResult();
+        result.testName = "Test Exception";
+        Cobra cobra = null;
+        try {
+            cobra = new Cobra("");
+            result.success = false;
+            result.errorMessage = "Init should have throw an exception";
+        } catch (CobraException e) {
+            result.success = true;
+        } finally {
+            results.add(result);
+        }
+
         displayTestResults(results);
     }
 
