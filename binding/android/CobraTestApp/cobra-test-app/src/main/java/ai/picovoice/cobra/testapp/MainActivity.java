@@ -37,6 +37,9 @@ import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import ai.picovoice.cobra.Cobra;
+import ai.picovoice.cobra.CobraException;
+
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -67,26 +70,15 @@ public class MainActivity extends AppCompatActivity {
 
         ArrayList<TestResult> results = new ArrayList<>();
 
-        String modelFile = getModelFile();
-        String[] keywords = getKeywords();
-        String[] keywordPaths = new String[keywords.length];
-        for (int i = 0; i < keywords.length; i++) {
-            keywordPaths[i] = String.format("keywords/%s", keywords[i]);
-        }
-
         TestResult result = new TestResult();
         result.testName = "Test Init";
-        Porcupine porcupine = null;
+        Cobra cobra = null;
         try {
-            porcupine = new Porcupine.Builder()
-                    .setAccessKey(accessKey)
-                    .setModelPath(modelFile)
-                    .setKeywordPaths(keywordPaths)
-                    .build(getApplicationContext());
+            cobra = new Cobra(accessKey);
             result.success = true;
-        } catch (PorcupineException e) {
+        } catch (CobraException e) {
             result.success = false;
-            result.errorMessage = String.format("Failed to init porcupine with '%s'", e);
+            result.errorMessage = String.format("Failed to init cobra with '%s'", e);
         } finally {
             results.add(result);
         }
@@ -94,15 +86,14 @@ public class MainActivity extends AppCompatActivity {
         result = new TestResult();
         result.testName = "Test Process";
         try {
-            String suffix = "_" + BuildConfig.FLAVOR;
-            if (BuildConfig.FLAVOR == "en") {
-                suffix = "";
+            String audioPath = "audio_samples/sample.wav";
+
+            ArrayList<Float> processResult = processTestAudio(cobra, audioPath);
+            double sum = 0;
+            for (float f : processResult) {
+                sum += f;
             }
-
-            String audioPath = "audio_samples/multiple_keywords" + suffix + ".wav";
-
-            ArrayList<Integer> processResult = processTestAudio(porcupine, audioPath);
-            if (processResult.size() > 0) {
+            if (processResult.size() > 0 && sum >= 0) {
                 result.success = true;
             } else {
                 result.success = false;
@@ -165,21 +156,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private String getModelFile() {
-        String suffix = (!BuildConfig.FLAVOR.equals("en")) ? String.format("_%s", BuildConfig.FLAVOR) : "";
-        return String.format("models/porcupine_params%s.pv", suffix);
-    }
-
-    private String[] getKeywords() {
-        try {
-            return getApplicationContext().getAssets().list("keywords");
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new String[]{};
-        }
-    }
-
-    private ArrayList<Integer> processTestAudio(@NonNull Porcupine p, String audioPath) throws Exception {
+    private ArrayList<Float> processTestAudio(@NonNull Cobra c, String audioPath) throws Exception {
         File testAudio = new File(getApplicationContext().getFilesDir(), audioPath);
 
         if (!testAudio.exists()) {
@@ -189,24 +166,22 @@ public class MainActivity extends AppCompatActivity {
 
         FileInputStream audioInputStream = new FileInputStream(testAudio);
 
-        byte[] rawData = new byte[p.getFrameLength() * 2];
-        short[] pcm = new short[p.getFrameLength()];
+        byte[] rawData = new byte[c.getFrameLength() * 2];
+        short[] pcm = new short[c.getFrameLength()];
         ByteBuffer pcmBuff = ByteBuffer.wrap(rawData).order(ByteOrder.LITTLE_ENDIAN);
 
         audioInputStream.skip(44);
 
-        ArrayList<Integer> detectionResults = new ArrayList<>();
+        ArrayList<Float> vadResults = new ArrayList<>();
         while (audioInputStream.available() > 0) {
             int numRead = audioInputStream.read(pcmBuff.array());
-            if (numRead == p.getFrameLength() * 2) {
+            if (numRead == c.getFrameLength() * 2) {
                 pcmBuff.asShortBuffer().get(pcm);
-                int keywordIndex = p.process(pcm);
-                if (keywordIndex >= 0) {
-                    detectionResults.add(keywordIndex);
-                }
+                float vad = c.process(pcm);
+                vadResults.add(vad);
             }
         }
-        return detectionResults;
+        return vadResults;
     }
 
     private void extractFile(String filepath) throws IOException {

@@ -85,6 +85,13 @@ android {
         }
     }
 
+    task("copyAudio", type: Copy) {
+        description = "Copy audio resources"
+        from("$projectDir/../../../../res/audio/")
+        include("sample.wav")
+        into("$projectDir/src/main/assets/audio_samples")
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -110,4 +117,9 @@ dependencies {
     })
     androidTestImplementation('com.microsoft.appcenter:espresso-test-extension:1.4')
     androidTestImplementation('androidx.test.espresso:espresso-intents:3.5.1')
+}
+
+afterEvaluate {
+    tasks."mergeDebugAssets".dependsOn "copyAudio"
+    tasks."mergeReleaseAssets".dependsOn "copyAudio"
 }
