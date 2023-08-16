@@ -77,7 +77,7 @@ jobs:
       run: ./gradlew assembleDebug
 
     - name: Build androidTest
-      run: ./gradlew assembleAndroidTest -DtestBuildType=integ
+      run: ./gradlew assembleAndroidTest -DtestBuildType=perf
 
     - name: Run tests on AppCenter
       run: appcenter test run espresso
