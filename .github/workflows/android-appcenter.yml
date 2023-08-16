@@ -121,7 +121,7 @@ jobs:
     - name: Run tests on AppCenter
       run: appcenter test run espresso
         --token ${{secrets.APPCENTERAPITOKEN}}
-        --app "Picovoice/Cobra-Android"
+        --app "Picovoice/Cobra-Android-Activity"
         --devices "Picovoice/android-min-max"
         --app-path cobra-test-app/build/outputs/apk/release/cobra-test-app-release.apk
         --test-series "cobra-android"

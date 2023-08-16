@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         result = new TestResult();
         result.testName = "Test Process";
         try {
-            String audioPath = "audio_samples/sample.wav";
+            String audioPath = "audio/sample.wav";
 
             ArrayList<Float> processResult = processTestAudio(cobra, audioPath);
             double sum = 0;

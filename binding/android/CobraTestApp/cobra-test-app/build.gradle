@@ -89,7 +89,7 @@ android {
         description = "Copy audio resources"
         from("$projectDir/../../../../res/audio/")
         include("sample.wav")
-        into("$projectDir/src/main/assets/audio_samples")
+        into("$projectDir/src/main/assets/audio/")
     }
 
     compileOptions {
