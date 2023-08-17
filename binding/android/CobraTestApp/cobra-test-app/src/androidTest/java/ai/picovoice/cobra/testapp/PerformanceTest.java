@@ -1,4 +1,4 @@
-package ai.picovoice.cobraactivitydemo;
+package ai.picovoice.cobra.testapp;
 
 import static org.junit.Assert.assertTrue;
 

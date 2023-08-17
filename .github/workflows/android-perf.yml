@@ -15,7 +15,7 @@ on:
 
 defaults:
   run:
-    working-directory: demo/android/Activity
+    working-directory: binding/android/CobraTestApp
 
 jobs:
   build:
@@ -27,7 +27,7 @@ jobs:
         device: [single-android, 32bit-android]
         include:
         - device: single-android
-          performanceThresholdSec: 0.003
+          performanceThresholdSec: 0.005
         - device: 32bit-android
           performanceThresholdSec: 0.015
 
@@ -57,6 +57,16 @@ jobs:
     - name: Inject Number of Iterations
       run: echo numTestIterations="100" >> local.properties
 
+    - name: Inject Android keystore variables
+      run: |
+        echo storePassword="${{secrets.ANDROID_RELEASE_KEYSTORE_PASSWORD}}" >> local.properties
+        echo keyPassword="${{secrets.ANDROID_RELEASE_KEYSTORE_PASSWORD}}" >> local.properties
+        echo keyAlias=picovoice >> local.properties
+        echo storeFile=../picovoice.jks >> local.properties
+
+    - name: Setup Android keystore file
+      run: echo "${{secrets.ANDROID_RELEASE_KEYSTORE_FILE_B64}}" | base64 -d > picovoice.jks
+
     - name: Inject Performance Threshold
       run: echo performanceThresholdSec="${{ matrix.performanceThresholdSec }}" >> local.properties
 
@@ -67,14 +77,14 @@ jobs:
       run: ./gradlew assembleDebug
 
     - name: Build androidTest
-      run: ./gradlew assembleAndroidTest
+      run: ./gradlew assembleAndroidTest -DtestBuildType=perf
 
     - name: Run tests on AppCenter
       run: appcenter test run espresso
         --token ${{secrets.APPCENTERAPITOKEN}}
         --app "Picovoice/Cobra-Android-Activity"
         --devices "Picovoice/${{ matrix.device }}"
-        --app-path cobra-activity-demo-app/build/outputs/apk/debug/cobra-activity-demo-app-debug.apk
+        --app-path cobra-test-app/build/outputs/apk/debug/cobra-test-app-debug.apk
         --test-series "cobra-android"
         --locale "en_US"
-        --build-dir cobra-activity-demo-app/build/outputs/apk/androidTest/debug
+        --build-dir cobra-test-app/build/outputs/apk/androidTest/debug

@@ -8,7 +8,7 @@
     limitations under the License.
 */
 
-package ai.picovoice.cobraactivitydemo;
+package ai.picovoice.cobra.testapp;
 
 import android.content.Context;
 import android.content.res.AssetManager;

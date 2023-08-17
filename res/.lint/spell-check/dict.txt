@@ -38,12 +38,14 @@ pthread
 pvcobra
 pvcobrademo
 pvrecorder
+Readables
 repr
 rodio
 signup
 soundfile
 styleable
 sysdefault
+testapp
 vtable
 wargv
 wavspec
