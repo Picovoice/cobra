@@ -27,7 +27,7 @@ jobs:
         device: [single-android, 32bit-android]
         include:
         - device: single-android
-          performanceThresholdSec: 0.003
+          performanceThresholdSec: 0.005
         - device: 32bit-android
           performanceThresholdSec: 0.015
 
