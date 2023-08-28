@@ -67,7 +67,7 @@ jobs:
 
     - name: Build micdemo
       run: cmake --build ./build --target cobra_demo_mic
-
+  
   build-filedemo-github-hosted:
     runs-on: ${{ matrix.os }}
 
@@ -78,20 +78,22 @@ jobs:
         - os: ubuntu-latest
           platform: linux
           arch: x86_64
-          ext: so
         - os: windows-latest
           platform: windows
           arch: amd64
-          ext: dll
         - os: macos-latest
           platform: mac
           arch: x86_64
-          ext: dylib
 
     steps:
     - uses: actions/checkout@v3
       with:
         submodules: recursive
+
+    - name: Set up Python '3.10'
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
 
     - name: Create build directory
       run: cmake -B ./build
@@ -99,12 +101,11 @@ jobs:
     - name: Build filedemo
       run: cmake --build ./build --target cobra_demo_file
 
-    - uses: ./.github/actions/c-filedemo
-      name: Run filedemo
-      with:
-        access_key: ${{ secrets.PV_VALID_ACCESS_KEY }}
-        library_path: ../../lib/${{ matrix.platform }}/${{ matrix.arch }}/libpv_cobra.${{ matrix.ext }}
-        audio_path: ../../res/audio/sample.wav
+    - name: Install dependencies
+      run: pip install -r test/requirements.txt
+
+    - name: Test
+      run: python test/test_cobra_c.py ${{secrets.PV_VALID_ACCESS_KEY}} ${{ matrix.platform }} ${{ matrix.arch }}
 
   build-filedemo-self-hosted:
     runs-on: ${{ matrix.machine }}
@@ -146,9 +147,8 @@ jobs:
     - name: Build filedemo
       run: cmake --build ./build --target cobra_demo_file
 
-    - uses: ./.github/actions/c-filedemo
-      name: Run filedemo
-      with:
-        access_key: ${{ secrets.PV_VALID_ACCESS_KEY }}
-        library_path: ../../lib/${{ matrix.platform }}/${{ matrix.arch }}/libpv_cobra.so
-        audio_path: ../../res/audio/sample.wav
+    - name: Install dependencies
+      run: pip install -r test/requirements.txt
+
+    - name: Test
+      run: python3 test/test_cobra_c.py ${{secrets.PV_VALID_ACCESS_KEY}} ${{ matrix.platform }} ${{ matrix.arch }}
