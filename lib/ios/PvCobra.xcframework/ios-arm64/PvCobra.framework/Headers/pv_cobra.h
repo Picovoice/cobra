@@ -19,9 +19,7 @@
 
 #ifdef __cplusplus
 
-extern "C"
-
-{
+extern "C" {
 
 #endif
 
@@ -34,20 +32,6 @@ extern "C"
  */
 typedef struct pv_cobra pv_cobra_t;
 
-#ifdef __PV_NO_DYNAMIC_MEMORY__
-
-/**
- * Constructor.
- *
- * @param memory_size Memory size in bytes.
- * @param memory_buffer Memory buffer needs to be 8-byte aligned.
- * @param[out] object Constructed instance of Cobra.
- * @return Status code. Returns `PV_STATUS_INVALID_ARGUMENT` or `PV_STATUS_OUT_OF_MEMORY` on failure.
- */
-PV_API pv_status_t pv_cobra_init(int32_t memory_size, void *memory_buffer, pv_cobra_t **object);
-
-#else
-
 /**
  * Constructor.
  *
@@ -58,8 +42,6 @@ PV_API pv_status_t pv_cobra_init(int32_t memory_size, void *memory_buffer, pv_co
  * `PV_STATUS_ACTIVATION_THROTTLED`, or `PV_STATUS_ACTIVATION_REFUSED` on failure.
  */
 PV_API pv_status_t pv_cobra_init(const char *access_key, pv_cobra_t **object);
-
-#endif
 
 /**
  * Destructor.
