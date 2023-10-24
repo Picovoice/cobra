@@ -59,7 +59,7 @@ class CobraAppTestUITests: XCTestCase {
         var first_error: String = ""
         do {
             let cobra: Cobra = try Cobra(accessKey: "invalid")
-            XCTAssertNil(p)
+            XCTAssertNil(cobra)
         } catch {
             first_error = "\(error.localizedDescription)"
             XCTAssert(first_error.count < 1024)
@@ -67,7 +67,7 @@ class CobraAppTestUITests: XCTestCase {
 
         do {
             let cobra: Cobra = try Cobra(accessKey: "invalid")
-            XCTAssertNil(p)
+            XCTAssertNil(cobra)
         } catch {
             XCTAssert("\(error.localizedDescription)".count == first_error.count)
         }
