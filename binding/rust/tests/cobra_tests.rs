@@ -63,14 +63,14 @@ mod tests {
     fn test_error_stack() {
         let mut error_stack = Vec::new();
 
-        let res = Cobra::new("invalid").init();
+        let res = Cobra::new("invalid");
         if let Err(err) = res {
             error_stack = err.message_stack
         }
 
         assert!(0 < error_stack.len() && error_stack.len() <= 8);
         
-        let res = Cobra::new("invalid").init();
+        let res = Cobra::new("invalid");
         if let Err(err) = res {
             assert_eq!(error_stack.len(), err.message_stack.len());
             for i in 0..error_stack.len() {
