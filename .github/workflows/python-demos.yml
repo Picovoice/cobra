@@ -28,6 +28,12 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
         python-version: ['3.7', '3.8', '3.9', '3.10']
 
+    # ************** REMOVE AFTER RELEASE ********************
+    - name: Build binding
+      run: |
+        pip install wheel && cd ../../binding/python && python setup.py sdist bdist_wheel && pip install dist/pvcobra-2.0.0-py3-none-any.whl
+    # ********************************************************
+
     steps:
     - uses: actions/checkout@v3
 
@@ -54,6 +60,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+
+    # ************** REMOVE AFTER RELEASE ********************
+    - name: Build binding
+      run: |
+        pip3 uninstall -y pvporcupine && pip3 install wheel && cd ../../binding/python && python3 setup.py sdist bdist_wheel && pip3 install dist/pvcobra-2.0.0-py3-none-any.whl
+    # ********************************************************
 
     - name: Install dependencies
       run: pip3 install -r requirements.txt
