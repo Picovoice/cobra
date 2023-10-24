@@ -406,10 +406,11 @@ export class Cobra {
       throw new CobraErrors.CobraOutOfMemoryError('malloc failed: Cannot allocate memory');
     }
 
+    const status = await pv_cobra_init(accessKeyAddress, objectAddressAddress);
+
     await pv_free(accessKeyAddress);
     const memoryBufferView = new DataView(memory.buffer);
-
-    const status = await pv_cobra_init(accessKeyAddress, objectAddressAddress);
+    
     if (status !== PV_STATUS_SUCCESS) {
       const messageStack = await Cobra.getMessageStack(
         pv_get_error_stack,
