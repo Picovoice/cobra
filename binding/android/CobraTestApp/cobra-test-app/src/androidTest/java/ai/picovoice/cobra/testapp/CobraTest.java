@@ -42,8 +42,7 @@ import java.util.List;
 import ai.picovoice.cobra.Cobra;
 import ai.picovoice.cobra.CobraException;
 
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 
 @RunWith(AndroidJUnit4.class)
