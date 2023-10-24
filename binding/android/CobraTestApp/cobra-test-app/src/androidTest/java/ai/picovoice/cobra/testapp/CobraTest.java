@@ -128,6 +128,27 @@ public class CobraTest {
         assertTrue(cobra.getVersion().length() > 0);
     }
 
+    @Test
+    public void testErrorStack() {
+        String[] error = {};
+        try {
+            Cobra cobra = new Cobra("invalid");
+        } catch (CobraException e) {
+            error = e.getMessageStack();
+        }
+
+        assertTrue(0 < error.length);
+        assertTrue(error.length <= 8);
+
+        try {
+            Cobra cobra = new Cobra("invalid");
+        } catch (CobraException e) {
+            for (int i = 0; i < error.length; i++) {
+                assertEquals(e.getMessageStack()[i], error[i]);
+            }
+        }
+    }
+
     private void extractAssetsRecursively(String path) throws IOException {
 
         String[] list = assetManager.list(path);

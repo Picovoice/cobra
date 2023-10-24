@@ -35,8 +35,8 @@ if (file("${rootDir}/publish-mavencentral.gradle").exists()) {
 }
 
 task copyLibs(type: Copy) {
-    from("${rootDir}/../../lib/android")
+    from("${rootDir}/../../../lib/android")
     into("${rootDir}/cobra/src/main/jniLibs")
 }
 
-preBuild.dependsOn copyLibs
+preBuild.dependsOn(copyLibs)
