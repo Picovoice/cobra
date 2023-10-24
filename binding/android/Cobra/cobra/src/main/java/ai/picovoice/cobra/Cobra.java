@@ -21,11 +21,17 @@ package ai.picovoice.cobra;
  **/
 public class Cobra {
 
+    private static String _sdk = "android";
+
     static {
         System.loadLibrary("pv_cobra");
     }
 
     private long handle;
+
+    public static void setSdk(String sdk) {
+        Cobra._sdk = sdk;
+    }
 
     /**
      * Constructor.
@@ -34,6 +40,7 @@ public class Cobra {
      * @throws CobraException if there is an error while initializing Cobra.
      */
     public Cobra(String accessKey) throws CobraException {
+        CobraNative.setSdk(Cobra._sdk);
         handle = CobraNative.init(accessKey);
     }
 

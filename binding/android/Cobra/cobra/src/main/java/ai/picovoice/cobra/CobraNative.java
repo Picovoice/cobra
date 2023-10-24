@@ -1,5 +1,5 @@
 /*
-    Copyright 2022 Picovoice Inc.
+    Copyright 2022-2023 Picovoice Inc.
 
     You may not use this file except in compliance with the license. A copy of the license is
     located in the "LICENSE" file accompanying this source.
@@ -14,16 +14,18 @@ package ai.picovoice.cobra;
 
 class CobraNative {
 
+    static native String getVersion();
+
     static native int getFrameLength();
 
     static native int getSampleRate();
 
-    static native String getVersion();
+    static native void setSdk(String sdk);
 
-    static native long init(String accessKey);
+    static native long init(String accessKey) throws CobraException;
 
     static native void delete(long object);
 
-    static native float process(long object, short[] pcm);
+    static native float process(long object, short[] pcm) throws CobraException;
 
 }
