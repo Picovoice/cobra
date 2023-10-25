@@ -2,13 +2,13 @@ source 'https://cdn.cocoapods.org/'
 platform :ios, '11.0'
 
 target 'CobraAppTest' do
-  pod 'Cobra-iOS', :podspec => 'https://raw.githubusercontent.com/Picovoice/cobra/v2.0-ios/binding/ios/Cobra-iOS.podspec'
+  pod 'Cobra-iOS', :podspec => 'https://raw.githubusercontent.com/Picovoice/cobra/v2.0/binding/ios/Cobra-iOS.podspec'
 end
 
 target 'CobraAppTestUITests' do
-  pod 'Cobra-iOS', :podspec => 'https://raw.githubusercontent.com/Picovoice/cobra/v2.0-ios/binding/ios/Cobra-iOS.podspec'
+  pod 'Cobra-iOS', :podspec => 'https://raw.githubusercontent.com/Picovoice/cobra/v2.0/binding/ios/Cobra-iOS.podspec'
 end
 
 target 'PerformanceTest' do
-  pod 'Cobra-iOS', :podspec => 'https://raw.githubusercontent.com/Picovoice/cobra/v2.0-ios/binding/ios/Cobra-iOS.podspec'
+  pod 'Cobra-iOS', :podspec => 'https://raw.githubusercontent.com/Picovoice/cobra/v2.0/binding/ios/Cobra-iOS.podspec'
 end
