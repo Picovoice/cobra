@@ -1,5 +1,5 @@
 /*
-  Copyright 2022 Picovoice Inc.
+  Copyright 2022-2023 Picovoice Inc.
 
   You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
   file accompanying this source.
@@ -16,7 +16,10 @@ import {
   CobraWorkerInitResponse,
   CobraWorkerProcessResponse,
   CobraWorkerReleaseResponse,
+  PvStatus,
 } from './types';
+
+import { pvStatusToException } from './cobra_errors';
 
 export class CobraWorker {
   private readonly _worker: Worker;
@@ -125,18 +128,17 @@ export class CobraWorker {
                     break;
                   case 'failed':
                   case 'error':
+                    const error = pvStatusToException(ev.data.status, ev.data.shortMessage, ev.data.messageStack);
                     if (processErrorCallback) {
-                      processErrorCallback(ev.data.message);
+                      processErrorCallback(error);
                     } else {
                       // eslint-disable-next-line no-console
-                      console.error(ev.data.message);
+                      console.error(error);
                     }
                     break;
                   default:
                     // @ts-ignore
-                    processErrorCallback(
-                      `Unrecognized command: ${event.data.command}`
-                    );
+                    processErrorCallback(pvStatusToException(PvStatus.RUNTIME_ERROR, `Unrecognized command: ${event.data.command}`));
                 }
               };
               resolve(
@@ -150,11 +152,12 @@ export class CobraWorker {
               break;
             case 'failed':
             case 'error':
-              reject(event.data.message);
+              const error = pvStatusToException(event.data.status, event.data.shortMessage, event.data.messageStack);
+              reject(error);
               break;
             default:
               // @ts-ignore
-              reject(`Unrecognized command: ${event.data.command}`);
+            reject(pvStatusToException(PvStatus.RUNTIME_ERROR, `Unrecognized command: ${event.data.command}`));
           }
         };
       }
@@ -199,11 +202,12 @@ export class CobraWorker {
             break;
           case 'failed':
           case 'error':
-            reject(event.data.message);
+            const error = pvStatusToException(event.data.status, event.data.shortMessage, event.data.messageStack);
+            reject(error);
             break;
           default:
             // @ts-ignore
-            reject(`Unrecognized command: ${event.data.command}`);
+            reject(pvStatusToException(PvStatus.RUNTIME_ERROR, `Unrecognized command: ${event.data.command}`));
         }
       };
     });

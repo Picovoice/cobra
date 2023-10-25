@@ -17,6 +17,8 @@ import {
 import cobraWasm from '../lib/pv_cobra.wasm';
 import cobraWasmSimd from '../lib/pv_cobra_simd.wasm';
 
+import * as CobraErrors from './cobra_errors';
+
 Cobra.setWasm(cobraWasm);
 Cobra.setWasmSimd(cobraWasmSimd);
 CobraWorker.setWasm(cobraWasm);
@@ -35,4 +37,5 @@ export {
   CobraWorkerReleaseResponse,
   CobraWorkerFailureResponse,
   CobraWorkerResponse,
+  CobraErrors,
 };
