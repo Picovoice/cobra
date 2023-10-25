@@ -1,5 +1,5 @@
 #
-# Copyright 2021 Picovoice Inc.
+# Copyright 2021-2023 Picovoice Inc.
 #
 # You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
 # file accompanying this source.
@@ -38,23 +38,51 @@ def read_file(file_name, sample_rate):
 def main():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument('--input_audio_path', help='Absolute path to input audio file.', required=True)
+    parser.add_argument(
+        '--input_wav_path',
+        help='Absolute path to input audio file.',
+        required=True)
 
-    parser.add_argument('--library_path', help='Absolute path to dynamic library.', default=pvcobra.LIBRARY_PATH)
+    parser.add_argument(
+        '--library_path',
+        help='Absolute path to dynamic library. Default: using the library provided by `pvcobra`')
 
-    parser.add_argument('--access_key',
-                        help='AccessKey provided by Picovoice Console (https://console.picovoice.ai/)',
-                        required=True)
+    parser.add_argument(
+        '--access_key',
+        help='AccessKey provided by Picovoice Console (https://console.picovoice.ai/)',
+        required=True)
 
-    parser.add_argument('--threshold', help="Threshold for the probability of voice activity",
-                        type=float,
-                        default=0.8)
+    parser.add_argument(
+        '--threshold',
+        help="Threshold for the probability of voice activity",
+        type=float,
+        default=0.8)
 
     args = parser.parse_args()
 
-    cobra = pvcobra.create(library_path=args.library_path, access_key=args.access_key)
+    try:
+        cobra = pvcobra.create(access_key=args.access_key, library_path=args.library_path)
+    except pvcobra.CobraInvalidArgumentError as e:
+        print(e)
+        raise e
+    except pvcobra.CobraActivationError as e:
+        print("AccessKey activation error")
+        raise e
+    except pvcobra.CobraActivationLimitError as e:
+        print("AccessKey '%s' has reached it's temporary device limit" % args.access_key)
+        raise e
+    except pvcobra.CobraActivationRefusedError as e:
+        print("AccessKey '%s' refused" % args.access_key)
+        raise e
+    except pvcobra.CobraActivationThrottledError as e:
+        print("AccessKey '%s' has been throttled" % args.access_key)
+        raise e
+    except pvcobra.CobraError as e:
+        print("Failed to initialize Cobra")
+        raise e
+
     print("Cobra version: %s" % cobra.version)
-    audio = read_file(args.input_audio_path, cobra.sample_rate)
+    audio = read_file(args.input_wav_path, cobra.sample_rate)
 
     num_frames = len(audio) // cobra.frame_length
     for i in range(num_frames):

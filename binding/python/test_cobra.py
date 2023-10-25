@@ -1,5 +1,5 @@
 #
-# Copyright 2021-2022 Picovoice Inc.
+# Copyright 2021-2023 Picovoice Inc.
 #
 # You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
 # file accompanying this source.
@@ -14,9 +14,9 @@ import unittest
 
 import numpy as np
 
-from cobra import Cobra
+from _cobra import Cobra, CobraError
+from _util import *
 from test_util import *
-from util import *
 
 
 class CobraTestCase(unittest.TestCase):
@@ -46,6 +46,26 @@ class CobraTestCase(unittest.TestCase):
 
     def test_version(self):
         self.assertIsInstance(self._cobra.version, str)
+
+    def test_message_stack(self):
+        relative_path = '../..'
+
+        error = None
+        try:
+            c = Cobra(access_key="invalid", library_path=pv_library_path(relative_path))
+            self.assertIsNone(c)
+        except CobraError as e:
+            error = e.message_stack
+
+        self.assertIsNotNone(error)
+        self.assertGreater(len(error), 0)
+
+        try:
+            c = Cobra(access_key="invalid", library_path=pv_library_path(relative_path))
+            self.assertIsNone(c)
+        except CobraError as e:
+            self.assertEqual(len(error), len(e.message_stack))
+            self.assertListEqual(list(error), list(e.message_stack))
 
 
 if __name__ == '__main__':

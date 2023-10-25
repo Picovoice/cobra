@@ -5,6 +5,7 @@ on:
   push:
     branches: [ main ]
     paths:
+      - '.github/workflows/python-perf.yml'
       - 'binding/python/test_cobra_perf.py'
       - 'lib/beaglebone/**'
       - 'lib/jetson/**'
@@ -16,6 +17,7 @@ on:
   pull_request:
     branches: [ main, 'v[0-9]+.[0-9]+' ]
     paths:
+      - '.github/workflows/python-perf.yml'
       - 'binding/python/test_cobra_perf.py'
       - 'lib/beaglebone/**'
       - 'lib/jetson/**'
@@ -47,8 +49,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-      with:
-        submodules: recursive
 
     - name: Set up Python '3.10'
       uses: actions/setup-python@v2
@@ -96,8 +96,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-      with:
-        submodules: recursive
 
     - name: Pre-build dependencies
       run: python3 -m pip install --upgrade pip
