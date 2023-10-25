@@ -1,5 +1,5 @@
 /*
-    Copyright 2021 Picovoice Inc.
+    Copyright 2021-2023 Picovoice Inc.
     You may not use this file except in compliance with the license. A copy of the license is
     located in the "LICENSE" file accompanying this source.
     Unless required by applicable law or agreed to in writing, software distributed under the
@@ -42,8 +42,7 @@ import java.util.List;
 import ai.picovoice.cobra.Cobra;
 import ai.picovoice.cobra.CobraException;
 
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 
 @RunWith(AndroidJUnit4.class)
@@ -126,6 +125,27 @@ public class CobraTest {
     public void testVersion() throws CobraException {
         Cobra cobra = new Cobra(accessKey);
         assertTrue(cobra.getVersion().length() > 0);
+    }
+
+    @Test
+    public void testErrorStack() {
+        String[] error = {};
+        try {
+            Cobra cobra = new Cobra("invalid");
+        } catch (CobraException e) {
+            error = e.getMessageStack();
+        }
+
+        assertTrue(0 < error.length);
+        assertTrue(error.length <= 8);
+
+        try {
+            Cobra cobra = new Cobra("invalid");
+        } catch (CobraException e) {
+            for (int i = 0; i < error.length; i++) {
+                assertEquals(e.getMessageStack()[i], error[i]);
+            }
+        }
     }
 
     private void extractAssetsRecursively(String path) throws IOException {
