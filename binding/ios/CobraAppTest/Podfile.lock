@@ -2,15 +2,15 @@ PODS:
   - Cobra-iOS (2.0.0)
 
 DEPENDENCIES:
-  - Cobra-iOS (from `https://raw.githubusercontent.com/Picovoice/cobra/v2.0/binding/ios/Cobra-iOS.podspec`)
+  - Cobra-iOS (~> 2.0.0)
 
-EXTERNAL SOURCES:
-  Cobra-iOS:
-    :podspec: https://raw.githubusercontent.com/Picovoice/cobra/v2.0/binding/ios/Cobra-iOS.podspec
+SPEC REPOS:
+  trunk:
+    - Cobra-iOS
 
 SPEC CHECKSUMS:
   Cobra-iOS: c8d7f9052b9b783b9976243e3092c9b9087f63fc
 
-PODFILE CHECKSUM: f2a9737621b3736541f8a3899eeff564bc95141a
+PODFILE CHECKSUM: 137881d8c57651849e46c3d711fcf8572d2b4864
 
 COCOAPODS: 1.11.3
