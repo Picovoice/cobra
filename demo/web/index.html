@@ -6,10 +6,7 @@
     <script type="application/javascript">
       function writeMessage(message) {
         console.log(message);
-        let p = document.createElement("p");
-        let text = document.createTextNode(message);
-        p.appendChild(text);
-        document.body.appendChild(p);
+        document.getElementById("status").innerHTML = message;
       }
 
       function writeVoiceProbability(message, value) {
@@ -74,6 +71,8 @@
       onclick="startCobra(document.getElementById('accessKey').value)"
     />
     <hr />
+
+    <div id="status" style="white-space: pre;"></div>
 
     <div id="voiceProbability" class="voiceProbability">
       <h2 id="voiceProbabilityText">
