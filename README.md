@@ -337,17 +337,24 @@ loop {
 
 ## Releases
 
+### v3.0.0 October 26th, 2023
+
+- Improvements to error reporting
+- Upgrades to authorization and authentication system
+- Various bug fixes and improvements
+- Node min support bumped to 16
+
 ### v1.2.0 January 27th, 2023
 
-- updated Cobra engine for improved accuracy and performance
+- Updated Cobra engine for improved accuracy and performance
 - iOS minimum requirement moved to iOS 11.0
-- minor bug fixes
+- Minor bug fixes
 
 ### v1.1.0 January 21st, 2022
 
 - Improved types for web binding
-- Various bug fixes and improvments
+- Various bug fixes and improvements
 
 ### v1.0.0 October 8th, 2021
 
-- Initial release.
+- Initial release
