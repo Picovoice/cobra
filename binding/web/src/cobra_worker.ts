@@ -26,6 +26,7 @@ export class CobraWorker {
   private readonly _version: string;
   private readonly _frameLength: number;
   private readonly _sampleRate: number;
+  private static _sdk: string = 'web';
 
   private static _wasm: string;
   private static _wasmSimd: string;
@@ -88,6 +89,10 @@ export class CobraWorker {
     if (this._wasmSimd === undefined) {
       this._wasmSimd = wasmSimd;
     }
+  }
+
+  public static setSdk(sdk: string): void {
+    CobraWorker._sdk = sdk;
   }
 
   /**
@@ -168,6 +173,7 @@ export class CobraWorker {
       accessKey: accessKey,
       wasm: this._wasm,
       wasmSimd: this._wasmSimd,
+      sdk: this._sdk,
       options: workerOptions,
     });
 
