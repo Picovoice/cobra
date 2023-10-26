@@ -153,5 +153,31 @@ describe("Cobra Binding", function () {
         expect(e).to.be.undefined;
       }
     });
+
+    it(`should return correct error message stack (${instanceString})`, async () => {
+      let messageStack = [];
+      try {
+        const cobra = await instance.create(
+          "invalidAccessKey",
+          () => { }
+        );
+        expect(cobra).to.be.undefined;
+      } catch (e: any) {
+        messageStack = e.messageStack;
+      }
+
+      expect(messageStack.length).to.be.gt(0);
+      expect(messageStack.length).to.be.lte(8);
+
+      try {
+        const cobra = await instance.create(
+          "invalidAccessKey",
+          () => { }
+        );
+        expect(cobra).to.be.undefined;
+      } catch (e: any) {
+        expect(messageStack.length).to.be.eq(e.messageStack.length);
+      }
+    });
   }
 });

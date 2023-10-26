@@ -1,5 +1,5 @@
 //
-//  Copyright 2021 Picovoice Inc.
+//  Copyright 2021-2023 Picovoice Inc.
 //  You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
 //  file accompanying this source.
 //  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
@@ -9,17 +9,28 @@
 
 public class CobraError: LocalizedError {
     private let message: String
+    private let messageStack: [String]
 
-    public init (_ message: String) {
+    public init (_ message: String, _ messageStack: [String] = []) {
         self.message = message
+        self.messageStack = messageStack
     }
 
     public var errorDescription: String? {
-        return message
+        var messageString = message
+        if messageStack.count > 0 {
+            messageString += ":"
+            for i in 0..<messageStack.count {
+                messageString += "\n  [\(i)] \(messageStack[i])"
+            }
+        }
+        return messageString
     }
 
     public var name: String {
-        return String(describing: type(of: self))
+        get {
+            return String(describing: type(of: self))
+        }
     }
 }
 

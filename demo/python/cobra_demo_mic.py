@@ -53,14 +53,33 @@ class CobraDemo(Thread):
          voice activities.
          """
 
-        cobra = None
         recorder = None
         wav_file = None
 
         try:
-            cobra = pvcobra.create(
-                library_path=self._library_path, access_key=self._access_key)
-            print("Cobra version: %s" % cobra.version)
+            cobra = pvcobra.create(access_key=self._access_key, library_path=self._library_path)
+        except pvcobra.CobraInvalidArgumentError as e:
+            print(e)
+            raise e
+        except pvcobra.CobraActivationError as e:
+            print("AccessKey activation error")
+            raise e
+        except pvcobra.CobraActivationLimitError as e:
+            print("AccessKey '%s' has reached it's temporary device limit" % self._access_key)
+            raise e
+        except pvcobra.CobraActivationRefusedError as e:
+            print("AccessKey '%s' refused" % self._access_key)
+            raise e
+        except pvcobra.CobraActivationThrottledError as e:
+            print("AccessKey '%s' has been throttled" % self._access_key)
+            raise e
+        except pvcobra.CobraError as e:
+            print("Failed to initialize Cobra")
+            raise e
+
+        print("Cobra version: %s" % cobra.version)
+
+        try:
             recorder = PvRecorder(frame_length=512, device_index=self._input_device_index)
             recorder.start()
 
@@ -106,17 +125,16 @@ def main():
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
-        '--library_path', help='Absolute path to dynamic library.', default=pvcobra.LIBRARY_PATH)
-
-    parser.add_argument('--access_key',
-                        help='AccessKey provided by Picovoice Console (https://console.picovoice.ai/)',
-                        default=None)
-
-    parser.add_argument('--audio_device_index',
-                        help='Index of input audio device.', type=int, default=-1)
+        '--access_key',
+        help='AccessKey provided by Picovoice Console (https://console.picovoice.ai/)')
 
     parser.add_argument(
-        '--output_path', help='Absolute path to recorded audio for debugging.', default=None)
+        '--library_path',
+        help='Absolute path to dynamic library. Default: using the library provided by `pvcobra`')
+
+    parser.add_argument('--audio_device_index', help='Index of input audio device.', type=int, default=-1)
+
+    parser.add_argument('--output_path', help='Absolute path to recorded audio for debugging.', default=None)
 
     parser.add_argument('--show_audio_devices', action='store_true')
 
@@ -126,7 +144,7 @@ def main():
         CobraDemo.show_available_devices()
     else:
         if args.access_key is None:
-            print("missing AccessKey")
+            print("Missing AccessKey (--access_key)")
         else:
             CobraDemo(
                 library_path=args.library_path,

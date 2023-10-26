@@ -1,5 +1,5 @@
 #
-# Copyright 2021-2022 Picovoice Inc.
+# Copyright 2021-2023 Picovoice Inc.
 #
 # You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
 # file accompanying this source.
@@ -22,8 +22,9 @@ os.mkdir(package_folder)
 shutil.copy(os.path.join(os.path.dirname(__file__), '../../LICENSE'), package_folder)
 
 shutil.copy(os.path.join(os.path.dirname(__file__), '__init__.py'), os.path.join(package_folder, '__init__.py'))
-shutil.copy(os.path.join(os.path.dirname(__file__), 'cobra.py'), os.path.join(package_folder, 'cobra.py'))
-shutil.copy(os.path.join(os.path.dirname(__file__), 'util.py'), os.path.join(package_folder, 'util.py'))
+shutil.copy(os.path.join(os.path.dirname(__file__), '_cobra.py'), os.path.join(package_folder, '_cobra.py'))
+shutil.copy(os.path.join(os.path.dirname(__file__), '_factory.py'), os.path.join(package_folder, '_factory.py'))
+shutil.copy(os.path.join(os.path.dirname(__file__), '_util.py'), os.path.join(package_folder, '_util.py'))
 
 platforms = ('beaglebone', 'jetson', 'linux', 'mac', 'raspberry-pi', 'windows')
 
@@ -36,8 +37,9 @@ for platform in platforms:
 MANIFEST_IN = """
 include pvcobra/LICENSE
 include pvcobra/__init__.py
-include pvcobra/cobra.py
-include pvcobra/util.py
+include pvcobra/_cobra.py
+include pvcobra/_factory.py
+include pvcobra/_util.py
 include pvcobra/lib/beaglebone/libpv_cobra.so
 recursive-include pvcobra/lib/jetson *
 include pvcobra/lib/linux/x86_64/libpv_cobra.so
@@ -55,7 +57,7 @@ with open(os.path.join(os.path.dirname(__file__), 'README.md'), 'r') as f:
 
 setuptools.setup(
     name="pvcobra",
-    version="1.2.2",
+    version="2.0.0",
     author="Picovoice",
     author_email="hello@picovoice.ai",
     description="Cobra voice activity detection (VAD) engine",

@@ -5,6 +5,7 @@ on:
   push:
     branches: [ main ]
     paths:
+      - '.github/workflows/python.yml'
       - 'binding/python/**'
       - '!binding/python/README.md'
       - 'lib/beaglebone/**'
@@ -17,6 +18,7 @@ on:
   pull_request:
     branches: [ main, 'v[0-9]+.[0-9]+' ]
     paths:
+      - '.github/workflows/python.yml'
       - 'binding/python/**'
       - '!binding/python/README.md'
       - 'lib/beaglebone/**'
@@ -42,8 +44,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-      with:
-        submodules: recursive
 
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
@@ -69,8 +69,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-      with:
-        submodules: recursive
 
     - name: Pre-build dependencies
       run: python3 -m pip install --upgrade pip

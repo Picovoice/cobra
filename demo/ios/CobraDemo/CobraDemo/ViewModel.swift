@@ -35,8 +35,8 @@ class ViewModel: ObservableObject {
             VoiceProcessor.instance.addErrorListener(VoiceProcessorErrorListener(errorCallback))
             VoiceProcessor.instance.addFrameListener(VoiceProcessorFrameListener(audioCallback))
 
-        } catch is CobraInvalidArgumentError {
-            errorMessage = "ACCESS_KEY '\(ACCESS_KEY)' is invalid."
+        } catch let error as CobraInvalidArgumentError {
+            errorMessage = error.localizedDescription
         } catch is CobraActivationError {
             errorMessage = "ACCESS_KEY activation error."
         } catch is CobraActivationRefusedError {

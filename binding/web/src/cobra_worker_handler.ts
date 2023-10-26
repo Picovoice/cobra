@@ -1,5 +1,5 @@
 /*
-  Copyright 2022 Picovoice Inc.
+  Copyright 2022-2023 Picovoice Inc.
 
   You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
   file accompanying this source.
@@ -13,7 +13,8 @@
 /// <reference lib="webworker" />
 
 import { Cobra } from './cobra';
-import { CobraWorkerRequest } from './types';
+import { CobraWorkerRequest, PvStatus } from './types';
+import { CobraError } from "./cobra_errors";
 
 let cobra: Cobra | null = null;
 
@@ -24,10 +25,12 @@ const voiceProbabilityCallback = (voiceProbability: number): void => {
   });
 };
 
-const processErrorCallback = (error: string): void => {
+const processErrorCallback = (error: CobraError): void => {
   self.postMessage({
     command: 'error',
-    message: error,
+    status: error.status,
+    shortMessage: error.shortMessage,
+    messageStack: error.messageStack
   });
 };
 
@@ -42,7 +45,8 @@ self.onmessage = async function (
       if (cobra !== null) {
         self.postMessage({
           command: 'error',
-          message: 'Cobra already initialized',
+          status: PvStatus.INVALID_STATE,
+          shortMessage: 'Cobra already initialized',
         });
         return;
       }
@@ -66,7 +70,9 @@ self.onmessage = async function (
       } catch (e: any) {
         self.postMessage({
           command: 'error',
-          message: e.message,
+          status: PvStatus.RUNTIME_ERROR,
+          shortMessage: e.shortMessage,
+          messageStack: e.messageStack
         });
       }
       break;
@@ -74,7 +80,8 @@ self.onmessage = async function (
       if (cobra === null) {
         self.postMessage({
           command: 'error',
-          message: 'Cobra not initialized',
+          status: PvStatus.INVALID_STATE,
+          shortMessage: 'Cobra not initialized',
         });
         return;
       }
@@ -94,8 +101,9 @@ self.onmessage = async function (
     default:
       self.postMessage({
         command: 'failed',
+        status: PvStatus.RUNTIME_ERROR,
         // @ts-ignore
-        message: `Unrecognized command: ${event.data.command}`,
+        shortMessage: `Unrecognized command: ${event.data.command}`,
       });
   }
 };
