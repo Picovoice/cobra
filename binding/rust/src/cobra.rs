@@ -111,6 +111,8 @@ impl std::fmt::Display for CobraError {
     }
 }
 
+impl std::error::Error for CobraError {}
+
 #[derive(Clone)]
 pub struct Cobra {
     inner: Arc<CobraInner>,
