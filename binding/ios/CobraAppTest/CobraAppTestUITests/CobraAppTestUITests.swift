@@ -73,7 +73,6 @@ class CobraAppTestUITests: XCTestCase {
         }
     }
 
-
     func testProcessMessageStack() throws {
         let cobra: Cobra = try Cobra(accessKey: accessKey)
         cobra.delete()

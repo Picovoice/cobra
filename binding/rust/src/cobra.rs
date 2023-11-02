@@ -377,7 +377,7 @@ mod tests {
             .expect("Pass the AccessKey in using the PV_ACCESS_KEY env variable");
 
         let mut inner = CobraInner::init(
-            &access_key.as_str(),
+            access_key,
             pv_library_path()
         ).expect("Unable to create Cobra");
 
@@ -392,7 +392,7 @@ mod tests {
             assert!(err.message_stack.len() > 0);
             assert!(err.message_stack.len() < 8);
         } else {
-            assert!(res.unwrap() == true);
+            assert!(res.unwrap() == -1.0);
         }
     }
 }
