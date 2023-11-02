@@ -72,4 +72,19 @@ class CobraAppTestUITests: XCTestCase {
             XCTAssert("\(error.localizedDescription)".count == first_error.count)
         }
     }
+
+    func testProcessMessageStack() throws {
+        let cobra: Cobra = try Cobra(accessKey: accessKey)
+        cobra.delete()
+
+        var testPcm: [Int16] = []
+        testPcm.reserveCapacity(Int(Cobra.frameLength))
+
+        do {
+            let res = try cobra.process(pcm: testPcm)
+            XCTAssert(res != true)
+        } catch {
+            XCTAssert("\(error.localizedDescription)".count > 0)
+        }
+    }
 }

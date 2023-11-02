@@ -363,3 +363,36 @@ impl Drop for CobraInner {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use std::env;
+
+    use crate::util::{pv_library_path};
+    use crate::cobra::{CobraInner};
+
+    #[test]
+    fn test_process_error_stack() {
+        let access_key = env::var("PV_ACCESS_KEY")
+            .expect("Pass the AccessKey in using the PV_ACCESS_KEY env variable");
+
+        let mut inner = CobraInner::init(
+            access_key,
+            pv_library_path()
+        ).expect("Unable to create Cobra");
+
+        let test_pcm = vec![0; inner.frame_length as usize];
+        let address = inner.ccobra;
+        inner.ccobra = std::ptr::null_mut();
+
+        let res = inner.process(&test_pcm);
+
+        inner.ccobra = address;
+        if let Err(err) = res {
+            assert!(err.message_stack.len() > 0);
+            assert!(err.message_stack.len() < 8);
+        } else {
+            assert!(res.unwrap() == -1.0);
+        }
+    }
+}

@@ -67,6 +67,24 @@ class CobraTestCase(unittest.TestCase):
             self.assertEqual(len(error), len(e.message_stack))
             self.assertListEqual(list(error), list(e.message_stack))
 
+    def test_process_message_stack(self):
+        relative_path = '../..'
+
+        c = Cobra(access_key=sys.argv[1], library_path=pv_library_path(relative_path))
+        test_pcm = [0] * c.frame_length
+
+        address = c._handle
+        c._handle = None
+
+        try:
+            res = c.process(test_pcm)
+            self.assertTrue(res == -1)
+        except CobraError as e:
+            self.assertGreater(len(e.message_stack), 0)
+            self.assertLess(len(e.message_stack), 8)
+
+        c._handle = address
+
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
