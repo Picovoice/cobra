@@ -1,4 +1,5 @@
 import { Cobra, CobraWorker } from "../";
+import { CobraError } from "../dist/types/cobra_errors";
 
 const ACCESS_KEY: string = Cypress.env("ACCESS_KEY");
 
@@ -86,7 +87,7 @@ const runProcTest = async (
           }
         },
         {
-          processErrorCallback: (error: string) => {
+          processErrorCallback: (error: CobraError) => {
             reject(error);
           }
         }
@@ -121,6 +122,43 @@ const runProcTest = async (
 };
 
 describe("Cobra Binding", function () {
+  it(`should return process error message stack`, async () => {
+    let error: CobraError | null = null;
+
+    const runProcess = () => new Promise<void>(async resolve => {
+      const cobra = await Cobra.create(
+        ACCESS_KEY,
+        () => { },
+        {
+          processErrorCallback: (e: CobraError) => {
+            error = e;
+            resolve();
+          }
+        }
+      );
+      const testPcm = new Int16Array(cobra.frameLength);
+      // @ts-ignore
+      const objectAddress = cobra._objectAddress;
+
+      // @ts-ignore
+      cobra._objectAddress = 0;
+      await cobra.process(testPcm);
+
+      await delay(1000);
+
+      // @ts-ignore
+      cobra._objectAddress = objectAddress;
+      await cobra.release();
+    });
+
+    await runProcess();
+    expect(error).to.not.be.null;
+    if (error) {
+      expect((error as CobraError).messageStack.length).to.be.gt(0);
+      expect((error as CobraError).messageStack.length).to.be.lte(8);
+    }
+  });
+
   for (const instance of [Cobra, CobraWorker]) {
     const instanceString = (instance === CobraWorker) ? 'worker' : 'main';
 

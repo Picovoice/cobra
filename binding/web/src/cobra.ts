@@ -121,7 +121,7 @@ export class Cobra {
     this._objectAddress = handleWasm.objectAddress;
     this._inputBufferAddress = handleWasm.inputBufferAddress;
     this._voiceProbabilityAddress = handleWasm.voiceProbabilityAddress;
-    this._messageStackAddressAddressAddress = handleWasm.messageStackDepthAddress;
+    this._messageStackAddressAddressAddress = handleWasm.messageStackAddressAddressAddress;
     this._messageStackDepthAddress = handleWasm.messageStackDepthAddress;
 
     this._processMutex = new Mutex();
@@ -410,7 +410,7 @@ export class Cobra {
 
     await pv_free(accessKeyAddress);
     const memoryBufferView = new DataView(memory.buffer);
-    
+
     if (status !== PV_STATUS_SUCCESS) {
       const messageStack = await Cobra.getMessageStack(
         pv_get_error_stack,
@@ -471,7 +471,7 @@ export class Cobra {
     memoryBufferUint8: Uint8Array,
   ): Promise<string[]> {
     const status = await pv_get_error_stack(messageStackAddressAddressAddress, messageStackDepthAddress);
-    if (status != PvStatus.SUCCESS) {
+    if (status !== PvStatus.SUCCESS) {
       throw pvStatusToException(status, "Unable to get Cobra error state");
     }
 
@@ -486,7 +486,7 @@ export class Cobra {
       messageStack.push(message);
     }
 
-    pv_free_error_stack(messageStackAddressAddress);
+    await pv_free_error_stack(messageStackAddressAddress);
 
     return messageStack;
   }
