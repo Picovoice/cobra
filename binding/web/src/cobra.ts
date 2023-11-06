@@ -305,6 +305,8 @@ export class Cobra {
    */
   public async release(): Promise<void> {
     await this._pvCobraDelete(this._objectAddress);
+    await this._pvFree(this._messageStackAddressAddressAddress);
+    await this._pvFree(this._messageStackDepthAddress);
     await this._pvFree(this._inputBufferAddress);
     delete this._wasmMemory;
     this._wasmMemory = undefined;
