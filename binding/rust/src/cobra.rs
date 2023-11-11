@@ -55,7 +55,7 @@ type PvCobraProcessFn =
     unsafe extern "C" fn(object: *mut CCobra, pcm: *const i16, is_voiced: *mut f32) -> PvStatus;
 type PvCobraDeleteFn = unsafe extern "C" fn(object: *mut CCobra);
 type PvGetErrorStackFn =
-    unsafe extern "C" fn(message_stack: *mut *mut *mut c_char, message_stack_depth: *mut i32);
+    unsafe extern "C" fn(message_stack: *mut *mut *mut c_char, message_stack_depth: *mut i32)-> PvStatus;
 type PvFreeErrorStackFn = unsafe extern "C" fn(message_stack: *mut *mut c_char);
 type PvSetSdkFn = unsafe extern "C" fn(sdk: *const c_char);
 
@@ -183,10 +183,17 @@ fn check_fn_call_status(
             let mut message_stack_ptr_ptr = addr_of_mut!(message_stack_ptr);
 
             let mut message_stack_depth: i32 = 0;
-            (vtable.pv_get_error_stack)(
+            let err_status = (vtable.pv_get_error_stack)(
                 addr_of_mut!(message_stack_ptr_ptr),
                 addr_of_mut!(message_stack_depth),
             );
+
+            if err_status != PvStatus::SUCCESS {
+                return Err(CobraError::new(
+                    CobraErrorStatus::LibraryError(err_status),
+                    "Unable to get Cobra error state",
+                ));
+            };
 
             let mut message_stack = Vec::new();
             for i in 0..message_stack_depth as usize {
