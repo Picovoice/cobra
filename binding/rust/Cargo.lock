@@ -615,7 +615,7 @@ dependencies = [
 
 [[package]]
 name = "pv_cobra"
-version = "2.0.1"
+version = "2.0.2"
 dependencies = [
  "itertools",
  "libc",
