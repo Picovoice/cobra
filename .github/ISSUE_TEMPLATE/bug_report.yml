@@ -23,6 +23,7 @@ body:
       label: SDK
       options:
         - Android
+        - C
         - iOS
         - Python
         - Rust
