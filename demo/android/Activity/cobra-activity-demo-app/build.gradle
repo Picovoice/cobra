@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion defaultTargetSdkVersion
+    compileSdk defaultTargetSdkVersion
 
     defaultConfig {
         applicationId "ai.picovoice.cobraactivitydemo"
@@ -25,6 +25,7 @@ android {
     lint {
         abortOnError false
     }
+    namespace 'ai.picovoice.cobraactivitydemo'
 }
 
 dependencies {
