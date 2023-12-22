@@ -10,7 +10,9 @@ Cobra is a highly accurate and lightweight voice activity detection (VAD) engine
 
 ## Installation
 
+<!-- markdown-link-check-disable -->
 The Cobra iOS binding is available via [Cocoapods](https://cocoapods.org/pods/Cobra-iOS). To import it into your iOS project, add the following line to your Podfile and run `pod install`:
+<!-- markdown-link-check-enable -->
 
 ```ruby
 pod 'Cobra-iOS'
