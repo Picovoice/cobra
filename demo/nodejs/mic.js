@@ -19,7 +19,7 @@ const { PvRecorder } = require("@picovoice/pvrecorder-node");
 const {
   Cobra,
   CobraActivationLimitReachedError,
-} = require("../../binding/nodejs");
+} = require("@picovoice/cobra-node");
 
 program
   .option(

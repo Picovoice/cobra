@@ -20,8 +20,7 @@ const {
   Cobra,
   getInt16Frames,
   checkWaveFile,
-  // } = require("@picovoice/cobra-node");
-} = require("../../binding/nodejs");
+} = require("@picovoice/cobra-node");
 
 program
   .requiredOption(

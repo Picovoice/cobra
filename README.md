@@ -26,6 +26,7 @@ Cobra is a highly-accurate and lightweight voice activity detection (VAD) engine
     - [Android](#android-demos)
     - [iOS](#ios-demos)
     - [Web](#web-demos)
+    - [NodeJS](#nodejs-demos)
     - [Rust](#rust-demos)
   - [SDKs](#sdks)
     - [Python](#python)
@@ -33,6 +34,7 @@ Cobra is a highly-accurate and lightweight voice activity detection (VAD) engine
     - [Android](#android)
     - [iOS](#ios)
     - [Web](#web)
+    - [NodeJS](#nodejs)
     - [Rust](#rust)
   - [Releases](#releases)
 
@@ -126,6 +128,24 @@ npm run start
 ```
 
 Open `http://localhost:5000` in your browser to try the demo.
+
+### NodeJS Demos
+
+Install the demo package:
+
+```console
+yarn global add @picovoice/cobra-node-demo
+```
+
+With a working microphone connected to your device run the following in the terminal:
+
+```console
+cobra-mic-demo --access_key ${ACCESS_KEY}
+```
+
+Cobra starts processing the audio input from the microphone in realtime and outputs to the terminal when it detects any voice activities.
+
+For more information about NodeJS demos go to [demo/nodejs](demo/nodejs).
 
 ### Rust Demos
 
@@ -313,6 +333,45 @@ Replace `${ACCESS_KEY}` with yours obtained from [Picovoice Console](https://con
 
 When done, release the resources allocated to Cobra using `cobra.release()`.
 
+### NodeJS
+
+Install NodeJS SDK:
+
+```console
+yarn add @picovoice/cobra-node
+```
+
+Create instances of the Cobra class:
+
+```javascript
+const { Cobra }= require("@picovoice/cobra-node");
+
+ // Obtained from the Picovoice Console (https://console.picovoice.ai/)
+const accessKey = "${ACCESS_KEY}";
+
+const handle = new Cobra(accessKey);
+```
+
+When instantiated, `handle` can process audio via its `.process` method.
+
+```javascript
+let getNextAudioFrame = function() {
+    ...
+};
+
+while (true) {
+  let voiceProbability = handle.process(getNextAudioFrame());
+  if (voiceProbability !== -1) {
+    // detection event callback
+  }
+}
+```
+
+When done be sure to release resources acquired by WebAssembly using `release()`:
+
+```javascript
+handle.release();
+```
 
 ### Rust
 
