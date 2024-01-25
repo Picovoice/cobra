@@ -65,4 +65,4 @@ Finally, when done be sure to explicitly release the resources using
 
 ## Demos
 
-[Cobra Node.js demo package](https://www.npmjs.com/package/@picovoice/cobra-node-demo) provides command-line utilities for processing audio using cobra.
+[Cobra Node.js demo package](../../demo/nodejs) provides command-line utilities for processing audio using cobra.
