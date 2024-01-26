@@ -10,13 +10,22 @@
 //
 'use strict';
 
-const { mkdirp } = require('mkdirp');
+const fs = require('fs');
 const ncp = require('ncp').ncp;
+
+const createDirectory = dir => {
+  try {
+    fs.mkdirSync(dir, { recursive: true });
+    console.log(`Directory '${dir}' created.`);
+  } catch (err) {
+    console.error(`Error creating directory '${dir}':`, err);
+  }
+};
 
 console.log('Copying library files...');
 
 // Library & Model
-mkdirp.sync('./lib/common');
+createDirectory('./lib');
 
 ncp('../../lib/node', './lib', function (err) {
   if (err) {
