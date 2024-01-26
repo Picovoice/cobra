@@ -39,6 +39,9 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
+      - name: Pre-build dependencies
+        run: npm install yarn
+
       - name: Install dependencies
         run: yarn install
 
@@ -50,10 +53,13 @@ jobs:
 
     strategy:
       matrix:
-        machine: [rpi3-32, rpi3-64, rpi4-32, rpi4-64, jetson]
+        machine: [rpi2, rpi3-32, rpi3-64, rpi4-32, rpi4-64, jetson, beaglebone]
 
     steps:
       - uses: actions/checkout@v3
+
+      - name: Pre-build dependencies
+        run: npm install --global yarn
 
       - name: Install dependencies
         run: yarn install
