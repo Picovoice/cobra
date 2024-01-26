@@ -7,8 +7,6 @@
   specific language governing permissions and limitations under the License.
 */
 
-export type CobraInputOptions = {
+export type CobraOptions = {
   libraryPath?: string;
 };
-
-export type CobraOptions = CobraInputOptions;

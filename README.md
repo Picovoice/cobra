@@ -48,14 +48,14 @@ Install the demo package:
 sudo pip3 install pvcobrademo
 ```
 
-With a working microphone connected to your device run the following in the terminal:
+With a working microphone connected to your device, run the following in the terminal:
 
 ```console
 cobra_demo_mic --access_key ${AccessKey}
 ```
 
 Replace `${AccessKey}` with your AccessKey obtained from [Picovoice Console](https://console.picovoice.ai/). Cobra
-starts processing the audio input from the microphone in realtime and outputs to the terminal when it detects any voice activities.
+will start processing the audio input from the microphone in realtime and output to the terminal when it detects any voice activity.
 
 For more information about the Python demos go to [demo/python](demo/python).
 
@@ -137,13 +137,13 @@ Install the demo package:
 yarn global add @picovoice/cobra-node-demo
 ```
 
-With a working microphone connected to your device run the following in the terminal:
+With a working microphone connected to your device, run the following in the terminal:
 
 ```console
 cobra-mic-demo --access_key ${ACCESS_KEY}
 ```
 
-Cobra starts processing the audio input from the microphone in realtime and outputs to the terminal when it detects any voice activities.
+Cobra will start processing the audio input from the microphone in realtime and output to the terminal when it detects any voice activity.
 
 For more information about NodeJS demos go to [demo/nodejs](demo/nodejs).
 
@@ -344,9 +344,9 @@ yarn add @picovoice/cobra-node
 Create instances of the Cobra class:
 
 ```javascript
-const { Cobra }= require("@picovoice/cobra-node");
+const { Cobra } = require("@picovoice/cobra-node");
 
- // Obtained from the Picovoice Console (https://console.picovoice.ai/)
+// Obtained from the Picovoice Console (https://console.picovoice.ai/)
 const accessKey = "${ACCESS_KEY}";
 
 const handle = new Cobra(accessKey);

@@ -14,14 +14,13 @@ import Cobra from './cobra';
 
 import { getInt16Frames, checkWaveFile } from './wave_util';
 
-import { CobraInputOptions, CobraOptions } from './types';
+import { CobraOptions } from './types';
 
 import * as CobraErrors from './errors';
 
 export {
   Cobra,
   CobraErrors,
-  CobraInputOptions,
   CobraOptions,
   checkWaveFile,
   getInt16Frames,

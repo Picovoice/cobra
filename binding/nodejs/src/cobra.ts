@@ -38,7 +38,6 @@ type VoiceProbabilityAndStatus = {
  */
 export default class Cobra {
   private _pvCobra: any;
-
   private _handle: any;
 
   private readonly _version: string;
@@ -78,9 +77,7 @@ export default class Cobra {
     try {
       pvCobra.set_sdk("nodejs");
 
-      cobraHandleAndStatus = pvCobra.init(
-        accessKey,
-      );
+      cobraHandleAndStatus = pvCobra.init(accessKey);
     } catch (err: any) {
       pvStatusToException(PvStatus[err.code as keyof typeof PvStatus], err);
     }

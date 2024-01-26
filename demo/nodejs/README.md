@@ -12,12 +12,12 @@ Cobra is an on-device voice activity detection engine. Cobra is:
     - Linux (x86_64), macOS (x86_64, arm64), and Windows (x86_64)
     - Android and iOS
     - Chrome, Safari, Firefox, and Edge
-    - Raspberry Pi (4, 3) and NVIDIA Jetson Nano
+    - Raspberry Pi (2, 3, 4), NVIDIA Jetson Nano, and BeagleBone
 
 ## Compatibility
 
 - Node.js 12+
-- Runs on Linux (x86_64), macOS (x86_64, arm64), Windows (x86_64), Raspberry Pi (4, 3), and NVIDIA Jetson Nano.
+- Runs on Linux (x86_64), macOS (x86_64, arm64), Windows (x86_64), Raspberry Pi (2, 3, 4), NVIDIA Jetson Nano, and BeagleBone.
 
 ## Installation
 
@@ -54,4 +54,4 @@ cobra-mic-demo --access_key ${ACCESS_KEY}
 
 Replace `${ACCESS_KEY}` with yours obtained from Picovoice Console.
 
-Now start recording and when done press `ENTER` key.
+Now start recording and when done press the `ENTER` key.
