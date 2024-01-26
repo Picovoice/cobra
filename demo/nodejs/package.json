@@ -23,7 +23,7 @@
     "wavefile": "^11.0.0"
   },
   "devDependencies": {},
-  "homepage": "https://picovoice.ai/products/cobra/",
+  "homepage": "https://picovoice.ai/platform/cobra/",
   "repository": {
     "type": "git",
     "url": "https://github.com/Picovoice/cobra.git",
