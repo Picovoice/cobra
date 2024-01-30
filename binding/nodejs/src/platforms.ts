@@ -36,6 +36,7 @@ const ARM_CPU_CORTEX_A7 = "cortex-a7";
 const ARM_CPU_CORTEX_A53 = "cortex-a53";
 const ARM_CPU_CORTEX_A57 = "cortex-a57";
 const ARM_CPU_CORTEX_A72 = "cortex-a72";
+const ARM_CPU_CORTEX_A76 = "cortex-a76";
 
 const LIBRARY_PATH_PREFIX = "../lib/";
 const SYSTEM_TO_LIBRARY_PATH = new Map();
@@ -70,6 +71,14 @@ SYSTEM_TO_LIBRARY_PATH.set(
 SYSTEM_TO_LIBRARY_PATH.set(
   `${SYSTEM_LINUX}/${ARM_CPU_CORTEX_A72}${ARM_CPU_64}`,
   `${PLATFORM_RASPBERRY_PI}/${ARM_CPU_CORTEX_A72}${ARM_CPU_64}/pv_cobra.node`
+);
+SYSTEM_TO_LIBRARY_PATH.set(
+  `${SYSTEM_LINUX}/${ARM_CPU_CORTEX_A76}`,
+  `${PLATFORM_RASPBERRY_PI}/${ARM_CPU_CORTEX_A76}/pv_cobra.node`
+);
+SYSTEM_TO_LIBRARY_PATH.set(
+  `${SYSTEM_LINUX}/${ARM_CPU_CORTEX_A76}${ARM_CPU_64}`,
+  `${PLATFORM_RASPBERRY_PI}/${ARM_CPU_CORTEX_A76}${ARM_CPU_64}/pv_cobra.node`
 );
 SYSTEM_TO_LIBRARY_PATH.set(
   `${SYSTEM_LINUX}/${ARM_CPU_CORTEX_A57}${ARM_CPU_64}`,
@@ -124,6 +133,7 @@ function getLinuxMachine(arch: string): string {
     case "0xd03": return ARM_CPU_CORTEX_A53 + archInfo;
     case "0xd07": return ARM_CPU_CORTEX_A57 + archInfo;
     case "0xd08": return ARM_CPU_CORTEX_A72 + archInfo;
+    case "0xd0b": return ARM_CPU_CORTEX_A76 + archInfo;
     case "0xc08": return PLATFORM_BEAGLEBONE;
     default:
       throw new CobraRuntimeError(`Unsupported CPU: '${cpuPart}'`);
