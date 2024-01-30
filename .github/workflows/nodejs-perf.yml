@@ -58,7 +58,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        machine: [rpi2, rpi3-32, rpi3-64, rpi4-32, rpi4-64, jetson, beaglebone]
+        machine: [rpi2, rpi3-32, rpi3-64, rpi4-32, rpi4-64, rpi5-64, jetson, beaglebone]
         include:
           - machine: rpi2
             num_test_iterations: 20
@@ -69,6 +69,8 @@ jobs:
           - machine: rpi4-32
             num_test_iterations: 50
           - machine: rpi4-64
+            num_test_iterations: 50
+          - machine: rpi5-64
             num_test_iterations: 50
           - machine: jetson
             num_test_iterations: 50
