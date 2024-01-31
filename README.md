@@ -346,28 +346,26 @@ Create instances of the Cobra class:
 ```javascript
 const { Cobra } = require("@picovoice/cobra-node");
 
-// Obtained from the Picovoice Console (https://console.picovoice.ai/)
-const accessKey = "${ACCESS_KEY}";
-
+const accessKey = "${ACCESS_KEY}"; // Obtained from the Picovoice Console (https://console.picovoice.ai/)
 const handle = new Cobra(accessKey);
 ```
 
 When instantiated, `handle` can process audio via its `.process` method.
 
 ```javascript
-let getNextAudioFrame = function() {
-    ...
-};
+function getNextAudioFrame() {
+  // ...
+  return audioFrame;
+}
 
 while (true) {
-  let voiceProbability = handle.process(getNextAudioFrame());
-  if (voiceProbability !== -1) {
-    // detection event callback
-  }
+  const audioFrame = getNextAudioFrame();
+  const voiceProbability = handle.process(audioFrame);
+  console.log(voiceProbability);
 }
 ```
 
-When done be sure to release resources acquired by WebAssembly using `release()`:
+When done be sure to release resources using `release()`:
 
 ```javascript
 handle.release();

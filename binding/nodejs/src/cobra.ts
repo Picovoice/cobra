@@ -60,9 +60,7 @@ export default class Cobra {
       throw new CobraInvalidArgumentError(`No AccessKey provided to Cobra`);
     }
 
-    const {
-      libraryPath = getSystemLibraryPath(),
-    } = options;
+    const { libraryPath = getSystemLibraryPath() } = options;
 
     if (!fs.existsSync(libraryPath)) {
       throw new CobraInvalidArgumentError(
@@ -75,7 +73,7 @@ export default class Cobra {
 
     let cobraHandleAndStatus: CobraHandleAndStatus | null = null;
     try {
-      pvCobra.set_sdk("nodejs");
+      pvCobra.set_sdk('nodejs');
 
       cobraHandleAndStatus = pvCobra.init(accessKey);
     } catch (err: any) {
@@ -167,15 +165,11 @@ export default class Cobra {
    */
   release(): void {
     if (this._handle !== 0) {
-      try {
-        this._pvCobra.delete(this._handle);
-      } catch (err: any) {
-        pvStatusToException(<PvStatus>err.code, err);
-      }
+      this._pvCobra.delete(this._handle);
       this._handle = 0;
     } else {
       // eslint-disable-next-line no-console
-      console.warn('Cobra is not initialized');
+      console.warn('Cobra is not initialized; nothing to destroy');
     }
   }
 
@@ -184,7 +178,7 @@ export default class Cobra {
     if (errorObject.status === PvStatus.SUCCESS) {
       pvStatusToException(status, message, errorObject.message_stack);
     } else {
-      pvStatusToException(status, "Unable to get Cobra error state");
+      pvStatusToException(status, 'Unable to get Cobra error state');
     }
   }
 }

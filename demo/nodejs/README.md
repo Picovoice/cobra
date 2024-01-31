@@ -16,7 +16,7 @@ Cobra is an on-device voice activity detection engine. Cobra is:
 
 ## Compatibility
 
-- Node.js 12+
+- Node.js 16+
 - Runs on Linux (x86_64), macOS (x86_64, arm64), Windows (x86_64), Raspberry Pi (2, 3, 4, 5), NVIDIA Jetson Nano, and BeagleBone.
 
 ## Installation
@@ -41,8 +41,8 @@ Run the following in the terminal:
 cobra-file-demo --access_key ${ACCESS_KEY} --input_audio_file_path ${AUDIO_PATH}
 ```
 
-Replace `${ACCESS_KEY}` with yours obtained from Picovoice Console and `${AUDIO_PATH}` with a path to an audio file for which you
-wish to detect voice activity.
+Replace `${ACCESS_KEY}` with yours obtained from Picovoice Console and `${AUDIO_PATH}` with a path to an audio file you
+wish to use for voice activity detection.
 
 ### Microphone Demo
 
