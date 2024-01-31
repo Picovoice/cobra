@@ -113,7 +113,8 @@ function getLinuxPlatform(): string {
   switch (cpuPart) {
     case "0xc07":
     case "0xd03":
-    case "0xd08": return PLATFORM_RASPBERRY_PI;
+    case "0xd08":
+    case "0xd0b": return PLATFORM_RASPBERRY_PI;
     case "0xd07": return PLATFORM_JETSON;
     case "0xc08": return PLATFORM_BEAGLEBONE;
     default:
