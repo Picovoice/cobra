@@ -11,8 +11,8 @@ Cobra is a highly accurate and lightweight voice activity detection (VAD) engine
 
 ## Compatibility
 
-- Python 3.5+
-- Runs on Linux (x86_64), Mac (x86_64), Windows (x86_64), Raspberry Pi (all variants), NVIDIA Jetson (Nano), and BeagleBone.
+- Python 3.7+
+- Runs on Linux (x86_64), macOS (x86_64 and arm64), Windows (x86_64), Raspberry Pi, NVIDIA Jetson (Nano), and BeagleBone.
 
 ## AccessKey
 
