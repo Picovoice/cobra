@@ -167,9 +167,6 @@ export default class Cobra {
     if (this._handle !== 0) {
       this._pvCobra.delete(this._handle);
       this._handle = 0;
-    } else {
-      // eslint-disable-next-line no-console
-      console.warn('Cobra is not initialized; nothing to destroy');
     }
   }
 
