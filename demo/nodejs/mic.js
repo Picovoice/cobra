@@ -22,7 +22,7 @@ const {
 } = require("@picovoice/cobra-node");
 
 program
-  .option(
+  .requiredOption(
     "-a, --access_key <string>",
     "AccessKey obtain from the Picovoice Console (https://console.picovoice.ai/)"
   )
@@ -81,7 +81,11 @@ async function micDemo() {
   process.stdin.setRawMode(true);
 
   process.stdin.on("keypress", (key, str) => {
-    if (str.sequence === "\r" || str.sequence === "\n") {
+    if (
+      str.sequence === "\r" ||
+      str.sequence === "\n" ||
+      (str.ctrl && str.name === "c")
+    ) {
       isInterrupted = true;
     }
   });
