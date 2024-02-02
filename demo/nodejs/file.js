@@ -31,6 +31,10 @@ program
   .option(
     "-l, --library_file_path <string>",
     "absolute path to cobra dynamic library"
+  )
+  .option(
+    "-t --threshold <string>",
+    "Threshold for the probability of voice activity"
   );
 
 if (process.argv.length < 2) {
@@ -42,6 +46,7 @@ function fileDemo() {
   let audioPath = program["input_audio_file_path"];
   let accessKey = program["access_key"];
   let libraryFilePath = program["library_file_path"];
+  let threshold = program["threshold"] ?? 0.8;
 
   let engineInstance = new Cobra(accessKey, {
     libraryPath: libraryFilePath,
@@ -70,13 +75,20 @@ function fileDemo() {
 
   let frames = getInt16Frames(inputWaveFile, engineInstance.frameLength);
 
-  let voiceProbabilities = [];
-  for (let frame of frames) {
-    const voiceProbability = engineInstance.process(frame);
-    voiceProbabilities.push(voiceProbability);
+  const printedNums = new Set();
+  for (let i = 0; i < frames.length; i++) {
+    const result = engineInstance.process(frames[i]);
+    const timestamp = (
+      (i * engineInstance.frameLength) /
+      engineInstance.sampleRate
+    ).toFixed(1);
+
+    if (result >= threshold && !printedNums.has(timestamp)) {
+      console.log(`Detected voice activity at ${timestamp} sec`);
+      printedNums.add(timestamp);
+    }
   }
 
-  console.log(voiceProbabilities);
   engineInstance.release();
 }
 

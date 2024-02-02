@@ -44,6 +44,14 @@ cobra-file-demo --access_key ${ACCESS_KEY} --input_audio_file_path ${AUDIO_PATH}
 Replace `${ACCESS_KEY}` with yours obtained from Picovoice Console and `${AUDIO_PATH}` with a path to an audio file you
 wish to use for voice activity detection.
 
+The threshold of the engine can be tuned using the `threshold` input argument:
+
+```console
+cobra-file-demo --access_key ${ACCESS_KEY} --input_audio_file_path ${AUDIO_PATH} --threshold ${DETECTION_THRESHOLD}
+```
+
+Threshold is a floating point number within `[0, 1]`. A higher threshold reduces the miss rate at the cost of increased false alarm rate.
+
 ### Microphone Demo
 
 You need a working microphone connected to your machine for this demo. Run the following in the terminal:

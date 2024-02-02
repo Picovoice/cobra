@@ -90,7 +90,16 @@ async function micDemo() {
     const pcm = await recorder.read();
     try {
       const voiceProbability = engineInstance.process(pcm);
-      console.log(voiceProbability);
+      const percentage = voiceProbability * 100;
+      const barLength = Math.floor((percentage / 10) * 3);
+      const emptyLength = 30 - barLength;
+      const spacer = ` `.repeat(3 - percentage.toFixed(0).length);
+
+      process.stdout.write(
+        `\r[${spacer}${percentage.toFixed(0)}]|${"█".repeat(
+          barLength
+        )}${" ".repeat(emptyLength)}|`
+      );
     } catch (err) {
       if (err instanceof CobraActivationLimitReachedError) {
         console.error(
@@ -106,6 +115,7 @@ async function micDemo() {
   recorder.stop();
   recorder.release();
   engineInstance.release();
+  process.stdout.write("\n");
   process.exit();
 }
 
