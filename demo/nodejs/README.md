@@ -62,4 +62,4 @@ cobra-mic-demo --access_key ${ACCESS_KEY}
 
 Replace `${ACCESS_KEY}` with yours obtained from Picovoice Console.
 
-Now start recording and when done press the `ENTER` key.
+To stop recording, press `Ctrl + C` or hit the `ENTER` key.
