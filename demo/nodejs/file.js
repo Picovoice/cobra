@@ -75,7 +75,7 @@ function fileDemo() {
 
   let frames = getInt16Frames(inputWaveFile, engineInstance.frameLength);
 
-  const printedNums = new Set();
+  const printedNumbers = new Set();
   for (let i = 0; i < frames.length; i++) {
     const result = engineInstance.process(frames[i]);
     const timestamp = (
@@ -83,9 +83,9 @@ function fileDemo() {
       engineInstance.sampleRate
     ).toFixed(1);
 
-    if (result >= threshold && !printedNums.has(timestamp)) {
+    if (result >= threshold && !printedNumbers.has(timestamp)) {
       console.log(`Detected voice activity at ${timestamp} sec`);
-      printedNums.add(timestamp);
+      printedNumbers.add(timestamp);
     }
   }
 
