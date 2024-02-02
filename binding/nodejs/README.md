@@ -35,19 +35,21 @@ Signup or Login to [Picovoice Console](https://console.picovoice.ai/) to get you
 
 Create an instance of the engine and detect voice activity in the audio:
 
-Replace `${AccessKey}` with your AccessKey obtained from [Picovoice Console](https://console.picovoice.ai/). `handle` is
+Replace `${AccessKey}` with your AccessKey obtained from [Picovoice Console](https://console.picovoice.ai/). `cobra` is
 an instance of Cobra.
-
-When initialized, the valid sample rate is given by `handle.sampleRate`. Expected frame length (number of audio samples
-in an input array) is `handle.frameLength`. The engine accepts 16-bit linearly-encoded PCM and operates on
-single-channel audio.
 
 ```javascript
 const { Cobra } = require("@picovoice/cobra-node");
 
 const accessKey = "${ACCESS_KEY}"; // Obtained from the Picovoice Console (https://console.picovoice.ai/)
-const handle = new Cobra(accessKey);
+const cobra = new Cobra(accessKey);
+```
 
+Once initialized, the valid sample rate is given by `cobra.sampleRate`. The expected frame length (number of audio samples
+in an input array) is `cobra.frameLength`. The engine accepts 16-bit linearly-encoded PCM and operates on
+single-channel audio.
+
+```javascript
 function getNextAudioFrame() {
   // ...
   return audioFrame;
@@ -55,14 +57,14 @@ function getNextAudioFrame() {
 
 while (true) {
   const audioFrame = getNextAudioFrame();
-  const voiceProbability = handle.process(audioFrame);
+  const voiceProbability = cobra.process(audioFrame);
   console.log(voiceProbability);
 }
 ```
 
 Finally, when done be sure to explicitly release the resources using
-`handle.release()`.
+`cobra.release()`.
 
 ## Demos
 
-[Cobra Node.js demo package](../../demo/nodejs) provides command-line utilities for processing audio using cobra.
+The [Cobra Node.js demo package](../../demo/nodejs) provides command-line utilities for processing audio using Cobra.

@@ -119,7 +119,7 @@ export default class Cobra {
    *
    * @param {Int16Array} pcm Audio data. The audio needs to have a sample rate equal to `Cobra.sampleRate` and be 16-bit linearly-encoded.
    * The specific array length can be attained by calling `Cobra.frameLength`. This function operates on single-channel audio.
-   * @returns {number} Voice probability result.
+   * @returns {number} Probability of voice activity. It is a floating-point number within [0, 1].
    */
   process(pcm: Int16Array): number {
     assert(pcm instanceof Int16Array);
@@ -142,19 +142,19 @@ export default class Cobra {
       );
     }
 
-    let VoiceProbabilityAndStatus: VoiceProbabilityAndStatus | null = null;
+    let voiceProbabilityAndStatus: VoiceProbabilityAndStatus | null = null;
     try {
-      VoiceProbabilityAndStatus = this._pvCobra.process(this._handle, pcm);
+      voiceProbabilityAndStatus = this._pvCobra.process(this._handle, pcm);
     } catch (err: any) {
       pvStatusToException(PvStatus[err.code as keyof typeof PvStatus], err);
     }
 
-    const status = VoiceProbabilityAndStatus!.status;
+    const status = voiceProbabilityAndStatus!.status;
     if (status !== PvStatus.SUCCESS) {
       this.handlePvStatus(status, 'Cobra failed to process the audio frame');
     }
 
-    return VoiceProbabilityAndStatus!.is_voiced;
+    return voiceProbabilityAndStatus!.is_voiced;
   }
 
   /**

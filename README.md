@@ -347,10 +347,10 @@ Create instances of the Cobra class:
 const { Cobra } = require("@picovoice/cobra-node");
 
 const accessKey = "${ACCESS_KEY}"; // Obtained from the Picovoice Console (https://console.picovoice.ai/)
-const handle = new Cobra(accessKey);
+const cobra = new Cobra(accessKey);
 ```
 
-When instantiated, `handle` can process audio via its `.process` method.
+When instantiated, `cobra` can process audio via its `.process` method.
 
 ```javascript
 function getNextAudioFrame() {
@@ -360,7 +360,7 @@ function getNextAudioFrame() {
 
 while (true) {
   const audioFrame = getNextAudioFrame();
-  const voiceProbability = handle.process(audioFrame);
+  const voiceProbability = cobra.process(audioFrame);
   console.log(voiceProbability);
 }
 ```
@@ -368,7 +368,7 @@ while (true) {
 When done be sure to release resources using `release()`:
 
 ```javascript
-handle.release();
+cobra.release();
 ```
 
 ### Rust
