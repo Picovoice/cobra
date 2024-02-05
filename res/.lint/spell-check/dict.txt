@@ -50,3 +50,4 @@ vtable
 wargv
 wavspec
 xcworkspace
+wavefile

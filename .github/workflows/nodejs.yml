@@ -1,0 +1,68 @@
+name: Node.js
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths:
+      - 'binding/nodejs/**'
+      - '!binding/nodejs/README.md'
+      - 'lib/node/**'
+      - '.github/workflows/nodejs.yml'
+
+  pull_request:
+    branches: [ main, 'v[0-9]+.[0-9]+' ]
+    paths:
+      - 'binding/nodejs/**'
+      - '!binding/nodejs/README.md'
+      - 'lib/node/**'
+      - '.github/workflows/nodejs.yml'
+
+defaults:
+  run:
+    working-directory: binding/nodejs
+
+jobs:
+  build-github-hosted:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node-version: [16.x, 18.x, 20.x]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Pre-build dependencies
+        run: npm install yarn
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Test
+        run: yarn test index.test.ts --access_key=${{secrets.PV_VALID_ACCESS_KEY}}
+
+  build-self-hosted:
+    runs-on: ${{ matrix.machine }}
+
+    strategy:
+      matrix:
+        machine: [rpi2, rpi3-32, rpi3-64, rpi4-32, rpi4-64, rpi5-64, jetson, beaglebone]
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Pre-build dependencies
+        run: npm install --global yarn
+
+      - name: Install dependencies
+        run: yarn install
+
+      - name: Test
+        run: yarn test index.test.ts --access_key=${{secrets.PV_VALID_ACCESS_KEY}}

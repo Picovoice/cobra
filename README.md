@@ -26,6 +26,7 @@ Cobra is a highly-accurate and lightweight voice activity detection (VAD) engine
     - [Android](#android-demos)
     - [iOS](#ios-demos)
     - [Web](#web-demos)
+    - [NodeJS](#nodejs-demos)
     - [Rust](#rust-demos)
   - [SDKs](#sdks)
     - [Python](#python)
@@ -33,6 +34,7 @@ Cobra is a highly-accurate and lightweight voice activity detection (VAD) engine
     - [Android](#android)
     - [iOS](#ios)
     - [Web](#web)
+    - [NodeJS](#nodejs)
     - [Rust](#rust)
   - [Releases](#releases)
 
@@ -46,14 +48,14 @@ Install the demo package:
 sudo pip3 install pvcobrademo
 ```
 
-With a working microphone connected to your device run the following in the terminal:
+With a working microphone connected to your device, run the following in the terminal:
 
 ```console
 cobra_demo_mic --access_key ${AccessKey}
 ```
 
 Replace `${AccessKey}` with your AccessKey obtained from [Picovoice Console](https://console.picovoice.ai/). Cobra
-starts processing the audio input from the microphone in realtime and outputs to the terminal when it detects any voice activities.
+will start processing the audio input from the microphone in realtime and output to the terminal when it detects any voice activity.
 
 For more information about the Python demos go to [demo/python](demo/python).
 
@@ -126,6 +128,24 @@ npm run start
 ```
 
 Open `http://localhost:5000` in your browser to try the demo.
+
+### NodeJS Demos
+
+Install the demo package:
+
+```console
+yarn global add @picovoice/cobra-node-demo
+```
+
+With a working microphone connected to your device, run the following in the terminal:
+
+```console
+cobra-mic-demo --access_key ${ACCESS_KEY}
+```
+
+Cobra will start processing the audio input from the microphone in realtime and output to the terminal when it detects any voice activity.
+
+For more information about NodeJS demos go to [demo/nodejs](demo/nodejs).
 
 ### Rust Demos
 
@@ -313,6 +333,43 @@ Replace `${ACCESS_KEY}` with yours obtained from [Picovoice Console](https://con
 
 When done, release the resources allocated to Cobra using `cobra.release()`.
 
+### NodeJS
+
+Install NodeJS SDK:
+
+```console
+yarn add @picovoice/cobra-node
+```
+
+Create instances of the Cobra class:
+
+```javascript
+const { Cobra } = require("@picovoice/cobra-node");
+
+const accessKey = "${ACCESS_KEY}"; // Obtained from the Picovoice Console (https://console.picovoice.ai/)
+const cobra = new Cobra(accessKey);
+```
+
+When instantiated, `cobra` can process audio via its `.process` method.
+
+```javascript
+function getNextAudioFrame() {
+  // ...
+  return audioFrame;
+}
+
+while (true) {
+  const audioFrame = getNextAudioFrame();
+  const voiceProbability = cobra.process(audioFrame);
+  console.log(voiceProbability);
+}
+```
+
+When done be sure to release resources using `release()`:
+
+```javascript
+cobra.release();
+```
 
 ### Rust
 
