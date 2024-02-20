@@ -4,7 +4,9 @@ res/** linguist-detectable=false
 
 binding/android/** linguist-detectable=false
 binding/ios/CobraAppTest/** linguist-detectable=false
-binding/node/test/** linguist-detectable=false
+binding/nodejs/** linguist-detectable=false
+binding/nodejs/src/cobra.ts linguist-detectable=true
+binding/node/** linguist-detectable=false
 binding/rust/tests/** linguist-detectable=false
 binding/web/** linguist-detectable=false
 binding/web/src/cobra.ts linguist-detectable=true
