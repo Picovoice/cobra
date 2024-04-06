@@ -1,17 +1,18 @@
 # Cobra
 
+[![GitHub release](https://img.shields.io/github/release/Picovoice/Cobra.svg)](https://github.com/Picovoice/Cobra/releases)
 [![GitHub](https://img.shields.io/github/license/Picovoice/cobra)](https://github.com/Picovoice/cobra/)
 
-[![PyPI](https://img.shields.io/pypi/v/pvcobra)](https://pypi.org/project/pvcobra/)
+[![Crates.io](https://img.shields.io/crates/v/pv_cobra)](https://crates.io/crates/pv_cobra)<!-- markdown-link-check-disable-line -->
 [![Maven Central](https://img.shields.io/maven-central/v/ai.picovoice/cobra-android?label=maven-central%20%5Bandroid%5D)](https://repo1.maven.org/maven2/ai/picovoice/cobra-android/)
-<!-- markdown-link-check-disable -->
-[![Crates.io](https://img.shields.io/crates/v/pv_cobra)](https://crates.io/crates/pv_cobra)
-<!-- markdown-link-check-enable -->
+[![npm](https://img.shields.io/npm/v/@picovoice/cobra-node?label=npm%20%5Bnode%5D)](https://www.npmjs.com/package/@picovoice/cobra-node)
+[![npm](https://img.shields.io/npm/v/@picovoice/cobra-web?label=npm%20%5Bweb%5D)](https://www.npmjs.com/package/@picovoice/cobra-web)
+[![npm](https://img.shields.io/cocoapods/v/Cobra-iOS)](https://cocoapods.org/pods/Cobra-iOS)
+[![PyPI](https://img.shields.io/pypi/v/pvcobra)](https://pypi.org/project/pvcobra/)
+
 Made in Vancouver, Canada by [Picovoice](https://picovoice.ai)
 
-<!-- markdown-link-check-disable -->
-[![Twitter URL](https://img.shields.io/twitter/url?label=%40AiPicovoice&style=social&url=https%3A%2F%2Ftwitter.com%2FAiPicovoice)](https://twitter.com/AiPicovoice)
-<!-- markdown-link-check-enable -->
+[![Twitter URL](https://img.shields.io/twitter/url?label=%40AiPicovoice&style=social&url=https%3A%2F%2Ftwitter.com%2FAiPicovoice)](https://twitter.com/AiPicovoice)<!-- markdown-link-check-disable-line -->
 [![YouTube Channel Views](https://img.shields.io/youtube/channel/views/UCAdi9sTCXLosG1XeqDwLx7w?label=YouTube&style=social)](https://www.youtube.com/channel/UCAdi9sTCXLosG1XeqDwLx7w)
 
 Cobra is a highly-accurate and lightweight voice activity detection (VAD) engine.
