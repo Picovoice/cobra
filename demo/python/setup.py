@@ -52,6 +52,6 @@ setuptools.setup(
             'cobra_demo_mic=pvcobrademo.cobra_demo_mic:main',
         ],
     ),
-    python_requires='>=3.5',
+    python_requires='>=3.8',
     keywords="voice activity detection engine, VAD",
 )
