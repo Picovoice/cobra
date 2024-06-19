@@ -74,6 +74,6 @@ setuptools.setup(
         "Programming Language :: Python :: 3",
         "Topic :: Multimedia :: Sound/Audio :: Speech"
     ],
-    python_requires='>=3.7',
+    python_requires='>=3.8',
     keywords="voice activity detection engine, VAD",
 )
