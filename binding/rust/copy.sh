@@ -8,7 +8,7 @@ echo "Preparing dir ..."
 mkdir -p ./data/lib/
 
 
-for platform in beaglebone jetson linux mac raspberry-pi windows
+for platform in linux mac raspberry-pi windows
 do
     echo "Copying Library Files for $platform ..."
     cp -r ../../lib/$platform ./data/lib/

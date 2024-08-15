@@ -1,6 +1,6 @@
 [package]
 name = "pv_cobra_micdemo"
-version = "0.1.1"
+version = "0.1.2"
 edition = "2018"
 
 [dependencies]
@@ -9,5 +9,5 @@ clap = "2.33.3"
 ctrlc = "3.1.9"
 hound = "3.5.0"
 itertools = "0.10.1"
-pv_cobra = "=2.0.2"
+pv_cobra = { path = "../../../binding/rust" }
 pv_recorder = "=1.2.1"

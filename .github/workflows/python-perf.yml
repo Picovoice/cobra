@@ -7,8 +7,6 @@ on:
     paths:
       - '.github/workflows/python-perf.yml'
       - 'binding/python/test_cobra_perf.py'
-      - 'lib/beaglebone/**'
-      - 'lib/jetson/**'
       - 'lib/linux/**'
       - 'lib/mac/**'
       - 'lib/raspberry-pi/**'
@@ -19,8 +17,6 @@ on:
     paths:
       - '.github/workflows/python-perf.yml'
       - 'binding/python/test_cobra_perf.py'
-      - 'lib/beaglebone/**'
-      - 'lib/jetson/**'
       - 'lib/linux/**'
       - 'lib/mac/**'
       - 'lib/raspberry-pi/**'
@@ -70,11 +66,8 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        machine: [rpi2, rpi3-32, rpi3-64, rpi4-32, rpi4-64, rpi5-64, jetson, beaglebone]
+        machine: [rpi3-32, rpi3-64, rpi4-32, rpi4-64, rpi5-64]
         include:
-        - machine: rpi2
-          num_test_iterations: 50
-          performance_threshold_sec: 0.08
         - machine: rpi3-32
           num_test_iterations: 100
           performance_threshold_sec: 0.05
@@ -90,12 +83,6 @@ jobs:
         - machine: rpi5-64
           num_test_iterations: 100
           performance_threshold_sec: 0.011
-        - machine: jetson
-          num_test_iterations: 100
-          performance_threshold_sec: 0.025
-        - machine: beaglebone
-          num_test_iterations: 50
-          performance_threshold_sec: 0.25
 
     steps:
     - uses: actions/checkout@v3

@@ -1,6 +1,6 @@
 [package]
 name = "pv_cobra_filedemo"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2018"
 
 [dependencies]
@@ -8,4 +8,4 @@ chrono = "0.4.23"
 clap = "2.33.3"
 hound = "3.5.0"
 itertools = "0.10.1"
-pv_cobra = "=2.0.2"
+pv_cobra = { path = "../../../binding/rust" }
