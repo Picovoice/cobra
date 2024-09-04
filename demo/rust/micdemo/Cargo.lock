@@ -246,6 +246,8 @@ dependencies = [
 [[package]]
 name = "pv_cobra"
 version = "2.0.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f994f736949106dc56f6ec77336a960aab85c71ce93d0e5fb71f386d480f1309"
 dependencies = [
  "libc",
  "libloading 0.7.4",
