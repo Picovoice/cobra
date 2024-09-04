@@ -8,8 +8,6 @@ on:
       - '.github/workflows/python.yml'
       - 'binding/python/**'
       - '!binding/python/README.md'
-      - 'lib/beaglebone/**'
-      - 'lib/jetson/**'
       - 'lib/linux/**'
       - 'lib/mac/**'
       - 'lib/raspberry-pi/**'
@@ -21,8 +19,6 @@ on:
       - '.github/workflows/python.yml'
       - 'binding/python/**'
       - '!binding/python/README.md'
-      - 'lib/beaglebone/**'
-      - 'lib/jetson/**'
       - 'lib/linux/**'
       - 'lib/mac/**'
       - 'lib/raspberry-pi/**'
@@ -65,7 +61,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        machine: [rpi2, rpi3-32, rpi3-64, rpi4-32, rpi4-64, rpi5-64, jetson, beaglebone]
+        machine: [rpi3-32, rpi3-64, rpi4-32, rpi4-64, rpi5-64]
 
     steps:
     - uses: actions/checkout@v3

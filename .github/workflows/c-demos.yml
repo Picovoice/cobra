@@ -7,8 +7,6 @@ on:
     paths:
       - 'demo/c/**'
       - '!demo/c/README.md'
-      - 'lib/beaglebone/**'
-      - 'lib/jetson/**'
       - 'lib/linux/**'
       - 'lib/mac/**'
       - 'lib/raspberry-pi/**'
@@ -19,8 +17,6 @@ on:
     paths:
       - 'demo/c/**'
       - '!demo/c/README.md'
-      - 'lib/beaglebone/**'
-      - 'lib/jetson/**'
       - 'lib/linux/**'
       - 'lib/mac/**'
       - 'lib/raspberry-pi/**'
@@ -55,7 +51,7 @@ jobs:
 
     strategy:
       matrix:
-        machine: [rpi2, rpi3-32, rpi3-64, rpi4-32, rpi4-64, rpi5-64, jetson, beaglebone]
+        machine: [rpi3-32, rpi3-64, rpi4-32, rpi4-64, rpi5-64]
 
     steps:
     - uses: actions/checkout@v3
@@ -83,7 +79,7 @@ jobs:
           arch: amd64
         - os: macos-latest
           platform: mac
-          arch: x86_64
+          arch: arm64
 
     steps:
     - uses: actions/checkout@v3
@@ -112,11 +108,8 @@ jobs:
 
     strategy:
       matrix:
-        machine: [rpi2, rpi3-32, rpi3-64, rpi4-32, rpi4-64, rpi5-64, jetson, beaglebone]
+        machine: [rpi3-32, rpi3-64, rpi4-32, rpi4-64, rpi5-64]
         include:
-        - machine: rpi2
-          platform: raspberry-pi
-          arch: cortex-a7
         - machine: rpi3-32
           platform: raspberry-pi
           arch: cortex-a53
@@ -132,12 +125,6 @@ jobs:
         - machine: rpi5-64
           platform: raspberry-pi
           arch: cortex-a76-aarch64
-        - machine: jetson
-          platform: jetson
-          arch: cortex-a57-aarch64
-        - machine: beaglebone
-          platform: beaglebone
-          arch: ''
 
     steps:
     - uses: actions/checkout@v3

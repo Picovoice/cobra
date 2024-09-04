@@ -1,5 +1,5 @@
 /*
-    Copyright 2021-2023 Picovoice Inc.
+    Copyright 2021-2024 Picovoice Inc.
 
     You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
     file accompanying this source.
@@ -20,9 +20,7 @@ use std::path::PathBuf;
 const DEFAULT_RELATIVE_LIBRARY_DIR: &str = "lib/";
 
 #[allow(dead_code)]
-const RPI_MACHINES: [&str; 4] = ["arm11", "cortex-a7", "cortex-a53", "cortex-a72"];
-#[allow(dead_code)]
-const JETSON_MACHINES: [&str; 1] = ["cortex-a57"];
+const RPI_MACHINES: [&str; 3] = ["arm11", "cortex-a53", "cortex-a72"];
 
 #[cfg(target_os = "linux")]
 #[allow(dead_code)]
@@ -50,11 +48,8 @@ fn find_machine_type() -> String {
 
     let machine = match cpu_part.as_str() {
         "0xb76" => "arm11",
-        "0xc07" => "cortex-a7",
         "0xd03" => "cortex-a53",
-        "0xd07" => "cortex-a57",
         "0xd08" => "cortex-a72",
-        "0xc08" => "beaglebone",
         _ => "unsupported",
     };
 
@@ -92,10 +87,6 @@ fn base_library_path() -> PathBuf {
                 PathBuf::from(format!("raspberry-pi/{}/libpv_cobra.so", &machine))
             }
         }
-        machine if JETSON_MACHINES.contains(&machine) => {
-            PathBuf::from("jetson/cortex-a57-aarch64/libpv_cobra.so")
-        }
-        "beaglebone" => PathBuf::from("beaglebone/libpv_cobra.so"),
         _ => {
             warn!("WARNING: Please be advised that this device is not officially supported by Picovoice.\nFalling back to the armv6-based (Raspberry Pi Zero) library. This is not tested nor optimal.\nFor the model, use Raspberry Pi's models");
             PathBuf::from("raspberry-pi/arm11/libpv_cobra.so")
