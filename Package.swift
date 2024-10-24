@@ -23,8 +23,7 @@ let package = Package(
             exclude: ["CobraAppTest"],
             dependencies: [
                 .target(name: "PvCobra")
-            ])
+            ]
         )
-    ],
-    swiftLanguageVersions: [.v5]
+    ]
 )
