@@ -13,17 +13,10 @@ let package = Package(
         )
     ],
     targets: [
-        .binaryTarget(
-            name: "PvCobra",
-            path: "lib/ios/PvCobra.xcframework"
-        ),
         .target(
             name: "Cobra",
             path: "binding/ios",
-            exclude: ["CobraAppTest"],
-            dependencies: [
-                .target(name: "PvCobra")
-            ]
+            exclude: ["CobraAppTest"]
         )
     ]
 )
