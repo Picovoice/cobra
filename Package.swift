@@ -19,9 +19,16 @@ let package = Package(
         ),
         .target(
             name: "Cobra",
-            path: "binding/ios",
-            exclude: ["CobraAppTest"]
             dependencies: ["PvCobra"],
+            path: ".",
+            exclude: [
+                "binding/ios/CobraAppTest",
+                "demo"
+            ],
+            sources: [
+                "binding/ios/Cobra.swift",
+                "binding/ios/CobraErrors.swift"
+            ],
         )
     ]
 )
