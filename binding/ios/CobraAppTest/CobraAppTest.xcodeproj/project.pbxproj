@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 55;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -16,7 +16,8 @@
 		1E00647D27CEE658006FF6E9 /* sample.wav in Resources */ = {isa = PBXBuildFile; fileRef = 1E00647C27CEE658006FF6E9 /* sample.wav */; };
 		1E5B7AEE2800B2CF00F8BDDB /* PerformanceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5B7AED2800B2CF00F8BDDB /* PerformanceTest.swift */; };
 		1E5B7AF12800B4A600F8BDDB /* sample.wav in Resources */ = {isa = PBXBuildFile; fileRef = 1E5B7AF02800B4A600F8BDDB /* sample.wav */; };
-		6A9164E4B0B1626D27DBA0A1 /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		E14CDF492CE4349C00E6494C /* Cobra in Frameworks */ = {isa = PBXBuildFile; productRef = E14CDF482CE4349C00E6494C /* Cobra */; };
+		E14CDF4B2CE434D700E6494C /* Cobra in Frameworks */ = {isa = PBXBuildFile; productRef = E14CDF4A2CE434D700E6494C /* Cobra */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E14CDF492CE4349C00E6494C /* Cobra in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -66,7 +68,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6A9164E4B0B1626D27DBA0A1 /* BuildFile in Frameworks */,
+				E14CDF4B2CE434D700E6494C /* Cobra in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -86,8 +88,8 @@
 				1E5B7ADD2800B28C00F8BDDB /* PerformanceTest */,
 				1E00644A27CEDF9B006FF6E9 /* CobraAppTest */,
 				1E00646B27CEDF9C006FF6E9 /* CobraAppTestUITests */,
+				E14CDF452CE4349900E6494C /* Frameworks */,
 				1E00644927CEDF9B006FF6E9 /* Products */,
-				FA7D97C92E04F06D3273CCF3 /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -134,11 +136,11 @@
 			path = PerformanceTest;
 			sourceTree = "<group>";
 		};
-		FA7D97C92E04F06D3273CCF3 /* Pods */ = {
+		E14CDF452CE4349900E6494C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 			);
-			path = Pods;
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -229,6 +231,9 @@
 				Base,
 			);
 			mainGroup = 1E00643F27CEDF9B006FF6E9;
+			packageReferences = (
+				E14CDF442CE425EC00E6494C /* XCLocalSwiftPackageReference "../../../../cobra" */,
+			);
 			productRefGroup = 1E00644927CEDF9B006FF6E9 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -631,6 +636,26 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		E14CDF442CE425EC00E6494C /* XCLocalSwiftPackageReference "../../../../cobra" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../../../cobra;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E14CDF482CE4349C00E6494C /* Cobra */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E14CDF442CE425EC00E6494C /* XCLocalSwiftPackageReference "../../../../cobra" */;
+			productName = Cobra;
+		};
+		E14CDF4A2CE434D700E6494C /* Cobra */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E14CDF442CE425EC00E6494C /* XCLocalSwiftPackageReference "../../../../cobra" */;
+			productName = Cobra;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 1E00644027CEDF9B006FF6E9 /* Project object */;
 }

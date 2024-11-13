@@ -28,7 +28,7 @@ let package = Package(
             sources: [
                 "binding/ios/Cobra.swift",
                 "binding/ios/CobraErrors.swift"
-            ],
+            ]
         )
     ]
 )
