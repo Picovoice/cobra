@@ -52,4 +52,5 @@ wavspec
 xcframework
 xcworkspace
 xcodeproj
+xcuitest
 wavefile

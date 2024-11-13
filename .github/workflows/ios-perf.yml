@@ -73,7 +73,7 @@ jobs:
 
       - name: Zipping Tests
         run: cd ddp/Build/Products/Debug-iphoneos/ &&
-          zip --symlinks -r CobraAppTestUITests.zip CobraAppTestUITests-Runner.app
+          zip --symlinks -r PerformanceTest.zip PerformanceTest-Runner.app
 
       - name: Run tests on BrowserStack
         run: python3 ../../../script/automation/browserstack.py
@@ -82,4 +82,4 @@ jobs:
           --access_key "${{secrets.BROWSERSTACK_ACCESS_KEY}}"
           --project_name "Cobra-Migration-Test-iOS-Perf"
           --app_path "ddp/Build/Products/Debug-iphoneos/CobraAppTest.ipa"
-          --test_path "ddp/Build/Products/Debug-iphoneos/CobraAppTestUITests.zip"
+          --test_path "ddp/Build/Products/Debug-iphoneos/PerformanceTest.zip"
