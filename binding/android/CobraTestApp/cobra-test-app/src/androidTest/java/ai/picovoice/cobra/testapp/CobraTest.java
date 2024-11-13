@@ -22,6 +22,9 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.rules.TestRule;
+import org.junit.runners.model.Statement;
+import org.junit.runner.Description;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -42,11 +45,18 @@ import ai.picovoice.cobra.CobraException;
 import static org.junit.Assert.*;
 
 
+public class TestContextImplementation implements TestRule {
+    @Override
+    public Statement apply(Statement base, Description description) {
+        return base;
+    }
+}
+
 @RunWith(AndroidJUnit4.class)
 public class CobraTest {
 
     @Rule
-    Context testContext;
+    public TestRule testContext = new TestContextImplementation();
     Context appContext;
     AssetManager assetManager;
     String testResourcesPath;
