@@ -30,8 +30,9 @@ import ai.picovoice.cobra.Cobra;
 
 @RunWith(AndroidJUnit4.class)
 public class PerformanceTest {
+
     @Rule
-    Context testContext;
+    public Context testContext;
     Context appContext;
     AssetManager assetManager;
     String testResourcesPath;
