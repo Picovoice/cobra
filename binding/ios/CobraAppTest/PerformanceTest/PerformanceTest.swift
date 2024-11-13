@@ -15,7 +15,7 @@ import Cobra
 class PerformanceTest: XCTestCase {
     let accessKey: String = "{TESTING_ACCESS_KEY_HERE}"
     let iterationString: String = "{NUM_TEST_ITERATIONS}"
-    let thresholdString: String = "0.001"
+    let thresholdString: String = "{PERFORMANCE_THRESHOLD_SEC}"
 
     override func setUp() {
         super.setUp()
@@ -23,7 +23,7 @@ class PerformanceTest: XCTestCase {
     }
 
     func testPerformance() throws {
-        try XCTSkipIf(thresholdString == "{PERFORMANCE_THRESHOLD_SEC}")
+        try XCTSkipIf(thresholdString == nil)
 
         let numTestIterations = Int(iterationString) ?? 100
         let performanceThresholdSec = Double(thresholdString)
