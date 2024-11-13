@@ -18,6 +18,7 @@
 		1E5B7AF12800B4A600F8BDDB /* sample.wav in Resources */ = {isa = PBXBuildFile; fileRef = 1E5B7AF02800B4A600F8BDDB /* sample.wav */; };
 		E14CDF492CE4349C00E6494C /* Cobra in Frameworks */ = {isa = PBXBuildFile; productRef = E14CDF482CE4349C00E6494C /* Cobra */; };
 		E14CDF4B2CE434D700E6494C /* Cobra in Frameworks */ = {isa = PBXBuildFile; productRef = E14CDF4A2CE434D700E6494C /* Cobra */; };
+		E1CE29CB2CE5173900C4B43A /* Cobra in Frameworks */ = {isa = PBXBuildFile; productRef = E1CE29CA2CE5173900C4B43A /* Cobra */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		1E5B7AED2800B2CF00F8BDDB /* PerformanceTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerformanceTest.swift; sourceTree = "<group>"; };
 		1E5B7AEF2800B2E300F8BDDB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1E5B7AF02800B4A600F8BDDB /* sample.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = sample.wav; path = ../../../../res/audio/sample.wav; sourceTree = "<group>"; };
+		E1CE29C82CE5173000C4B43A /* cobra */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = cobra; path = ../../..; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +78,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E1CE29CB2CE5173900C4B43A /* Cobra in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -139,6 +142,7 @@
 		E14CDF452CE4349900E6494C /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				E1CE29C82CE5173000C4B43A /* cobra */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -653,6 +657,10 @@
 		E14CDF4A2CE434D700E6494C /* Cobra */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E14CDF442CE425EC00E6494C /* XCLocalSwiftPackageReference "../../../../cobra" */;
+			productName = Cobra;
+		};
+		E1CE29CA2CE5173900C4B43A /* Cobra */ = {
+			isa = XCSwiftPackageProductDependency;
 			productName = Cobra;
 		};
 /* End XCSwiftPackageProductDependency section */
