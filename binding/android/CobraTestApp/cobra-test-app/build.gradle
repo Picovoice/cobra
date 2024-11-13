@@ -96,6 +96,11 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+    }
+
     lint {
         abortOnError false
     }
@@ -116,10 +121,6 @@ dependencies {
     })
     androidTestImplementation 'com.browserstack:gradle-tool:1.0.0'
     androidTestImplementation('androidx.test.espresso:espresso-intents:3.5.1')
-}
-
-packagingOptions {
-    exclude 'META-INF/DEPENDENCIES'
 }
 
 afterEvaluate {
