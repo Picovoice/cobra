@@ -19,7 +19,7 @@ defaults:
 
 jobs:
   build:
-    name: Run Android Speed Tests on AppCenter
+    name: Run Android Speed Tests on BrowserStack
     runs-on: ubuntu-latest
 
     strategy:
@@ -34,13 +34,12 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: Set up Node.js LTS
-      uses: actions/setup-node@v3
+    - name: Installing Python
+      uses: actions/setup-python@v5
       with:
-        node-version: lts/*
-
-    - name: Install AppCenter CLI
-      run: npm install -g appcenter-cli
+        python-version: '3.10'
+    - run:
+        pip3 install requests
 
     - name: set up JDK 11
       uses: actions/setup-java@v3
@@ -79,12 +78,11 @@ jobs:
     - name: Build androidTest
       run: ./gradlew assembleAndroidTest -DtestBuildType=perf
 
-    - name: Run tests on AppCenter
-      run: appcenter test run espresso
-        --token ${{secrets.APPCENTERAPITOKEN}}
-        --app "Picovoice/Cobra-Android-Activity"
-        --devices "Picovoice/${{ matrix.device }}"
-        --app-path cobra-test-app/build/outputs/apk/debug/cobra-test-app-debug.apk
-        --test-series "cobra-android"
-        --locale "en_US"
-        --build-dir cobra-test-app/build/outputs/apk/androidTest/debug
+    - name: Run tests on BrowserStack
+      run: python3 ../../../script/automation/browserstack.py
+        --type espresso
+        --username "${{secrets.BROWSERSTACK_USERNAME}}"
+        --access_key "${{secrets.BROWSERSTACK_ACCESS_KEY}}"
+        --project_name "Cobra-Migration-Test-Android-Perf"
+        --app_path "cobra-test-app/build/outputs/apk/debug/cobra-test-app-debug.apk"
+        --test_path "cobra-test-app/build/outputs/apk/androidTest/debug/cobra-test-app-debug-androidTest.apk"

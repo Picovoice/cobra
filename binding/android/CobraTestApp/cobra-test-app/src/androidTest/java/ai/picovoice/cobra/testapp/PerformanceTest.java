@@ -8,9 +8,6 @@ import android.content.res.AssetManager;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.microsoft.appcenter.espresso.Factory;
-import com.microsoft.appcenter.espresso.ReportHelper;
-
 import org.junit.After;
 import org.junit.Assume;
 import org.junit.Before;
@@ -34,17 +31,11 @@ import ai.picovoice.cobra.Cobra;
 @RunWith(AndroidJUnit4.class)
 public class PerformanceTest {
     @Rule
-    public ReportHelper reportHelper = Factory.getReportHelper();
     Context testContext;
     Context appContext;
     AssetManager assetManager;
     String testResourcesPath;
     String accessKey;
-
-    @After
-    public void TearDown() {
-        reportHelper.label("Stopping App");
-    }
 
     @Before
     public void Setup() throws IOException {
