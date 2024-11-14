@@ -66,7 +66,8 @@ jobs:
         --type espresso
         --username "${{secrets.BROWSERSTACK_USERNAME}}"
         --access_key "${{secrets.BROWSERSTACK_ACCESS_KEY}}"
-        --project_name "Cobra-Migration-Test-Android-Build"
+        --project_name "Cobra-Android"
+        --devices "android-min-max"
         --app_path "cobra-test-app/build/outputs/apk/debug/cobra-test-app-debug.apk"
         --test_path "cobra-test-app/build/outputs/apk/androidTest/debug/cobra-test-app-debug-androidTest.apk"
 
@@ -120,6 +121,7 @@ jobs:
         --type espresso
         --username "${{secrets.BROWSERSTACK_USERNAME}}"
         --access_key "${{secrets.BROWSERSTACK_ACCESS_KEY}}"
-        --project_name "Cobra-Migration-Test-Android-Build-Integ"
+        --project_name "Cobra-Android-Integration"
+        --devices "android-min-max"
         --app_path "cobra-test-app/build/outputs/apk/release/cobra-test-app-release.apk"
         --test_path "cobra-test-app/build/outputs/apk/androidTest/release/cobra-test-app-release-androidTest.apk"

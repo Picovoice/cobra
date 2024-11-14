@@ -24,12 +24,10 @@ jobs:
 
     strategy:
       matrix:
-        device: [single-android, 32bit-android]
+        device: [ android-perf ]
         include:
-        - device: single-android
+        - device: android-perf
           performanceThresholdSec: 0.005
-        - device: 32bit-android
-          performanceThresholdSec: 0.015
 
     steps:
     - uses: actions/checkout@v3
@@ -83,6 +81,7 @@ jobs:
         --type espresso
         --username "${{secrets.BROWSERSTACK_USERNAME}}"
         --access_key "${{secrets.BROWSERSTACK_ACCESS_KEY}}"
-        --project_name "Cobra-Migration-Test-Android-Perf"
+        --project_name "Cobra-Android-Performance"
+        --devices "${{ matrix.device }}"
         --app_path "cobra-test-app/build/outputs/apk/debug/cobra-test-app-debug.apk"
         --test_path "cobra-test-app/build/outputs/apk/androidTest/debug/cobra-test-app-debug-androidTest.apk"

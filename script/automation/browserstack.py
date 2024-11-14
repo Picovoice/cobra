@@ -7,21 +7,24 @@ TEST_URI = 'https://api-cloud.browserstack.com/app-automate/{}/v2/test-suite'
 BUILD_URI = 'https://api-cloud.browserstack.com/app-automate/{}/v2/build'
 STATUS_URI = 'https://api-cloud.browserstack.com/app-automate/{}/v2/builds/{}'
 
-ESPRESSO_DEVICES = [
-    'Google Pixel 6 Pro-12.0'
-]
-
-XCUITEST_DEVICES = [
-    'iPhone 12 Pro-17'
-]
-
-def get_devices(type: str):
-    if type == 'espresso':
-        return ESPRESSO_DEVICES
-    elif type == 'xcuitest':
-        return XCUITEST_DEVICES
-    else:
-        return []
+devices_dict = {
+    'android-min-max': [
+        'Galaxy S8-7',
+        'Galaxy S21-11',
+        'Pixel 9-15'
+    ],
+    'android-perf': [
+        'Pixel 6 Pro-15'
+    ],
+    'ios-min-max': [
+        'iPhone 7-10',
+        'iPhone 12 Pro-17',
+        'iPhone 16-18.1'
+    ],
+    'ios-perf': [
+        'Apple iPhone 12-17',
+    ]
+}
 
 def main(args: argparse.Namespace) -> None:
     app_files = {
@@ -60,7 +63,7 @@ def main(args: argparse.Namespace) -> None:
         'app': app_response_json['app_url'],
         'testSuite': test_response_json['test_suite_url'],
         'project': args.project_name,
-        'devices': get_devices(args.type)
+        'devices': devices_dict[args.devices]
     }
     build_response = requests.post(
         BUILD_URI.format(args.type),
@@ -107,6 +110,7 @@ if __name__ == '__main__':
     parser.add_argument('--access_key', required=True)
 
     parser.add_argument('--project_name', required=True)
+    parser.add_argument('--devices', choices=devices_dict.keys(), required=True)
     parser.add_argument('--app_path', required=True)
     parser.add_argument('--test_path', required=True)
     args = parser.parse_args()
