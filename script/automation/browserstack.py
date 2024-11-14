@@ -75,7 +75,7 @@ def main(args: argparse.Namespace) -> None:
         )
         if (build_response is not None and 'message' in build_response.json() and '[BROWSERSTACK_ALL_PARALLELS_IN_USE]'
                 in build_response.json()['message']):
-                print('Parallel threads limit reached. Waiting...')
+                print('Parallel threads limit reached. Waiting...', flush=True)
                 time.sleep(60)
         else:
             break
