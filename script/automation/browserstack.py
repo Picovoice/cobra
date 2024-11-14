@@ -65,17 +65,29 @@ def main(args: argparse.Namespace) -> None:
         'project': args.project_name,
         'devices': devices_dict[args.devices]
     }
-    build_response = requests.post(
-        BUILD_URI.format(args.type),
-        headers=build_headers,
-        json=build_data,
-        auth=(args.username, args.access_key)
-    )
+
+    while True:
+        build_response = requests.post(
+            BUILD_URI.format(args.type),
+            headers=build_headers,
+            json=build_data,
+            auth=(args.username, args.access_key)
+        )
+        if (build_response is not None and 'message' in build_response.json() and '[BROWSERSTACK_ALL_PARALLELS_IN_USE]'
+                in build_response.json()['message']):
+                print('Parallel threads limit reached. Waiting...')
+                time.sleep(60)
+        else:
+            break
+
+    if build_response is None:
+        print('Build Failed')
+        exit(1)
+
     build_response_json = build_response.json()
 
     if not build_response.ok:
-        print('Build Failed', build_response_json)
-        print('Build Response', build_response)
+        print('Build Failed', build_response.json())
         exit(1)
 
     if build_response_json['message'] != 'Success':
