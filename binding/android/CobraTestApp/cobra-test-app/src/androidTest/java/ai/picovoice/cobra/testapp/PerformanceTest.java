@@ -8,10 +8,8 @@ import android.content.res.AssetManager;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import org.junit.After;
 import org.junit.Assume;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -31,11 +29,11 @@ import ai.picovoice.cobra.Cobra;
 @RunWith(AndroidJUnit4.class)
 public class PerformanceTest {
 
-    @Rule
-    public Context testContext;
+    Context testContext;
     Context appContext;
     AssetManager assetManager;
     String testResourcesPath;
+
     String accessKey;
 
     @Before
@@ -48,8 +46,6 @@ public class PerformanceTest {
 
         accessKey = appContext.getString(R.string.pvTestingAccessKey);
     }
-
-
 
     @Test
     public void testPerformance() throws Exception {
