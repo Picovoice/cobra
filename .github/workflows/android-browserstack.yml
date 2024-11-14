@@ -43,7 +43,7 @@ jobs:
       run: ./copy_test_resources.sh
 
     - name: Inject AccessKey
-      run: echo pvTestingAccessKey="123abc" >> local.properties
+      run: echo pvTestingAccessKey="${{secrets.PV_VALID_ACCESS_KEY}}" >> local.properties
 
     - name: Inject Android keystore variables
       run: |
@@ -95,7 +95,7 @@ jobs:
       run: ./copy_test_resources.sh
 
     - name: Inject AccessKey
-      run: echo pvTestingAccessKey="123abc" >> local.properties
+      run: echo pvTestingAccessKey="${{secrets.PV_VALID_ACCESS_KEY}}" >> local.properties
 
     - name: Inject Android keystore variables
       run: |

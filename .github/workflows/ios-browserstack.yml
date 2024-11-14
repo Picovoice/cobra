@@ -37,7 +37,7 @@ jobs:
         run: mkdir ddp
 
       - name: Inject AccessKey
-        run: sed -i '.bak' 's:{TESTING_ACCESS_KEY_HERE}:123abc:'
+        run: sed -i '.bak' 's:{TESTING_ACCESS_KEY_HERE}:${{secrets.PV_VALID_ACCESS_KEY}}:'
           CobraAppTestUITests/CobraAppTestUITests.swift
 
       - name: XCode Build

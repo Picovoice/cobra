@@ -27,7 +27,7 @@ jobs:
         device: [ android-perf ]
         include:
         - device: android-perf
-          performanceThresholdSec: 0 # 0.005
+          performanceThresholdSec: 0.005
 
     steps:
     - uses: actions/checkout@v3
