@@ -75,6 +75,7 @@ def main(args: argparse.Namespace) -> None:
 
     if not build_response.ok:
         print('Build Failed', build_response_json)
+        print('Build Response', build_response)
         exit(1)
 
     if build_response_json['message'] != 'Success':
