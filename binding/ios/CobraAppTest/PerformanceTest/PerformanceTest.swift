@@ -23,7 +23,7 @@ class PerformanceTest: XCTestCase {
     }
 
     func testPerformance() throws {
-        try XCTSkipIf(thresholdString == nil)
+        try XCTSkipIf(thresholdString == "{PERFORMANCE_THRESHOLD_SEC}")
 
         let numTestIterations = Int(iterationString) ?? 100
         let performanceThresholdSec = Double(thresholdString)
