@@ -1,5 +1,5 @@
 /*
-    Copyright 2021-2023 Picovoice Inc.
+    Copyright 2021-2024 Picovoice Inc.
     You may not use this file except in compliance with the license. A copy of the license is
     located in the "LICENSE" file accompanying this source.
     Unless required by applicable law or agreed to in writing, software distributed under the
@@ -16,13 +16,9 @@ import android.content.res.AssetManager;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import org.junit.After;
-import org.junit.Assume;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.rules.TestRule;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -44,13 +40,12 @@ import static org.junit.Assert.*;
 
 
 @RunWith(AndroidJUnit4.class)
-public class CobraTest implements TestRule {
+public class CobraTest {
 
-    @Rule
-    public Context testContext;
-    public Context appContext;
-    public AssetManager assetManager;
-    public String testResourcesPath;
+    Context testContext;
+    Context appContext;
+    AssetManager assetManager;
+    String testResourcesPath;
 
     String accessKey = "";
 
@@ -70,7 +65,6 @@ public class CobraTest implements TestRule {
         Cobra cobra = new Cobra(accessKey);
 
         File testAudio = new File(testResourcesPath, "audio/sample.wav");
-        ArrayList<Float> detectionResults = new ArrayList<>();
 
         List<Float> probs = new ArrayList<>();
 
