@@ -23,8 +23,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.rules.TestRule;
-import org.junit.runners.model.Statement;
-import org.junit.runner.Description;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -46,14 +44,13 @@ import static org.junit.Assert.*;
 
 
 @RunWith(AndroidJUnit4.class)
-public class CobraTest {
-
-    public Context testContext;
+public class CobraTest implements TestRule {
 
     @Rule
-    Context appContext;
-    AssetManager assetManager;
-    String testResourcesPath;
+    public Context testContext;
+    public Context appContext;
+    public AssetManager assetManager;
+    public String testResourcesPath;
 
     String accessKey = "";
 

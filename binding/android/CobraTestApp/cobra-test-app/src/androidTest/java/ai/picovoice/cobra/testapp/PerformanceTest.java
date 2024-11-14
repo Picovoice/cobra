@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.junit.rules.TestRule;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -29,13 +30,14 @@ import java.nio.ByteOrder;
 import ai.picovoice.cobra.Cobra;
 
 @RunWith(AndroidJUnit4.class)
-public class PerformanceTest {
+public class PerformanceTest implements TestRule {
 
     @Rule
     public Context testContext;
-    Context appContext;
-    AssetManager assetManager;
-    String testResourcesPath;
+    public Context appContext;
+    public AssetManager assetManager;
+    public String testResourcesPath;
+
     String accessKey;
 
     @Before
