@@ -9,20 +9,20 @@ STATUS_URI = 'https://api-cloud.browserstack.com/app-automate/{}/v2/builds/{}'
 
 devices_dict = {
     'android-min-max': [
-        'Galaxy S8-7',
-        'Galaxy S21-11',
-        'Pixel 9-15'
+        'Samsung Galaxy S8-7.0',
+        'Samsung Galaxy M52-11.0',
+        'Google Pixel 9-15.0'
     ],
     'android-perf': [
-        'Pixel 6 Pro-15'
+        'Google Pixel 6 Pro-15.0'
     ],
     'ios-min-max': [
-        'iPhone 7-10',
-        'iPhone 12 Pro-17',
-        'iPhone 16-18.1'
+        'iPhone 11-13',
+        'iPhone 14 Pro-16',
+        'iPhone 14-18'
     ],
     'ios-perf': [
-        'Apple iPhone 12-17',
+        'iPhone 13-18',
     ]
 }
 
