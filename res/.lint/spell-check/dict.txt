@@ -49,5 +49,8 @@ testapp
 vtable
 wargv
 wavspec
+xcframework
 xcworkspace
+xcodeproj
+xcuitest
 wavefile

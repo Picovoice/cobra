@@ -10,6 +10,7 @@
 import ios_voice_processor
 import Cobra
 import Combine
+import Foundation
 
 class ViewModel: ObservableObject {
 

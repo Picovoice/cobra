@@ -1,5 +1,5 @@
 /*
-    Copyright 2021-2023 Picovoice Inc.
+    Copyright 2021-2024 Picovoice Inc.
     You may not use this file except in compliance with the license. A copy of the license is
     located in the "LICENSE" file accompanying this source.
     Unless required by applicable law or agreed to in writing, software distributed under the
@@ -16,13 +16,7 @@ import android.content.res.AssetManager;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.microsoft.appcenter.espresso.Factory;
-import com.microsoft.appcenter.espresso.ReportHelper;
-
-import org.junit.After;
-import org.junit.Assume;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -48,19 +42,12 @@ import static org.junit.Assert.*;
 @RunWith(AndroidJUnit4.class)
 public class CobraTest {
 
-    @Rule
-    public ReportHelper reportHelper = Factory.getReportHelper();
     Context testContext;
     Context appContext;
     AssetManager assetManager;
     String testResourcesPath;
 
     String accessKey = "";
-
-    @After
-    public void TearDown() {
-        reportHelper.label("Stopping App");
-    }
 
     @Before
     public void Setup() throws IOException {
@@ -78,7 +65,6 @@ public class CobraTest {
         Cobra cobra = new Cobra(accessKey);
 
         File testAudio = new File(testResourcesPath, "audio/sample.wav");
-        ArrayList<Float> detectionResults = new ArrayList<>();
 
         List<Float> probs = new ArrayList<>();
 

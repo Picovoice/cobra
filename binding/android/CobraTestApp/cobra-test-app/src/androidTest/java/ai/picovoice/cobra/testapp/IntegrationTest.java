@@ -16,9 +16,6 @@ import androidx.test.espresso.util.HumanReadables;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.microsoft.appcenter.espresso.Factory;
-import com.microsoft.appcenter.espresso.ReportHelper;
-
 import org.hamcrest.Matcher;
 import org.junit.After;
 import org.junit.Before;
@@ -75,9 +72,6 @@ class WaitForTextAction implements ViewAction {
 public class IntegrationTest {
 
     @Rule
-    public ReportHelper reportHelper = Factory.getReportHelper();
-
-    @Rule
     public ActivityScenarioRule<MainActivity> activityScenarioRule =
             new ActivityScenarioRule<>(MainActivity.class);
 
@@ -91,13 +85,8 @@ public class IntegrationTest {
         Intents.release();
     }
 
-    @After
-    public void TearDown() {
-        reportHelper.label("Stopping App");
-    }
-
     @Test
-    public void testPorcupine() {
+    public void testCobra() {
         onView(withId(R.id.testButton)).perform(click());
         onView(withId(R.id.testResult)).perform(waitForText("Passed", 60000));
     }
