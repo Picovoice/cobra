@@ -47,7 +47,6 @@
 				02A11947268D39A700A2AC99 /* CobraDemo */,
 				02A11946268D39A700A2AC99 /* Products */,
 				8DB92FF3DC81AB04D3FF7242 /* Pods */,
-				E14CDF572CE43D5F00E6494C /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -76,13 +75,6 @@
 			children = (
 			);
 			path = Pods;
-			sourceTree = "<group>";
-		};
-		E14CDF572CE43D5F00E6494C /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -130,7 +122,7 @@
 			mainGroup = 02A1193C268D39A700A2AC99;
 			packageReferences = (
 				E14CDF4C2CE43A7600E6494C /* XCRemoteSwiftPackageReference "ios-voice-processor" */,
-				E14CDF542CE43B5B00E6494C /* XCLocalSwiftPackageReference "../../../../cobra" */,
+				E14CDF542CE43B5B00E6494C /* XCLocalSwiftPackageReference "cobra" */,
 			);
 			productRefGroup = 02A11946268D39A700A2AC99 /* Products */;
 			projectDirPath = "";
@@ -350,7 +342,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		E14CDF542CE43B5B00E6494C /* XCLocalSwiftPackageReference "../../../../cobra" */ = {
+		E14CDF542CE43B5B00E6494C /* XCLocalSwiftPackageReference "cobra" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../../../../cobra;
 		};
@@ -379,12 +371,12 @@
 		};
 		E14CDF582CE43D5F00E6494C /* Cobra */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E14CDF542CE43B5B00E6494C /* XCLocalSwiftPackageReference "../../../../cobra" */;
+			package = E14CDF542CE43B5B00E6494C /* XCLocalSwiftPackageReference "cobra" */;
 			productName = Cobra;
 		};
 		E14CDF5A2CE43D6600E6494C /* Cobra */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E14CDF542CE43B5B00E6494C /* XCLocalSwiftPackageReference "../../../../cobra" */;
+			package = E14CDF542CE43B5B00E6494C /* XCLocalSwiftPackageReference "cobra" */;
 			productName = Cobra;
 		};
 /* End XCSwiftPackageProductDependency section */
