@@ -29,7 +29,6 @@ logf
 LPWSTR
 Makefiles
 micdemo
-numpy
 picovoice
 podfile
 Prefs
