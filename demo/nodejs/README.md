@@ -9,7 +9,7 @@ Cobra is an on-device voice activity detection engine. Cobra is:
 - Private; All voice processing runs locally.
 - Accurate [[1]](https://picovoice.ai/docs/benchmark/vad/#results)
 - Cross-Platform:
-    - Linux (x86_64), macOS (x86_64, arm64), and Windows (x86_64)
+    - Linux (x86_64), macOS (x86_64, arm64), and Windows (x86_64, arm64)
     - Android and iOS
     - Chrome, Safari, Firefox, and Edge
     - Raspberry Pi (3, 4, 5)
@@ -17,7 +17,7 @@ Cobra is an on-device voice activity detection engine. Cobra is:
 ## Compatibility
 
 - Node.js 16+
-- Runs on Linux (x86_64), macOS (x86_64, arm64), Windows (x86_64), and Raspberry Pi (3, 4, 5).
+- Runs on Linux (x86_64), macOS (x86_64, arm64), Windows (x86_64, arm64), and Raspberry Pi (3, 4, 5).
 
 ## Installation
 
