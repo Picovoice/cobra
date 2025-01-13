@@ -32,15 +32,16 @@ class CobraTestCase(unittest.TestCase):
             self._cobra.sample_rate)
 
         num_frames = len(audio) // self._cobra.frame_length
-        probs = [ 0.0 ] * num_frames
+        probs = [0.0] * num_frames
         for i in range(num_frames):
             frame = audio[i * self._cobra.frame_length:(i + 1) * self._cobra.frame_length]
             probs[i] = self._cobra.process(frame)
 
-        labels = [ 0 ] * num_frames
-        labels[10:28] = [ 1 ] * 18
+        labels = [0] * num_frames
+        labels[10:28] = [1] * 18
 
-        loss = sum([ l * math.log(p) + (1 - l) * math.log(1 - p) for l, p in zip(labels, probs)]) / num_frames
+        loss = sum([label * math.log(prob) + (1 - label) * math.log(1 - prob)
+                    for label, prob in zip(labels, probs)]) / num_frames
         self.assertLess(loss, 0.1)
 
     def test_version(self):
