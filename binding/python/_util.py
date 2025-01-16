@@ -84,6 +84,9 @@ def pv_library_path(relative):
                 relative,
                 'lib/raspberry-pi/%s/libpv_cobra.so' % _PV_MACHINE)
     elif _PV_SYSTEM == 'Windows':
-        return os.path.join(os.path.dirname(__file__), relative, 'lib/windows/amd64/libpv_cobra.dll')
+        if platform.machine().lower() == 'amd64':
+            return os.path.join(os.path.dirname(__file__), relative, 'lib/windows/amd64/libpv_cobra.dll')
+        elif platform.machine().lower() == 'arm64':
+            return os.path.join(os.path.dirname(__file__), relative, 'lib/windows/arm64/libpv_cobra.dll')
 
     raise NotImplementedError('Unsupported platform.')

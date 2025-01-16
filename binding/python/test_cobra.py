@@ -11,8 +11,7 @@
 
 import sys
 import unittest
-
-import numpy as np
+import math
 
 from _cobra import Cobra, CobraError
 from _util import *
@@ -33,15 +32,16 @@ class CobraTestCase(unittest.TestCase):
             self._cobra.sample_rate)
 
         num_frames = len(audio) // self._cobra.frame_length
-        probs = np.zeros(num_frames, dtype=float)
+        probs = [0.0] * num_frames
         for i in range(num_frames):
             frame = audio[i * self._cobra.frame_length:(i + 1) * self._cobra.frame_length]
             probs[i] = self._cobra.process(frame)
 
-        labels = np.zeros(num_frames, dtype=int)
-        labels[10:28] = 1
+        labels = [0] * num_frames
+        labels[10:28] = [1] * 18
 
-        loss = -np.sum(labels * np.log(probs) + (1 - labels) * np.log(1 - probs)) / num_frames
+        loss = sum([label * math.log(prob) + (1 - label) * math.log(1 - prob)
+                    for label, prob in zip(labels, probs)]) / num_frames
         self.assertLess(loss, 0.1)
 
     def test_version(self):

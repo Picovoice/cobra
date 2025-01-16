@@ -2,15 +2,15 @@
 # yarn lockfile v1
 
 
-"@picovoice/cobra-node@=2.0.2":
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/@picovoice/cobra-node/-/cobra-node-2.0.2.tgz#a6322984eaf7557d649686c670a9f774af6650da"
-  integrity sha512-KSE1rOFLYAlAJfGbor1QtqU7ijp4yG6BPTbp5wsNaevO7XDmz7PU+ko/o0V2DCtXOcePwJMMsjmc4Zfr1YFVIw==
+"@picovoice/cobra-node@=2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@picovoice/cobra-node/-/cobra-node-2.0.3.tgz#3062a06ed6051e8d7d016eb03de577a420918316"
+  integrity sha512-fgLTBiLcP4OgmMmU7XFLCfDH7Ki9I+kJAKK2JTQsI/M884t49Qp0RaLfuEGB+pNl4Qo/5U4LsN/UU3uL8brOmA==
 
-"@picovoice/pvrecorder-node@~1.2.3":
-  version "1.2.3"
-  resolved "https://registry.yarnpkg.com/@picovoice/pvrecorder-node/-/pvrecorder-node-1.2.3.tgz#d0cb1d1ab82fbd2e914fda4e19b1dd0022609b48"
-  integrity sha512-6QOODFyGDgfWZI1NeXwMxylgaxJ+c5aVbvpDMGMen287eCajp/LDnxy3J1bZHceHsW3ilk/d4rCRLyifqcr24Q==
+"@picovoice/pvrecorder-node@~1.2.5":
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/@picovoice/pvrecorder-node/-/pvrecorder-node-1.2.5.tgz#a47e11d347979ef0f1b083657ff69dd9bd2efe5c"
+  integrity sha512-bnid5oInf22JRdrZ75z8ooewOza0whYI9w/oSQSZbkDvddylPPrY6x+1L1qIyf5Tb8ZtzKQL+aQ9m8SazgRHFg==
 
 commander@^6.1.0:
   version "6.2.1"
