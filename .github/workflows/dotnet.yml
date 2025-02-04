@@ -34,7 +34,6 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       ACCESS_KEY: ${{secrets.PV_VALID_ACCESS_KEY}}
-
     strategy:
       matrix:
         os: [ubuntu-latest, macos-latest, macos-13, windows-latest]

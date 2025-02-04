@@ -65,7 +65,7 @@ For more information about the Python demos go to [demo/python](demo/python).
 
 ### .NET Demos
 
-From [demo/dotnet/Cobra](demo/dotnet/Cobra) build and run the demo:
+From [demo/dotnet/CobraDemo](demo/dotnet/CobraDemo) build and run the demo:
 
 ```console
 dotnet build -c MicDemo.Release

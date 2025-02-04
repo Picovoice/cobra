@@ -55,7 +55,7 @@ NOTE: File path arguments must be absolute paths. The working directory for the 
 cobra/demo/dotnet/CobraDemo
 ```
 
-For both demos, you can use `--help/-h` to see the list of input arguements.
+For both demos, you can use `--help/-h` to see the list of input arguments.
 
 ### Microphone Demo
 

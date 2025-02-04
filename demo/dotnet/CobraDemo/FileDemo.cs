@@ -199,6 +199,6 @@ namespace CobraDemo
         private static readonly string HELP_STR = "Available options: \n " +
             $"\t--input_audio_path (required): Absolute path to input audio file.\n" +
             $"\t--access_key (required): AccessKey obtained from Picovoice Console (https://console.picovoice.ai/)\n" +
-            $"\t--threshold: Voice activity detection theshold. Demo will print out events that exceed the theshold. Must be between [0, 1]. \n";
+            $"\t--threshold: Voice activity detection threshold. Demo will print out events that exceed the threshold. Must be between [0, 1]. \n";
     }
 }
