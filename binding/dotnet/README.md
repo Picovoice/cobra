@@ -101,5 +101,5 @@ using(Cobra cobra = new Cobra(accessKey))
 
 ## Demos
 
-The [Cobra dotnet demo project](https://github.com/Picovoice/cobra/tree/main/demo/dotnet) is a .NET command line application that allows for
+The [Cobra dotnet demo project](https://github.com/Picovoice/cobra/tree/main/demo/dotnet) is a .NET command line application that allows for<!-- markdown-link-check-disable-line -->
 processing real-time audio (i.e. microphone) and files using Cobra.
