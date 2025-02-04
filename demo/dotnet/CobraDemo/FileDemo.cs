@@ -58,7 +58,7 @@ namespace CobraDemo
                             if (voiceProbability >= threshold)
                             {
                                 Console.WriteLine($"Detected voice activity at " +
-                                    $"{Math.Round(totalSamplesRead / (double) cobra.SampleRate, 2)} sec");
+                                    $"{Math.Round(totalSamplesRead / (double)cobra.SampleRate, 2)} sec");
                             }
                             frameIndex = 0;
                         }
@@ -70,7 +70,7 @@ namespace CobraDemo
                         }
                     }
                     stopWatch.Stop();
-                    double audioLen = Math.Round(totalSamplesRead / (double) cobra.SampleRate, 2);
+                    double audioLen = Math.Round(totalSamplesRead / (double)cobra.SampleRate, 2);
                     double realtimeFactor = Math.Round(audioLen / stopWatch.Elapsed.TotalSeconds, 2);
                     Console.WriteLine($"Realtime factor: {realtimeFactor}x");
                 }

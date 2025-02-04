@@ -44,7 +44,7 @@ namespace CobraDemo
                     Console.CancelKeyPress += delegate (object sender, ConsoleCancelEventArgs e)
                     {
                         e.Cancel = true;
-                        recorder.Stop();                        
+                        recorder.Stop();
                     };
 
                     BinaryWriter outputFileWriter = null;
@@ -78,7 +78,7 @@ namespace CobraDemo
                     }
 
                     if (outputFileWriter != null)
-                    {                        
+                    {
                         WriteWavHeader(outputFileWriter, 1, 16, recorder.SampleRate, totalSamplesWritten);
                         outputFileWriter.Flush();
                         outputFileWriter.Dispose();
