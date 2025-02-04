@@ -1,5 +1,5 @@
 ﻿/*
-    Copyright 2024 Picovoice Inc.
+    Copyright 2025 Picovoice Inc.
 
     You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
     file accompanying this source.
@@ -20,7 +20,7 @@ using Pv;
 namespace CobraDemo
 {
     /// <summary>
-    /// Microphone Demo for the Cobra Voice Activity Detection engine. It creates an input audio stream from a microphone and detects voice activity in real-time. 
+    /// Microphone Demo for the Cobra Voice Activity Detection engine. It creates an input audio stream from a microphone and detects voice activity in real-time.
     /// It optionally saves the recorded audio into a file for further debugging.
     /// </summary>
     public class MicDemo

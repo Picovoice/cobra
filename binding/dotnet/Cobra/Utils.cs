@@ -53,7 +53,7 @@ namespace Pv
                 return Path.Combine(AppContext.BaseDirectory, $"lib/{_env}/{PvLinuxMachine()}/{libName}.so");
             }
             throw new PlatformNotSupportedException($"{RuntimeInformation.OSDescription} ({RuntimeInformation.OSArchitecture}) is not currently supported.\n" +
-                                                    "Visit https://picovoice.ai/docs/api/porcupine-dotnet/ to see a list of supported platforms.");
+                                                    "Visit https://picovoice.ai/docs/api/cobra-dotnet/ to see a list of supported platforms.");
         }
 
         public static string PvLinuxMachine()

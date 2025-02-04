@@ -42,7 +42,7 @@ Platform compatible with .NET 6.0+:
 
 ## Installation
 
-You can install the latest version of Cobra by getting the latest [Cobra Nuget package](https://www.nuget.org/packages/Cobra/)<!-- markdown-link-check-disable-line -->
+You can install the latest version of Cobra by getting the latest [Cobra Nuget package](https://www.nuget.org/packages/Cobra/)
 in Visual Studio or using the .NET CLI.
 
 ```console
@@ -101,5 +101,5 @@ using(Cobra cobra = new Cobra(accessKey))
 
 ## Demos
 
-The [Cobra dotnet demo project](https://github.com/Picovoice/cobra/tree/main/demo/dotnet) is a .NET command line application that allows for<!-- markdown-link-check-disable-line -->
+The [Cobra dotnet demo project](https://github.com/Picovoice/cobra/tree/main/demo/dotnet) is a .NET command line application that allows for
 processing real-time audio (i.e. microphone) and files using Cobra.

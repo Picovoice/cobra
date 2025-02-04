@@ -9,7 +9,7 @@
 [![npm](https://img.shields.io/npm/v/@picovoice/cobra-web?label=npm%20%5Bweb%5D)](https://www.npmjs.com/package/@picovoice/cobra-web)
 [![CocoaPods](https://img.shields.io/cocoapods/v/Cobra-iOS)](https://cocoapods.org/pods/Cobra-iOS)
 [![PyPI](https://img.shields.io/pypi/v/pvcobra)](https://pypi.org/project/pvcobra/)
-[![Nuget](https://img.shields.io/nuget/v/cobra)](https://www.nuget.org/packages/Cobra/)<!-- markdown-link-check-disable-line -->
+[![Nuget](https://img.shields.io/nuget/v/Cobra)](https://www.nuget.org/packages/Cobra/)
 
 Made in Vancouver, Canada by [Picovoice](https://picovoice.ai)
 
