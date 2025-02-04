@@ -9,6 +9,7 @@
 [![npm](https://img.shields.io/npm/v/@picovoice/cobra-web?label=npm%20%5Bweb%5D)](https://www.npmjs.com/package/@picovoice/cobra-web)
 [![CocoaPods](https://img.shields.io/cocoapods/v/Cobra-iOS)](https://cocoapods.org/pods/Cobra-iOS)
 [![PyPI](https://img.shields.io/pypi/v/pvcobra)](https://pypi.org/project/pvcobra/)
+[![Nuget](https://img.shields.io/nuget/v/cobra)](https://www.nuget.org/packages/Cobra/)<!-- markdown-link-check-disable-line -->
 
 Made in Vancouver, Canada by [Picovoice](https://picovoice.ai)
 
@@ -23,6 +24,7 @@ Cobra is a highly-accurate and lightweight voice activity detection (VAD) engine
   - [Table of Contents](#table-of-contents)
   - [Demos](#demos)
     - [Python](#python-demos)
+    - [.NET](#net-demos)
     - [C](#c-demos)
     - [Android](#android-demos)
     - [iOS](#ios-demos)
@@ -31,6 +33,7 @@ Cobra is a highly-accurate and lightweight voice activity detection (VAD) engine
     - [Rust](#rust-demos)
   - [SDKs](#sdks)
     - [Python](#python)
+    - [.NET](#net)
     - [C](#c)
     - [Android](#android)
     - [iOS](#ios)
@@ -59,6 +62,17 @@ Replace `${AccessKey}` with your AccessKey obtained from [Picovoice Console](htt
 will start processing the audio input from the microphone in realtime and output to the terminal when it detects any voice activity.
 
 For more information about the Python demos go to [demo/python](demo/python).
+
+### .NET Demos
+
+From [demo/dotnet/Cobra](demo/dotnet/Cobra) build and run the demo:
+
+```console
+dotnet build -c MicDemo.Release
+dotnet run -c MicDemo.Release -- --access_key ${ACCESS_KEY}
+```
+
+For more information about .NET demos go to [demo/dotnet](demo/dotnet).
 
 ### C Demos
 
@@ -190,6 +204,50 @@ while True:
 ```
 
 Finally, when done be sure to explicitly release the resources using `handle.delete()`.
+
+### .NET
+
+Install the Cobra .NET SDK using NuGet or the dotnet CLI:
+
+```console
+dotnet add package Cobra
+```
+
+Create instances of the Cobra class:
+
+```csharp
+using Pv;
+
+const string accessKey = "${ACCESS_KEY}"; // Obtained from the Picovoice Console (https://console.picovoice.ai/)
+
+Cobra cobra = new Cobra(accessKey);
+```
+
+Once instantiated, `cobra` can process audio via its `.Process` method:
+
+```csharp
+short[] GetNextAudioFrame()
+{
+    // .. get audioFrame
+    return audioFrame;
+}
+
+while(true)
+{
+    float voiceProbability = cobra.Process(frame.ToArray());
+    // .. use probability to trigger other functionality
+}
+```
+
+Cobra will have its resources freed by the garbage collector, but to have resources freed immediately after use,
+wrap it in a using statement:
+
+```csharp
+using(Cobra cobra = new Cobra(accessKey))
+{
+    // .. Cobra usage here
+}
+```
 
 ### C
 

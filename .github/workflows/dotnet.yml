@@ -1,0 +1,119 @@
+name: .NET
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ master ]
+    paths:
+      - 'binding/dotnet/**'
+      - '!binding/dotnet/README.md'
+      - 'lib/linux/**'
+      - 'lib/mac/**'
+      - 'lib/raspberry-pi/**'
+      - 'lib/windows/**'
+      - 'res/audio/**'
+      - '.github/workflows/dotnet.yml'
+  pull_request:
+    branches: [ master, 'v[0-9]+.[0-9]+' ]
+    paths:
+      - 'binding/dotnet/**'
+      - '!binding/dotnet/README.md'
+      - 'lib/linux/**'
+      - 'lib/mac/**'
+      - 'lib/raspberry-pi/**'
+      - 'lib/windows/**'
+      - 'res/audio/**'
+      - '.github/workflows/dotnet.yml'
+
+defaults:
+  run:
+    working-directory: binding/dotnet
+
+jobs:
+  build-github-hosted:
+    runs-on: ${{ matrix.os }}
+    env:
+      ACCESS_KEY: ${{secrets.PV_VALID_ACCESS_KEY}}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, macos-13, windows-latest]
+        dotnet-version: [2.1.x, 3.0.x, 3.1.x, 5.0.x, 6.0.x, 8.0.x]
+        include:
+          - dotnet-version: 2.1.x
+            binding-framework: netstandard2.0
+            test-framework: netcoreapp2.1
+          - dotnet-version: 3.0.x
+            binding-framework: netcoreapp3.0
+            test-framework: netcoreapp3.0
+          - dotnet-version: 3.1.x
+            binding-framework: netcoreapp3.0
+            test-framework: netcoreapp3.1
+          - dotnet-version: 5.0.x
+            binding-framework: netcoreapp3.0
+            test-framework: net5.0
+          - dotnet-version: 6.0.x
+            binding-framework: net6.0
+            test-framework: net6.0
+          - dotnet-version: 8.0.x
+            binding-framework: net8.0
+            test-framework: net8.0
+        exclude:
+          - os: ubuntu-latest
+            dotnet-version: 2.1.x
+          - os: ubuntu-latest
+            dotnet-version: 3.0.x
+          - os: ubuntu-latest
+            dotnet-version: 3.1.x
+          - os: ubuntu-latest
+            dotnet-version: 5.0.x
+          - os: macos-latest
+            dotnet-version: 2.1.x
+          - os: macos-latest
+            dotnet-version: 3.0.x
+          - os: macos-latest
+            dotnet-version: 3.1.x
+          - os: macos-latest
+            dotnet-version: 5.0.x
+          - os: macos-latest
+            dotnet-version: 6.0.x
+          - os: macos-13
+            dotnet-version: 8.0.x
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ matrix.dotnet-version }}
+
+    - name: Set up .NET (8)
+      if: ${{ matrix.os == 'ubuntu-latest' && matrix.dotnet-version == '6.0.x' }}
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Build binding
+      run: dotnet build Cobra/Cobra.csproj --framework ${{ matrix.binding-framework }}
+
+    - name: Test
+      run: dotnet test --framework ${{ matrix.test-framework }} -v n
+
+  build-self-hosted:
+    runs-on: ${{ matrix.machine }}
+    env:
+      ACCESS_KEY: ${{secrets.PV_VALID_ACCESS_KEY}}
+
+    strategy:
+      matrix:
+        machine: [rpi3-32, rpi3-64, rpi4-32, rpi4-64, rpi5-64, pv-windows-arm64]
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Build binding
+      run: dotnet build Cobra/Cobra.csproj --framework net8.0
+
+    - name: Test
+      run: dotnet test --framework net8.0 -v n

@@ -1,0 +1,113 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFrameworks>net8.0;net6.0;netcoreapp3.0;netstandard2.0</TargetFrameworks>
+		<Version>2.0.0</Version>
+		<Authors>Picovoice</Authors>
+		<Company />
+		<Product>Cobra Voice Activity Detection Engine</Product>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+		<PackageProjectUrl>https://github.com/Picovoice/cobra</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/Picovoice/cobra.git</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<PackageTags>ai, offline, private, voice activity detection, voice assistant, voice, vad</PackageTags>
+		<PackageReleaseNotes>See https://github.com/Picovoice/cobra/ </PackageReleaseNotes>
+		<Copyright>Picovoice 2025</Copyright>
+		<Description>Cobra is a highly accurate and lightweight voice activity detection (VAD) engine.
+		</Description>
+		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+		<PackageIcon>pv_circle_512.png</PackageIcon>
+	</PropertyGroup>
+
+	<!--.NET Standard 2.0+ libs-->
+	<ItemGroup>
+		<Content Include="Cobra.netstandard2.0.targets">
+		  <PackagePath>
+				build/netstandard2.0/Cobra.targets;
+			</PackagePath>
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="Cobra.targets">
+			<PackagePath>
+				build/netcoreapp3.0;
+				build/net6.0;
+				build/net8.0;
+			</PackagePath>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
+		<Content Include="..\..\..\lib\windows\amd64\libpv_cobra.dll">
+			<PackagePath>
+				build/netstandard2.0/libpv_cobra.dll;
+				build/netcoreapp3.0/lib/windows/amd64/libpv_cobra.dll;
+				build/net6.0/lib/windows/amd64/libpv_cobra.dll;
+				build/net8.0/lib/windows/amd64/libpv_cobra.dll;
+			</PackagePath>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<Link>lib\windows\amd64\libpv_cobra.dll</Link>
+			<Visible>false</Visible>
+		</Content>
+		<Content Include="..\..\..\lib\mac\x86_64\libpv_cobra.dylib">
+			<PackagePath>
+				build/netstandard2.0/libpv_cobra.dylib;
+				build/netcoreapp3.0/lib/mac/x86_64/libpv_cobra.dylib;
+				build/net6.0/lib/mac/x86_64/libpv_cobra.dylib;
+				build/net8.0/lib/mac/x86_64/libpv_cobra.dylib;
+			</PackagePath>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<Link>lib\mac\x86_64\libpv_cobra.dylib</Link>
+			<Visible>false</Visible>
+		</Content>
+	</ItemGroup>
+
+	<!--.NET 6.0+ libs-->
+	<ItemGroup>
+		<Content Include="..\..\..\lib\linux\x86_64\libpv_cobra.so">
+			<PackagePath>
+				build/net6.0/lib/linux/x86_64/libpv_cobra.so;
+				build/net8.0/lib/linux/x86_64/libpv_cobra.so;
+			</PackagePath>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<Link>lib\linux\x86_64\libpv_cobra.so</Link>
+			<Visible>false</Visible>
+		</Content>
+		<Content Include="..\..\..\lib\raspberry-pi\**\*" Exclude="..\..\..\lib\raspberry-pi\arm11\*">
+			<PackagePath>
+				build/net6.0/lib/raspberry-pi;
+				build/net8.0/lib/raspberry-pi;
+			</PackagePath>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<Link>lib\raspberry-pi\%(RecursiveDir)%(Filename)%(Extension)</Link>
+			<Visible>false</Visible>
+		</Content>
+		<Content Include="..\..\..\lib\mac\arm64\libpv_cobra.dylib">
+			<PackagePath>
+				build/net6.0/lib/mac/arm64/libpv_cobra.dylib;
+				build/net8.0/lib/mac/arm64/libpv_cobra.dylib;
+			</PackagePath>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<Link>lib\mac\arm64\libpv_cobra.dylib</Link>
+			<Visible>false</Visible>
+		</Content>
+		<Content Include="..\..\..\lib\windows\arm64\libpv_cobra.dll">
+			<PackagePath>
+				build/net6.0/lib/windows/arm64/libpv_cobra.dll;
+				build/net8.0/lib/windows/arm64/libpv_cobra.dll;
+			</PackagePath>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<Link>lib\windows\arm64\libpv_cobra.dll</Link>
+			<Visible>false</Visible>
+		</Content>
+	</ItemGroup>
+	<ItemGroup>
+		<Folder Include="Content\" />
+	</ItemGroup>
+	<ItemGroup>
+		<None Include="Content\pv_circle_512.png">
+			<Pack>True</Pack>
+			<PackagePath></PackagePath>
+		</None>
+        <None Include="..\README.md">
+            <Pack>True</Pack>
+            <PackagePath>README.md</PackagePath>
+        </None>
+	</ItemGroup>
+</Project>

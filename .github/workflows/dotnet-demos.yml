@@ -1,0 +1,104 @@
+name: .NET Demos
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ master ]
+    paths:
+      - 'demo/dotnet/**'
+      - '!demo/dotnet/README.md'
+      - '.github/workflows/dotnet-demos.yml'
+  pull_request:
+    branches: [ master, 'v[0-9]+.[0-9]+' ]
+    paths:
+      - 'demo/dotnet/**'
+      - '!demo/dotnet/README.md'
+      - '.github/workflows/dotnet-demos.yml'
+
+defaults:
+  run:
+    working-directory: demo/dotnet/CobraDemo
+
+jobs:
+  build-github-hosted:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up .NET 8.0
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 8.0.x
+
+    - name: Package restore
+      run: dotnet restore
+
+    # ************** REMOVE AFTER RELEASE ********************
+    - name: Build Local Packages
+      run: dotnet build
+      working-directory: binding/dotnet/Cobra
+
+    - name: Pack Local Packages
+      run: dotnet pack -c Release
+      working-directory: binding/dotnet/Cobra
+
+    - name: Install Local Packages
+      run: dotnet add package -s ../../../binding/dotnet/Cobra/bin/Release Cobra
+    # ********************************************************
+
+    - name: Dotnet build mic demo
+      run: dotnet build -c MicDemo.Release
+
+    - name: Dotnet build file demo
+      run: dotnet build -c FileDemo.Release
+
+    - name: Run Dotnet file demo
+      run: dotnet run -c FileDemo.Release -- --input_audio_path ../../../res/audio/sample.wav --access_key ${{secrets.PV_VALID_ACCESS_KEY}}
+
+  build-self-hosted:
+    runs-on: ${{ matrix.machine }}
+
+    strategy:
+      matrix:
+        machine: [rpi3-32, rpi3-64, rpi4-32, rpi4-64, rpi5-64, pv-windows-arm64]
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Package restore
+      run: dotnet restore
+
+    # ************** REMOVE AFTER RELEASE ********************
+    - name: Remove local package
+      if: ${{ matrix.machine != 'pv-windows-arm64' }}
+      run: rm -rf ~/.nuget/packages/cobra
+
+    - name: Remove local package
+      if: ${{ matrix.machine == 'pv-windows-arm64' }}
+      run: rm ~/.nuget/packages/cobra -r -force -ErrorAction SilentlyContinue
+
+    - name: Build Local Packages
+      run: dotnet build
+      working-directory: binding/dotnet/Cobra
+
+    - name: Pack Local Packages
+      run: dotnet pack -c Release
+      working-directory: binding/dotnet/Cobra
+
+    - name: Install Local Packages
+      run: dotnet add package -s ../../../binding/dotnet/Cobra/bin/Release Cobra
+    # ********************************************************
+
+    - name: Dotnet build mic demo
+      run: dotnet build -c MicDemo.Release
+
+    - name: Dotnet build file demo
+      run: dotnet build -c FileDemo.Release
+
+    - name: Run Dotnet file demo
+      run: dotnet run -c FileDemo.Release -- --input_audio_path ../../../res/audio/sample.wav --access_key ${{secrets.PV_VALID_ACCESS_KEY}}
