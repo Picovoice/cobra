@@ -7,6 +7,7 @@
 		<Product>Cobra Voice Activity Detection Engine</Product>
 		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/Picovoice/cobra</PackageProjectUrl>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<RepositoryUrl>https://github.com/Picovoice/cobra.git</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
 		<PackageTags>ai, offline, private, voice activity detection, voice assistant, voice, vad</PackageTags>

@@ -19,6 +19,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="PvRecorder" Version="1.2.5" />
+        <PackageReference Include="PvRecorder" Version="1.2.9" />
     </ItemGroup>
 </Project>
