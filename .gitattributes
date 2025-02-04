@@ -3,6 +3,7 @@ lib/** linguist-detectable=false
 res/** linguist-detectable=false
 
 binding/android/** linguist-detectable=false
+binding/dotnet/CobraTest/** linguist-detectable=false
 binding/ios/CobraAppTest/** linguist-detectable=false
 binding/nodejs/** linguist-detectable=false
 binding/nodejs/src/cobra.ts linguist-detectable=true

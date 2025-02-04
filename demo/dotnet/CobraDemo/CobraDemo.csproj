@@ -1,0 +1,25 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <Configurations>FileDemo.Debug;FileDemo.Release;MicDemo.Debug;MicDemo.Release</Configurations>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)' == 'FileDemo.Debug' Or '$(Configuration)' == 'FileDemo.Release'">
+        <StartupObject>CobraDemo.FileDemo</StartupObject>
+        <TargetName>CobraFileDemo</TargetName>
+        <AssemblyName>CobraFileDemo</AssemblyName>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)' == 'MicDemo.Debug' Or '$(Configuration)' == 'MicDemo.Release'">
+        <StartupObject>CobraDemo.MicDemo</StartupObject>
+        <TargetName>CobraMicDemo</TargetName>
+        <AssemblyName>CobraMicDemo</AssemblyName>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Cobra" Version="2.0.0" />
+        <PackageReference Include="PvRecorder" Version="1.2.9" />
+    </ItemGroup>
+</Project>

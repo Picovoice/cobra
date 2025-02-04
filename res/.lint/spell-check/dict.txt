@@ -53,3 +53,9 @@ xcworkspace
 xcodeproj
 xcuitest
 wavefile
+NETCOREAPP
+Cdecl
+finalizer
+netcoreapp
+netstandard
+framecount

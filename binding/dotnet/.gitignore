@@ -1,0 +1,9 @@
+.vscode
+.vs
+*.user
+Cobra/bin
+Cobra/obj
+Cobra/Properties
+CobraTest/bin
+CobraTest/obj
+TestResults
