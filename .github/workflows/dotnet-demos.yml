@@ -62,27 +62,6 @@ jobs:
     - name: Package restore
       run: dotnet restore
 
-    # ************** REMOVE AFTER RELEASE ********************
-    - name: Remove local package
-      if: ${{ matrix.machine != 'pv-windows-arm64' }}
-      run: rm -rf ~/.nuget/packages/cobra
-
-    - name: Remove local package
-      if: ${{ matrix.machine == 'pv-windows-arm64' }}
-      run: rm ~/.nuget/packages/cobra -r -force -ErrorAction SilentlyContinue
-
-    - name: Build Local Packages
-      run: dotnet build
-      working-directory: binding/dotnet/Cobra
-
-    - name: Pack Local Packages
-      run: dotnet pack -c Release
-      working-directory: binding/dotnet/Cobra
-
-    - name: Install Local Packages
-      run: dotnet add package -s ../../../binding/dotnet/Cobra/bin/Release Cobra
-    # ********************************************************
-
     - name: Dotnet build mic demo
       run: dotnet build -c MicDemo.Release
 
