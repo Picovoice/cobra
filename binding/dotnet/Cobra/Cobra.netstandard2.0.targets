@@ -11,7 +11,7 @@
 			<Visible>false</Visible>
 		</Content>
 		<Content Include="$(MSBuildThisFileDirectory)lib/**">
-            <PackagePath>content/picovoice/%(RecursiveDir)%(Filename)%(Extension)</PackagePath>
+			<PackagePath>content/picovoice/%(RecursiveDir)%(Filename)%(Extension)</PackagePath>
 			<Link>lib/%(RecursiveDir)%(Filename)%(Extension)</Link>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<Visible>false</Visible>
