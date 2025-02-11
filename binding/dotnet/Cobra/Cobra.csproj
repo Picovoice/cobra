@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFrameworks>net8.0;net6.0;netcoreapp3.0;netstandard2.0</TargetFrameworks>
-		<Version>2.0.0</Version>
+		<Version>2.0.1</Version>
 		<Authors>Picovoice</Authors>
 		<Company />
 		<Product>Cobra Voice Activity Detection Engine</Product>
@@ -23,24 +23,24 @@
 	<ItemGroup>
 		<Content Include="Cobra.netstandard2.0.targets">
 		  <PackagePath>
-				build/netstandard2.0/Cobra.targets;
+				buildTransitive/netstandard2.0/Cobra.targets;
 			</PackagePath>
 		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 		<Content Include="Cobra.targets">
 			<PackagePath>
-				build/netcoreapp3.0;
-				build/net6.0;
-				build/net8.0;
+				buildTransitive/netcoreapp3.0;
+				buildTransitive/net6.0;
+				buildTransitive/net8.0;
 			</PackagePath>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
 		<Content Include="..\..\..\lib\windows\amd64\libpv_cobra.dll">
 			<PackagePath>
-				build/netstandard2.0/libpv_cobra.dll;
-				build/netcoreapp3.0/lib/windows/amd64/libpv_cobra.dll;
-				build/net6.0/lib/windows/amd64/libpv_cobra.dll;
-				build/net8.0/lib/windows/amd64/libpv_cobra.dll;
+				buildTransitive/netstandard2.0/libpv_cobra.dll;
+				buildTransitive/netcoreapp3.0/lib/windows/amd64/libpv_cobra.dll;
+				buildTransitive/net6.0/lib/windows/amd64/libpv_cobra.dll;
+				buildTransitive/net8.0/lib/windows/amd64/libpv_cobra.dll;
 			</PackagePath>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<Link>lib\windows\amd64\libpv_cobra.dll</Link>
@@ -48,10 +48,10 @@
 		</Content>
 		<Content Include="..\..\..\lib\mac\x86_64\libpv_cobra.dylib">
 			<PackagePath>
-				build/netstandard2.0/libpv_cobra.dylib;
-				build/netcoreapp3.0/lib/mac/x86_64/libpv_cobra.dylib;
-				build/net6.0/lib/mac/x86_64/libpv_cobra.dylib;
-				build/net8.0/lib/mac/x86_64/libpv_cobra.dylib;
+				buildTransitive/netstandard2.0/libpv_cobra.dylib;
+				buildTransitive/netcoreapp3.0/lib/mac/x86_64/libpv_cobra.dylib;
+				buildTransitive/net6.0/lib/mac/x86_64/libpv_cobra.dylib;
+				buildTransitive/net8.0/lib/mac/x86_64/libpv_cobra.dylib;
 			</PackagePath>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<Link>lib\mac\x86_64\libpv_cobra.dylib</Link>
@@ -63,8 +63,8 @@
 	<ItemGroup>
 		<Content Include="..\..\..\lib\linux\x86_64\libpv_cobra.so">
 			<PackagePath>
-				build/net6.0/lib/linux/x86_64/libpv_cobra.so;
-				build/net8.0/lib/linux/x86_64/libpv_cobra.so;
+				buildTransitive/net6.0/lib/linux/x86_64/libpv_cobra.so;
+				buildTransitive/net8.0/lib/linux/x86_64/libpv_cobra.so;
 			</PackagePath>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<Link>lib\linux\x86_64\libpv_cobra.so</Link>
@@ -72,8 +72,8 @@
 		</Content>
 		<Content Include="..\..\..\lib\raspberry-pi\**\*" Exclude="..\..\..\lib\raspberry-pi\arm11\*">
 			<PackagePath>
-				build/net6.0/lib/raspberry-pi;
-				build/net8.0/lib/raspberry-pi;
+				buildTransitive/net6.0/lib/raspberry-pi;
+				buildTransitive/net8.0/lib/raspberry-pi;
 			</PackagePath>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<Link>lib\raspberry-pi\%(RecursiveDir)%(Filename)%(Extension)</Link>
@@ -81,8 +81,8 @@
 		</Content>
 		<Content Include="..\..\..\lib\mac\arm64\libpv_cobra.dylib">
 			<PackagePath>
-				build/net6.0/lib/mac/arm64/libpv_cobra.dylib;
-				build/net8.0/lib/mac/arm64/libpv_cobra.dylib;
+				buildTransitive/net6.0/lib/mac/arm64/libpv_cobra.dylib;
+				buildTransitive/net8.0/lib/mac/arm64/libpv_cobra.dylib;
 			</PackagePath>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<Link>lib\mac\arm64\libpv_cobra.dylib</Link>
@@ -90,8 +90,8 @@
 		</Content>
 		<Content Include="..\..\..\lib\windows\arm64\libpv_cobra.dll">
 			<PackagePath>
-				build/net6.0/lib/windows/arm64/libpv_cobra.dll;
-				build/net8.0/lib/windows/arm64/libpv_cobra.dll;
+				buildTransitive/net6.0/lib/windows/arm64/libpv_cobra.dll;
+				buildTransitive/net8.0/lib/windows/arm64/libpv_cobra.dll;
 			</PackagePath>
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 			<Link>lib\windows\arm64\libpv_cobra.dll</Link>
