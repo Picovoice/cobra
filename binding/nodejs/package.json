@@ -1,6 +1,6 @@
 {
   "name": "@picovoice/cobra-node",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "Picovoice Cobra Node.js binding",
   "main": "dist/index.js",
   "types": "dist/types/index.d.ts",
@@ -49,7 +49,7 @@
     "wavefile": "^11.0.0"
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=18.0.0"
   },
   "cpu": [
     "!ia32",
