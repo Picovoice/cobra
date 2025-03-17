@@ -1,8 +1,8 @@
 # cobra-web-demo
 
-This is a basic demo to show how to use Cobra for web browsers, using the IIFE version of the library (i.e. an HTML script tag). 
-It instantiates a Cobra worker engine and uses it with the 
-[@picovoice/web-voice-processor](https://www.npmjs.com/package/@picovoice/web-voice-processor) 
+This is a basic demo to show how to use Cobra for web browsers, using the IIFE version of the library (i.e. an HTML script tag).
+It instantiates a Cobra worker engine and uses it with the
+[@picovoice/web-voice-processor](https://www.npmjs.com/package/@picovoice/web-voice-processor)
 to access (and automatically downsample) microphone audio.
 
 ## AccessKey
