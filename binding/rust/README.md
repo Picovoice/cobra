@@ -1,5 +1,7 @@
 # Cobra Voice Activity Detection Engine
 
+> Rust SDKs will no longer be maintained after **July 15, 2025**. If you plan to use the Cobra Voice Activity Detection Rust SDK for commercial purposes, please [contact us](https://picovoice.ai/contact/).
+
 Made in Vancouver, Canada by [Picovoice](https://picovoice.ai)
 
 Cobra is a highly accurate and lightweight voice activity detection (VAD) engine.
