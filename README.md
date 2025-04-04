@@ -164,6 +164,8 @@ For more information about NodeJS demos go to [demo/nodejs](demo/nodejs).
 
 ### Rust Demos
 
+> Rust SDKs will no longer be maintained after **July 15, 2025**. If you plan to use the Cobra Voice Activity Detection Rust SDK for commercial purposes, please [contact us](https://picovoice.ai/contact/).
+
 From [demo/rust/micdemo](demo/rust/micdemo) build and run the demo:
 
 ```console
@@ -431,6 +433,8 @@ cobra.release();
 ```
 
 ### Rust
+
+> Rust SDKs will no longer be maintained after **July 15, 2025**. If you plan to use the Cobra Voice Activity Detection Rust SDK for commercial purposes, please [contact us](https://picovoice.ai/contact/).
 
 Create an instance of the engine and detect voice activity:
 

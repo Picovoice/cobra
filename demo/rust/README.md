@@ -1,5 +1,7 @@
 # Cobra Rust Demos
 
+> Rust SDKs will no longer be maintained after **July 15, 2025**. If you plan to use the Cobra Voice Activity Detection Rust SDK for commercial purposes, please [contact us](https://picovoice.ai/contact/).
+
 This package contains demos for processing real-time audio (i.e. microphone) and audio files using Cobra voice activity detection engine.
 
 ## AccessKey
