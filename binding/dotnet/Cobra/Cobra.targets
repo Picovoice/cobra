@@ -1,8 +1,8 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <ItemGroup>
-        <Content Include="$(MSBuildThisFileDirectory)lib/**">
-            <Link>lib/%(RecursiveDir)%(Filename)%(Extension)</Link>
-            <PackagePath>content/picovoice/%(RecursiveDir)%(Filename)%(Extension)</PackagePath>
+        <Content Include="$(MSBuildThisFileDirectory)lib\**">
+            <Link>lib\%(RecursiveDir)%(Filename)%(Extension)</Link>
+            <PackagePath>content\picovoice\%(RecursiveDir)%(Filename)%(Extension)</PackagePath>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
             <Visible>false</Visible>
         </Content>
