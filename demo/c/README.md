@@ -26,8 +26,11 @@ The Cobra microphone demo opens an audio stream and detects the presence of spee
 Use CMake to build the Cobra microphone demo target:
 
 ```console
-cmake -S demo/c/ -B demo/c/build && cmake --build demo/c/build --target cobra_demo_mic
+cmake -S demo/c/ -B demo/c/build -DPV_RECORDER_PLATFORM={PV_RECORDER_PLATFORM}
+cmake --build demo/c/build --target cobra_demo_mic
 ```
+
+The {PV_RECORDER_PLATFORM} variable will set the compilation flags for the given platform. Exclude this variable to get a list of possible values.
 
 ## Usage
 
@@ -66,8 +69,11 @@ frame of audio. This demo expects a single-channel WAV file with a sampling rate
 Use CMake to build the Cobra file demo target:
 
 ```console
-cmake -S demo/c/ -B demo/c/build && cmake --build demo/c/build --target cobra_demo_file
+cmake -S demo/c/ -B demo/c/build -DPV_RECORDER_PLATFORM={PV_RECORDER_PLATFORM}
+cmake --build demo/c/build --target cobra_demo_file
 ```
+
+The {PV_RECORDER_PLATFORM} variable will set the compilation flags for the given platform. Exclude this variable to get a list of possible values.
 
 ## Usage
 
