@@ -1,5 +1,5 @@
 /*
-    Copyright 2021-2023 Picovoice Inc.
+    Copyright 2021-2025 Picovoice Inc.
 
     You may not use this file except in compliance with the license. A copy of
    the license is located in the "LICENSE" file accompanying this source.
@@ -109,7 +109,7 @@ void show_audio_devices(void) {
     char **devices = NULL;
     int32_t count = 0;
 
-    pv_recorder_status_t status = pv_recorder_get_audio_devices(&count, &devices);
+    pv_recorder_status_t status = pv_recorder_get_available_devices(&count, &devices);
     if (status != PV_RECORDER_STATUS_SUCCESS) {
         fprintf(stderr, "Failed to get audio devices with: %s.\n", pv_recorder_status_to_string(status));
         exit(1);
@@ -120,7 +120,7 @@ void show_audio_devices(void) {
         fprintf(stdout, "index: %d, name: %s\n", i, devices[i]);
     }
 
-    pv_recorder_free_device_list(count, devices);
+    pv_recorder_free_available_devices(count, devices);
 }
 
 static void print_analog(float is_voiced) {
@@ -267,8 +267,7 @@ int picovoice_main(int argc, char *argv[]) {
 
     const int32_t frame_length = 512;
     pv_recorder_t *recorder = NULL;
-    pv_recorder_status_t recorder_status =
-            pv_recorder_init(device_index, frame_length, 100, true, true, &recorder);
+    pv_recorder_status_t recorder_status = pv_recorder_init(frame_length, device_index, 100, &recorder);
     if (recorder_status != PV_RECORDER_STATUS_SUCCESS) {
         fprintf(stderr, "Failed to initialize device with %s.\n", pv_recorder_status_to_string(recorder_status));
         exit(1);
