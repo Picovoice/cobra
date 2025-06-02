@@ -1,2 +1,5 @@
 rootProject.name = "CobraActivityDemo"
 include ':cobra-activity-demo-app'
+
+include(":cobra-android")
+project(":cobra-android").projectDir = file("../../../binding/android/Cobra/cobra")
