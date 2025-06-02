@@ -35,7 +35,7 @@ jobs:
 
     - name: Build binding
       run: ./gradlew assembleRelease --info
-      working-directory: binding/android/Cheetah
+      working-directory: binding/android/Cobra
 ############## REMOVE AFTER RELEASE ##########################
 
     - name: Installing Python
@@ -99,7 +99,7 @@ jobs:
 
     - name: Build binding
       run: ./gradlew assembleRelease --info
-      working-directory: binding/android/Cheetah
+      working-directory: binding/android/Cobra
 ############## REMOVE AFTER RELEASE ##########################
 
     - name: Installing Python
