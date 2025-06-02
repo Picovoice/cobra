@@ -7,7 +7,6 @@ ext {
 }
 
 android {
-    namespace 'ai.picovoice.cobra'
     compileSdkVersion defaultTargetSdkVersion
 
     defaultConfig {
