@@ -1,5 +1,2 @@
 rootProject.name = "CobraTestApp"
 include ':cobra-test-app'
-
-include(":cobra-android")
-project(":cobra-android").projectDir = file("../Cobra/cobra")
