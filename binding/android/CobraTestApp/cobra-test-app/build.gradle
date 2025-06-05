@@ -108,7 +108,7 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
     implementation 'androidx.navigation:navigation-fragment:2.3.5'
     implementation 'androidx.navigation:navigation-ui:2.3.5'
-    implementation 'ai.picovoice:cobra-android:2.0.1'
+    implementation 'ai.picovoice:cobra-android:2.0.2'
 
     // Espresso UI Testing
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
