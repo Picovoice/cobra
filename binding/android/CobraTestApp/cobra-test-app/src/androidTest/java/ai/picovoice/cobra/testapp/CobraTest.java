@@ -32,6 +32,8 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import ai.picovoice.cobra.Cobra;
 import ai.picovoice.cobra.CobraException;
@@ -41,7 +43,7 @@ import static org.junit.Assert.*;
 
 @RunWith(AndroidJUnit4.class)
 public class CobraTest {
-
+    static Set<String> extractedFiles = new HashSet<>();
     Context testContext;
     Context appContext;
     AssetManager assetManager;
@@ -54,17 +56,16 @@ public class CobraTest {
         testContext = InstrumentationRegistry.getInstrumentation().getContext();
         appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
         assetManager = testContext.getAssets();
-        extractAssetsRecursively("test_resources");
         testResourcesPath = new File(appContext.getFilesDir(), "test_resources").getAbsolutePath();
 
         accessKey = appContext.getString(R.string.pvTestingAccessKey);
     }
 
     @Test
-    public void testProcess() throws CobraException {
+    public void testProcess() throws CobraException, IOException {
         Cobra cobra = new Cobra(accessKey);
 
-        File testAudio = new File(testResourcesPath, "audio/sample.wav");
+        File testAudio = new File(getAudioFilepath("sample.wav"));
 
         List<Float> probs = new ArrayList<>();
 
@@ -133,30 +134,39 @@ public class CobraTest {
             }
         }
     }
-
-    private void extractAssetsRecursively(String path) throws IOException {
-
-        String[] list = assetManager.list(path);
-        if (list.length > 0) {
-            File outputFile = new File(appContext.getFilesDir(), path);
-            if (!outputFile.exists()) {
-                outputFile.mkdirs();
-            }
-
-            for (String file : list) {
-                String filepath = path + "/" + file;
-                extractAssetsRecursively(filepath);
-            }
-        } else {
-            extractTestFile(path);
-        }
+    
+    public String getAudioFilepath(String audioFilename) throws IOException {
+        Context context = InstrumentationRegistry.getInstrumentation().getTargetContext();
+        String resPath = new File(
+                context.getFilesDir(),
+                "test_resources").getAbsolutePath();
+        extractTestFile(String.format("test_resources/audio/%s", audioFilename));
+        return new File(resPath, String.format("audio/%s", audioFilename)).getAbsolutePath();
     }
 
     private void extractTestFile(String filepath) throws IOException {
+        File absPath = new File(
+                appContext.getFilesDir(),
+                filepath);
 
-        InputStream is = new BufferedInputStream(assetManager.open(filepath), 256);
-        File absPath = new File(appContext.getFilesDir(), filepath);
-        OutputStream os = new BufferedOutputStream(new FileOutputStream(absPath), 256);
+        if (extractedFiles.contains(filepath)) {
+            return;
+        }
+
+        if (!absPath.exists()) {
+            if (absPath.getParentFile() != null) {
+                absPath.getParentFile().mkdirs();
+            }
+            absPath.createNewFile();
+        }
+
+        InputStream is = new BufferedInputStream(
+                assetManager.open(filepath),
+                256);
+        OutputStream os = new BufferedOutputStream(
+                new FileOutputStream(absPath),
+                256);
+
         int r;
         while ((r = is.read()) != -1) {
             os.write(r);
@@ -165,5 +175,7 @@ public class CobraTest {
 
         is.close();
         os.close();
+
+        extractedFiles.add(filepath);
     }
 }
