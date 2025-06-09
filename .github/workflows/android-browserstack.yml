@@ -5,13 +5,13 @@ on:
   push:
     branches: [ main ]
     paths:
-      - 'binding/android/CobraTestApp/cobra-test-app/build.gradle'
+      - 'binding/android/CobraTestApp/**'
       - '.github/workflows/android-browserstack.yml'
 
   pull_request:
     branches: [ main, 'v[0-9]+.[0-9]+' ]
     paths:
-      - 'binding/android/CobraTestApp/cobra-test-app/build.gradle'
+      - 'binding/android/CobraTestApp/**'
       - '.github/workflows/android-browserstack.yml'
 
 defaults:
