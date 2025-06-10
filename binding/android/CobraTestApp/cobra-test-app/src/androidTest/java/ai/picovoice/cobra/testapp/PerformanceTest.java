@@ -61,7 +61,7 @@ public class PerformanceTest {
         double performanceThresholdSec = Double.parseDouble(thresholdString);
 
         Cobra cobra = new Cobra(accessKey);
-        File testAudio = new File(testResourcesPath, "audio/sample.wav");
+        File testAudio = new File(getAudioFilepath("sample.wav"));
 
         long totalNSec = 0;
         for (int i = 0; i < numTestIterations; i++) {
