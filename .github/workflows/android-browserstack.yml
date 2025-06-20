@@ -7,12 +7,14 @@ on:
     paths:
       - 'binding/android/CobraTestApp/**'
       - '.github/workflows/android-browserstack.yml'
+      - 'script/automation/browserstack.py'
 
   pull_request:
     branches: [ main, 'v[0-9]+.[0-9]+' ]
     paths:
       - 'binding/android/CobraTestApp/**'
       - '.github/workflows/android-browserstack.yml'
+      - 'script/automation/browserstack.py'
 
 defaults:
   run:
