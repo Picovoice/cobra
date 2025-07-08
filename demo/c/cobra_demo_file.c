@@ -290,7 +290,7 @@ int picovoice_main(int argc, char *argv[]) {
 
     const double real_time_factor =
             total_cpu_time_usec / total_processed_time_usec;
-    fprintf(stdout, "real time factor : %.3f\n", real_time_factor);
+    fprintf(stdout, "\n\nreal time factor : %.3f\n", real_time_factor);
 
     fprintf(stdout, "\n");
 
