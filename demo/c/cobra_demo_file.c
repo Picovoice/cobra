@@ -1,11 +1,14 @@
 /*
-    Copyright 2021-2023 Picovoice Inc.
+    Copyright 2021-2025 Picovoice Inc.
+
     You may not use this file except in compliance with the license. A copy of
-   the license is located in the "LICENSE" file accompanying this source. Unless
-   required by applicable law or agreed to in writing, software distributed
-   under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR
-   CONDITIONS OF ANY KIND, either express or implied. See the License for the
-    specific language governing permissions and limitations under the License.
+    the license is located in the "LICENSE" file accompanying this source.
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+    WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+    License for the specific language governing permissions and limitations under
+    the License.
 */
 
 #include <getopt.h>
@@ -82,8 +85,8 @@ static void print_dl_error(const char *message) {
 }
 
 static struct option long_options[] = {
-        {"show_audio_devices", no_argument,       NULL, 's'},
         {"library_path",       required_argument, NULL, 'l'},
+        {"access_key",         required_argument, NULL, 'a'},
         {"wav_path",           required_argument, NULL, 'w'},
 };
 
