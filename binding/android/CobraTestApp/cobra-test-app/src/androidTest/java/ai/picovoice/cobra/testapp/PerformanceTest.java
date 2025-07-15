@@ -37,9 +37,8 @@ public class PerformanceTest extends BaseTest {
         String iterationString = appContext.getString(R.string.numTestIterations);
         try {
             numTestIterations = Integer.parseInt(iterationString);
-        } catch (NumberFormatException ignored) { }
-
-        extractAssetsRecursively("test_resources");
+        } catch (NumberFormatException ignored) {
+        }
     }
 
     @Test
@@ -82,23 +81,6 @@ public class PerformanceTest extends BaseTest {
                 String.format("Expected threshold (%.3fs), process took (%.3fs)", performanceThresholdSec, avgSec),
                 avgSec <= performanceThresholdSec
         );
-    }
-
-    private void extractAssetsRecursively(String path) throws IOException {
-        String[] list = assetManager.list(path);
-        if (list.length > 0) {
-            File outputFile = new File(appContext.getFilesDir(), path);
-            if (!outputFile.exists()) {
-                outputFile.mkdirs();
-            }
-
-            for (String file : list) {
-                String filepath = path + "/" + file;
-                extractAssetsRecursively(filepath);
-            }
-        } else {
-            extractTestFile(path);
-        }
     }
 
     private void extractTestFile(String filepath) throws IOException {
