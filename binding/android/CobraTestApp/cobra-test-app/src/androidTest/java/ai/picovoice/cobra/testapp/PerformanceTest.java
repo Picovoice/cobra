@@ -28,14 +28,6 @@ import ai.picovoice.cobra.Cobra;
 
 @RunWith(AndroidJUnit4.class)
 public class PerformanceTest extends BaseTest {
-
-    Context testContext;
-    Context appContext;
-    AssetManager assetManager;
-    String testResourcesPath;
-
-    String accessKey;
-
     int numTestIterations = 100;
 
     @Before
