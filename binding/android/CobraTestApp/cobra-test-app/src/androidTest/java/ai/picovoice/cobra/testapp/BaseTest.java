@@ -42,7 +42,7 @@ import static org.junit.Assert.*;
 
 
 @RunWith(AndroidJUnit4.class)
-public class CobraTest {
+public class BaseTest {
     static Set<String> extractedFiles = new HashSet<>();
     Context testContext;
     Context appContext;

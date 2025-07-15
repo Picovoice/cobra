@@ -27,7 +27,7 @@ import java.nio.ByteOrder;
 import ai.picovoice.cobra.Cobra;
 
 @RunWith(AndroidJUnit4.class)
-public class PerformanceTest {
+public class PerformanceTest extends BaseTest {
 
     Context testContext;
     Context appContext;
