@@ -7,11 +7,13 @@ on:
     paths:
       - 'lib/android/**'
       - '.github/workflows/android-perf.yml'
+      - 'binding/android/CobraTestApp/**'
   pull_request:
     branches: [ main, 'v[0-9]+.[0-9]+' ]
     paths:
       - 'lib/android/**'
       - '.github/workflows/android-perf.yml'
+      - 'binding/android/CobraTestApp/**'
 
 defaults:
   run:
