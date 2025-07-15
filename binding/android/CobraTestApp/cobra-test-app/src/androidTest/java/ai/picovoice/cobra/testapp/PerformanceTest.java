@@ -36,28 +36,26 @@ public class PerformanceTest extends BaseTest {
 
     String accessKey;
 
+    int numTestIterations = 100;
+
     @Before
     public void Setup() throws IOException {
-        testContext = InstrumentationRegistry.getInstrumentation().getContext();
-        appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assetManager = testContext.getAssets();
-        extractAssetsRecursively("test_resources");
-        testResourcesPath = new File(appContext.getFilesDir(), "test_resources").getAbsolutePath();
+        super.Setup();
 
-        accessKey = appContext.getString(R.string.pvTestingAccessKey);
+        String iterationString = appContext.getString(R.string.numTestIterations);
+        try {
+            numTestIterations = Integer.parseInt(iterationString);
+        } catch (NumberFormatException ignored) { }
+
+        extractAssetsRecursively("test_resources");
     }
 
     @Test
     public void testPerformance() throws Exception {
-        String iterationString = appContext.getString(R.string.numTestIterations);
         String thresholdString = appContext.getString(R.string.performanceThresholdSec);
         Assume.assumeNotNull(thresholdString);
         Assume.assumeFalse(thresholdString.equals(""));
 
-        int numTestIterations = 100;
-        try {
-            numTestIterations = Integer.parseInt(iterationString);
-        } catch (NumberFormatException ignored) { }
         double performanceThresholdSec = Double.parseDouble(thresholdString);
 
         Cobra cobra = new Cobra(accessKey);
