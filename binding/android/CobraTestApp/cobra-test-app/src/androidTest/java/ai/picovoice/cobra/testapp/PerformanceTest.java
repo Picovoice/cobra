@@ -83,17 +83,4 @@ public class PerformanceTest extends BaseTest {
         );
     }
 
-    private void extractTestFile(String filepath) throws IOException {
-        InputStream is = new BufferedInputStream(assetManager.open(filepath), 256);
-        File absPath = new File(appContext.getFilesDir(), filepath);
-        OutputStream os = new BufferedOutputStream(new FileOutputStream(absPath), 256);
-        int r;
-        while ((r = is.read()) != -1) {
-            os.write(r);
-        }
-        os.flush();
-
-        is.close();
-        os.close();
-    }
 }
