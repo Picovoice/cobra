@@ -27,37 +27,26 @@ import java.nio.ByteOrder;
 import ai.picovoice.cobra.Cobra;
 
 @RunWith(AndroidJUnit4.class)
-public class PerformanceTest {
-
-    Context testContext;
-    Context appContext;
-    AssetManager assetManager;
-    String testResourcesPath;
-
-    String accessKey;
+public class PerformanceTest extends BaseTest {
+    int numTestIterations = 100;
 
     @Before
     public void Setup() throws IOException {
-        testContext = InstrumentationRegistry.getInstrumentation().getContext();
-        appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
-        assetManager = testContext.getAssets();
-        extractAssetsRecursively("test_resources");
-        testResourcesPath = new File(appContext.getFilesDir(), "test_resources").getAbsolutePath();
+        super.Setup();
 
-        accessKey = appContext.getString(R.string.pvTestingAccessKey);
+        String iterationString = appContext.getString(R.string.numTestIterations);
+        try {
+            numTestIterations = Integer.parseInt(iterationString);
+        } catch (NumberFormatException ignored) {
+        }
     }
 
     @Test
     public void testPerformance() throws Exception {
-        String iterationString = appContext.getString(R.string.numTestIterations);
         String thresholdString = appContext.getString(R.string.performanceThresholdSec);
         Assume.assumeNotNull(thresholdString);
         Assume.assumeFalse(thresholdString.equals(""));
 
-        int numTestIterations = 100;
-        try {
-            numTestIterations = Integer.parseInt(iterationString);
-        } catch (NumberFormatException ignored) { }
         double performanceThresholdSec = Double.parseDouble(thresholdString);
 
         Cobra cobra = new Cobra(accessKey);
@@ -94,34 +83,4 @@ public class PerformanceTest {
         );
     }
 
-    private void extractAssetsRecursively(String path) throws IOException {
-        String[] list = assetManager.list(path);
-        if (list.length > 0) {
-            File outputFile = new File(appContext.getFilesDir(), path);
-            if (!outputFile.exists()) {
-                outputFile.mkdirs();
-            }
-
-            for (String file : list) {
-                String filepath = path + "/" + file;
-                extractAssetsRecursively(filepath);
-            }
-        } else {
-            extractTestFile(path);
-        }
-    }
-
-    private void extractTestFile(String filepath) throws IOException {
-        InputStream is = new BufferedInputStream(assetManager.open(filepath), 256);
-        File absPath = new File(appContext.getFilesDir(), filepath);
-        OutputStream os = new BufferedOutputStream(new FileOutputStream(absPath), 256);
-        int r;
-        while ((r = is.read()) != -1) {
-            os.write(r);
-        }
-        os.flush();
-
-        is.close();
-        os.close();
-    }
 }
