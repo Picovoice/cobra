@@ -3,7 +3,6 @@
 [![GitHub release](https://img.shields.io/github/release/Picovoice/Cobra.svg)](https://github.com/Picovoice/Cobra/releases)
 [![GitHub](https://img.shields.io/github/license/Picovoice/cobra)](https://github.com/Picovoice/cobra/)
 
-[![Crates.io](https://img.shields.io/crates/v/pv_cobra)](https://crates.io/crates/pv_cobra)<!-- markdown-link-check-disable-line -->
 [![Maven Central](https://img.shields.io/maven-central/v/ai.picovoice/cobra-android?label=maven-central%20%5Bandroid%5D)](https://repo1.maven.org/maven2/ai/picovoice/cobra-android/)
 [![npm](https://img.shields.io/npm/v/@picovoice/cobra-node?label=npm%20%5Bnode%5D)](https://www.npmjs.com/package/@picovoice/cobra-node)
 [![npm](https://img.shields.io/npm/v/@picovoice/cobra-web?label=npm%20%5Bweb%5D)](https://www.npmjs.com/package/@picovoice/cobra-web)
@@ -30,7 +29,6 @@ Cobra is a highly-accurate and lightweight voice activity detection (VAD) engine
     - [iOS](#ios-demos)
     - [Web](#web-demos)
     - [NodeJS](#nodejs-demos)
-    - [Rust](#rust-demos)
   - [SDKs](#sdks)
     - [Python](#python)
     - [.NET](#net)
@@ -39,7 +37,6 @@ Cobra is a highly-accurate and lightweight voice activity detection (VAD) engine
     - [iOS](#ios)
     - [Web](#web)
     - [NodeJS](#nodejs)
-    - [Rust](#rust)
   - [Releases](#releases)
 
 ## Demos
@@ -161,19 +158,6 @@ cobra-mic-demo --access_key ${ACCESS_KEY}
 Cobra will start processing the audio input from the microphone in realtime and output to the terminal when it detects any voice activity.
 
 For more information about NodeJS demos go to [demo/nodejs](demo/nodejs).
-
-### Rust Demos
-
-> Rust SDKs will no longer be maintained after **July 15, 2025**. If you plan to use the Cobra Voice Activity Detection Rust SDK for commercial purposes, please [contact us](https://picovoice.ai/contact/).
-
-From [demo/rust/micdemo](demo/rust/micdemo) build and run the demo:
-
-```console
-cargo run --release -- --access_key ${ACCESS_KEY}
-```
-
-For more information about Rust demos go to [demo/rust](demo/rust).
-
 
 ## SDKs
 
@@ -431,29 +415,6 @@ When done be sure to release resources using `release()`:
 ```javascript
 cobra.release();
 ```
-
-### Rust
-
-> Rust SDKs will no longer be maintained after **July 15, 2025**. If you plan to use the Cobra Voice Activity Detection Rust SDK for commercial purposes, please [contact us](https://picovoice.ai/contact/).
-
-Create an instance of the engine and detect voice activity:
-
-```rust
-use cobra::Cobra;
-
-let cobra = Cobra::new("${ACCESS_KEY}");
-
-fn next_audio_frame() -> Vec<i16> {
-    // get audio frame
-}
-
-loop {
-    if let Ok(voice_probability) = cobra.process(&next_audio_frame()) {
-      // ...
-    }
-}
-```
-
 
 ## Releases
 

@@ -27,7 +27,6 @@ body:
         - iOS
         - Node.js
         - Python
-        - Rust
         - Web
     validations:
       required: true

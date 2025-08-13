@@ -7,7 +7,6 @@ binding/dotnet/CobraTest/** linguist-detectable=false
 binding/ios/CobraAppTest/** linguist-detectable=false
 binding/nodejs/** linguist-detectable=false
 binding/nodejs/src/cobra.ts linguist-detectable=true
-binding/rust/tests/** linguist-detectable=false
 binding/web/** linguist-detectable=false
 binding/web/src/cobra.ts linguist-detectable=true
 
