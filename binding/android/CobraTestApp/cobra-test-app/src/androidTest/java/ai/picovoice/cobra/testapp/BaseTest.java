@@ -1,5 +1,5 @@
 /*
-    Copyright 2021-2024 Picovoice Inc.
+    Copyright 2021-2025 Picovoice Inc.
     You may not use this file except in compliance with the license. A copy of the license is
     located in the "LICENSE" file accompanying this source.
     Unless required by applicable law or agreed to in writing, software distributed under the
@@ -94,7 +94,7 @@ public class BaseTest {
 
         long fileSize = testAudio.length();
         long numSamples = (fileSize - 44) / 2;
-        int numFrames = (int)(numSamples / cobra.getFrameLength());
+        int numFrames = (int) (numSamples / cobra.getFrameLength());
 
         float[] labels = new float[numFrames];
 
@@ -103,7 +103,7 @@ public class BaseTest {
         Arrays.fill(labels, 163, 183, 1.0f);
         Arrays.fill(labels, 227, 252, 1.0f);
 
-        assertSame(labels.length, probs.size());
+        assertEquals(labels.length, probs.size());
 
         float error = 0.f;
 
