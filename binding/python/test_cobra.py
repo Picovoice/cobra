@@ -1,5 +1,5 @@
 #
-# Copyright 2021-2023 Picovoice Inc.
+# Copyright 2021-2025 Picovoice Inc.
 #
 # You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
 # file accompanying this source.
@@ -44,7 +44,7 @@ class CobraTestCase(unittest.TestCase):
         labels[227:252] = [1] * 25
 
         loss = - sum([label * math.log(prob) + (1 - label) * math.log(1 - prob)
-                    for label, prob in zip(labels, probs)]) / num_frames
+                      for label, prob in zip(labels, probs)]) / num_frames
         self.assertLess(loss, 0.1)
 
     def test_version(self):

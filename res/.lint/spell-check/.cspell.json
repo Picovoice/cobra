@@ -26,6 +26,9 @@
       "**/*.pv",
       "**/*.so",
       "**/*.wasm",
+      "**/wasm/**",
+      "**/dist/**",
+      "**/lib/ios/**/*",
       "**/*.wav",
       "../../../lib/ios/**/*",
   
@@ -56,6 +59,9 @@
       "**/package.json",
       "**/packages-lock.json",
       "**/tsconfig.json",
-      "**/tslint.json"
+      "**/tslint.json",
+
+      // wasm
+      "**/lib/wasm/**/*.js"
     ]
   }
