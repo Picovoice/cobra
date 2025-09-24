@@ -4,8 +4,8 @@
 [![GitHub](https://img.shields.io/github/license/Picovoice/cobra)](https://github.com/Picovoice/cobra/)
 
 [![Maven Central](https://img.shields.io/maven-central/v/ai.picovoice/cobra-android?label=maven-central%20%5Bandroid%5D)](https://repo1.maven.org/maven2/ai/picovoice/cobra-android/)
-[![npm](https://img.shields.io/npm/v/@picovoice/cobra-node?label=npm%20%5Bnode%5D)](https://www.npmjs.com/package/@picovoice/cobra-node)
-[![npm](https://img.shields.io/npm/v/@picovoice/cobra-web?label=npm%20%5Bweb%5D)](https://www.npmjs.com/package/@picovoice/cobra-web)
+[![npm](https://img.shields.io/npm/v/@picovoice/cobra-node?label=npm%20%5Bnode%5D)](https://www.npmjs.com/package/@picovoice/cobra-node) <!-- markdown-link-check-disable-line -->
+[![npm](https://img.shields.io/npm/v/@picovoice/cobra-web?label=npm%20%5Bweb%5D)](https://www.npmjs.com/package/@picovoice/cobra-web) <!-- markdown-link-check-disable-line -->
 [![CocoaPods](https://img.shields.io/cocoapods/v/Cobra-iOS)](https://cocoapods.org/pods/Cobra-iOS)
 [![PyPI](https://img.shields.io/pypi/v/pvcobra)](https://pypi.org/project/pvcobra/)
 [![Nuget](https://img.shields.io/nuget/v/Cobra)](https://www.nuget.org/packages/Cobra/)
