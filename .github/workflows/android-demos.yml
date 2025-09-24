@@ -39,6 +39,12 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+############## REMOVE AFTER RELEASE ##########################
+    - name: Build binding
+      run: ./gradlew assembleRelease --info
+      working-directory: binding/android/Cobra
+############## REMOVE AFTER RELEASE ##########################
+
     - name: Override gradle settings
       run: sed -i "s/com.android.tools.build:gradle:[0-9]*\.[0-9]*\.[0-9]*/com.android.tools.build:gradle:${{ matrix.agp-version }}/g" build.gradle
 
@@ -52,7 +58,6 @@ jobs:
       uses: gradle/actions/setup-gradle@v3
       with:
         gradle-version: ${{ matrix.gradle-version }}
-
 
     - name: Build
       run: gradle assembleDebug
