@@ -3,6 +3,7 @@ androidx
 armv
 beaglebone
 camelcase
+ccall
 ccobra
 chrono
 cobraactivitydemo
@@ -12,12 +13,16 @@ colour
 commandline
 Compat
 constraintlayout
+cwrap
 dmix
 downsample
 drwav
 dtype
 dylib
+emscripten
 filedemo
+HEAPF
+HEAPU
 iife
 improvments
 itertools

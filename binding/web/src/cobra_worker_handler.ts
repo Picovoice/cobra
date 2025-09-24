@@ -1,5 +1,5 @@
 /*
-  Copyright 2022-2023 Picovoice Inc.
+  Copyright 2022-2025 Picovoice Inc.
 
   You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
   file accompanying this source.
@@ -55,6 +55,8 @@ self.onmessage = async function (
 
         Cobra.setWasm(event.data.wasm);
         Cobra.setWasmSimd(event.data.wasmSimd);
+        Cobra.setWasmLib(event.data.wasmLib);
+        Cobra.setWasmSimdLib(event.data.wasmSimdLib);
         Cobra.setSdk(event.data.sdk);
         cobra = await Cobra.create(
           event.data.accessKey,

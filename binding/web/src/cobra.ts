@@ -1,5 +1,5 @@
 /*
-  Copyright 2022-2023 Picovoice Inc.
+  Copyright 2022-2025 Picovoice Inc.
 
   You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
   file accompanying this source.
@@ -14,13 +14,13 @@
 import { Mutex } from 'async-mutex';
 
 import {
-  aligned_alloc_type,
+  base64ToUint8Array,
   arrayBufferToStringAtIndex,
-  buildWasm,
   isAccessKeyValid,
-  pv_free_type,
-  PvError
 } from '@picovoice/web-utils';
+
+import createModule from "./lib/pv_cobra";
+import createModuleSimd from "./lib/pv_cobra_simd";
 
 import { simd } from 'wasm-feature-detect';
 import { CobraOptions, PvStatus } from './types';
@@ -40,27 +40,40 @@ type pv_cobra_process_type = (
   pcm: number,
   voiceProbability: number
 ) => Promise<number>;
-type pv_cobra_delete_type = (object: number) => Promise<void>;
-type pv_cobra_frame_length_type = () => Promise<number>;
-type pv_sample_rate_type = () => Promise<number>;
-type pv_cobra_version_type = () => Promise<number>;
-type pv_set_sdk_type = (sdk: number) => Promise<void>;
-type pv_get_error_stack_type = (messageStack: number, messageStackDepth: number) => Promise<number>;
-type pv_free_error_stack_type = (messageStack: number) => Promise<void>;
+type pv_cobra_delete_type = (object: number) => void;
+type pv_cobra_frame_length_type = () => number;
+type pv_sample_rate_type = () => number;
+type pv_cobra_version_type = () => number;
+type pv_set_sdk_type = (sdk: number) => void;
+type pv_get_error_stack_type = (messageStack: number, messageStackDepth: number) => number;
+type pv_free_error_stack_type = (messageStack: number) => void;
 
 /**
  * JavaScript/WebAssembly Binding for the Picovoice Cobra VAD engine.
  */
 
+type CobraModule = EmscriptenModule & {
+  _pv_free: (address: number) => void;
+
+  _pv_cobra_delete: pv_cobra_delete_type;
+  _pv_cobra_frame_length: pv_cobra_frame_length_type;
+  _pv_sample_rate: pv_sample_rate_type;
+  _pv_cobra_version: pv_cobra_version_type;
+
+  _pv_set_sdk: pv_set_sdk_type;
+  _pv_get_error_stack: pv_get_error_stack_type;
+  _pv_free_error_stack: pv_free_error_stack_type;
+
+  // em default functions
+  addFunction: typeof addFunction;
+  ccall: typeof ccall;
+  cwrap: typeof cwrap;
+}
+
 type CobraWasmOutput = {
-  aligned_alloc: aligned_alloc_type;
-  memory: WebAssembly.Memory;
-  pvFree: pv_free_type;
+  module: CobraModule;
+  pv_cobra_process: pv_cobra_process_type;
   objectAddress: number;
-  pvCobraDelete: pv_cobra_delete_type;
-  pvCobraProcess: pv_cobra_process_type;
-  pvGetErrorStack: pv_get_error_stack_type;
-  pvFreeErrorStack: pv_free_error_stack_type;
   frameLength: number;
   sampleRate: number;
   version: string;
@@ -73,13 +86,14 @@ type CobraWasmOutput = {
 const PV_STATUS_SUCCESS = 10000;
 
 export class Cobra {
-  private readonly _pvCobraDelete: pv_cobra_delete_type;
-  private readonly _pvCobraProcess: pv_cobra_process_type;
-  private readonly _pvGetErrorStack: pv_get_error_stack_type;
-  private readonly _pvFreeErrorStack: pv_free_error_stack_type;
+  private readonly _module: CobraModule;
 
-  private _wasmMemory: WebAssembly.Memory | undefined;
-  private readonly _pvFree: pv_free_type;
+  private readonly _pv_cobra_process: pv_cobra_process_type;
+
+  private readonly _version: string;
+  private readonly _sampleRate: number;
+  private readonly _frameLength: number;
+
   private readonly _processMutex: Mutex;
 
   private readonly _objectAddress: number;
@@ -88,11 +102,10 @@ export class Cobra {
   private readonly _messageStackAddressAddressAddress: number;
   private readonly _messageStackDepthAddress: number;
 
-  private static _frameLength: number;
-  private static _sampleRate: number;
-  private static _version: string;
   private static _wasm: string;
+  private static _wasmLib: string;
   private static _wasmSimd: string;
+  private static _wasmSimdLib: string;
   private static _sdk: string = "web";
 
   private static _cobraMutex = new Mutex();
@@ -107,17 +120,14 @@ export class Cobra {
     voiceProbabilityCallback: (voiceProbability: number) => void,
     processErrorCallback?: (error: CobraErrors.CobraError) => void
   ) {
-    Cobra._frameLength = handleWasm.frameLength;
-    Cobra._sampleRate = handleWasm.sampleRate;
-    Cobra._version = handleWasm.version;
+    this._module = handleWasm.module;
 
-    this._pvCobraDelete = handleWasm.pvCobraDelete;
-    this._pvCobraProcess = handleWasm.pvCobraProcess;
-    this._pvGetErrorStack = handleWasm.pvGetErrorStack;
-    this._pvFreeErrorStack = handleWasm.pvFreeErrorStack;
+    this._pv_cobra_process = handleWasm.pv_cobra_process;
 
-    this._wasmMemory = handleWasm.memory;
-    this._pvFree = handleWasm.pvFree;
+    this._version = handleWasm.version;
+    this._sampleRate = handleWasm.sampleRate;
+    this._frameLength = handleWasm.frameLength;
+
     this._objectAddress = handleWasm.objectAddress;
     this._inputBufferAddress = handleWasm.inputBufferAddress;
     this._voiceProbabilityAddress = handleWasm.voiceProbabilityAddress;
@@ -134,21 +144,21 @@ export class Cobra {
    * Get Cobra engine version.
    */
   get version(): string {
-    return Cobra._version;
+    return this._version;
   }
 
   /**
    * Get frame length.
    */
   get frameLength(): number {
-    return Cobra._frameLength;
+    return this._frameLength;
   }
 
   /**
    * Get sample rate.
    */
   get sampleRate(): number {
-    return Cobra._sampleRate;
+    return this._sampleRate;
   }
 
   /**
@@ -162,12 +172,32 @@ export class Cobra {
   }
 
   /**
+   * Set base64 wasm file in text format.
+   * @param wasmLib Base64'd wasm file in text format.
+   */
+  public static setWasmLib(wasmLib: string): void {
+    if (this._wasmLib === undefined) {
+      this._wasmLib = wasmLib;
+    }
+  }
+
+  /**
    * Set base64 wasm file with SIMD feature.
    * @param wasmSimd Base64'd wasm file to use to initialize wasm.
    */
   public static setWasmSimd(wasmSimd: string): void {
     if (this._wasmSimd === undefined) {
       this._wasmSimd = wasmSimd;
+    }
+  }
+
+  /**
+   * Set base64 SIMD wasm file in text format.
+   * @param wasmSimdLib Base64'd SIMD wasm file in text format.
+   */
+  public static setWasmSimdLib(wasmSimdLib: string): void {
+    if (this._wasmSimdLib === undefined) {
+      this._wasmSimdLib = wasmSimdLib;
     }
   }
 
@@ -203,9 +233,10 @@ export class Cobra {
         .runExclusive(async () => {
           const isSimd = await simd();
           const wasmOutput = await Cobra.initWasm(
-            accessKey.trim(),
-            isSimd ? this._wasmSimd : this._wasm
-          );
+              accessKey.trim(),
+              (isSimd) ? this._wasmSimd : this._wasm,
+              (isSimd) ? this._wasmSimdLib : this._wasmLib,
+              (isSimd) ? createModuleSimd : createModule);
           return new Cobra(
             wasmOutput,
             voiceProbabilityCallback,
@@ -244,34 +275,29 @@ export class Cobra {
 
     this._processMutex
       .runExclusive(async () => {
-        if (this._wasmMemory === undefined) {
+        if (this._module === undefined) {
           throw new CobraErrors.CobraInvalidStateError('Attempted to call Cobra process after release.');
         }
 
-        const memoryBuffer = new Int16Array(this._wasmMemory.buffer);
-
-        memoryBuffer.set(
+        this._module.HEAP16.set(
           pcm,
           this._inputBufferAddress / Int16Array.BYTES_PER_ELEMENT
         );
 
-        const status = await this._pvCobraProcess(
+        const status = await this._pv_cobra_process(
           this._objectAddress,
           this._inputBufferAddress,
           this._voiceProbabilityAddress
         );
 
-        const memoryBufferUint8 = new Uint8Array(this._wasmMemory.buffer);
-        const memoryBufferView = new DataView(this._wasmMemory.buffer);
-
         if (status !== PV_STATUS_SUCCESS) {
-          const messageStack = await Cobra.getMessageStack(
-            this._pvGetErrorStack,
-            this._pvFreeErrorStack,
+          const messageStack = Cobra.getMessageStack(
+            this._module._pv_get_error_stack,
+            this._module._pv_free_error_stack,
             this._messageStackAddressAddressAddress,
             this._messageStackDepthAddress,
-            memoryBufferView,
-            memoryBufferUint8
+            this._module.HEAP32,
+            this._module.HEAPU8
           );
 
           const error = pvStatusToException(status, "Processing failed", messageStack);
@@ -283,10 +309,7 @@ export class Cobra {
           }
         }
 
-        const voiceProbability = memoryBufferView.getFloat32(
-          this._voiceProbabilityAddress,
-          true
-        );
+        const voiceProbability = this._module.HEAPF32[this._voiceProbabilityAddress / Float32Array.BYTES_PER_ELEMENT];
 
         this._voiceProbabilityCallback(voiceProbability);
       })
@@ -304,12 +327,13 @@ export class Cobra {
    * Releases resources acquired by WebAssembly module.
    */
   public async release(): Promise<void> {
-    await this._pvCobraDelete(this._objectAddress);
-    await this._pvFree(this._messageStackAddressAddressAddress);
-    await this._pvFree(this._messageStackDepthAddress);
-    await this._pvFree(this._inputBufferAddress);
-    delete this._wasmMemory;
-    this._wasmMemory = undefined;
+    if (!this._module) {
+      return;
+    }
+    this._module._pv_cobra_delete(this._objectAddress);
+    this._module._pv_free(this._messageStackAddressAddressAddress);
+    this._module._pv_free(this._messageStackDepthAddress);
+    this._module._pv_free(this._inputBufferAddress);
   }
 
   async onmessage(e: MessageEvent): Promise<void> {
@@ -325,135 +349,104 @@ export class Cobra {
 
   private static async initWasm(
     accessKey: string,
-    wasmBase64: string
-  ): Promise<any> {
-    // A WebAssembly page has a constant size of 64KiB. -> 1MiB ~= 16 pages
-    // minimum memory requirements for init: 3 pages
-    const memory = new WebAssembly.Memory({ initial: 16, maximum: 64 });
-
-    const memoryBufferUint8 = new Uint8Array(memory.buffer);
-
-    const pvError = new PvError();
-
-    const exports = await buildWasm(memory, wasmBase64, pvError);
-
-    const aligned_alloc = exports.aligned_alloc as aligned_alloc_type;
-    const pv_free = exports.pv_free as pv_free_type;
-    const pv_cobra_version = exports.pv_cobra_version as pv_cobra_version_type;
-    const pv_cobra_process = exports.pv_cobra_process as pv_cobra_process_type;
-    const pv_cobra_delete = exports.pv_cobra_delete as pv_cobra_delete_type;
-    const pv_cobra_init = exports.pv_cobra_init as pv_cobra_init_type;
-    const pv_cobra_frame_length =
-      exports.pv_cobra_frame_length as pv_cobra_frame_length_type;
-    const pv_sample_rate = exports.pv_sample_rate as pv_sample_rate_type;
-    const pv_set_sdk = exports.pv_set_sdk as pv_set_sdk_type;
-    const pv_get_error_stack = exports.pv_get_error_stack as pv_get_error_stack_type;
-    const pv_free_error_stack = exports.pv_free_error_stack as pv_free_error_stack_type;
-
-    const voiceProbabilityAddress = await aligned_alloc(
-      Float32Array.BYTES_PER_ELEMENT,
-      Float32Array.BYTES_PER_ELEMENT
+    wasmBase64: string,
+    wasmLibBase64: string,
+    createModuleFunc: any,
+  ): Promise<CobraWasmOutput> {
+    const blob = new Blob(
+      [base64ToUint8Array(wasmLibBase64)],
+      { type: 'application/javascript' }
     );
+    const module: CobraModule = await createModuleFunc({
+      mainScriptUrlOrBlob: blob,
+      wasmBinary: base64ToUint8Array(wasmBase64),
+    });
+
+    const pv_cobra_init: pv_cobra_init_type = this.wrapAsyncFunction(
+      module,
+      "pv_cobra_init",
+      2);
+    const pv_cobra_process: pv_cobra_process_type = this.wrapAsyncFunction(
+      module,
+      "pv_cobra_process",
+      3);
+
+    const voiceProbabilityAddress = module._malloc(Float32Array.BYTES_PER_ELEMENT);
     if (voiceProbabilityAddress === 0) {
       throw new CobraErrors.CobraOutOfMemoryError('malloc failed: Cannot allocate memory');
     }
 
-    const objectAddressAddress = await aligned_alloc(
-      Int32Array.BYTES_PER_ELEMENT,
-      Int32Array.BYTES_PER_ELEMENT
-    );
+    const objectAddressAddress = module._malloc(Int32Array.BYTES_PER_ELEMENT);
     if (objectAddressAddress === 0) {
       throw new CobraErrors.CobraOutOfMemoryError('malloc failed: Cannot allocate memory');
     }
 
-    const accessKeyAddress = await aligned_alloc(
-      Uint8Array.BYTES_PER_ELEMENT,
-      (accessKey.length + 1) * Uint8Array.BYTES_PER_ELEMENT
-    );
-
+    const accessKeyAddress = module._malloc((accessKey.length + 1) * Uint8Array.BYTES_PER_ELEMENT);
     if (accessKeyAddress === 0) {
       throw new CobraErrors.CobraOutOfMemoryError('malloc failed: Cannot allocate memory');
     }
 
     for (let i = 0; i < accessKey.length; i++) {
-      memoryBufferUint8[accessKeyAddress + i] = accessKey.charCodeAt(i);
+      module.HEAPU8[accessKeyAddress + i] = accessKey.charCodeAt(i);
     }
-    memoryBufferUint8[accessKeyAddress + accessKey.length] = 0;
+    module.HEAPU8[accessKeyAddress + accessKey.length] = 0;
 
     const sdkEncoded = new TextEncoder().encode(this._sdk);
-    const sdkAddress = await aligned_alloc(
-      Uint8Array.BYTES_PER_ELEMENT,
-      (sdkEncoded.length + 1) * Uint8Array.BYTES_PER_ELEMENT
-    );
+    const sdkAddress = module._malloc((sdkEncoded.length + 1) * Uint8Array.BYTES_PER_ELEMENT);
     if (!sdkAddress) {
       throw new CobraErrors.CobraOutOfMemoryError('malloc failed: Cannot allocate memory');
     }
-    memoryBufferUint8.set(sdkEncoded, sdkAddress);
-    memoryBufferUint8[sdkAddress + sdkEncoded.length] = 0;
-    await pv_set_sdk(sdkAddress);
+    module.HEAPU8.set(sdkEncoded, sdkAddress);
+    module.HEAPU8[sdkAddress + sdkEncoded.length] = 0;
+    module._pv_set_sdk(sdkAddress);
+    module._pv_free(sdkAddress);
 
-    const messageStackDepthAddress = await aligned_alloc(
-      Int32Array.BYTES_PER_ELEMENT,
-      Int32Array.BYTES_PER_ELEMENT
-    );
+    const messageStackDepthAddress = module._malloc(Int32Array.BYTES_PER_ELEMENT);
     if (!messageStackDepthAddress) {
       throw new CobraErrors.CobraOutOfMemoryError('malloc failed: Cannot allocate memory');
     }
 
-    const messageStackAddressAddressAddress = await aligned_alloc(
-      Int32Array.BYTES_PER_ELEMENT,
-      Int32Array.BYTES_PER_ELEMENT
-    );
+    const messageStackAddressAddressAddress = module._malloc(Int32Array.BYTES_PER_ELEMENT);
     if (!messageStackAddressAddressAddress) {
       throw new CobraErrors.CobraOutOfMemoryError('malloc failed: Cannot allocate memory');
     }
 
     const status = await pv_cobra_init(accessKeyAddress, objectAddressAddress);
-
-    await pv_free(accessKeyAddress);
-    const memoryBufferView = new DataView(memory.buffer);
+    module._pv_free(accessKeyAddress);
 
     if (status !== PV_STATUS_SUCCESS) {
-      const messageStack = await Cobra.getMessageStack(
-        pv_get_error_stack,
-        pv_free_error_stack,
+      const messageStack = Cobra.getMessageStack(
+        module._pv_get_error_stack,
+        module._pv_free_error_stack,
         messageStackAddressAddressAddress,
         messageStackDepthAddress,
-        memoryBufferView,
-        memoryBufferUint8
+        module.HEAP32,
+        module.HEAPU8,
       );
 
-      throw pvStatusToException(status, "Initialization failed", messageStack, pvError);
+      throw pvStatusToException(status, "Initialization failed", messageStack);
     }
 
-    const objectAddress = memoryBufferView.getInt32(objectAddressAddress, true);
-    await pv_free(objectAddressAddress);
+    const objectAddress = module.HEAP32[objectAddressAddress / Int32Array.BYTES_PER_ELEMENT];
+    module._pv_free(objectAddressAddress);
 
-    const frameLength = await pv_cobra_frame_length();
-    const sampleRate = await pv_sample_rate();
-    const versionAddress = await pv_cobra_version();
+    const frameLength = module._pv_cobra_frame_length();
+    const sampleRate = module._pv_sample_rate();
+    const versionAddress = module._pv_cobra_version();
     const version = arrayBufferToStringAtIndex(
-      memoryBufferUint8,
+      module.HEAPU8,
       versionAddress
     );
 
-    const inputBufferAddress = await aligned_alloc(
-      Int16Array.BYTES_PER_ELEMENT,
-      frameLength * Int16Array.BYTES_PER_ELEMENT
-    );
+    const inputBufferAddress = module._malloc(frameLength * Int16Array.BYTES_PER_ELEMENT);
     if (inputBufferAddress === 0) {
       throw new CobraErrors.CobraOutOfMemoryError('malloc failed: Cannot allocate memory');
     }
 
     return {
-      aligned_alloc,
-      memory: memory,
-      pvFree: pv_free,
+      module: module,
+      pv_cobra_process: pv_cobra_process,
       objectAddress: objectAddress,
-      pvCobraDelete: pv_cobra_delete,
-      pvCobraProcess: pv_cobra_process,
-      pvGetErrorStack: pv_get_error_stack,
-      pvFreeErrorStack: pv_free_error_stack,
       frameLength: frameLength,
       sampleRate: sampleRate,
       version: version,
@@ -464,32 +457,41 @@ export class Cobra {
     };
   }
 
-  private static async getMessageStack(
+  private static getMessageStack(
     pv_get_error_stack: pv_get_error_stack_type,
     pv_free_error_stack: pv_free_error_stack_type,
     messageStackAddressAddressAddress: number,
     messageStackDepthAddress: number,
-    memoryBufferView: DataView,
+    memoryBufferInt32: Int32Array,
     memoryBufferUint8: Uint8Array,
-  ): Promise<string[]> {
-    const status = await pv_get_error_stack(messageStackAddressAddressAddress, messageStackDepthAddress);
+  ): string[] {
+    const status = pv_get_error_stack(messageStackAddressAddressAddress, messageStackDepthAddress);
     if (status !== PvStatus.SUCCESS) {
-      throw pvStatusToException(status, "Unable to get Cobra error state");
+      throw new Error(`Unable to get error state: ${status}`);
     }
 
-    const messageStackAddressAddress = memoryBufferView.getInt32(messageStackAddressAddressAddress, true);
+    const messageStackAddressAddress = memoryBufferInt32[messageStackAddressAddressAddress / Int32Array.BYTES_PER_ELEMENT];
 
-    const messageStackDepth = memoryBufferView.getInt32(messageStackDepthAddress, true);
+    const messageStackDepth = memoryBufferInt32[messageStackDepthAddress / Int32Array.BYTES_PER_ELEMENT];
     const messageStack: string[] = [];
     for (let i = 0; i < messageStackDepth; i++) {
-      const messageStackAddress = memoryBufferView.getInt32(
-        messageStackAddressAddress + (i * Int32Array.BYTES_PER_ELEMENT), true);
+      const messageStackAddress = memoryBufferInt32[(messageStackAddressAddress / Int32Array.BYTES_PER_ELEMENT) + i];
       const message = arrayBufferToStringAtIndex(memoryBufferUint8, messageStackAddress);
       messageStack.push(message);
     }
 
-    await pv_free_error_stack(messageStackAddressAddress);
+    pv_free_error_stack(messageStackAddressAddress);
 
     return messageStack;
+  }
+
+  private static wrapAsyncFunction(module: CobraModule, functionName: string, numArgs: number): (...args: any[]) => any {
+    // @ts-ignore
+    return module.cwrap(
+        functionName,
+        "number",
+        Array(numArgs).fill("number"),
+        { async: true }
+    );
   }
 }

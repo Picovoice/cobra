@@ -1,5 +1,5 @@
 /*
-  Copyright 2022-2023 Picovoice Inc.
+  Copyright 2022-2025 Picovoice Inc.
 
   You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
   file accompanying this source.
@@ -11,6 +11,7 @@
 
 import { CobraError } from "./cobra_errors";
 
+// eslint-disable-next-line no-shadow
 export enum PvStatus {
   SUCCESS = 10000,
   OUT_OF_MEMORY,
@@ -35,7 +36,9 @@ export type CobraWorkerInitRequest = {
   command: 'init';
   accessKey: string;
   wasm: string;
+  wasmLib: string;
   wasmSimd: string;
+  wasmSimdLib: string;
   sdk: string;
   options: CobraOptions;
 };
