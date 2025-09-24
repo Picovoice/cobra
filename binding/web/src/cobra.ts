@@ -233,10 +233,10 @@ export class Cobra {
         .runExclusive(async () => {
           const isSimd = await simd();
           const wasmOutput = await Cobra.initWasm(
-              accessKey.trim(),
-              (isSimd) ? this._wasmSimd : this._wasm,
-              (isSimd) ? this._wasmSimdLib : this._wasmLib,
-              (isSimd) ? createModuleSimd : createModule);
+            accessKey.trim(),
+            (isSimd) ? this._wasmSimd : this._wasm,
+            (isSimd) ? this._wasmSimdLib : this._wasmLib,
+            (isSimd) ? createModuleSimd : createModule);
           return new Cobra(
             wasmOutput,
             voiceProbabilityCallback,
@@ -488,10 +488,10 @@ export class Cobra {
   private static wrapAsyncFunction(module: CobraModule, functionName: string, numArgs: number): (...args: any[]) => any {
     // @ts-ignore
     return module.cwrap(
-        functionName,
-        "number",
-        Array(numArgs).fill("number"),
-        { async: true }
+      functionName,
+      "number",
+      Array(numArgs).fill("number"),
+      { async: true }
     );
   }
 }
