@@ -38,9 +38,12 @@ class CobraTestCase(unittest.TestCase):
             probs[i] = self._cobra.process(frame)
 
         labels = [0] * num_frames
-        labels[10:28] = [1] * 18
+        labels[28:53] = [1] * 25
+        labels[97:121] = [1] * 24
+        labels[163:183] = [1] * 20
+        labels[227:252] = [1] * 25
 
-        loss = sum([label * math.log(prob) + (1 - label) * math.log(1 - prob)
+        loss = - sum([label * math.log(prob) + (1 - label) * math.log(1 - prob)
                     for label, prob in zip(labels, probs)]) / num_frames
         self.assertLess(loss, 0.1)
 
