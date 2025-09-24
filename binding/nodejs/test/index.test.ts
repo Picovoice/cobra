@@ -58,13 +58,18 @@ const cobraProcessWaveFile = (
 
 describe('successful processes', () => {
   it('testing process', () => {
-    let cobraEngine = new Cobra(ACCESS_KEY);
+    const cobraEngine = new Cobra(ACCESS_KEY);
 
-    let probs = cobraProcessWaveFile(cobraEngine, WAV_PATH);
-    const labels = [
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-      1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-    ];
+    const probs = cobraProcessWaveFile(cobraEngine, WAV_PATH);
+
+    const pcm = loadPcm(WAV_PATH);
+    const numSamples = Math.floor(pcm.length / cobraEngine.frameLength);
+    const labels = new Array(numSamples).fill(0);
+
+    labels.fill(1, 28, 53);
+    labels.fill(1, 97, 121);
+    labels.fill(1, 163, 183);
+    labels.fill(1, 227, 252);
 
     expect(labels.length).toBe(probs.length);
 
