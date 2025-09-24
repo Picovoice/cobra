@@ -31,6 +31,7 @@ import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.HashSet;
 import java.util.Set;
@@ -91,10 +92,16 @@ public class BaseTest {
 
         cobra.delete();
 
-        float[] labels = {
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-        };
+        long fileSize = testAudio.length();
+        long numSamples = (fileSize - 44) / 2;
+        int numFrames = (int)(numSamples / cobra.getFrameLength());
+
+        float[] labels = new float[numFrames];
+
+        Arrays.fill(labels, 28, 53, 1.0f);
+        Arrays.fill(labels, 97, 121, 1.0f);
+        Arrays.fill(labels, 163, 183, 1.0f);
+        Arrays.fill(labels, 227, 252, 1.0f);
 
         assertSame(labels.length, probs.size());
 
