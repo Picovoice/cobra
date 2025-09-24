@@ -50,7 +50,7 @@ jobs:
       working-directory: binding/dotnet/Cobra
 
     - name: Install Local Packages
-      run: dotnet add package -s ../../../binding/dotnet/Cobra/bin/Release Picovoice.Cobra
+      run: dotnet add package -s ../../../binding/dotnet/Cobra/bin/Release Cobra
     # ********************************************************
 
     - name: Dotnet build mic demo
@@ -85,7 +85,7 @@ jobs:
       working-directory: binding/dotnet/Cobra
 
     - name: Install Local Packages
-      run: dotnet add package -s ../../../binding/dotnet/Cobra/bin/Release Picovoice.Cobra
+      run: dotnet add package -s ../../../binding/dotnet/Cobra/bin/Release Cobra
     # ********************************************************
 
     - name: Dotnet build mic demo
