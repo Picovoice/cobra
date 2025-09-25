@@ -1,2 +1,2 @@
-../../binding/python/dist/pvcobra-2.1.0-py3-none-any.whl
+pvcobra==2.1.0
 pvrecorder==1.2.4
