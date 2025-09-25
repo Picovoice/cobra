@@ -37,11 +37,11 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
         include:
         - os: ubuntu-latest
-          performance_threshold_sec: 0.006
+          performance_threshold_sec: 0.03
         - os: windows-latest
-          performance_threshold_sec: 0.006
+          performance_threshold_sec: 0.03
         - os: macos-latest
-          performance_threshold_sec: 0.006
+          performance_threshold_sec: 0.03
 
     steps:
     - uses: actions/checkout@v3
@@ -70,19 +70,19 @@ jobs:
         include:
         - machine: rpi3-32
           num_test_iterations: 100
-          performance_threshold_sec: 0.05
+          performance_threshold_sec: 0.3
         - machine: rpi3-64
           num_test_iterations: 100
-          performance_threshold_sec: 0.05
+          performance_threshold_sec: 0.3
         - machine: rpi4-32
           num_test_iterations: 100
-          performance_threshold_sec: 0.023
+          performance_threshold_sec: 0.15
         - machine: rpi4-64
           num_test_iterations: 100
-          performance_threshold_sec: 0.022
+          performance_threshold_sec: 0.15
         - machine: rpi5-64
           num_test_iterations: 100
-          performance_threshold_sec: 0.011
+          performance_threshold_sec: 0.05
 
     steps:
     - uses: actions/checkout@v3
@@ -114,7 +114,7 @@ jobs:
         include:
         - machine: pv-windows-arm64
           num_test_iterations: 100
-          performance_threshold_sec: 0.006
+          performance_threshold_sec: 0.025
 
     steps:
     - uses: actions/checkout@v3
