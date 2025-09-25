@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 55;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -238,7 +238,7 @@
 			);
 			mainGroup = 1E00643F27CEDF9B006FF6E9;
 			packageReferences = (
-				E132B4482E85DA6100BFE108 /* XCLocalSwiftPackageReference "../../../../cobra" */,
+				E13ECC502E85F1700049A48F /* XCRemoteSwiftPackageReference "cobra" */,
 			);
 			productRefGroup = 1E00644927CEDF9B006FF6E9 /* Products */;
 			projectDirPath = "";
@@ -644,10 +644,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		E132B4482E85DA6100BFE108 /* XCLocalSwiftPackageReference "../../../../cobra" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = ../../../../cobra;
-		};
 		E14CDF442CE425EC00E6494C /* XCLocalSwiftPackageReference "../../../../cobra" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../../../../cobra;
@@ -655,6 +651,14 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		E13ECC502E85F1700049A48F /* XCRemoteSwiftPackageReference "cobra" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Picovoice/cobra";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.1.0;
+			};
+		};
 		E1643D4A2CE6DA14009027E6 /* XCRemoteSwiftPackageReference "cobra" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Picovoice/cobra";
