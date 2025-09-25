@@ -67,7 +67,6 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.1'
     implementation 'androidx.navigation:navigation-fragment:2.3.5'
     implementation 'androidx.navigation:navigation-ui:2.3.5'
-    // implementation 'ai.picovoice:cobra-android:2.1.0'
-    implementation files('../../../../binding/android/Cobra/cobra/build/outputs/aar/cobra-release.aar')
+    implementation 'ai.picovoice:cobra-android:2.1.0'
     implementation 'ai.picovoice:android-voice-processor:1.0.2'
 }
