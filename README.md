@@ -418,7 +418,11 @@ cobra.release();
 
 ## Releases
 
-### v3.0.0 - October 26th, 2023
+### v2.1.0 - September 25th, 2025
+
+- Updated Cobra engine for improved accuracy
+
+### v2.0.0 - October 26th, 2023
 
 - Improvements to error reporting
 - Upgrades to authorization and authentication system
