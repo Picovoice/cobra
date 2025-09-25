@@ -53,6 +53,5 @@ jobs:
       with:
         gradle-version: ${{ matrix.gradle-version }}
 
-
     - name: Build
       run: gradle assembleDebug

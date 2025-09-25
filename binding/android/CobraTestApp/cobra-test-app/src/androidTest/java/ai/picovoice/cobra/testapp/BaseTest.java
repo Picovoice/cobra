@@ -1,5 +1,5 @@
 /*
-    Copyright 2021-2024 Picovoice Inc.
+    Copyright 2021-2025 Picovoice Inc.
     You may not use this file except in compliance with the license. A copy of the license is
     located in the "LICENSE" file accompanying this source.
     Unless required by applicable law or agreed to in writing, software distributed under the
@@ -31,6 +31,7 @@ import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.HashSet;
 import java.util.Set;
@@ -91,12 +92,18 @@ public class BaseTest {
 
         cobra.delete();
 
-        float[] labels = {
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-        };
+        long fileSize = testAudio.length();
+        long numSamples = (fileSize - 44) / 2;
+        int numFrames = (int) (numSamples / cobra.getFrameLength());
 
-        assertSame(labels.length, probs.size());
+        float[] labels = new float[numFrames];
+
+        Arrays.fill(labels, 28, 53, 1.0f);
+        Arrays.fill(labels, 97, 121, 1.0f);
+        Arrays.fill(labels, 163, 183, 1.0f);
+        Arrays.fill(labels, 227, 252, 1.0f);
+
+        assertEquals(labels.length, probs.size());
 
         float error = 0.f;
 
