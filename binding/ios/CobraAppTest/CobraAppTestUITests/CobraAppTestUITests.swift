@@ -1,5 +1,5 @@
 //
-//  Copyright 2022-2023 Picovoice Inc.
+//  Copyright 2022-2025 Picovoice Inc.
 //  You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
 //  file accompanying this source.
 //  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
@@ -40,8 +40,16 @@ class CobraAppTestUITests: XCTestCase {
 
         cobra.delete()
 
-        let labels: [Float32] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                                             0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        let numSamples = (data.count - 44) / 2
+        let frameLength = Int(Cobra.frameLength)
+        let numFrames = numSamples / frameLength
+        var labels = [Float32](repeating: 0.0, count: numFrames)
+
+        (28..<53).forEach { labels[$0] = 1.0 }
+        (97..<121).forEach { labels[$0] = 1.0 }
+        (163..<183).forEach { labels[$0] = 1.0 }
+        (227..<252).forEach { labels[$0] = 1.0 }
+
         XCTAssert(labels.count == results.count)
 
         var error: Float32 = 0
