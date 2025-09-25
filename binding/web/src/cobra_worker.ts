@@ -186,7 +186,7 @@ export class CobraWorker {
             }
             default:
               // @ts-ignore
-            reject(pvStatusToException(PvStatus.RUNTIME_ERROR, `Unrecognized command: ${event.data.command}`));
+              reject(pvStatusToException(PvStatus.RUNTIME_ERROR, `Unrecognized command: ${event.data.command}`));
           }
         };
       }
