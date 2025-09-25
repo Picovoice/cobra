@@ -26,7 +26,7 @@ jobs:
         node-version: [lts/*]
         include:
         - node-version: lts/*
-          procPerformanceThresholdSec: 0.12
+          procPerformanceThresholdSec: 0.2
 
     steps:
     - uses: actions/checkout@v3

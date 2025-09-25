@@ -1,4 +1,4 @@
 node_modules
 dist
-lib/pv_cobra*.wasm
+src/lib/*
 cypress/fixtures/audio_samples/*

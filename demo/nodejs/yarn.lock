@@ -2,10 +2,10 @@
 # yarn lockfile v1
 
 
-"@picovoice/cobra-node@=2.0.4":
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/@picovoice/cobra-node/-/cobra-node-2.0.4.tgz#ae8b17e343043ba06eeb8d0fb1bcc7f018ff5957"
-  integrity sha512-A5ofpxQ1g1NiIbRcf+x+DJqjFuiecafBKeVFlzf56Utk03KXBMAnQWdco2H7C8X1h7GBu4y/XjUaD2RpZmKYnQ==
+"@picovoice/cobra-node@=2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@picovoice/cobra-node/-/cobra-node-2.1.0.tgz#be02bd6290eace6db9c367a101817855bcf0b51b"
+  integrity sha512-Xc49bnb+JXS+lzcFo0/o7fuWOb1Ia0t1L7zusicWeg5idTHIkJFyWxMn52i8DniBw+DiqLaPuHMdPg2FJ/8bxA==
 
 "@picovoice/pvrecorder-node@~1.2.6":
   version "1.2.6"

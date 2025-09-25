@@ -68,13 +68,14 @@ namespace CobraTest
         public void TestProcess()
         {
             List<float> probs = new List<float>();
+            int framecount;
             using (Cobra cobra = new Cobra(_accessKey))
             {
                 int frameLen = cobra.FrameLength;
                 string testAudioPath = Path.Combine(ROOT_DIR, "res/audio/sample.wav");
                 List<short> data = GetPcmFromFile(testAudioPath, cobra.SampleRate);
 
-                int framecount = (int)Math.Floor((float)(data.Count / frameLen));
+                framecount = (int)Math.Floor((float)(data.Count / frameLen));
                 for (int i = 0; i < framecount; i++)
                 {
                     int start = i * frameLen;
@@ -86,10 +87,12 @@ namespace CobraTest
                 }
             }
 
-            float[] labels = {
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-            };
+            float[] labels = new float[framecount];
+            Array.Fill(labels, 1.0f, 28, 53 - 28);
+            Array.Fill(labels, 1.0f, 97, 121 - 97);
+            Array.Fill(labels, 1.0f, 163, 183 - 163);
+            Array.Fill(labels, 1.0f, 227, 252 - 227);
+
             Assert.AreEqual(probs.Count, labels.Length);
 
             double error = 0;

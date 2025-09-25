@@ -3,12 +3,6 @@ import { CobraError } from "../dist/types/cobra_errors";
 
 const ACCESS_KEY: string = Cypress.env("ACCESS_KEY");
 
-const testParam = {
-  audioFile: 'sample.wav',
-  expectedLoss: 0.1,
-  labels: new Array(28).fill(0).fill(1, 10)
-};
-
 function delay(time: number) {
   return new Promise(resolve => setTimeout(resolve, time));
 }
@@ -61,8 +55,6 @@ const runInitTest = async (
 const runProcTest = async (
   instance: typeof Cobra | typeof CobraWorker,
   inputPcm: Int16Array,
-  expectedLoss: number,
-  labels: number[],
   params: {
     accessKey?: string,
   } = {}
@@ -114,8 +106,15 @@ const runProcTest = async (
 
   try {
     await runProcess();
+    const labels = new Array(numSamples).fill(0);
+
+    labels.fill(1, 28, 53);
+    labels.fill(1, 97, 121);
+    labels.fill(1, 163, 183);
+    labels.fill(1, 227, 252);
+
     const loss = lossFunc(labels, results);
-    expect(loss).to.be.lte(expectedLoss);
+    expect(loss).to.be.lte(0.1);
   } catch (e) {
     expect(e).to.be.undefined;
   }
@@ -179,12 +178,10 @@ describe("Cobra Binding", function () {
 
     it(`should be able to process (${instanceString})`, () => {
       try {
-        cy.getFramesFromFile(`audio_samples/${testParam.audioFile}`).then( async pcm => {
+        cy.getFramesFromFile("audio_samples/sample.wav").then( async pcm => {
           await runProcTest(
             instance,
             pcm,
-            testParam.expectedLoss,
-            testParam.labels,
           );
         });
       } catch (e) {
