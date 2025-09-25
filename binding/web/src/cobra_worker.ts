@@ -1,5 +1,5 @@
 /*
-  Copyright 2022-2023 Picovoice Inc.
+  Copyright 2022-2025 Picovoice Inc.
 
   You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
   file accompanying this source.
@@ -29,7 +29,9 @@ export class CobraWorker {
   private static _sdk: string = 'web';
 
   private static _wasm: string;
+  private static _wasmLib: string;
   private static _wasmSimd: string;
+  private static _wasmSimdLib: string;
 
   private constructor(
     worker: Worker,
@@ -82,12 +84,32 @@ export class CobraWorker {
   }
 
   /**
+   * Set base64 wasm lib file in text format.
+   * @param wasmLib Base64'd wasm lib file in text format.
+   */
+  public static setWasmLib(wasmLib: string): void {
+    if (this._wasmLib === undefined) {
+      this._wasmLib = wasmLib;
+    }
+  }
+
+  /**
    * Set base64 wasm file with SIMD feature.
-   * @param wasmSimd Base64'd wasm file to use to initialize wasm.
+   * @param wasmSimd Base64'd wasm SIMD file to use to initialize wasm.
    */
   public static setWasmSimd(wasmSimd: string): void {
     if (this._wasmSimd === undefined) {
       this._wasmSimd = wasmSimd;
+    }
+  }
+
+  /**
+   * Set base64 wasm file with SIMD feature in text format.
+   * @param wasmSimdLib Base64'd wasm SIMD file in text format.
+   */
+  public static setWasmSimdLib(wasmSimdLib: string): void {
+    if (this._wasmSimdLib === undefined) {
+      this._wasmSimdLib = wasmSimdLib;
     }
   }
 
@@ -132,7 +154,7 @@ export class CobraWorker {
                     voiceProbabilityCallback(ev.data.voiceProbability);
                     break;
                   case 'failed':
-                  case 'error':
+                  case 'error': {
                     const error = pvStatusToException(ev.data.status, ev.data.shortMessage, ev.data.messageStack);
                     if (processErrorCallback) {
                       processErrorCallback(error);
@@ -141,6 +163,7 @@ export class CobraWorker {
                       console.error(error);
                     }
                     break;
+                  }
                   default:
                     // @ts-ignore
                     processErrorCallback(pvStatusToException(PvStatus.RUNTIME_ERROR, `Unrecognized command: ${event.data.command}`));
@@ -156,13 +179,14 @@ export class CobraWorker {
               );
               break;
             case 'failed':
-            case 'error':
+            case 'error': {
               const error = pvStatusToException(event.data.status, event.data.shortMessage, event.data.messageStack);
               reject(error);
               break;
+            }
             default:
               // @ts-ignore
-            reject(pvStatusToException(PvStatus.RUNTIME_ERROR, `Unrecognized command: ${event.data.command}`));
+              reject(pvStatusToException(PvStatus.RUNTIME_ERROR, `Unrecognized command: ${event.data.command}`));
           }
         };
       }
@@ -172,7 +196,9 @@ export class CobraWorker {
       command: 'init',
       accessKey: accessKey,
       wasm: this._wasm,
+      wasmLib: this._wasmLib,
       wasmSimd: this._wasmSimd,
+      wasmSimdLib: this._wasmSimdLib,
       sdk: this._sdk,
       options: workerOptions,
     });
@@ -207,10 +233,11 @@ export class CobraWorker {
             resolve();
             break;
           case 'failed':
-          case 'error':
+          case 'error': {
             const error = pvStatusToException(event.data.status, event.data.shortMessage, event.data.messageStack);
             reject(error);
             break;
+          }
           default:
             // @ts-ignore
             reject(pvStatusToException(PvStatus.RUNTIME_ERROR, `Unrecognized command: ${event.data.command}`));

@@ -96,10 +96,10 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/retry/-/retry-0.4.2.tgz#1860473de7dfa1546767448f333db80cb0ff2161"
   integrity sha512-xeO57FpIu4p1Ri3Jq/EXq4ClRm86dVF2z/+kvFnyqVYRavTZmaFaUBbWCOuuTh0o/g7DSsk6kc2vrS4Vl5oPOQ==
 
-"@picovoice/cobra-web@~2.0.3":
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/@picovoice/cobra-web/-/cobra-web-2.0.3.tgz#af39bd650976c75ce3158193fcfede0656f1f880"
-  integrity sha512-Zr/FwboSzby/sSpNEQdFFCM021EeDAYOftAr9/oKjmRMFR/RzZ/jJD8cIxJO0MefV3IonYjx8+71cEDPZfM9vg==
+"@picovoice/cobra-web@~2.1.0":
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/@picovoice/cobra-web/-/cobra-web-2.1.0.tgz#553bd451330c492e500f53a6a59477da47c108de"
+  integrity sha512-ubhy3uWUZXzp44ycqE1dNqBODMfsVNKIVqLsidDTQtPkzMnB642dE26OUoaXEbDD8qgG02p34DcA94Od27ni8Q==
   dependencies:
     "@picovoice/web-utils" "=1.3.1"
 
