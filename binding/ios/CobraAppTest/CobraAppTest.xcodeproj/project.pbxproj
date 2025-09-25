@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 55;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -238,7 +238,7 @@
 			);
 			mainGroup = 1E00643F27CEDF9B006FF6E9;
 			packageReferences = (
-				E1643D4A2CE6DA14009027E6 /* XCRemoteSwiftPackageReference "cobra" */,
+				E132B4482E85DA6100BFE108 /* XCLocalSwiftPackageReference "../../../../cobra" */,
 			);
 			productRefGroup = 1E00644927CEDF9B006FF6E9 /* Products */;
 			projectDirPath = "";
@@ -644,6 +644,10 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
+		E132B4482E85DA6100BFE108 /* XCLocalSwiftPackageReference "../../../../cobra" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../../../cobra;
+		};
 		E14CDF442CE425EC00E6494C /* XCLocalSwiftPackageReference "../../../../cobra" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../../../../cobra;
