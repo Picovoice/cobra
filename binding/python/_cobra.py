@@ -1,5 +1,5 @@
 #
-# Copyright 2021-2023 Picovoice Inc.
+# Copyright 2021-2025 Picovoice Inc.
 #
 # You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
 # file accompanying this source.
@@ -123,16 +123,24 @@ class Cobra(object):
     class CCobra(Structure):
         pass
 
-    def __init__(self, access_key: str, library_path: str):
+    def __init__(self, access_key: str, device: str, library_path: str):
         """
         Constructor.
 
         :param access_key: AccessKey provided by Picovoice Console (https://console.picovoice.ai/)
+        :param device: String representation of the device (e.g., CPU or GPU) to use. If set to `best`, the most
+        suitable device is selected automatically. If set to `gpu`, the engine uses the first available GPU device. To select a specific
+        GPU device, set this argument to `gpu:${GPU_INDEX}`, where `${GPU_INDEX}` is the index of the target GPU. If set to
+        `cpu`, the engine will run on the CPU with the default number of threads. To specify the number of threads, set this
+        argument to `cpu:${NUM_THREADS}`, where `${NUM_THREADS}` is the desired number of threads.
         :param library_path: Absolute path to Cobra's dynamic library.
         """
 
         if not access_key:
             raise ValueError("access_key should be a non-empty string.")
+
+        if not isinstance(device, str) or len(device) == 0:
+            raise CobraInvalidArgumentError("`device` should be a non-empty string.")
 
         if not os.path.exists(library_path):
             raise IOError("Couldn't find Cobra's dynamic library at '%s'." % library_path)
@@ -156,6 +164,7 @@ class Cobra(object):
         init_func = library.pv_cobra_init
         init_func.argtypes = [
             c_char_p,
+            c_char_p,
             POINTER(POINTER(self.CCobra))]
         init_func.restype = self.PicovoiceStatuses
 
@@ -163,6 +172,7 @@ class Cobra(object):
 
         status = init_func(
             access_key.encode('utf-8'),
+            device.encode('utf-8'),
             byref(self._handle))
         if status is not self.PicovoiceStatuses.SUCCESS:
             raise self._PICOVOICE_STATUS_TO_EXCEPTION[status](

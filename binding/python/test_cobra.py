@@ -9,33 +9,55 @@
 # specific language governing permissions and limitations under the License.
 #
 
+import os
 import sys
 import unittest
+from parameterized import parameterized
 import math
 
 from _cobra import Cobra, CobraError
 from _util import *
 from test_util import *
 
+def get_test_devices():
+    result = list()
+
+    device = sys.argv[2] if len(sys.argv) == 3 else None
+    if device == "cpu":
+        max_threads = os.cpu_count() // 2
+        i = 1
+
+        while i <= max_threads:
+            result.append(f"cpu:{i}")
+            i *= 2
+    else:
+        result.append(device)
+
+    return result
+
+
 
 class CobraTestCase(unittest.TestCase):
 
     def setUp(self):
-        self._cobra = Cobra(access_key=sys.argv[1], library_path=pv_library_path('../..'))
+        self._access_key = sys.argv[1]
+        self._device = sys.argv[2]
 
     def tearDown(self):
-        self._cobra.delete()
+        pass
 
-    def test_process(self):
+    @parameterized.expand(get_test_devices, skip_on_empty=True)
+    def test_process(self, device):
+        cobra = Cobra(access_key=self._access_key, device=device, library_path=pv_library_path('../..'))
         audio = read_wav_file(
             os.path.join(os.path.dirname(__file__), '../../res/audio/sample.wav'),
-            self._cobra.sample_rate)
+            cobra.sample_rate)
 
-        num_frames = len(audio) // self._cobra.frame_length
+        num_frames = len(audio) // cobra.frame_length
         probs = [0.0] * num_frames
         for i in range(num_frames):
-            frame = audio[i * self._cobra.frame_length:(i + 1) * self._cobra.frame_length]
-            probs[i] = self._cobra.process(frame)
+            frame = audio[i * cobra.frame_length:(i + 1) * cobra.frame_length]
+            probs[i] = cobra.process(frame)
 
         labels = [0] * num_frames
         labels[28:53] = [1] * 25
@@ -48,14 +70,15 @@ class CobraTestCase(unittest.TestCase):
         self.assertLess(loss, 0.1)
 
     def test_version(self):
-        self.assertIsInstance(self._cobra.version, str)
+        cobra = Cobra(access_key=self._access_key, device=self._device, library_path=pv_library_path('../..'))
+        self.assertIsInstance(cobra.version, str)
 
     def test_message_stack(self):
         relative_path = '../..'
 
         error = None
         try:
-            c = Cobra(access_key="invalid", library_path=pv_library_path(relative_path))
+            c = Cobra(access_key="invalid", device=self._device, library_path=pv_library_path(relative_path))
             self.assertIsNone(c)
         except CobraError as e:
             error = e.message_stack
@@ -64,7 +87,7 @@ class CobraTestCase(unittest.TestCase):
         self.assertGreater(len(error), 0)
 
         try:
-            c = Cobra(access_key="invalid", library_path=pv_library_path(relative_path))
+            c = Cobra(access_key="invalid", device=self._device, library_path=pv_library_path(relative_path))
             self.assertIsNone(c)
         except CobraError as e:
             self.assertEqual(len(error), len(e.message_stack))
@@ -73,7 +96,7 @@ class CobraTestCase(unittest.TestCase):
     def test_process_message_stack(self):
         relative_path = '../..'
 
-        c = Cobra(access_key=sys.argv[1], library_path=pv_library_path(relative_path))
+        c = Cobra(access_key=self._access_key, device=self._device, library_path=pv_library_path(relative_path))
         test_pcm = [0] * c.frame_length
 
         address = c._handle
@@ -91,7 +114,7 @@ class CobraTestCase(unittest.TestCase):
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
-        print("usage: test_cobra.py ${AccessKey}")
+        print("usage: test_cobra.py ${AccessKey} ${Device}")
         exit(1)
 
     unittest.main(argv=sys.argv[:1])

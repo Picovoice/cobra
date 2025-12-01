@@ -9,6 +9,7 @@
 # specific language governing permissions and limitations under the License.
 #
 
+import os
 import sys
 import time
 import unittest
@@ -20,11 +21,12 @@ from test_util import *
 
 class CobraPerformanceTestCase(unittest.TestCase):
     ACCESS_KEY = sys.argv[1]
-    NUM_TEST_ITERATIONS = int(sys.argv[2])
-    PERFORMANCE_THRESHOLD_SEC = float(sys.argv[3])
+    DEVICE = sys.argv[2]
+    NUM_TEST_ITERATIONS = int(sys.argv[3])
+    PERFORMANCE_THRESHOLD_SEC = float(sys.argv[4])
 
     def test_performance(self):
-        cobra = Cobra(access_key=sys.argv[1], library_path=pv_library_path('../..'))
+        cobra = Cobra(access_key=self.ACCESS_KEY, device=self.DEVICE, library_path=pv_library_path('../..'))
         audio = read_wav_file(
             os.path.join(os.path.dirname(__file__), '../../res/audio/sample.wav'),
             cobra.sample_rate)
@@ -51,8 +53,8 @@ class CobraPerformanceTestCase(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 4:
-        print("usage: test_cobra_perf.py ${ACCESS_KEY} ${NUM_TEST_INTERVALS} ${PERFORMANCE_THRESHOLD_SEC}")
+    if len(sys.argv) != 5:
+        print("usage: test_cobra_perf.py ${ACCESS_KEY} ${DEVICE} ${NUM_TEST_INTERVALS} ${PERFORMANCE_THRESHOLD_SEC}")
         exit(1)
 
     unittest.main(argv=sys.argv[:1])
