@@ -1,5 +1,5 @@
 /*
-    Copyright 2021-2023 Picovoice Inc.
+    Copyright 2021-2025 Picovoice Inc.
     You may not use this file except in compliance with the license. A copy of the license is
     located in the "LICENSE" file accompanying this source.
     Unless required by applicable law or agreed to in writing, software distributed under the
@@ -37,11 +37,18 @@ public class Cobra {
      * Constructor.
      *
      * @param accessKey AccessKey obtained from Picovoice Console
+     * @param device String representation of the device (e.g., CPU or GPU) to use for inference.
+     *               If set to `best`, the most suitable device is selected automatically. If set to `gpu`,
+     *               the engine uses the first available GPU device. To select a specific GPU device, set this
+     *               argument to `gpu:${GPU_INDEX}`, where `${GPU_INDEX}` is the index of the target GPU. If
+     *               set to `cpu`, the engine will run on the CPU with the default number of threads. To specify
+     *               the number of threads, set this argument to `cpu:${NUM_THREADS}`, where `${NUM_THREADS}`
+     *               is the desired number of threads.
      * @throws CobraException if there is an error while initializing Cobra.
      */
-    public Cobra(String accessKey) throws CobraException {
+    public Cobra(String accessKey, String device) throws CobraException {
         CobraNative.setSdk(Cobra._sdk);
-        handle = CobraNative.init(accessKey);
+        handle = CobraNative.init(accessKey, device);
     }
 
     /**
@@ -105,6 +112,17 @@ public class Cobra {
      */
     public String getVersion() {
         return CobraNative.getVersion();
+    }
+
+    /**
+     * Lists all available devices that Cobra can use for inference.
+     * Each entry in the list can be used as the `device` argument when initializing Cobra.
+     *
+     * @return Array of all available devices that Cobra can be used for inference.
+     * @throws CobraException if getting available devices fails.
+     */
+    public static String[] getAvailableDevices() throws CobraException {
+        return CobraNative.listHardwareDevices();
     }
 
 }

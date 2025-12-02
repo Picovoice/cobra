@@ -67,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void runTest() {
         String accessKey = getApplicationContext().getString(R.string.pvTestingAccessKey);
+        String device = getApplicationContext().getString(R.string.pvTestingDevice);
 
         ArrayList<TestResult> results = new ArrayList<>();
 
@@ -74,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         result.testName = "Test Init";
         Cobra cobra = null;
         try {
-            cobra = new Cobra(accessKey);
+            cobra = new Cobra(accessKey, device);
             result.success = true;
         } catch (CobraException e) {
             result.success = false;
@@ -109,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
         result = new TestResult();
         result.testName = "Test Exception";
         try {
-            new Cobra("");
+            new Cobra("", "");
             result.success = false;
             result.errorMessage = "Init should have throw an exception";
         } catch (CobraException e) {
