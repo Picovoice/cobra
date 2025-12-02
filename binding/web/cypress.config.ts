@@ -12,4 +12,12 @@ export default defineConfig({
     video: false,
     screenshotOnRunFailure: false
   },
+  setupNodeEvents(on, config) {
+    on('before:browser:launch', (browser, launchOptions) => {
+      if (browser.name === 'chrome') {
+        launchOptions.args.push('--enable-features=SharedArrayBuffer');
+      }
+      return launchOptions;
+    });
+  },
 });
