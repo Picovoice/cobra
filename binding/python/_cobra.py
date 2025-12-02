@@ -196,6 +196,14 @@ class Cobra(object):
 
         self._sample_rate = library.pv_sample_rate()
 
+        self._list_hardware_devices_func = library.pv_cobra_list_hardware_devices
+        self._list_hardware_devices_func.argtypes = [POINTER(POINTER(c_char_p)), POINTER(c_int)]
+        self._list_hardware_devices_func.restype = self.PicovoiceStatuses
+
+        self._free_hardware_devices_func = library.pv_cobra_free_hardware_devices
+        self._free_hardware_devices_func.argtypes = [POINTER(c_char_p), c_int]
+        self._free_hardware_devices_func.restype = None
+
     def delete(self):
         """Releases resources acquired by Cobra."""
 
@@ -255,6 +263,27 @@ class Cobra(object):
         self._free_error_stack_func(message_stack_ref)
 
         return message_stack
+
+    def list_hardware_devices(self) -> Sequence[str]:
+        """
+        Lists all available devices that Cobra can use for inference.
+        Each entry in the list can be used as the `device` argument when initializing Cobra.
+
+        :return: Array of all available devices that Cobra can be used for inference.
+        """
+        device_list_ref = POINTER(c_char_p)()
+        device_list_size = c_int()
+        status = self._list_hardware_devices_func(byref(device_list_ref), byref(device_list_size))
+        if status is not self.PicovoiceStatuses.SUCCESS:
+            raise self._PICOVOICE_STATUS_TO_EXCEPTION[status](message='Unable to list hardware devices')
+
+        device_list = list()
+        for i in range(device_list_size.value):
+            device_list.append(device_list_ref[i].decode('utf-8'))
+
+        self._free_hardware_devices_func(device_list_ref, device_list_size)
+
+        return device_list
 
 
 __all__ = [
