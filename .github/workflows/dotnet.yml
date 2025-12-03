@@ -43,19 +43,13 @@ jobs:
           - dotnet-version: 2.1.818
             binding-framework: netstandard2.0
             test-framework: netcoreapp2.1
-          - dotnet-version: 3.0.103
-            binding-framework: netcoreapp3.0
-            test-framework: netcoreapp3.0
-          - dotnet-version: 3.1.426
-            binding-framework: netcoreapp3.0
-            test-framework: netcoreapp3.1
-          - dotnet-version: 5.0.408
-            binding-framework: netcoreapp3.0
-            test-framework: net5.0
           - dotnet-version: 6.0.x
             binding-framework: net6.0
             test-framework: net6.0
           - dotnet-version: 8.0.x
+            binding-framework: net8.0
+            test-framework: net8.0
+          - dotnet-version: 10.0.x
             binding-framework: net8.0
             test-framework: net8.0
         exclude:

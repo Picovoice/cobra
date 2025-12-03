@@ -24,6 +24,7 @@ namespace CobraTest
     public class MainTest
     {
         private static string _accessKey;
+        private static string _device;
         private static readonly string ROOT_DIR = Path.Combine(
             Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location),
             "../../../../../..");
@@ -33,6 +34,7 @@ namespace CobraTest
         public static void ClassInitialize(TestContext _)
         {
             _accessKey = Environment.GetEnvironmentVariable("ACCESS_KEY");
+            _device = Environment.GetEnvironmentVariable("DEVICE") ?? "cpu:1";
         }
 
         private static List<short> GetPcmFromFile(string audioFilePath, int expectedSampleRate)
@@ -56,7 +58,7 @@ namespace CobraTest
         [TestMethod]
         public void TestInit()
         {
-            using (Cobra cobra = new Cobra(_accessKey))
+            using (Cobra cobra = new Cobra(_accessKey, _device))
             {
                 Assert.IsFalse(string.IsNullOrWhiteSpace(cobra?.Version), "Cobra did not return a valid version string.");
                 Assert.IsTrue(cobra.SampleRate > 0, "Cobra did not return a valid sample rate number.");
@@ -65,11 +67,22 @@ namespace CobraTest
         }
 
         [TestMethod]
+        public void TestListHardwareDevices()
+        {
+            using (Cobra cobra = new Cobra(_accessKey, _device))
+            {
+                string[] devices = cobra.ListHardwareDevices();
+                Assert.IsNotNull(devices, "ListHardwareDevices returned null.");
+                Assert.IsTrue(devices.Length > 0, "ListHardwareDevices returned an empty array.");
+            }
+        }
+
+        [TestMethod]
         public void TestProcess()
         {
             List<float> probs = new List<float>();
             int framecount;
-            using (Cobra cobra = new Cobra(_accessKey))
+            using (Cobra cobra = new Cobra(_accessKey, _device))
             {
                 int frameLen = cobra.FrameLength;
                 string testAudioPath = Path.Combine(ROOT_DIR, "res/audio/sample.wav");
@@ -113,7 +126,7 @@ namespace CobraTest
 
             try
             {
-                c = new Cobra("invalid");
+                c = new Cobra("invalid", _device);
                 Assert.IsNull(c);
                 c.Dispose();
             }
@@ -127,7 +140,7 @@ namespace CobraTest
 
             try
             {
-                c = new Cobra("invalid");
+                c = new Cobra("invalid", _device);
                 Assert.IsNull(c);
                 c.Dispose();
             }
@@ -143,7 +156,7 @@ namespace CobraTest
         [TestMethod]
         public void TestProcessMessageStack()
         {
-            Cobra c = new Cobra(_accessKey);
+            Cobra c = new Cobra(_accessKey, _device);
             short[] testPcm = new short[c.FrameLength];
 
             var obj = typeof(Cobra).GetField("_libraryPointer", BindingFlags.NonPublic | BindingFlags.Instance);
