@@ -39,6 +39,7 @@ import ai.picovoice.cobra.CobraInvalidArgumentException;
 
 public class MainActivity extends AppCompatActivity {
     private static final String ACCESS_KEY = "${YOUR_ACCESS_KEY_HERE}";
+    private static final String DEVICE = "best";
 
     private final VoiceProcessor voiceProcessor = VoiceProcessor.getInstance();
 
@@ -72,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         };
 
         try {
-            cobra = new Cobra(ACCESS_KEY);
+            cobra = new Cobra(ACCESS_KEY, DEVICE);
         } catch (CobraInvalidArgumentException e) {
             onCobraInitError(e.getMessage());
         } catch (CobraActivationException e) {
