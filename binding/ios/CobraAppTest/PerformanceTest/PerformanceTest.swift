@@ -14,6 +14,7 @@ import Cobra
 
 class PerformanceTest: XCTestCase {
     let accessKey: String = "{TESTING_ACCESS_KEY_HERE}"
+    let device: String = "{TESTING_DEVICE_HERE}"
     let iterationString: String = "{NUM_TEST_ITERATIONS}"
     let thresholdString: String = "{PERFORMANCE_THRESHOLD_SEC}"
 
@@ -29,7 +30,7 @@ class PerformanceTest: XCTestCase {
         let performanceThresholdSec = Double(thresholdString)
         try XCTSkipIf(performanceThresholdSec == nil)
 
-        let cobra: Cobra = try Cobra(accessKey: accessKey)
+        let cobra: Cobra = try Cobra(accessKey: accessKey, device: device)
 
         let bundle = Bundle(for: type(of: self))
         let fileURL: URL = bundle.url(forResource: "sample", withExtension: "wav")!

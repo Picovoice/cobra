@@ -1,5 +1,5 @@
 //
-//  Copyright 2021-2024 Picovoice Inc.
+//  Copyright 2021-2025 Picovoice Inc.
 //  You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
 //  file accompanying this source.
 //  Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on
@@ -39,11 +39,21 @@ public class Cobra {
     ///
     /// - Parameters:
     ///   - accessKey: AccessKey obtained from the Picovoice Console (https://console.picovoice.ai/)
+    ///   - device: String representation of the device (e.g., CPU or GPU) to use. If set to `best`, the most
+    ///     suitable device is selected automatically. If set to `gpu`, the engine uses the first available GPU device. To select a specific
+    ///     GPU device, set this argument to `gpu:${GPU_INDEX}`, where `${GPU_INDEX}` is the index of the target GPU. If set to
+    ///     `cpu`, the engine will run on the CPU with the default number of threads. To specify the number of threads, set this
+    ///     argument to `cpu:${NUM_THREADS}`, where `${NUM_THREADS}` is the desired number of threads.
     /// - Throws: CobraError
-    public init(accessKey: String) throws {
+    public init(accessKey: String, device: String? = nil) throws {
         pv_set_sdk(Cobra.sdk)
 
-        let status = pv_cobra_init(accessKey, &handle)
+        var deviceArg = device
+        if device == nil {
+            deviceArg = "best"
+        }
+
+        let status = pv_cobra_init(accessKey, deviceArg, &handle)
         if status != PV_STATUS_SUCCESS {
             let messageStack = try getMessageStack()
             throw pvStatusToCobraError(status, "Cobra init failed", messageStack)
@@ -139,5 +149,29 @@ public class Cobra {
         pv_free_error_stack(messageStackRef)
 
         return messageStack
+    }
+    
+    /// Lists all available devices that Cobra can use for inference.
+    /// Entries in the list can be used as the `device` argument when initializing Cobra.
+    ///
+    /// - Throws: CobraError
+    /// - Returns: Array of available devices that Cobra can be used for inference.
+    public func getAvailableDevices() throws -> [String] {
+        var cHardwareDevices: UnsafeMutablePointer<UnsafeMutablePointer<Int8>?>?
+        var numHardwareDevices: Int32 = 0
+        let status = pv_cobra_list_hardware_devices(&cHardwareDevices, &numHardwareDevices)
+        if status != PV_STATUS_SUCCESS {
+            let messageStack = try getMessageStack()
+            throw pvStatusToCobraError(status, "Cobra getAvailableDevices failed", messageStack)
+        }
+
+        var hardwareDevices: [String] = []
+        for i in 0..<numHardwareDevices {
+            hardwareDevices.append(String(cString: cHardwareDevices!.advanced(by: Int(i)).pointee!))
+        }
+
+        pv_cobra_free_hardware_devices(cHardwareDevices, numHardwareDevices)
+
+        return hardwareDevices
     }
 }
