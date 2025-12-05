@@ -29,14 +29,16 @@ namespace CobraDemo
         /// Creates an input audio stream, instantiates an instance of the Cobra engine, and detects voice activity in the audio stream.
         /// </summary>
         /// <param name="accessKey">AccessKey obtained from Picovoice Console (https://console.picovoice.ai/).</param>
+        /// <param name="device">Device to run demo.</param>
         /// <param name="audioDeviceIndex">Optional argument. If provided, audio is recorded from this input device. Otherwise, the default audio input device is used.</param>
         /// <param name="outputPath">Optional argument. If provided, recorded audio will be stored in this location at the end of the run.</param>
         public static void RunDemo(
             string accessKey,
+            string device,
             int audioDeviceIndex,
             string outputPath = null)
         {
-            using (Cobra cobra = new Cobra(accessKey))
+            using (Cobra cobra = new Cobra(accessKey, device))
             {
                 using (PvRecorder recorder = PvRecorder.Create(frameLength: cobra.FrameLength, deviceIndex: audioDeviceIndex))
                 {
@@ -151,6 +153,7 @@ namespace CobraDemo
             }
 
             string accessKey = null;
+            string device = "cpu:1";
             int audioDeviceIndex = -1;
             string outputPath = null;
             bool showAudioDevices = false;
@@ -164,6 +167,13 @@ namespace CobraDemo
                     if (++argIndex < args.Length)
                     {
                         accessKey = args[argIndex++];
+                    }
+                }
+                else if (args[argIndex] == "--device")
+                {
+                    if (++argIndex < args.Length)
+                    {
+                        device = args[argIndex++];
                     }
                 }
                 else if (args[argIndex] == "--show_audio_devices")
@@ -217,7 +227,7 @@ namespace CobraDemo
                 throw new ArgumentNullException("access_key");
             }
 
-            RunDemo(accessKey, audioDeviceIndex, outputPath);
+            RunDemo(accessKey, device, audioDeviceIndex, outputPath);
         }
 
         private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -228,6 +238,7 @@ namespace CobraDemo
 
         private static readonly string HELP_STR = "Available options: \n " +
             $"\t--access_key (required): AccessKey obtained from Picovoice Console (https://console.picovoice.ai/)\n" +
+            $"\t--device: device to run demo\n" +
             "\t--audio_device_index: Index of input audio device.\n" +
             "\t--output_path: Absolute path to recorded audio for debugging.\n" +
             "\t--show_audio_devices: Print available recording devices.\n";
