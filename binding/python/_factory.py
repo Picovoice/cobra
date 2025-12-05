@@ -17,7 +17,7 @@ from ._util import *
 
 def create(
         access_key: str,
-        device: Optional[str] = None,
+        device: Optional[str] = 'best',
         library_path: Optional[str] = None) -> Cobra:
     """
     Factory method for Cobra voice activity detection (VAD) engine.
@@ -36,7 +36,7 @@ def create(
         library_path = pv_library_path('')
 
     if device is None:
-        device = "cpu:1"
+        device = "best"
 
     return Cobra(access_key=access_key, device=device, library_path=library_path)
 

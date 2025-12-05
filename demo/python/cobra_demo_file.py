@@ -53,6 +53,10 @@ def main():
         required=True)
 
     parser.add_argument(
+        '--device',
+        help='Device to run demo')
+
+    parser.add_argument(
         '--threshold',
         help="Threshold for the probability of voice activity",
         type=float,
@@ -61,7 +65,7 @@ def main():
     args = parser.parse_args()
 
     try:
-        cobra = pvcobra.create(access_key=args.access_key, library_path=args.library_path)
+        cobra = pvcobra.create(access_key=args.access_key, device=args.device, library_path=args.library_path)
     except pvcobra.CobraInvalidArgumentError as e:
         print(e)
         raise e

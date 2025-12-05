@@ -28,6 +28,7 @@ class CobraDemo(Thread):
             self,
             library_path,
             access_key,
+            device,
             output_path=None,
             input_device_index=None):
         """
@@ -35,6 +36,7 @@ class CobraDemo(Thread):
 
         :param library_path: Absolute path to Cobra's dynamic library.
         :param access_key AccessKey obtained from Picovoice Console.
+        :param device: Device to run the demo on.
         :param output_path: If provided recorded audio will be stored in this location at the end of the run.
         :param input_device_index: Optional argument. If provided, audio is recorded from this input device. Otherwise,
         the default audio input device is used.
@@ -44,6 +46,7 @@ class CobraDemo(Thread):
 
         self._library_path = library_path
         self._access_key = access_key
+        self._device = device
         self._input_device_index = input_device_index
         self._output_path = output_path
 
@@ -57,7 +60,7 @@ class CobraDemo(Thread):
         wav_file = None
 
         try:
-            cobra = pvcobra.create(access_key=self._access_key, library_path=self._library_path)
+            cobra = pvcobra.create(access_key=self._access_key, device=self._device, library_path=self._library_path)
         except pvcobra.CobraInvalidArgumentError as e:
             print(e)
             raise e
@@ -129,6 +132,10 @@ def main():
         help='AccessKey provided by Picovoice Console (https://console.picovoice.ai/)')
 
     parser.add_argument(
+        '--device',
+        help='Device to run demo')
+
+    parser.add_argument(
         '--library_path',
         help='Absolute path to dynamic library. Default: using the library provided by `pvcobra`')
 
@@ -149,6 +156,7 @@ def main():
             CobraDemo(
                 library_path=args.library_path,
                 access_key=args.access_key,
+                device=args.device,
                 output_path=args.output_path,
                 input_device_index=args.audio_device_index).run()
 
