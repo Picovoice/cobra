@@ -27,6 +27,10 @@ program
     "AccessKey obtain from the Picovoice Console (https://console.picovoice.ai/)"
   )
   .option(
+    "-d, --device <string>",
+    "device to run demo"
+  )
+  .option(
     "-l, --library_file_path <string>",
     "absolute path to cobra dynamic library"
   )
@@ -47,6 +51,7 @@ let isInterrupted = false;
 
 async function micDemo() {
   let accessKey = program["access_key"];
+  let device = program["device"];
   let libraryFilePath = program["library_file_path"];
   let audioDeviceIndex = program["audio_device_index"];
   let showAudioDevices = program["show_audio_devices"];
@@ -66,7 +71,7 @@ async function micDemo() {
     process.exit();
   }
 
-  let engineInstance = new Cobra(accessKey, {
+  let engineInstance = new Cobra(accessKey, device, {
     libraryPath: libraryFilePath,
   });
 

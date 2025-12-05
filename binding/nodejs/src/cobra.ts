@@ -61,7 +61,7 @@ export default class Cobra {
    * @param options Optional configuration arguments.
    * @param {string} options.libraryPath the path to the Cobra library (.node extension)
    */
-  constructor(accessKey: string, device: string, options: CobraOptions = {}) {
+  constructor(accessKey: string, device: string = 'best', options: CobraOptions = {}) {
     assert(typeof accessKey === 'string');
     if (
       accessKey === null ||

@@ -29,6 +29,10 @@ program
   )
   .requiredOption("-i, --input_audio_file_path <string>", "input wav file")
   .option(
+    "-d, --device <string>",
+    "device to run demo"
+  )
+  .option(
     "-l, --library_file_path <string>",
     "absolute path to cobra dynamic library"
   )
@@ -45,10 +49,11 @@ program.parse(process.argv);
 function fileDemo() {
   let audioPath = program["input_audio_file_path"];
   let accessKey = program["access_key"];
+  let device = program["device"];
   let libraryFilePath = program["library_file_path"];
   let threshold = program["threshold"] ?? 0.8;
 
-  let engineInstance = new Cobra(accessKey, {
+  let engineInstance = new Cobra(accessKey, device, {
     libraryPath: libraryFilePath,
   });
 
