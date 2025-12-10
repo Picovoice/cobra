@@ -113,7 +113,7 @@ class CobraTestCase(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 2:
+    if len(sys.argv) != 3:
         print("usage: test_cobra.py ${AccessKey} ${Device}")
         exit(1)
 

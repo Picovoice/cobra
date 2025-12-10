@@ -26,6 +26,7 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
+        device: [ cpu:1, cpu ]
         python-version: ['3.9', '3.10', '3.11', '3.12', '3.13', '3.14']
 
     steps:
@@ -39,24 +40,37 @@ jobs:
     - name: Pre-build dependencies
       run: python -m pip install --upgrade pip
 
+# ************** REMOVE AFTER RELEASE ********************
+    - name: Build binding
+      run: |
+        pip install setuptools && pip install wheel && cd ../../binding/python && python setup.py sdist bdist_wheel && pip install dist/pvcobra-3.0.0-py3-none-any.whl
+# ********************************************************
+
     - name: Install dependencies
       run: pip install -r requirements.txt
 
     - name: Test
-      run: python cobra_demo_file.py --access_key ${{secrets.PV_VALID_ACCESS_KEY}} --input_wav_path ../../res/audio/sample.wav
+      run: python cobra_demo_file.py --access_key ${{secrets.PV_VALID_ACCESS_KEY}} --device ${{ matrix.device }} --input_wav_path ../../res/audio/sample.wav
 
   build-self-hosted:
     runs-on: ${{ matrix.machine }}
 
     strategy:
       matrix:
+        device: [ best ]
         machine: [rpi3-32, rpi3-64, rpi4-32, rpi4-64, rpi5-64, pv-windows-arm64]
 
     steps:
     - uses: actions/checkout@v3
 
+# ************** REMOVE AFTER RELEASE ********************
+    - name: Build binding
+      run: |
+        pip3 install setuptools && pip3 install wheel && cd ../../binding/python && python3 setup.py sdist bdist_wheel && pip3 install dist/pvcobra-3.0.0-py3-none-any.whl
+# ********************************************************
+
     - name: Install dependencies
       run: pip3 install -r requirements.txt
 
     - name: Test
-      run: python3 cobra_demo_file.py --access_key ${{secrets.PV_VALID_ACCESS_KEY}} --input_wav_path ../../res/audio/sample.wav
+      run: python3 cobra_demo_file.py --access_key ${{secrets.PV_VALID_ACCESS_KEY}} --device ${{ matrix.device }} --input_wav_path ../../res/audio/sample.wav
