@@ -19,6 +19,7 @@ from _cobra import Cobra, CobraError
 from _util import *
 from test_util import *
 
+
 def get_test_devices():
     result = list()
 
@@ -34,7 +35,6 @@ def get_test_devices():
         result.append(device)
 
     return result
-
 
 
 class CobraTestCase(unittest.TestCase):
