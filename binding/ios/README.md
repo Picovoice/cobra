@@ -6,7 +6,7 @@ Cobra is a highly accurate and lightweight voice activity detection (VAD) engine
 
 ## Compatibility
 
-- iOS 13.0 or higher
+- iOS 16.0 or higher
 
 ## Installation
 
