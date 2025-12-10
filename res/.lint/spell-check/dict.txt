@@ -35,6 +35,7 @@ LPWSTR
 Makefiles
 micdemo
 microcontroller
+microcontrollers
 picovoice
 podfile
 Prefs
