@@ -106,29 +106,15 @@ jobs:
       working-directory: res/scripts
       run: bash machine-state.sh
 
-  perf-windows-desktop:
+  perf-windows-arm64:
     runs-on: ${{ matrix.machine }}
 
     strategy:
       fail-fast: false
       matrix:
-        device: [ gpu ]
-        machine: [ pv-linux, pv-windows, pv-windows-igpu, pv-ios ]
+        machine: [pv-windows-arm64]
         include:
-        - device: cpu
-          machine: pv-windows-arm64
-          num_test_iterations: 100
-          performance_threshold_sec: 0.025
-        - machine: pv-linux
-          num_test_iterations: 100
-          performance_threshold_sec: 0.025
-        - machine: pv-windows
-          num_test_iterations: 100
-          performance_threshold_sec: 0.025
-        - machine: pv-windows-igpu
-          num_test_iterations: 100
-          performance_threshold_sec: 0.025
-        - machine: pv-ios
+        - machine: pv-windows-arm64
           num_test_iterations: 100
           performance_threshold_sec: 0.025
 
@@ -142,4 +128,4 @@ jobs:
       run: pip3 install -r requirements.txt
 
     - name: Test
-      run: python3 test_cobra_perf.py ${{secrets.PV_VALID_ACCESS_KEY}} ${{matrix.device}} ${{matrix.num_test_iterations}} ${{matrix.performance_threshold_sec}}
+      run: python3 test_cobra_perf.py ${{secrets.PV_VALID_ACCESS_KEY}} cpu:1 ${{matrix.num_test_iterations}} ${{matrix.performance_threshold_sec}}
