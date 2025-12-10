@@ -96,7 +96,7 @@ class CobraAppTestUITests: XCTestCase {
             XCTAssert("\(error.localizedDescription)".count > 0)
         }
     }
-    
+
     func testGetAvailableDevices() throws {
         let cobra: Cobra = try Cobra(accessKey: accessKey, device: device)
         let devices = try cobra.getAvailableDevices()
