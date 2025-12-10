@@ -238,7 +238,7 @@ export class Cobra {
     if (!isAccessKeyValid(accessKey)) {
       throw new CobraErrors.CobraInvalidArgumentError('Invalid AccessKey');
     }
-        
+
     let { device } = options;
 
     const isSimd = await simd();
@@ -259,7 +259,6 @@ export class Cobra {
     return new Promise<Cobra>((resolve, reject) => {
       Cobra._cobraMutex
         .runExclusive(async () => {
-          const isSimd = await simd();
           const wasmOutput = await Cobra.initWasm(
             accessKey.trim(),
             (device) ? device : "best",
