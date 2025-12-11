@@ -69,7 +69,7 @@ public class BaseTest {
         Cobra cobra = new Cobra.Builder()
                 .setAccessKey(accessKey)
                 .setDevice(device)
-                .build(getApplicationContext());
+                .build(appContext);
 
         File testAudio = new File(getAudioFilepath("sample.wav"));
 
@@ -125,7 +125,7 @@ public class BaseTest {
         Cobra cobra = new Cobra.Builder()
                 .setAccessKey(accessKey)
                 .setDevice(device)
-                .build(getApplicationContext());
+                .build(appContext);
         assertTrue(cobra.getVersion().length() > 0);
     }
 
@@ -136,7 +136,7 @@ public class BaseTest {
             Cobra cobra = new Cobra.Builder()
                     .setAccessKey(accessKey)
                     .setDevice("invalid_device")
-                    .build(getApplicationContext());
+                    .build(appContext);
             fail("CobraException expected due to invalid device.");
         } catch (CobraException e) {
             didFail = true;
@@ -160,7 +160,7 @@ public class BaseTest {
             Cobra cobra = new Cobra.Builder()
                     .setAccessKey("invalid")
                     .setDevice(device)
-                    .build(getApplicationContext());
+                    .build(appContext);
         } catch (CobraException e) {
             error = e.getMessageStack();
         }
@@ -172,7 +172,7 @@ public class BaseTest {
             Cobra cobra = new Cobra.Builder()
                     .setAccessKey("invalid")
                     .setDevice(device)
-                    .build(getApplicationContext());
+                    .build(appContext);
         } catch (CobraException e) {
             for (int i = 0; i < error.length; i++) {
                 assertEquals(e.getMessageStack()[i], error[i]);
