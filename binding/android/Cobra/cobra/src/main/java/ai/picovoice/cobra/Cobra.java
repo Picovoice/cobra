@@ -164,11 +164,10 @@ public class Cobra {
         /**
          * Validates properties and creates an instance of the Cobra voice activity detection engine.
          *
-         * @param context Android application context
          * @return An instance of Cobra Engine
          * @throws CobraException if there is an error while initializing Cobra.
          */
-        public Cobra build(Context context) throws CobraException {
+        public Cobra build() throws CobraException {
             if (accessKey == null || this.accessKey.equals("")) {
                 throw new CobraInvalidArgumentException("No AccessKey was provided to Cobra");
             }
