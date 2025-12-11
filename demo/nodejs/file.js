@@ -23,11 +23,11 @@ const {
 } = require("@picovoice/cobra-node");
 
 program
-  .requiredOption(
+  .option(
     "-a, --access_key <string>",
     "AccessKey obtain from the Picovoice Console (https://console.picovoice.ai/)"
   )
-  .requiredOption("-i, --input_audio_file_path <string>", "input wav file")
+  .option("-i, --input_audio_file_path <string>", "input wav file")
   .option(
     "-d, --device <string>",
     "Device to run inference on (`best`, `cpu:{num_threads}` or `gpu:{gpu_index}`). Default: selects best device"

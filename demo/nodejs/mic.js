@@ -22,7 +22,7 @@ const {
 } = require("@picovoice/cobra-node");
 
 program
-  .requiredOption(
+  .option(
     "-a, --access_key <string>",
     "AccessKey obtain from the Picovoice Console (https://console.picovoice.ai/)"
   )
@@ -76,9 +76,9 @@ async function micDemo() {
     process.exit();
   }
 
-  if (accessKey === undefined || audioPath === undefined) {
+  if (accessKey === undefined) {
     console.error(
-      "`--access_key` and `--input_audio_file_path` are required arguments"
+      "`--access_key` is a required argument"
     );
     return;
   }
