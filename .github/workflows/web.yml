@@ -56,4 +56,4 @@ jobs:
         run: yarn setup-test
 
       - name: Test
-        run: yarn test --env ACCESS_KEY=${{secrets.PV_VALID_ACCESS_KEY}}, DEVICE=${{matrix.device}}
+        run: yarn test --env ACCESS_KEY=${{secrets.PV_VALID_ACCESS_KEY}},DEVICE=${{matrix.device}}
