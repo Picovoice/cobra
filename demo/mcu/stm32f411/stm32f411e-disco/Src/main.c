@@ -95,7 +95,17 @@ int main(void) {
             const pv_status_t status = pv_cobra_process(handle, buffer, &is_voiced);
             if (status != PV_STATUS_SUCCESS) {
                 printf("Cobra process failed with '%s'\n", pv_status_to_string(status));
-                error_handler();
+
+                error_status = pv_get_error_stack(&message_stack, &message_stack_depth);
+                if (error_status != PV_STATUS_SUCCESS) {
+                    printf("Unable to get Cobra error state with '%s':\n", pv_status_to_string(error_status));
+                    error_handler();
+                }
+
+                print_error_message(message_stack, message_stack_depth);
+                pv_free_error_stack(message_stack);
+
+               error_handler();
             }
             if (is_voiced > SENSITIVITY) {
                 BSP_LED_On(LED3);

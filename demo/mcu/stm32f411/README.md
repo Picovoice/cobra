@@ -32,7 +32,7 @@ To compile and run the demo project on a STM32f411 discovery board, perform the 
 5. Replace `ACCESS_KEY` in both `main.c` with your AccessKey obtained
    from [Picovoice Console](https://console.picovoice.ai/)
 6. Click `Project` > `Build Project`
-7. Connect the board to the computer and press `Run` > `Run`, the LED lights up when Cobra detects voice activities
+7. Connect the board to the computer and press `Run` > `Run`, the LED lights up when Cobra detects voice activity
 <!-- markdown-link-check-disable -->
 > :warning: `printf()` uses the SWO connector and the trace port 0. For more information, refer
 >
