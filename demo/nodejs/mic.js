@@ -42,7 +42,7 @@ program
   )
   .option(
     "-z, --show_inference_devices",
-    "Print devices that are available to run Porcupine inference.",
+    "Print devices that are available to run Cobra inference.",
     false)
   .option("-s, --show_audio_devices", "show the list of available devices");
 
@@ -72,7 +72,7 @@ async function micDemo() {
 
   const showInferenceDevices = program["show_inference_devices"];
   if (showInferenceDevices) {
-    console.log(Porcupine.listAvailableDevices().join('\n'));
+    console.log(Cobra.listHardwareDevices().join('\n'));
     process.exit();
   }
 

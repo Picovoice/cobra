@@ -42,7 +42,7 @@ program
   )
   .option(
     "-z, --show_inference_devices",
-    "Print devices that are available to run Porcupine inference.",
+    "Print devices that are available to run Cobra inference.",
     false);
 
 if (process.argv.length < 2) {
@@ -59,7 +59,7 @@ function fileDemo() {
 
   const showInferenceDevices = program["show_inference_devices"];
   if (showInferenceDevices) {
-    console.log(Porcupine.listAvailableDevices().join('\n'));
+    console.log(Cobra.listHardwareDevices().join('\n'));
     process.exit();
   }
 

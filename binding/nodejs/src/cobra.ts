@@ -29,7 +29,7 @@ type VoiceProbabilityAndStatus = {
   is_voiced: number;
   status: PvStatus;
 };
-type HardwareDevicesAndStatus = {
+type CobraHardwareDevicesAndStatus = {
   hardware_devices: string[];
   num_hardware_devices: number;
   status: PvStatus;
@@ -190,28 +190,31 @@ export default class Cobra {
    *
    * @returns {string[]} Array of all available devices that Cobra can use for inference.
    */
-  listHardwareDevices(): string[] {
-    if (
-      this._handle === 0 ||
-      this._handle === null ||
-      this._handle === undefined
-    ) {
-      throw new CobraInvalidStateError('Cobra is not initialized');
-    }
+  static listHardwareDevices(options: CobraOptions = {}): string[] {
+    const {
+      libraryPath = getSystemLibraryPath(),
+    } = options;
 
-    let hardwareDevicesAndStatus: HardwareDevicesAndStatus | null = null;
+    const pvCobra = require(libraryPath); // eslint-disable-line
+
+    let cobraHardwareDevicesAndStatus: CobraHardwareDevicesAndStatus | null = null;
     try {
-      hardwareDevicesAndStatus = this._pvCobra.list_hardware_devices();
+      cobraHardwareDevicesAndStatus = pvCobra.list_hardware_devices();
     } catch (err: any) {
-      pvStatusToException(PvStatus[err.code as keyof typeof PvStatus], err);
+      pvStatusToException(<PvStatus>err.code, err);
     }
 
-    const status = hardwareDevicesAndStatus!.status;
+    const status = cobraHardwareDevicesAndStatus!.status;
     if (status !== PvStatus.SUCCESS) {
-      this.handlePvStatus(status, 'Cobra failed to list hardware devices');
+      const errorObject = pvCobra.get_error_stack();
+      if (errorObject.status === PvStatus.SUCCESS) {
+        pvStatusToException(status, 'Cobra failed to get available devices', errorObject.message_stack);
+      } else {
+        pvStatusToException(status, 'Unable to get Cobra error state');
+      }
     }
 
-    return hardwareDevicesAndStatus!.hardware_devices;
+    return cobraHardwareDevicesAndStatus!.hardware_devices;
   }
 
   private handlePvStatus(status: PvStatus, message: string): void {
