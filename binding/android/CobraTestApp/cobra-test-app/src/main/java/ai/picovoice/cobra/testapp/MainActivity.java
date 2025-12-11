@@ -75,7 +75,10 @@ public class MainActivity extends AppCompatActivity {
         result.testName = "Test Init";
         Cobra cobra = null;
         try {
-            cobra = new Cobra(accessKey, device);
+            cobra = new Cobra.Builder()
+                    .setAccessKey(accessKey)
+                    .setDevice(device)
+                    .build(getApplicationContext());
             result.success = true;
         } catch (CobraException e) {
             result.success = false;
@@ -110,7 +113,10 @@ public class MainActivity extends AppCompatActivity {
         result = new TestResult();
         result.testName = "Test Exception";
         try {
-            new Cobra("", "");
+            new Cobra.Builder()
+                    .setAccessKey("")
+                    .setDevice(device)
+                    .build(getApplicationContext());
             result.success = false;
             result.errorMessage = "Init should have throw an exception";
         } catch (CobraException e) {
