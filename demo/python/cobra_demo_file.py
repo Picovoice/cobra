@@ -72,8 +72,8 @@ def main():
         print('\n'.join(pvcobra.available_devices(library_path=args.library_path)))
         return
 
-    if args.access_key is None or args.wav_path is None:
-        raise ValueError("Arguments --access_key and --wav_path are required.")
+    if args.access_key is None or args.input_wav_path is None:
+        raise ValueError("Arguments --access_key and --input_wav_path are required.")
 
     try:
         cobra = pvcobra.create(access_key=args.access_key, device=args.device, library_path=args.library_path)
