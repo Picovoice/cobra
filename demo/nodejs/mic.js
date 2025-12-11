@@ -72,7 +72,7 @@ async function micDemo() {
 
   const showInferenceDevices = program["show_inference_devices"];
   if (showInferenceDevices) {
-    console.log(Cobra.listHardwareDevices().join('\n'));
+    console.log(Cobra.listAvailableDevices().join('\n'));
     process.exit();
   }
 

@@ -143,8 +143,8 @@ describe('error message stack', () => {
 });
 
 describe('list hardware devices', () => {
-  test('listHardwareDevices returns array', () => {
-    const devices = Cobra.listHardwareDevices();
+  test('listAvailableDevices returns array', () => {
+    const devices = Cobra.listAvailableDevices();
 
     expect(Array.isArray(devices)).toBe(true);
     expect(devices.length).toBeGreaterThan(0);

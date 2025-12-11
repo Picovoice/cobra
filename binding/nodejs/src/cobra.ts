@@ -190,7 +190,7 @@ export default class Cobra {
    *
    * @returns {string[]} Array of all available devices that Cobra can use for inference.
    */
-  static listHardwareDevices(options: CobraOptions = {}): string[] {
+  static listAvailableDevices(options: CobraOptions = {}): string[] {
     const {
       libraryPath = getSystemLibraryPath(),
     } = options;
