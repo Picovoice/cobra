@@ -52,16 +52,16 @@ export default class Cobra {
   /**
    * Creates an instance of Cobra.
    * @param {string} accessKey AccessKey obtained from Picovoice Console (https://console.picovoice.ai/).
-   * @param {string} device String representation of the device (e.g., CPU or GPU) to use.
+   * @param options Optional configuration arguments.
+   * @param {string} options.device String representation of the device (e.g., CPU or GPU) to use.
    *   If set to `best`, the most suitable device is selected automatically.
    *   If set to `gpu`, the engine uses the first available GPU device.
    *   To select a specific GPU device, set this argument to `gpu:${GPU_INDEX}`.
    *   If set to `cpu`, the engine will run on the CPU with the default number of threads.
    *   To specify the number of threads, set this argument to `cpu:${NUM_THREADS}`.
-   * @param options Optional configuration arguments.
    * @param {string} options.libraryPath the path to the Cobra library (.node extension)
    */
-  constructor(accessKey: string, device: string = 'best', options: CobraOptions = {}) {
+  constructor(accessKey: string, options: CobraOptions = {}) {
     assert(typeof accessKey === 'string');
     if (
       accessKey === null ||
@@ -71,18 +71,10 @@ export default class Cobra {
       throw new CobraInvalidArgumentError(`No AccessKey provided to Cobra`);
     }
 
-    if (
-      typeof device !== 'string' ||
-      device === null ||
-      device === undefined ||
-      device.length === 0
-    ) {
-      throw new CobraInvalidArgumentError(
-        `'device' should be a non-empty string`
-      );
-    }
-
-    const { libraryPath = getSystemLibraryPath() } = options;
+    const {
+      libraryPath = getSystemLibraryPath(),
+      device = 'best',
+    } = options;
 
     if (!fs.existsSync(libraryPath)) {
       throw new CobraInvalidArgumentError(

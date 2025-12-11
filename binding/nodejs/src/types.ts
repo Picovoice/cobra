@@ -8,5 +8,6 @@
 */
 
 export type CobraOptions = {
+  device?: string;
   libraryPath?: string;
 };

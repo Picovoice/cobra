@@ -30,7 +30,7 @@ program
   .requiredOption("-i, --input_audio_file_path <string>", "input wav file")
   .option(
     "-d, --device <string>",
-    "device to run demo"
+    "Device to run inference on (`best`, `cpu:{num_threads}` or `gpu:{gpu_index}`). Default: selects best device"
   )
   .option(
     "-l, --library_file_path <string>",
@@ -39,7 +39,11 @@ program
   .option(
     "-t --threshold <string>",
     "Threshold for the probability of voice activity"
-  );
+  )
+  .option(
+    "-z, --show_inference_devices",
+    "Print devices that are available to run Porcupine inference.",
+    false);
 
 if (process.argv.length < 2) {
   program.help();
@@ -53,7 +57,21 @@ function fileDemo() {
   let libraryFilePath = program["library_file_path"];
   let threshold = program["threshold"] ?? 0.8;
 
-  let engineInstance = new Cobra(accessKey, device, {
+  const showInferenceDevices = program["show_inference_devices"];
+  if (showInferenceDevices) {
+    console.log(Porcupine.listAvailableDevices().join('\n'));
+    process.exit();
+  }
+
+  if (accessKey === undefined || audioPath === undefined) {
+    console.error(
+      "`--access_key` and `--input_audio_file_path` are required arguments"
+    );
+    return;
+  }
+
+  let engineInstance = new Cobra(accessKey, {
+    device: device,
     libraryPath: libraryFilePath,
   });
 

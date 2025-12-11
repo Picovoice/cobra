@@ -28,7 +28,7 @@ program
   )
   .option(
     "-d, --device <string>",
-    "device to run demo"
+    "Device to run inference on (`best`, `cpu:{num_threads}` or `gpu:{gpu_index}`). Default: selects best device"
   )
   .option(
     "-l, --library_file_path <string>",
@@ -40,6 +40,10 @@ program
     Number,
     -1
   )
+  .option(
+    "-z, --show_inference_devices",
+    "Print devices that are available to run Porcupine inference.",
+    false)
   .option("-s, --show_audio_devices", "show the list of available devices");
 
 if (process.argv.length < 1) {
@@ -66,12 +70,21 @@ async function micDemo() {
     process.exit();
   }
 
-  if (accessKey === undefined) {
-    console.log("No AccessKey provided");
+  const showInferenceDevices = program["show_inference_devices"];
+  if (showInferenceDevices) {
+    console.log(Porcupine.listAvailableDevices().join('\n'));
     process.exit();
   }
 
-  let engineInstance = new Cobra(accessKey, device, {
+  if (accessKey === undefined || audioPath === undefined) {
+    console.error(
+      "`--access_key` and `--input_audio_file_path` are required arguments"
+    );
+    return;
+  }
+
+  let engineInstance = new Cobra(accessKey, {
+    device: device,
     libraryPath: libraryFilePath,
   });
 

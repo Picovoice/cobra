@@ -28,7 +28,7 @@ const ACCESS_KEY = process.argv
 
 const DEVICE = process.argv
   .filter(x => x.startsWith('--device='))[0]
-  ?.split('--device=')[1] ?? 'cpu:1';
+  ?.split('--device=')[1] ?? 'best';
 
 const loadPcm = (audioFile: string): Int16Array => {
   const waveFilePath = getAudioFile(audioFile);
@@ -62,7 +62,7 @@ const cobraProcessWaveFile = (
 
 describe('successful processes', () => {
   it('testing process', () => {
-    const cobraEngine = new Cobra(ACCESS_KEY, DEVICE);
+    const cobraEngine = new Cobra(ACCESS_KEY, { device: DEVICE });
 
     const probs = cobraProcessWaveFile(cobraEngine, WAV_PATH);
 
@@ -95,20 +95,21 @@ describe('successful processes', () => {
 describe('Defaults', () => {
   test('Empty AccessKey', () => {
     expect(() => {
-      new Cobra('', DEVICE);
+      new Cobra('', { device: DEVICE });
     }).toThrow(CobraErrors.CobraInvalidArgumentError);
   });
 
   test('Empty Device', () => {
     expect(() => {
-      new Cobra(ACCESS_KEY, '');
+      new Cobra(ACCESS_KEY, { device: '' });
     }).toThrow(CobraErrors.CobraInvalidArgumentError);
   });
 });
 
 describe('manual paths', () => {
   test('manual library path', () => {
-    let cobraEngine = new Cobra(ACCESS_KEY, DEVICE, {
+    let cobraEngine = new Cobra(ACCESS_KEY, {
+      device: DEVICE,
       libraryPath: libraryPath,
     });
 
@@ -123,7 +124,7 @@ describe('error message stack', () => {
   test('message stack cleared after read', () => {
     let error: string[] = [];
     try {
-      new Cobra('invalid', DEVICE);
+      new Cobra('invalid', { device: DEVICE });
     } catch (e: any) {
       error = e.messageStack;
     }
@@ -132,7 +133,7 @@ describe('error message stack', () => {
     expect(error.length).toBeLessThanOrEqual(8);
 
     try {
-      new Cobra('invalid', DEVICE);
+      new Cobra('invalid', { device: DEVICE });
     } catch (e: any) {
       for (let i = 0; i < error.length; i++) {
         expect(error[i]).toEqual(e.messageStack[i]);
@@ -143,7 +144,7 @@ describe('error message stack', () => {
 
 describe('list hardware devices', () => {
   test('listHardwareDevices returns array', () => {
-    const cobraEngine = new Cobra(ACCESS_KEY, DEVICE);
+    const cobraEngine = new Cobra(ACCESS_KEY, { device: DEVICE });
 
     const devices = cobraEngine.listHardwareDevices();
 

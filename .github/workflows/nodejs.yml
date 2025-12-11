@@ -43,6 +43,12 @@ jobs:
       - name: Pre-build dependencies
         run: npm install yarn
 
+      # ************** REMOVE AFTER RELEASE ********************
+      - name: Build Local Packages
+        run: yarn && yarn build
+        working-directory: binding/nodejs
+      # ********************************************************
+
       - name: Install dependencies
         run: yarn install
 
@@ -55,13 +61,26 @@ jobs:
     strategy:
       matrix:
         machine: [rpi3-32, rpi3-64, rpi4-32, rpi4-64, rpi5-64, pv-windows-arm64]
-        device: [ cpu, cpu:1 ]
+        device: [ best ]
+        include:
+          - device: gpu
+            machine: pv-linux
+          - device: gpu
+            machine: pv-windows
+          - device: gpu
+            machine: pv-ios
 
     steps:
       - uses: actions/checkout@v3
 
       - name: Pre-build dependencies
         run: npm install --global yarn
+
+      # ************** REMOVE AFTER RELEASE ********************
+      - name: Build Local Packages
+        run: yarn && yarn build
+        working-directory: binding/nodejs
+      # ********************************************************
 
       - name: Install dependencies
         run: yarn install

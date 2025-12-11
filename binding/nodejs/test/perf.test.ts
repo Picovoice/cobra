@@ -42,7 +42,7 @@ const PROC_PERFORMANCE_THRESHOLD_SEC = Number(
 
 describe('Performance', () => {
   test('proc performance', () => {
-    let cobraEngine = new Cobra(ACCESS_KEY, DEVICE);
+    let cobraEngine = new Cobra(ACCESS_KEY, { device: DEVICE });
 
     const waveFilePath = path.join(__dirname, WAV_PATH);
     const waveBuffer = fs.readFileSync(waveFilePath);
