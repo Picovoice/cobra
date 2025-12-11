@@ -57,7 +57,7 @@ public class Cobra {
 
         let status = pv_cobra_init(accessKey, deviceArg, &handle)
         if status != PV_STATUS_SUCCESS {
-            let messageStack = try getMessageStack()
+            let messageStack = try Cobra.getMessageStack()
             throw pvStatusToCobraError(status, "Cobra init failed", messageStack)
         }
     }
@@ -95,7 +95,7 @@ public class Cobra {
         var result: Float32 = 0
         let status = pv_cobra_process(self.handle, pcm, &result)
         if status != PV_STATUS_SUCCESS {
-            let messageStack = try getMessageStack()
+            let messageStack = try Cobra.getMessageStack()
             throw pvStatusToCobraError(status, "Cobra process failed", messageStack)
         }
 
@@ -135,7 +135,7 @@ public class Cobra {
         }
     }
 
-    private func getMessageStack() throws -> [String] {
+    private static func getMessageStack() throws -> [String] {
         var messageStackRef: UnsafeMutablePointer<UnsafeMutablePointer<Int8>?>?
         var messageStackDepth: Int32 = 0
         let status = pv_get_error_stack(&messageStackRef, &messageStackDepth)
@@ -163,7 +163,7 @@ public class Cobra {
         var numHardwareDevices: Int32 = 0
         let status = pv_cobra_list_hardware_devices(&cHardwareDevices, &numHardwareDevices)
         if status != PV_STATUS_SUCCESS {
-            let messageStack = try getMessageStack()
+            let messageStack = try Cobra.getMessageStack()
             throw pvStatusToCobraError(status, "Cobra getAvailableDevices failed", messageStack)
         }
 
