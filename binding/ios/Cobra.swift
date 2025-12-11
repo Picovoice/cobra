@@ -58,7 +58,7 @@ public class Cobra {
         let status = pv_cobra_init(accessKey, deviceArg, &handle)
         if status != PV_STATUS_SUCCESS {
             let messageStack = try Cobra.getMessageStack()
-            throw pvStatusToCobraError(status, "Cobra init failed", messageStack)
+            throw Cobra.pvStatusToCobraError(status, "Cobra init failed", messageStack)
         }
     }
 
@@ -96,13 +96,13 @@ public class Cobra {
         let status = pv_cobra_process(self.handle, pcm, &result)
         if status != PV_STATUS_SUCCESS {
             let messageStack = try Cobra.getMessageStack()
-            throw pvStatusToCobraError(status, "Cobra process failed", messageStack)
+            throw Cobra.pvStatusToCobraError(status, "Cobra process failed", messageStack)
         }
 
         return result
     }
 
-    private func pvStatusToCobraError(
+    private static func pvStatusToCobraError(
         _ status: pv_status_t,
         _ message: String,
         _ messageStack: [String] = []) -> CobraError {
@@ -140,7 +140,7 @@ public class Cobra {
         var messageStackDepth: Int32 = 0
         let status = pv_get_error_stack(&messageStackRef, &messageStackDepth)
         if status != PV_STATUS_SUCCESS {
-            throw pvStatusToCobraError(status, "Unable to get Cobra error state")
+            throw Cobra.pvStatusToCobraError(status, "Unable to get Cobra error state")
         }
 
         var messageStack: [String] = []
@@ -164,7 +164,7 @@ public class Cobra {
         let status = pv_cobra_list_hardware_devices(&cHardwareDevices, &numHardwareDevices)
         if status != PV_STATUS_SUCCESS {
             let messageStack = try Cobra.getMessageStack()
-            throw pvStatusToCobraError(status, "Cobra getAvailableDevices failed", messageStack)
+            throw Cobra.pvStatusToCobraError(status, "Cobra getAvailableDevices failed", messageStack)
         }
 
         var hardwareDevices: [String] = []
