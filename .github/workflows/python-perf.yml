@@ -35,7 +35,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        device: [ cpu:1, cpu ]
+        device: [ cpu:1 ]
         include:
         - os: ubuntu-latest
           performance_threshold_sec: 0.03
@@ -68,7 +68,7 @@ jobs:
       fail-fast: false
       matrix:
         machine: [rpi3-32, rpi3-64, rpi4-32, rpi4-64, rpi5-64]
-        device: [ cpu ]
+        device: [ cpu:1 ]
         include:
         - machine: rpi3-32
           num_test_iterations: 100

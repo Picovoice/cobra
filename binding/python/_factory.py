@@ -20,7 +20,7 @@ from ._util import *
 
 def create(
         access_key: str,
-        device: Optional[str] = 'best',
+        device: Optional[str] = None,
         library_path: Optional[str] = None) -> Cobra:
     """
     Factory method for Cobra voice activity detection (VAD) engine.

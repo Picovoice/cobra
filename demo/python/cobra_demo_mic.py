@@ -36,7 +36,7 @@ class CobraDemo(Thread):
 
         :param library_path: Absolute path to Cobra's dynamic library.
         :param access_key AccessKey obtained from Picovoice Console.
-        :param device: Device to run the demo on.
+        :param device: Device to run inference on (`best`, `cpu:{num_threads}` or `gpu:{gpu_index}`). 
         :param output_path: If provided recorded audio will be stored in this location at the end of the run.
         :param input_device_index: Optional argument. If provided, audio is recorded from this input device. Otherwise,
         the default audio input device is used.
@@ -133,7 +133,8 @@ def main():
 
     parser.add_argument(
         '--device',
-        help='Device to run demo')
+        help='Device to run inference on (`best`, `cpu:{num_threads}` or `gpu:{gpu_index}`). '
+             'Default: automatically selects best device')
 
     parser.add_argument(
         '--library_path',
