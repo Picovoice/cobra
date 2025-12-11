@@ -14,7 +14,7 @@ Cobra is a highly accurate and lightweight voice activity detection (VAD) engine
 
 ## Requirements
 
-Falcon Web Binding uses [SharedArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer)
+Cobra Web Binding uses [SharedArrayBuffer](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/SharedArrayBuffer)
 for processing speaker diarization. 
 
 Include the following headers in the response to enable the use of `SharedArrayBuffers`:
@@ -33,6 +33,8 @@ which disables multithreaded performance.
 
 IndexedDB is required to use `Cobra` in a worker thread. Browsers without IndexedDB support
 (i.e. Firefox Incognito Mode) should use `Cobra` in the main thread.
+
+Multi-threading is only enabled for `Koala` when using on a web worker.
 
 ## Installation
 

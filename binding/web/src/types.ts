@@ -38,7 +38,6 @@ export type CobraOptions = {
 export type CobraWorkerInitRequest = {
   command: 'init';
   accessKey: string;
-  device?: string;
   wasmSimd: string;
   wasmSimdLib: string;
   wasmPThread: string;

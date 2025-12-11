@@ -27,8 +27,8 @@ jobs:
 
     strategy:
       matrix:
-        device: [ cpu ]
-        node-version: [ 20.x, 22.x, 24.x ]
+        device: [ cpu:1 ]
+        node-version: [18.x, 20.x, 22.x, 24.x]
 
     steps:
       - uses: actions/checkout@v3
@@ -56,4 +56,4 @@ jobs:
         run: yarn setup-test
 
       - name: Test
-        run: yarn test --env ACCESS_KEY=${{secrets.PV_VALID_ACCESS_KEY}} DEVICE=${{matrix.device}}
+        run: yarn test --env ACCESS_KEY=${{secrets.PV_VALID_ACCESS_KEY}}, DEVICE=${{matrix.device}}

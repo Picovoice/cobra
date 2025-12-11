@@ -239,7 +239,7 @@ export class Cobra {
       throw new CobraErrors.CobraInvalidArgumentError('Invalid AccessKey');
     }
 
-    let { device } = options;
+    let { device = 'best' } = options;
 
     const isSimd = await simd();
     if (!isSimd) {
@@ -247,21 +247,24 @@ export class Cobra {
     }
 
     const isWorkerScope = typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope;
-    if (!isWorkerScope) {
-      if (device && device !== "cpu:1") {
-        console.warn("Multi-threading is not supported on main thread.");
-      }
-      device = "cpu:1";
+    if (
+      !isWorkerScope &&
+      (device === 'best' || (device.startsWith('cpu') && device !== 'cpu:1'))
+    ) {
+      // eslint-disable-next-line no-console
+      console.warn('Multi-threading is not supported on main thread.');
+      device = 'cpu:1';
     }
 
-    const sabDefined = (typeof SharedArrayBuffer !== 'undefined') && (device !== "cpu:1");
+    const sabDefined = typeof SharedArrayBuffer !== 'undefined'
+      && (device !== "cpu:1");
 
     return new Promise<Cobra>((resolve, reject) => {
       Cobra._cobraMutex
         .runExclusive(async () => {
           const wasmOutput = await Cobra.initWasm(
             accessKey.trim(),
-            (device) ? device : "best",
+            device,
             (sabDefined) ? this._wasmPThread : this._wasmSimd,
             (sabDefined) ? this._wasmPThreadLib : this._wasmSimdLib,
             (sabDefined) ? createModulePThread : createModuleSimd);
@@ -437,16 +440,6 @@ export class Cobra {
 
     const messageStackAddressAddressAddress = module._malloc(Int32Array.BYTES_PER_ELEMENT);
     if (!messageStackAddressAddressAddress) {
-      throw new CobraErrors.CobraOutOfMemoryError('malloc failed: Cannot allocate memory');
-    }
-
-    const numHardwareDevicesAddress = module._malloc(Int32Array.BYTES_PER_ELEMENT);
-    if (!numHardwareDevicesAddress) {
-      throw new CobraErrors.CobraOutOfMemoryError('malloc failed: Cannot allocate memory');
-    }
-
-    const hardwareDevicesListAddressAddressAddress = module._malloc(Int32Array.BYTES_PER_ELEMENT);
-    if (!hardwareDevicesListAddressAddressAddress) {
       throw new CobraErrors.CobraOutOfMemoryError('malloc failed: Cannot allocate memory');
     }
 

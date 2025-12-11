@@ -24,6 +24,7 @@ jobs:
     strategy:
       matrix:
         node-version: [lts/*]
+        device: [ cpu:1 ]
         include:
         - node-version: lts/*
           procPerformanceThresholdSec: 0.2

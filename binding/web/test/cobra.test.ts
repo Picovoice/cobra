@@ -5,21 +5,6 @@ const ACCESS_KEY: string = Cypress.env("ACCESS_KEY");
 
 const DEVICE: string = Cypress.env('DEVICE');
 
-const getDeviceList = () => {
-  const result: string[] = [];
-  if (DEVICE === 'cpu') {
-    const maxThreads = self.navigator.hardwareConcurrency / 2;
-
-    for (let i = 1; i <= maxThreads; i *= 2) {
-      result.push(`cpu:${i}`);
-    }
-  } else {
-    result.push(DEVICE);
-  }
-
-  return result;
-};
-
 function delay(time: number) {
   return new Promise(resolve => setTimeout(resolve, time));
 }
