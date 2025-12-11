@@ -74,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
         try {
             cobra = new Cobra.Builder()
                     .setAccessKey(ACCESS_KEY)
-                    .setDevice("best")
                     .build();
         } catch (CobraInvalidArgumentException e) {
             onCobraInitError(e.getMessage());

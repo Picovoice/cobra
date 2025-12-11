@@ -133,7 +133,7 @@ public class Cobra {
     public static class Builder {
 
         private String accessKey = null;
-        private String device = "best";
+        private String device = null;
 
         /**
          * Setter the AccessKey.
@@ -172,8 +172,8 @@ public class Cobra {
                 throw new CobraInvalidArgumentException("No AccessKey was provided to Cobra");
             }
 
-            if (device == null || this.device.equals("")) {
-                throw new CobraInvalidArgumentException("Device must not be null or empty");
+            if (device == null) {
+                device = "best";
             }
 
             return new Cobra(
