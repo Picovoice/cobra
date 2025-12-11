@@ -66,7 +66,10 @@ public class BaseTest {
 
     @Test
     public void testProcess() throws CobraException, IOException {
-        Cobra cobra = new Cobra(accessKey, device);
+        Cobra cobra = new Cobra.Builder()
+                .setAccessKey(accessKey)
+                .setDevice(device)
+                .build();
 
         File testAudio = new File(getAudioFilepath("sample.wav"));
 
@@ -119,7 +122,10 @@ public class BaseTest {
 
     @Test
     public void testVersion() throws CobraException {
-        Cobra cobra = new Cobra(accessKey, device);
+        Cobra cobra = new Cobra.Builder()
+                .setAccessKey(accessKey)
+                .setDevice(device)
+                .build();
         assertTrue(cobra.getVersion().length() > 0);
     }
 
@@ -127,7 +133,10 @@ public class BaseTest {
     public void testInvalidDevice() throws CobraException {
         boolean didFail = false;
         try {
-            Cobra cobra = new Cobra(accessKey, "invalid_device");
+            Cobra cobra = new Cobra.Builder()
+                    .setAccessKey(accessKey)
+                    .setDevice("invalid_device")
+                    .build();
             fail("CobraException expected due to invalid device.");
         } catch (CobraException e) {
             didFail = true;
@@ -148,7 +157,10 @@ public class BaseTest {
     public void testErrorStack() {
         String[] error = {};
         try {
-            Cobra cobra = new Cobra("invalid", device);
+            Cobra cobra = new Cobra.Builder()
+                    .setAccessKey("invalid")
+                    .setDevice(device)
+                    .build();
         } catch (CobraException e) {
             error = e.getMessageStack();
         }
@@ -157,7 +169,10 @@ public class BaseTest {
         assertTrue(error.length <= 8);
 
         try {
-            Cobra cobra = new Cobra("invalid", device);
+            Cobra cobra = new Cobra.Builder()
+                    .setAccessKey("invalid")
+                    .setDevice(device)
+                    .build();
         } catch (CobraException e) {
             for (int i = 0; i < error.length; i++) {
                 assertEquals(e.getMessageStack()[i], error[i]);

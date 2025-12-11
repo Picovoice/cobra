@@ -40,7 +40,10 @@ public class PerformanceTest extends BaseTest {
 
         double performanceThresholdSec = Double.parseDouble(thresholdString);
 
-        Cobra cobra = new Cobra(accessKey, device);
+        Cobra cobra = new Cobra.Builder()
+                .setAccessKey(accessKey)
+                .setDevice(device)
+                .build();
         File testAudio = new File(getAudioFilepath("sample.wav"));
 
         long totalNSec = 0;
