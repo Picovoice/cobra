@@ -9,7 +9,10 @@
 # specific language governing permissions and limitations under the License.
 #
 
-from typing import Optional, Sequence
+from typing import (
+    Optional,
+    Sequence
+)
 
 from ._cobra import *
 from ._util import *
