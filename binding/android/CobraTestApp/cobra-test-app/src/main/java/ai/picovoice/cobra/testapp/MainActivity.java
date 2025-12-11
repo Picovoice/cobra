@@ -78,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
             cobra = new Cobra.Builder()
                     .setAccessKey(accessKey)
                     .setDevice(device)
-                    .build(getApplicationContext());
+                    .build();
             result.success = true;
         } catch (CobraException e) {
             result.success = false;
@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
             new Cobra.Builder()
                     .setAccessKey("")
                     .setDevice(device)
-                    .build(getApplicationContext());
+                    .build();
             result.success = false;
             result.errorMessage = "Init should have throw an exception";
         } catch (CobraException e) {
