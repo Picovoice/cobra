@@ -12,7 +12,6 @@
 import os
 import sys
 import unittest
-from parameterized import parameterized
 import math
 
 from _cobra import Cobra, CobraError
