@@ -78,28 +78,22 @@ PV_API int32_t pv_cobra_frame_length(void);
 PV_API const char *pv_cobra_version(void);
 
 /**
- * Gets a list of hardware devices that can be specified when calling `pv_cobra_init`
+ * Computes the minimum required memory buffer size, in bytes, for Cobra.
+ * A relatively large value for 'preliminary_memory_buffer' is suggested (e.g., 50 kilobytes).
+ * Then, 'pv_cobra_init' can be called optimally passing a memory buffer with the size of 'min_memory_buffer_size'.
  *
- * @param[out] hardware_devices Array of available hardware devices. Devices are NULL terminated strings.
- *                              The array must be freed using `pv_cobra_free_hardware_devices`.
- * @param[out] num_hardware_devices The number of devices in the `hardware_devices` array.
- * @return Status code. Returns `PV_STATUS_OUT_OF_MEMORY`, `PV_STATUS_INVALID_ARGUMENT`, `PV_STATUS_INVALID_STATE`,
- * `PV_STATUS_RUNTIME_ERROR`, `PV_STATUS_ACTIVATION_ERROR`, `PV_STATUS_ACTIVATION_LIMIT_REACHED`,
- * `PV_STATUS_ACTIVATION_THROTTLED`, or `PV_STATUS_ACTIVATION_REFUSED` on failure.
- */
-PV_API pv_status_t pv_cobra_list_hardware_devices(
-        char ***hardware_devices,
-        int32_t *num_hardware_devices);
+ * @param preliminary_memory_size Memory size in bytes.
+ * @param preliminary_memory_buffer Memory needs to be 8-byte aligned.
+ * @param[out] min_memory_buffer_size minimum required memory buffer size in bytes.
+ * @return Status code. Returns 'PV_STATUS_INVALID_ARGUMENT', 'PV_STATUS_INVALID_STATE', or 'PV_STATUS_OUT_OF_MEMORY'
+ * on failure.
+ * */
 
-/**
- * Frees memory allocated by `pv_cobra_list_hardware_devices`.
- *
- * @param[out] hardware_devices Array of available hardware devices allocated by `pv_cobra_list_hardware_devices`.
- * @param[out] num_hardware_devices The number of devices in the `hardware_devices` array.
- */
-PV_API void pv_cobra_free_hardware_devices(
-        char **hardware_devices,
-        int32_t num_hardware_devices);
+PV_API pv_status_t pv_cobra_get_min_memory_buffer_size(
+        void *preliminary_memory_buffer,
+        int32_t preliminary_memory_size,
+        int32_t *min_memory_buffer_size);
+
 
 #ifdef __cplusplus
 }
