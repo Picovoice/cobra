@@ -198,10 +198,6 @@ class Cobra(object):
 
         self._sample_rate = library.pv_sample_rate()
 
-        self._list_hardware_devices_func = library.pv_cobra_list_hardware_devices
-        self._list_hardware_devices_func.argtypes = [POINTER(POINTER(c_char_p)), POINTER(c_int)]
-        self._list_hardware_devices_func.restype = self.PicovoiceStatuses
-
         self._free_hardware_devices_func = library.pv_cobra_free_hardware_devices
         self._free_hardware_devices_func.argtypes = [POINTER(c_char_p), c_int]
         self._free_hardware_devices_func.restype = None
@@ -266,26 +262,33 @@ class Cobra(object):
 
         return message_stack
 
-    def list_hardware_devices(self) -> Sequence[str]:
-        """
-        Lists all available devices that Cobra can use for inference.
-        Each entry in the list can be used as the `device` argument when initializing Cobra.
 
-        :return: Array of all available devices that Cobra can be used for inference.
-        """
-        device_list_ref = POINTER(c_char_p)()
-        device_list_size = c_int()
-        status = self._list_hardware_devices_func(byref(device_list_ref), byref(device_list_size))
-        if status is not self.PicovoiceStatuses.SUCCESS:
-            raise self._PICOVOICE_STATUS_TO_EXCEPTION[status](message='Unable to list hardware devices')
+def list_hardware_devices(library_path: str) -> Sequence[str]:
+    dll_dir_obj = None
+    if hasattr(os, "add_dll_directory"):
+        dll_dir_obj = os.add_dll_directory(os.path.dirname(library_path))
 
-        device_list = list()
-        for i in range(device_list_size.value):
-            device_list.append(device_list_ref[i].decode('utf-8'))
+    library = cdll.LoadLibrary(library_path)
 
-        self._free_hardware_devices_func(device_list_ref, device_list_size)
+    if dll_dir_obj is not None:
+        dll_dir_obj.close()
 
-        return device_list
+    list_hardware_devices_func = library.pv_cobra_list_hardware_devices
+    list_hardware_devices_func.argtypes = [POINTER(POINTER(c_char_p)), POINTER(c_int32)]
+    list_hardware_devices_func.restype = Cobra.PicovoiceStatuses
+    c_hardware_devices = POINTER(c_char_p)()
+    c_num_hardware_devices = c_int32()
+    status = list_hardware_devices_func(byref(c_hardware_devices), byref(c_num_hardware_devices))
+    if status is not Cobra.PicovoiceStatuses.SUCCESS:
+        raise Cobra._PICOVOICE_STATUS_TO_EXCEPTION[status](message='`pv_cobra_list_hardware_devices` failed.')
+    res = [c_hardware_devices[i].decode() for i in range(c_num_hardware_devices.value)]
+
+    free_hardware_devices_func = library.pv_cobra_free_hardware_devices
+    free_hardware_devices_func.argtypes = [POINTER(c_char_p), c_int32]
+    free_hardware_devices_func.restype = None
+    free_hardware_devices_func(c_hardware_devices, c_num_hardware_devices.value)
+
+    return res
 
 
 __all__ = [
@@ -302,4 +305,5 @@ __all__ = [
     'CobraMemoryError',
     'CobraRuntimeError',
     'CobraStopIterationError',
+    'list_hardware_devices',
 ]

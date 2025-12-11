@@ -35,7 +35,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        device: [ cpu ]
+        device: [ cpu:1, cpu ]
         include:
         - os: ubuntu-latest
           performance_threshold_sec: 0.03

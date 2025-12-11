@@ -145,7 +145,16 @@ def main():
 
     parser.add_argument('--show_audio_devices', action='store_true')
 
+    parser.add_argument(
+        '--show_inference_devices',
+        action='store_true',
+        help='Print devices that are available to run Cobra inference')
+
     args = parser.parse_args()
+
+    if args.show_inference_devices:
+        print('\n'.join(pvcobra.available_devices(library_path=args.library_path)))
+        return
 
     if args.show_audio_devices:
         CobraDemo.show_available_devices()

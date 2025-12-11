@@ -20,23 +20,6 @@ from _util import *
 from test_util import *
 
 
-def get_test_devices():
-    result = list()
-
-    device = sys.argv[2] if len(sys.argv) == 3 else None
-    if device == "cpu":
-        max_threads = os.cpu_count() // 2
-        i = 1
-
-        while i <= max_threads:
-            result.append(f"cpu:{i}")
-            i *= 2
-    else:
-        result.append(device)
-
-    return result
-
-
 class CobraTestCase(unittest.TestCase):
 
     def setUp(self):
@@ -46,7 +29,6 @@ class CobraTestCase(unittest.TestCase):
     def tearDown(self):
         pass
 
-    @parameterized.expand(get_test_devices, skip_on_empty=True)
     def test_process(self, device):
         cobra = Cobra(access_key=self._access_key, device=device, library_path=pv_library_path('../..'))
         audio = read_wav_file(

@@ -43,6 +43,22 @@ def create(
     return Cobra(access_key=access_key, device=device, library_path=library_path)
 
 
+def available_devices(library_path: Optional[str] = None) -> Sequence[str]:
+    """
+    Lists all available devices that Cobra can use for inference. Each entry in the list can be the `device`
+    argument of `.create` factory method or `Cobra` constructor.
+    :param library_path: Absolute path to Cobra's dynamic library.
+    If not set it will be set to the default location.
+    :return: List of all available devices that Cobra can use for inference.
+    """
+
+    if library_path is None:
+        library_path = pv_library_path()
+
+    return list_hardware_devices(library_path=library_path)
+
+
 __all__ = [
     'create',
+    'available_devices',
 ]
