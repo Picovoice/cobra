@@ -144,9 +144,7 @@ describe('error message stack', () => {
 
 describe('list hardware devices', () => {
   test('listHardwareDevices returns array', () => {
-    const cobraEngine = new Cobra(ACCESS_KEY, { device: DEVICE });
-
-    const devices = cobraEngine.listHardwareDevices();
+    const devices = Cobra.listHardwareDevices();
 
     expect(Array.isArray(devices)).toBe(true);
     expect(devices.length).toBeGreaterThan(0);
@@ -154,7 +152,5 @@ describe('list hardware devices', () => {
     for (const device of devices) {
       expect(typeof device).toBe('string');
     }
-
-    cobraEngine.release();
   });
 });
