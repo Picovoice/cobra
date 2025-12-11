@@ -158,7 +158,7 @@ public class Cobra {
     ///
     /// - Throws: CobraError
     /// - Returns: Array of available devices that Cobra can be used for inference.
-    public func getAvailableDevices() throws -> [String] {
+    public static func getAvailableDevices() throws -> [String] {
         var cHardwareDevices: UnsafeMutablePointer<UnsafeMutablePointer<Int8>?>?
         var numHardwareDevices: Int32 = 0
         let status = pv_cobra_list_hardware_devices(&cHardwareDevices, &numHardwareDevices)

@@ -15,7 +15,6 @@ import Foundation
 class ViewModel: ObservableObject {
 
     private let ACCESS_KEY = "{YOUR_ACCESS_KEY_HERE}"
-    private let DEVICE = "cpu:1"
 
     private let ALPHA: Float = 0.5
 
@@ -32,7 +31,7 @@ class ViewModel: ObservableObject {
 
     init() {
         do {
-            try cobra = Cobra(accessKey: ACCESS_KEY, device: DEVICE)
+            try cobra = Cobra(accessKey: ACCESS_KEY)
 
             VoiceProcessor.instance.addErrorListener(VoiceProcessorErrorListener(errorCallback))
             VoiceProcessor.instance.addFrameListener(VoiceProcessorFrameListener(audioCallback))

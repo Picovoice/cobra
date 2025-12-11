@@ -98,8 +98,7 @@ class CobraAppTestUITests: XCTestCase {
     }
 
     func testGetAvailableDevices() throws {
-        let cobra: Cobra = try Cobra(accessKey: accessKey, device: device)
-        let devices = try cobra.getAvailableDevices()
+        let devices = try Cobra.getAvailableDevices()
         XCTAssert(!devices.isEmpty)
         for device in devices {
             XCTAssert(!device.isEmpty)
