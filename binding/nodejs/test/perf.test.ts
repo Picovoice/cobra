@@ -23,11 +23,17 @@ const ACCESS_KEY =
   process.argv
     .filter(x => x.startsWith('--access_key='))[0]
     ?.split('--access_key=')[1] ?? '';
+
+const DEVICE = process.argv
+  .filter(x => x.startsWith('--device='))[0]
+  ?.split('--device=')[1] ?? 'cpu:1';
+
 const NUM_TEST_ITERATIONS = Number(
   process.argv
     .filter(x => x.startsWith('--num_test_iterations='))[0]
     ?.split('--num_test_iterations=')[1] ?? 0
 );
+
 const PROC_PERFORMANCE_THRESHOLD_SEC = Number(
   process.argv
     .filter(x => x.startsWith('--proc_performance_threshold_sec='))[0]
@@ -36,7 +42,7 @@ const PROC_PERFORMANCE_THRESHOLD_SEC = Number(
 
 describe('Performance', () => {
   test('proc performance', () => {
-    let cobraEngine = new Cobra(ACCESS_KEY);
+    let cobraEngine = new Cobra(ACCESS_KEY, { device: DEVICE });
 
     const waveFilePath = path.join(__dirname, WAV_PATH);
     const waveBuffer = fs.readFileSync(waveFilePath);
