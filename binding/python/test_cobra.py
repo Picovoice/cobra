@@ -28,8 +28,11 @@ class CobraTestCase(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def test_process(self, device):
-        cobra = Cobra(access_key=self._access_key, device=device, library_path=pv_library_path('../..'))
+    def test_process(self):
+        cobra = Cobra(
+            access_key=self._access_key,
+            device=self._device,
+            library_path=pv_library_path('../..'))
         audio = read_wav_file(
             os.path.join(os.path.dirname(__file__), '../../res/audio/sample.wav'),
             cobra.sample_rate)
