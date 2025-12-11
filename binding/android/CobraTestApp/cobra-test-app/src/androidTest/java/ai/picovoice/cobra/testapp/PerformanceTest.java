@@ -43,7 +43,7 @@ public class PerformanceTest extends BaseTest {
         Cobra cobra = new Cobra.Builder()
                 .setAccessKey(accessKey)
                 .setDevice(device)
-                .build();
+                .build(getApplicationContext());
         File testAudio = new File(getAudioFilepath("sample.wav"));
 
         long totalNSec = 0;
