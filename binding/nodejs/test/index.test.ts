@@ -99,9 +99,9 @@ describe('Defaults', () => {
     }).toThrow(CobraErrors.CobraInvalidArgumentError);
   });
 
-  test('Empty Device', () => {
+  test('Invalid Device', () => {
     expect(() => {
-      new Cobra(ACCESS_KEY, { device: '' });
+      new Cobra(ACCESS_KEY, { device: 'invalid' });
     }).toThrow(CobraErrors.CobraInvalidArgumentError);
   });
 });

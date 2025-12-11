@@ -40,9 +40,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Pre-build dependencies
-        run: npm install yarn
-
       # ************** REMOVE AFTER RELEASE ********************
       - name: Build Local Packages
         run: yarn && yarn build
@@ -72,9 +69,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-
-      - name: Pre-build dependencies
-        run: npm install --global yarn
 
       # ************** REMOVE AFTER RELEASE ********************
       - name: Build Local Packages
