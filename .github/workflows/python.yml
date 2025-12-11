@@ -65,7 +65,6 @@ jobs:
         device: [ best ]
         machine: [rpi3-32, rpi3-64, rpi4-32, rpi4-64, rpi5-64, pv-windows-arm64]
         include:
-        include:
           - device: gpu
             machine: pv-linux
           - device: gpu
