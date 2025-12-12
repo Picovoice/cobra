@@ -52,10 +52,12 @@ class CobraTestCase(unittest.TestCase):
         loss = - sum([label * math.log(prob) + (1 - label) * math.log(1 - prob)
                       for label, prob in zip(labels, probs)]) / num_frames
         self.assertLess(loss, 0.1)
+        cobra.delete()
 
     def test_version(self):
         cobra = Cobra(access_key=self._access_key, device=self._device, library_path=pv_library_path('../..'))
         self.assertIsInstance(cobra.version, str)
+        cobra.delete()
 
     def test_message_stack(self):
         relative_path = '../..'
@@ -94,6 +96,7 @@ class CobraTestCase(unittest.TestCase):
             self.assertLess(len(e.message_stack), 8)
 
         c._handle = address
+        c.delete()
 
 
 if __name__ == '__main__':

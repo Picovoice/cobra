@@ -198,9 +198,6 @@ class Cobra(object):
 
         self._sample_rate = library.pv_sample_rate()
 
-        self._free_hardware_devices_func = library.pv_cobra_free_hardware_devices
-        self._free_hardware_devices_func.argtypes = [POINTER(c_char_p), c_int]
-        self._free_hardware_devices_func.restype = None
 
     def delete(self):
         """Releases resources acquired by Cobra."""
