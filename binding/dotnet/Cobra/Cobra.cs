@@ -45,7 +45,7 @@ namespace Pv
         static Cobra()
         {
 
-#if NETCOREAPP3_0_OR_GREATER
+#if NET6_0_OR_GREATER
 
             NativeLibrary.SetDllImportResolver(typeof(Cobra).Assembly, ImportResolver);
 
@@ -53,7 +53,7 @@ namespace Pv
 
         }
 
-#if NETCOREAPP3_0_OR_GREATER
+#if NET6_0_OR_GREATER
 
         private static IntPtr ImportResolver(string libraryName, Assembly assembly, DllImportSearchPath? searchPath)
         {
@@ -144,17 +144,14 @@ namespace Pv
         /// the number of threads, set this argument to `cpu:${NUM_THREADS}`, where `${NUM_THREADS}` is the desired
         /// number of threads.
         /// </param>
-        public Cobra(string accessKey, string device)
+        public Cobra(string accessKey, string device = null)
         {
             if (string.IsNullOrEmpty(accessKey))
             {
                 throw new CobraInvalidArgumentException("No AccessKey provided to Cobra");
             }
 
-            if (string.IsNullOrEmpty(device))
-            {
-                throw new CobraInvalidArgumentException("Device should be a non-empty string");
-            }
+            device = device ?? "best";
 
             IntPtr accessKeyPtr = Utils.GetPtrFromUtf8String(accessKey);
             IntPtr devicePtr = Utils.GetPtrFromUtf8String(device);
@@ -219,7 +216,7 @@ namespace Pv
         /// Each entry in the list can be used as the `device` argument when initializing Cobra.
         /// </summary>
         /// <returns>Array of all available devices that Cobra can use for inference.</returns>
-        public string[] ListHardwareDevices()
+        public static string[] GetAvailableDevices()
         {
             IntPtr deviceListRef;
             int deviceListSize;

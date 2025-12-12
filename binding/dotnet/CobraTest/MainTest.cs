@@ -67,17 +67,6 @@ namespace CobraTest
         }
 
         [TestMethod]
-        public void TestListHardwareDevices()
-        {
-            using (Cobra cobra = new Cobra(_accessKey, _device))
-            {
-                string[] devices = cobra.ListHardwareDevices();
-                Assert.IsNotNull(devices, "ListHardwareDevices returned null.");
-                Assert.IsTrue(devices.Length > 0, "ListHardwareDevices returned an empty array.");
-            }
-        }
-
-        [TestMethod]
         public void TestProcess()
         {
             List<float> probs = new List<float>();
@@ -150,6 +139,17 @@ namespace CobraTest
                 {
                     Assert.AreEqual(messageList[i], e.MessageStack[i]);
                 }
+            }
+        }
+
+        [TestMethod]
+        public void TestGetAvailableDevices()
+        {
+            string[] devices = Cobra.GetAvailableDevices();
+            Assert.IsTrue(devices.Length > 0);
+            foreach (string device in devices)
+            {
+                Assert.IsFalse(string.IsNullOrEmpty(device));
             }
         }
 

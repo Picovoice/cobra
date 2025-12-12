@@ -125,8 +125,9 @@ namespace CobraDemo
 
             string inputAudioPath = null;
             string accessKey = null;
-            string device = "cpu:1";
+            string device = null;
             float threshold = 0.8f;
+            bool showInferenceDevices = false;
             bool showHelp = false;
 
             // parse command line arguments
@@ -164,6 +165,11 @@ namespace CobraDemo
                         }
                     }
                 }
+                else if (args[argIndex] == "--show_inference_devices")
+                {
+                    showInferenceDevices = true;
+                    argIndex++;
+                }
                 else if (args[argIndex] == "-h" || args[argIndex] == "--help")
                 {
                     showHelp = true;
@@ -173,6 +179,12 @@ namespace CobraDemo
                 {
                     argIndex++;
                 }
+            }
+
+            if (showInferenceDevices)
+            {
+                Console.WriteLine(string.Join(Environment.NewLine, Cobra.GetAvailableDevices()));
+                return;
             }
 
             // print help text and exit
@@ -209,7 +221,8 @@ namespace CobraDemo
         private static readonly string HELP_STR = "Available options: \n " +
             $"\t--input_audio_path (required): Absolute path to input audio file.\n" +
             $"\t--access_key (required): AccessKey obtained from Picovoice Console (https://console.picovoice.ai/)\n" +
-            $"\t--device: device to run demo\n" +
-            $"\t--threshold: Voice activity detection threshold. Demo will print out events that exceed the threshold. Must be between [0, 1]. \n";
+            "\t--device: Device to run inference on (`best`, `cpu:{num_threads}` or `gpu:{gpu_index}`). Default: automatically selects best device.\n" +
+            $"\t--threshold: Voice activity detection threshold. Demo will print out events that exceed the threshold. Must be between [0, 1]. \n" +
+            "\t--show_inference_devices: Print devices that are available to run Cobra inference.\n";
     }
 }
