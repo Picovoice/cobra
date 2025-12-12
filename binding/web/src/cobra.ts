@@ -455,6 +455,7 @@ export class Cobra {
 
     const status = await pv_cobra_init(accessKeyAddress, deviceAddress, objectAddressAddress);
     module._pv_free(accessKeyAddress);
+    module._pv_free(deviceAddress);
 
     if (status !== PV_STATUS_SUCCESS) {
       const messageStack = Cobra.getMessageStack(

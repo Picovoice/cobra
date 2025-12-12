@@ -140,7 +140,7 @@ export class CobraWorker {
     voiceProbabilityCallback: (voiceProbability: number) => void,
     options: CobraOptions = {}
   ): Promise<CobraWorker> {
-    const { processErrorCallback, device, ...workerOptions } = options;
+    const { processErrorCallback, ...workerOptions } = options;
 
     const worker = new PvWorker();
     const returnPromise: Promise<CobraWorker> = new Promise(
@@ -201,7 +201,6 @@ export class CobraWorker {
     worker.postMessage({
       command: 'init',
       accessKey: accessKey,
-      device: device,
       wasmSimd: this._wasmSimd,
       wasmSimdLib: this._wasmSimdLib,
       wasmPThread: this._wasmPThread,
