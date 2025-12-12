@@ -86,6 +86,8 @@ jobs:
 
     - name: Test
       run: dotnet test --framework ${{ matrix.test-framework }} -v n
+      env:
+        DEVICE: ${{ matrix.device }}
 
   build-self-hosted:
     runs-on: ${{ matrix.machine }}
@@ -96,6 +98,13 @@ jobs:
       matrix:
         machine: [rpi3-32, rpi3-64, rpi4-32, rpi4-64, rpi5-64, pv-windows-arm64]
         device: [best]
+        include:
+          - device: gpu
+            machine: pv-linux
+          - device: gpu
+            machine: pv-windows
+          - device: gpu
+            machine: pv-ios
 
     steps:
     - uses: actions/checkout@v3

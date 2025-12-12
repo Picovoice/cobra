@@ -154,6 +154,17 @@ namespace CobraTest
         }
 
         [TestMethod]
+        public void TestGetAvailableDevices()
+        {
+            string[] devices = Cobra.GetAvailableDevices();
+            Assert.IsTrue(devices.Length > 0);
+            foreach (string device in devices)
+            {
+                Assert.IsFalse(string.IsNullOrEmpty(device));
+            }
+        }
+
+        [TestMethod]
         public void TestProcessMessageStack()
         {
             Cobra c = new Cobra(_accessKey, _device);

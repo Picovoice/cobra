@@ -153,11 +153,12 @@ namespace CobraDemo
             }
 
             string accessKey = null;
-            string device = "cpu:1";
+            string device = null;
             int audioDeviceIndex = -1;
             string outputPath = null;
             bool showAudioDevices = false;
             bool showHelp = false;
+            bool showInferenceDevices = false;
 
             int argIndex = 0;
             while (argIndex < args.Length)
@@ -196,6 +197,11 @@ namespace CobraDemo
                         outputPath = args[argIndex++];
                     }
                 }
+                else if (args[argIndex] == "--show_inference_devices")
+                {
+                    showInferenceDevices = true;
+                    argIndex++;
+                }
                 else if (args[argIndex] == "-h" || args[argIndex] == "--help")
                 {
                     showHelp = true;
@@ -221,6 +227,11 @@ namespace CobraDemo
                 return;
             }
 
+            if (showInferenceDevices)
+            {
+                Console.WriteLine(string.Join(Environment.NewLine, Rhino.GetAvailableDevices()));
+                return;
+            }
 
             if (string.IsNullOrEmpty(accessKey))
             {
@@ -238,9 +249,10 @@ namespace CobraDemo
 
         private static readonly string HELP_STR = "Available options: \n " +
             $"\t--access_key (required): AccessKey obtained from Picovoice Console (https://console.picovoice.ai/)\n" +
-            $"\t--device: device to run demo\n" +
+            "\t--device: Device to run inference on (`best`, `cpu:{num_threads}` or `gpu:{gpu_index}`). Default: automatically selects best device.\n" +
             "\t--audio_device_index: Index of input audio device.\n" +
             "\t--output_path: Absolute path to recorded audio for debugging.\n" +
-            "\t--show_audio_devices: Print available recording devices.\n";
+            "\t--show_audio_devices: Print available recording devices.\n" +
+            "\t--show_inference_devices: Print devices that are available to run Porcupine inference.\n";
     }
 }
