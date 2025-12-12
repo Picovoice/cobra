@@ -72,7 +72,9 @@ public class MainActivity extends AppCompatActivity {
         };
 
         try {
-            cobra = new Cobra(ACCESS_KEY);
+            cobra = new Cobra.Builder()
+                    .setAccessKey(ACCESS_KEY)
+                    .build();
         } catch (CobraInvalidArgumentException e) {
             onCobraInitError(e.getMessage());
         } catch (CobraActivationException e) {
