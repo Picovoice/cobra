@@ -51,7 +51,7 @@ jobs:
     # ******************************************************
 
     - name: Dotnet build mic demo
-      run: dotnet build -c MicDemo.Release -- --device ${{ matrix.device }}
+      run: dotnet build -c MicDemo.Release
 
     - name: Dotnet build file demo
       run: dotnet build -c FileDemo.Release
