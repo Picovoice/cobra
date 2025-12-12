@@ -86,7 +86,7 @@ jobs:
       working-directory: binding/dotnet
 
     - name: Add binding to demo
-      run: dotnet add package -s ../../../binding/dotnet/Cobra/bin/Release Cobra
+      run: dotnet remove package Cobra && dotnet add package -s ../../../binding/dotnet/Cobra/bin/Release Cobra
     # ******************************************************
 
     - name: Dotnet build mic demo
