@@ -101,4 +101,4 @@ cobra_demo_file --access_key {AccessKey} --input_audio_path ${AUDIO_PATH} \
  --threshold 0.9
 ```
 
-Threshold is a floating point number within `[0, 1]`. A higher threshold reduces the miss rate at the cost of increased false alarm rate. A
+Threshold is a floating point number within `[0, 1]`. A higher threshold reduces the miss rate at the cost of increased false alarm rate.
