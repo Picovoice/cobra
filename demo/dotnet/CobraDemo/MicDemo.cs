@@ -229,7 +229,7 @@ namespace CobraDemo
 
             if (showInferenceDevices)
             {
-                Console.WriteLine(string.Join(Environment.NewLine, Rhino.GetAvailableDevices()));
+                Console.WriteLine(string.Join(Environment.NewLine, Cobra.GetAvailableDevices()));
                 return;
             }
 
