@@ -77,6 +77,11 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
+    # *********** REMOVE AFTER RELEASE **********************
+    - name: Remove cached package
+      run: dotnet nuget locals all --clear
+    # ******************************************************
+
     - name: Package restore
       run: dotnet restore
 
@@ -86,7 +91,7 @@ jobs:
       working-directory: binding/dotnet
 
     - name: Add binding to demo
-      run: dotnet nuget locals all --clear && dotnet add package -s ../../../binding/dotnet/Cobra/bin/Release Cobra
+      run: dotnet add package -s ../../../binding/dotnet/Cobra/bin/Release Cobra
     # ******************************************************
 
     - name: Dotnet build mic demo
