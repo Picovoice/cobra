@@ -34,7 +34,7 @@ which disables multithreaded performance.
 IndexedDB is required to use `Cobra` in a worker thread. Browsers without IndexedDB support
 (i.e. Firefox Incognito Mode) should use `Cobra` in the main thread.
 
-Multi-threading is only enabled for `Koala` when using on a web worker.
+Multi-threading is only enabled for `Cobra` when using on a web worker.
 
 ## Installation
 
