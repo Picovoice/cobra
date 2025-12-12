@@ -198,7 +198,6 @@ class Cobra(object):
 
         self._sample_rate = library.pv_sample_rate()
 
-
     def delete(self):
         """Releases resources acquired by Cobra."""
 
