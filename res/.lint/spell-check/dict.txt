@@ -20,6 +20,7 @@ downsample
 drwav
 dtype
 dylib
+embedder
 emscripten
 filedemo
 HEAPF
