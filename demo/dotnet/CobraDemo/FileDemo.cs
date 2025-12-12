@@ -223,6 +223,6 @@ namespace CobraDemo
             $"\t--access_key (required): AccessKey obtained from Picovoice Console (https://console.picovoice.ai/)\n" +
             "\t--device: Device to run inference on (`best`, `cpu:{num_threads}` or `gpu:{gpu_index}`). Default: automatically selects best device.\n" +
             $"\t--threshold: Voice activity detection threshold. Demo will print out events that exceed the threshold. Must be between [0, 1]. \n" +
-            "\t--show_inference_devices: Print devices that are available to run Porcupine inference.\n";
+            "\t--show_inference_devices: Print devices that are available to run Cobra inference.\n";
     }
 }

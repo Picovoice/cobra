@@ -253,6 +253,6 @@ namespace CobraDemo
             "\t--audio_device_index: Index of input audio device.\n" +
             "\t--output_path: Absolute path to recorded audio for debugging.\n" +
             "\t--show_audio_devices: Print available recording devices.\n" +
-            "\t--show_inference_devices: Print devices that are available to run Porcupine inference.\n";
+            "\t--show_inference_devices: Print devices that are available to run Cobra inference.\n";
     }
 }
