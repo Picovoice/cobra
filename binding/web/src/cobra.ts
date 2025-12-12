@@ -19,8 +19,8 @@ import {
   isAccessKeyValid,
 } from '@picovoice/web-utils';
 
-import createModule from "./lib/pv_cobra";
 import createModuleSimd from "./lib/pv_cobra_simd";
+import createModulePThread from "./lib/pv_cobra_pthread";
 
 import { simd } from 'wasm-feature-detect';
 import { CobraOptions, PvStatus } from './types';
@@ -33,6 +33,7 @@ import { pvStatusToException } from './cobra_errors';
 
 type pv_cobra_init_type = (
   accessKey: number,
+  device: number,
   object: number
 ) => Promise<number>;
 type pv_cobra_process_type = (
@@ -47,6 +48,8 @@ type pv_cobra_version_type = () => number;
 type pv_set_sdk_type = (sdk: number) => void;
 type pv_get_error_stack_type = (messageStack: number, messageStackDepth: number) => number;
 type pv_free_error_stack_type = (messageStack: number) => void;
+type pv_cobra_list_hardware_devices_type = (hardwareDevices: number, numHardwareDevices: number) => number;
+type pv_cobra_free_hardware_devices_type = (hardwareDevices: number, numHardwareDevices: number) => number;
 
 /**
  * JavaScript/WebAssembly Binding for the Picovoice Cobra VAD engine.
@@ -63,6 +66,8 @@ type CobraModule = EmscriptenModule & {
   _pv_set_sdk: pv_set_sdk_type;
   _pv_get_error_stack: pv_get_error_stack_type;
   _pv_free_error_stack: pv_free_error_stack_type;
+  _pv_cobra_list_hardware_devices: pv_cobra_list_hardware_devices_type;
+  _pv_cobra_free_hardware_devices: pv_cobra_free_hardware_devices_type;
 
   // em default functions
   addFunction: typeof addFunction;
@@ -102,8 +107,8 @@ export class Cobra {
   private readonly _messageStackAddressAddressAddress: number;
   private readonly _messageStackDepthAddress: number;
 
-  private static _wasm: string;
-  private static _wasmLib: string;
+  private static _wasmPThread: string;
+  private static _wasmPThreadLib: string;
   private static _wasmSimd: string;
   private static _wasmSimdLib: string;
   private static _sdk: string = "web";
@@ -162,26 +167,6 @@ export class Cobra {
   }
 
   /**
-   * Set base64 wasm file.
-   * @param wasm Base64'd wasm file to use to initialize wasm.
-   */
-  public static setWasm(wasm: string): void {
-    if (this._wasm === undefined) {
-      this._wasm = wasm;
-    }
-  }
-
-  /**
-   * Set base64 wasm file in text format.
-   * @param wasmLib Base64'd wasm file in text format.
-   */
-  public static setWasmLib(wasmLib: string): void {
-    if (this._wasmLib === undefined) {
-      this._wasmLib = wasmLib;
-    }
-  }
-
-  /**
    * Set base64 wasm file with SIMD feature.
    * @param wasmSimd Base64'd wasm file to use to initialize wasm.
    */
@@ -201,6 +186,26 @@ export class Cobra {
     }
   }
 
+  /**
+   * Set base64 wasm file with SIMD and pthread feature.
+   * @param wasmPThread Base64'd wasm file to use to initialize wasm.
+   */
+  public static setWasmPThread(wasmPThread: string): void {
+    if (this._wasmPThread === undefined) {
+      this._wasmPThread = wasmPThread;
+    }
+  }
+
+  /**
+   * Set base64 SIMD and thread wasm file in text format.
+   * @param wasmPThreadLib Base64'd wasm file in text format.
+   */
+  public static setWasmPThreadLib(wasmPThreadLib: string): void {
+    if (this._wasmPThreadLib === undefined) {
+      this._wasmPThreadLib = wasmPThreadLib;
+    }
+  }
+
   public static setSdk(sdk: string): void {
     Cobra._sdk = sdk;
   }
@@ -213,6 +218,12 @@ export class Cobra {
    * @param accessKey AccessKey obtained from Picovoice Console (https://console.picovoice.ai/)
    * @param voiceProbabilityCallback User-defined callback to run after receiving voice probability result.
    * @param options Optional configuration arguments.
+   * @param options.device String representation of the device (e.g., CPU or GPU) to use. If set to `best`, the most
+   * suitable device is selected automatically. If set to `gpu`, the engine uses the first available GPU device. To
+   * select a specific GPU device, set this argument to `gpu:${GPU_INDEX}`, where `${GPU_INDEX}` is the index of the
+   * target GPU. If set to `cpu`, the engine will run on the CPU with the default number of threads. To specify the
+   * number of threads, set this argument to `cpu:${NUM_THREADS}`, where `${NUM_THREADS}` is the desired number of
+   * threads.
    * @param options.processErrorCallback User-defined callback invoked if any error happens while processing audio.
    *
    * @returns An instance of the Cobra engine.
@@ -228,15 +239,35 @@ export class Cobra {
       throw new CobraErrors.CobraInvalidArgumentError('Invalid AccessKey');
     }
 
+    let { device = 'best' } = options;
+
+    const isSimd = await simd();
+    if (!isSimd) {
+      throw new CobraErrors.CobraRuntimeError('Browser not supported.');
+    }
+
+    const isWorkerScope = typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope;
+    if (
+      !isWorkerScope &&
+      (device === 'best' || (device.startsWith('cpu') && device !== 'cpu:1'))
+    ) {
+      // eslint-disable-next-line no-console
+      console.warn('Multi-threading is not supported on main thread.');
+      device = 'cpu:1';
+    }
+
+    const sabDefined = typeof SharedArrayBuffer !== 'undefined'
+      && (device !== "cpu:1");
+
     return new Promise<Cobra>((resolve, reject) => {
       Cobra._cobraMutex
         .runExclusive(async () => {
-          const isSimd = await simd();
           const wasmOutput = await Cobra.initWasm(
             accessKey.trim(),
-            (isSimd) ? this._wasmSimd : this._wasm,
-            (isSimd) ? this._wasmSimdLib : this._wasmLib,
-            (isSimd) ? createModuleSimd : createModule);
+            device,
+            (sabDefined) ? this._wasmPThread : this._wasmSimd,
+            (sabDefined) ? this._wasmPThreadLib : this._wasmSimdLib,
+            (sabDefined) ? createModulePThread : createModuleSimd);
           return new Cobra(
             wasmOutput,
             voiceProbabilityCallback,
@@ -349,6 +380,7 @@ export class Cobra {
 
   private static async initWasm(
     accessKey: string,
+    device: string,
     wasmBase64: string,
     wasmLibBase64: string,
     createModuleFunc: any,
@@ -365,7 +397,7 @@ export class Cobra {
     const pv_cobra_init: pv_cobra_init_type = this.wrapAsyncFunction(
       module,
       "pv_cobra_init",
-      2);
+      3);
     const pv_cobra_process: pv_cobra_process_type = this.wrapAsyncFunction(
       module,
       "pv_cobra_process",
@@ -411,8 +443,19 @@ export class Cobra {
       throw new CobraErrors.CobraOutOfMemoryError('malloc failed: Cannot allocate memory');
     }
 
-    const status = await pv_cobra_init(accessKeyAddress, objectAddressAddress);
+    const deviceEncoded = new TextEncoder().encode(device);
+    const deviceAddress = module._malloc((device.length + 1) * Uint8Array.BYTES_PER_ELEMENT);
+    if (deviceAddress === 0) {
+      throw new CobraErrors.CobraOutOfMemoryError(
+        'malloc failed: Cannot allocate memory'
+      );
+    }
+    module.HEAP8.set(deviceEncoded, deviceAddress);
+    module.HEAPU8[deviceAddress + device.length] = 0;
+
+    const status = await pv_cobra_init(accessKeyAddress, deviceAddress, objectAddressAddress);
     module._pv_free(accessKeyAddress);
+    module._pv_free(deviceAddress);
 
     if (status !== PV_STATUS_SUCCESS) {
       const messageStack = Cobra.getMessageStack(
@@ -455,6 +498,111 @@ export class Cobra {
       messageStackAddressAddressAddress: messageStackAddressAddressAddress,
       messageStackDepthAddress: messageStackDepthAddress,
     };
+  }
+
+  /**
+   * Lists all available devices that Cobra can use for inference.
+   * Each entry in the list can be the used as the `device` argument for the `.create` method.
+   *
+   * @returns List of all available devices that Cobra can use for inference.
+   */
+  public static async listAvailableDevices(): Promise<string[]> {
+    return new Promise<string[]>((resolve, reject) => {
+      Cobra._cobraMutex
+        .runExclusive(async () => {
+          const isSimd = await simd();
+          if (!isSimd) {
+            throw new CobraErrors.CobraRuntimeError('Unsupported Browser');
+          }
+
+          const blob = new Blob(
+            [base64ToUint8Array(this._wasmSimdLib)],
+            { type: 'application/javascript' }
+          );
+          const module: CobraModule = await createModuleSimd({
+            mainScriptUrlOrBlob: blob,
+            wasmBinary: base64ToUint8Array(this._wasmSimd),
+          });
+
+          const hardwareDevicesAddressAddress = module._malloc(Int32Array.BYTES_PER_ELEMENT);
+          if (hardwareDevicesAddressAddress === 0) {
+            throw new CobraErrors.CobraOutOfMemoryError(
+              'malloc failed: Cannot allocate memory for hardwareDevices'
+            );
+          }
+
+          const numHardwareDevicesAddress = module._malloc(Int32Array.BYTES_PER_ELEMENT);
+          if (numHardwareDevicesAddress === 0) {
+            throw new CobraErrors.CobraOutOfMemoryError(
+              'malloc failed: Cannot allocate memory for numHardwareDevices'
+            );
+          }
+
+          const status: PvStatus = module._pv_cobra_list_hardware_devices(
+            hardwareDevicesAddressAddress,
+            numHardwareDevicesAddress
+          );
+
+          const messageStackDepthAddress = module._malloc(Int32Array.BYTES_PER_ELEMENT);
+          if (!messageStackDepthAddress) {
+            throw new CobraErrors.CobraOutOfMemoryError(
+              'malloc failed: Cannot allocate memory for messageStackDepth'
+            );
+          }
+
+          const messageStackAddressAddressAddress = module._malloc(Int32Array.BYTES_PER_ELEMENT);
+          if (!messageStackAddressAddressAddress) {
+            throw new CobraErrors.CobraOutOfMemoryError(
+              'malloc failed: Cannot allocate memory messageStack'
+            );
+          }
+
+          if (status !== PvStatus.SUCCESS) {
+            const messageStack = await Cobra.getMessageStack(
+              module._pv_get_error_stack,
+              module._pv_free_error_stack,
+              messageStackAddressAddressAddress,
+              messageStackDepthAddress,
+              module.HEAP32,
+              module.HEAPU8,
+            );
+            module._pv_free(messageStackAddressAddressAddress);
+            module._pv_free(messageStackDepthAddress);
+
+            throw pvStatusToException(
+              status,
+              'List devices failed',
+              messageStack
+            );
+          }
+          module._pv_free(messageStackAddressAddressAddress);
+          module._pv_free(messageStackDepthAddress);
+
+          const numHardwareDevices: number = module.HEAP32[numHardwareDevicesAddress / Int32Array.BYTES_PER_ELEMENT];
+          module._pv_free(numHardwareDevicesAddress);
+
+          const hardwareDevicesAddress = module.HEAP32[hardwareDevicesAddressAddress / Int32Array.BYTES_PER_ELEMENT];
+
+          const hardwareDevices: string[] = [];
+          for (let i = 0; i < numHardwareDevices; i++) {
+            const deviceAddress = module.HEAP32[hardwareDevicesAddress / Int32Array.BYTES_PER_ELEMENT + i];
+            hardwareDevices.push(arrayBufferToStringAtIndex(module.HEAPU8, deviceAddress));
+          }
+          module._pv_cobra_free_hardware_devices(
+            hardwareDevicesAddress,
+            numHardwareDevices
+          );
+          module._pv_free(hardwareDevicesAddressAddress);
+
+          return hardwareDevices;
+        })
+        .then((result: string[]) => {
+          resolve(result);
+        })
+        .catch((error: any) => {
+          reject(error);
+        });
+    });
   }
 
   private static getMessageStack(

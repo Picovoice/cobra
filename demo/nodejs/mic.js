@@ -22,9 +22,13 @@ const {
 } = require("@picovoice/cobra-node");
 
 program
-  .requiredOption(
+  .option(
     "-a, --access_key <string>",
     "AccessKey obtain from the Picovoice Console (https://console.picovoice.ai/)"
+  )
+  .option(
+    "-d, --device <string>",
+    "Device to run inference on (`best`, `cpu:{num_threads}` or `gpu:{gpu_index}`). Default: selects best device"
   )
   .option(
     "-l, --library_file_path <string>",
@@ -36,6 +40,10 @@ program
     Number,
     -1
   )
+  .option(
+    "-z, --show_inference_devices",
+    "Print devices that are available to run Cobra inference.",
+    false)
   .option("-s, --show_audio_devices", "show the list of available devices");
 
 if (process.argv.length < 1) {
@@ -47,6 +55,7 @@ let isInterrupted = false;
 
 async function micDemo() {
   let accessKey = program["access_key"];
+  let device = program["device"];
   let libraryFilePath = program["library_file_path"];
   let audioDeviceIndex = program["audio_device_index"];
   let showAudioDevices = program["show_audio_devices"];
@@ -61,12 +70,21 @@ async function micDemo() {
     process.exit();
   }
 
-  if (accessKey === undefined) {
-    console.log("No AccessKey provided");
+  const showInferenceDevices = program["show_inference_devices"];
+  if (showInferenceDevices) {
+    console.log(Cobra.listAvailableDevices().join('\n'));
     process.exit();
   }
 
+  if (accessKey === undefined) {
+    console.error(
+      "`--access_key` is a required argument"
+    );
+    return;
+  }
+
   let engineInstance = new Cobra(accessKey, {
+    device: device,
     libraryPath: libraryFilePath,
   });
 

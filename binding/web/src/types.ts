@@ -28,6 +28,9 @@ export enum PvStatus {
 }
 
 export type CobraOptions = {
+  /** @defaultValue 'best' */
+  device?: string;
+
   /** @defaultValue undefined */
   processErrorCallback?: (error: CobraError) => void;
 };
@@ -35,10 +38,10 @@ export type CobraOptions = {
 export type CobraWorkerInitRequest = {
   command: 'init';
   accessKey: string;
-  wasm: string;
-  wasmLib: string;
   wasmSimd: string;
   wasmSimdLib: string;
+  wasmPThread: string;
+  wasmPThreadLib: string;
   sdk: string;
   options: CobraOptions;
 };

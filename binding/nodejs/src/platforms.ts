@@ -179,7 +179,7 @@ export function getSystemLibraryPath(): string {
       }
       break;
     case SYSTEM_WINDOWS:
-      if (arch === X86_64 || arch == ARM_64) {
+      if (arch === X86_64 || arch === ARM_64) {
         return absoluteLibraryPath(
           SYSTEM_TO_LIBRARY_PATH.get(`${SYSTEM_WINDOWS}/${arch}`)
         );

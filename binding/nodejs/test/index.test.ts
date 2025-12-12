@@ -1,5 +1,5 @@
 //
-// Copyright 2024 Picovoice Inc.
+// Copyright 2024-2025 Picovoice Inc.
 //
 // You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
 // file accompanying this source.
@@ -25,6 +25,10 @@ const libraryPath = getSystemLibraryPath();
 const ACCESS_KEY = process.argv
   .filter(x => x.startsWith('--access_key='))[0]
   .split('--access_key=')[1];
+
+const DEVICE = process.argv
+  .filter(x => x.startsWith('--device='))[0]
+  ?.split('--device=')[1] ?? 'best';
 
 const loadPcm = (audioFile: string): Int16Array => {
   const waveFilePath = getAudioFile(audioFile);
@@ -58,7 +62,7 @@ const cobraProcessWaveFile = (
 
 describe('successful processes', () => {
   it('testing process', () => {
-    const cobraEngine = new Cobra(ACCESS_KEY);
+    const cobraEngine = new Cobra(ACCESS_KEY, { device: DEVICE });
 
     const probs = cobraProcessWaveFile(cobraEngine, WAV_PATH);
 
@@ -91,7 +95,13 @@ describe('successful processes', () => {
 describe('Defaults', () => {
   test('Empty AccessKey', () => {
     expect(() => {
-      new Cobra('');
+      new Cobra('', { device: DEVICE });
+    }).toThrow(CobraErrors.CobraInvalidArgumentError);
+  });
+
+  test('Invalid Device', () => {
+    expect(() => {
+      new Cobra(ACCESS_KEY, { device: 'invalid' });
     }).toThrow(CobraErrors.CobraInvalidArgumentError);
   });
 });
@@ -99,6 +109,7 @@ describe('Defaults', () => {
 describe('manual paths', () => {
   test('manual library path', () => {
     let cobraEngine = new Cobra(ACCESS_KEY, {
+      device: DEVICE,
       libraryPath: libraryPath,
     });
 
@@ -113,7 +124,7 @@ describe('error message stack', () => {
   test('message stack cleared after read', () => {
     let error: string[] = [];
     try {
-      new Cobra('invalid');
+      new Cobra('invalid', { device: DEVICE });
     } catch (e: any) {
       error = e.messageStack;
     }
@@ -122,11 +133,24 @@ describe('error message stack', () => {
     expect(error.length).toBeLessThanOrEqual(8);
 
     try {
-      new Cobra('invalid');
+      new Cobra('invalid', { device: DEVICE });
     } catch (e: any) {
       for (let i = 0; i < error.length; i++) {
         expect(error[i]).toEqual(e.messageStack[i]);
       }
+    }
+  });
+});
+
+describe('list hardware devices', () => {
+  test('listAvailableDevices returns array', () => {
+    const devices = Cobra.listAvailableDevices();
+
+    expect(Array.isArray(devices)).toBe(true);
+    expect(devices.length).toBeGreaterThan(0);
+
+    for (const device of devices) {
+      expect(typeof device).toBe('string');
     }
   });
 });

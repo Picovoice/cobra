@@ -1,6 +1,7 @@
 import { Cobra, CobraWorker } from "../";
 
 const ACCESS_KEY = Cypress.env('ACCESS_KEY');
+const DEVICE = Cypress.env('DEVICE');
 const NUM_TEST_ITERATIONS = Number(Cypress.env('NUM_TEST_ITERATIONS'));
 const PROC_PERFORMANCE_THRESHOLD_SEC = Number(Cypress.env('PROC_PERFORMANCE_THRESHOLD_SEC'));
 
@@ -21,7 +22,8 @@ async function testPerformance(
       ACCESS_KEY,
       () => {
         processed += 1;
-      }
+      },
+      { device: DEVICE }
     );
 
     let end = Date.now();

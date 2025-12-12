@@ -29,13 +29,15 @@ namespace CobraDemo
         /// </summary>
         /// <param name="inputAudioPath">Required argument. Absolute path to input audio file.</param>
         /// <param name="accessKey">AccessKey obtained from Picovoice Console (https://console.picovoice.ai/).</param>
+        /// <param name="device">Device to run demo.</param>
         /// <param name="threshold">Threshold for voice detection.</param>
         public static void RunDemo(
             string inputAudioPath,
             string accessKey,
+            string device,
             float threshold)
         {
-            using (Cobra cobra = new Cobra(accessKey))
+            using (Cobra cobra = new Cobra(accessKey, device))
             {
                 using (BinaryReader reader = new BinaryReader(File.Open(inputAudioPath, FileMode.Open)))
                 {
@@ -123,7 +125,9 @@ namespace CobraDemo
 
             string inputAudioPath = null;
             string accessKey = null;
+            string device = null;
             float threshold = 0.8f;
+            bool showInferenceDevices = false;
             bool showHelp = false;
 
             // parse command line arguments
@@ -144,6 +148,13 @@ namespace CobraDemo
                         accessKey = args[argIndex++];
                     }
                 }
+                else if (args[argIndex] == "--device")
+                {
+                    if (++argIndex < args.Length)
+                    {
+                        device = args[argIndex++];
+                    }
+                }
                 else if (args[argIndex] == "--threshold")
                 {
                     if (++argIndex < args.Length)
@@ -154,6 +165,11 @@ namespace CobraDemo
                         }
                     }
                 }
+                else if (args[argIndex] == "--show_inference_devices")
+                {
+                    showInferenceDevices = true;
+                    argIndex++;
+                }
                 else if (args[argIndex] == "-h" || args[argIndex] == "--help")
                 {
                     showHelp = true;
@@ -163,6 +179,12 @@ namespace CobraDemo
                 {
                     argIndex++;
                 }
+            }
+
+            if (showInferenceDevices)
+            {
+                Console.WriteLine(string.Join(Environment.NewLine, Cobra.GetAvailableDevices()));
+                return;
             }
 
             // print help text and exit
@@ -187,7 +209,7 @@ namespace CobraDemo
                 throw new ArgumentException($"Audio file at path {inputAudioPath} does not exist");
             }
 
-            RunDemo(inputAudioPath, accessKey, threshold);
+            RunDemo(inputAudioPath, accessKey, device, threshold);
         }
 
         private static void OnUnhandledException(object sender, UnhandledExceptionEventArgs e)
@@ -199,6 +221,8 @@ namespace CobraDemo
         private static readonly string HELP_STR = "Available options: \n " +
             $"\t--input_audio_path (required): Absolute path to input audio file.\n" +
             $"\t--access_key (required): AccessKey obtained from Picovoice Console (https://console.picovoice.ai/)\n" +
-            $"\t--threshold: Voice activity detection threshold. Demo will print out events that exceed the threshold. Must be between [0, 1]. \n";
+            "\t--device: Device to run inference on (`best`, `cpu:{num_threads}` or `gpu:{gpu_index}`). Default: automatically selects best device.\n" +
+            $"\t--threshold: Voice activity detection threshold. Demo will print out events that exceed the threshold. Must be between [0, 1]. \n" +
+            "\t--show_inference_devices: Print devices that are available to run Cobra inference.\n";
     }
 }

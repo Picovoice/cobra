@@ -40,8 +40,7 @@ def main():
 
     parser.add_argument(
         '--input_wav_path',
-        help='Absolute path to input audio file.',
-        required=True)
+        help='Absolute path to input audio file.')
 
     parser.add_argument(
         '--library_path',
@@ -49,8 +48,12 @@ def main():
 
     parser.add_argument(
         '--access_key',
-        help='AccessKey provided by Picovoice Console (https://console.picovoice.ai/)',
-        required=True)
+        help='AccessKey provided by Picovoice Console (https://console.picovoice.ai/)')
+
+    parser.add_argument(
+        '--device',
+        help='Device to run inference on (`best`, `cpu:{num_threads}` or `gpu:{gpu_index}`). '
+             'Default: automatically selects best device')
 
     parser.add_argument(
         '--threshold',
@@ -58,10 +61,22 @@ def main():
         type=float,
         default=0.8)
 
+    parser.add_argument(
+        '--show_inference_devices',
+        action='store_true',
+        help='Print devices that are available to run Cobra inference')
+
     args = parser.parse_args()
 
+    if args.show_inference_devices:
+        print('\n'.join(pvcobra.available_devices(library_path=args.library_path)))
+        return
+
+    if args.access_key is None or args.input_wav_path is None:
+        raise ValueError("Arguments --access_key and --input_wav_path are required.")
+
     try:
-        cobra = pvcobra.create(access_key=args.access_key, library_path=args.library_path)
+        cobra = pvcobra.create(access_key=args.access_key, device=args.device, library_path=args.library_path)
     except pvcobra.CobraInvalidArgumentError as e:
         print(e)
         raise e
