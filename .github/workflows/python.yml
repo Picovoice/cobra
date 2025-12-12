@@ -36,7 +36,8 @@ jobs:
     strategy:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
-        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13']
+        device: [ cpu:1, cpu ]
+        python-version: ['3.9', '3.10', '3.11', '3.12', '3.13', '3.14']
 
     steps:
     - uses: actions/checkout@v3
@@ -53,7 +54,7 @@ jobs:
       run: pip install -r requirements.txt
 
     - name: Test
-      run: python test_cobra.py ${{secrets.PV_VALID_ACCESS_KEY}}
+      run: python test_cobra.py ${{secrets.PV_VALID_ACCESS_KEY}} ${{matrix.device}}
 
   build-self-hosted:
     runs-on: ${{ matrix.machine }}
@@ -61,7 +62,15 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        device: [ best ]
         machine: [rpi3-32, rpi3-64, rpi4-32, rpi4-64, rpi5-64, pv-windows-arm64]
+        include:
+          - device: gpu
+            machine: pv-linux
+          - device: gpu
+            machine: pv-windows
+          - device: gpu
+            machine: pv-ios
 
     steps:
     - uses: actions/checkout@v3
@@ -73,4 +82,4 @@ jobs:
       run: pip3 install -r requirements.txt
 
     - name: Test
-      run: python3 test_cobra.py ${{secrets.PV_VALID_ACCESS_KEY}}
+      run: python3 test_cobra.py ${{secrets.PV_VALID_ACCESS_KEY}} ${{matrix.device}}

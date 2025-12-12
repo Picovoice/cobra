@@ -44,7 +44,7 @@ include pvcobra/lib/linux/x86_64/libpv_cobra.so
 include pvcobra/lib/mac/x86_64/libpv_cobra.dylib
 include pvcobra/lib/mac/arm64/libpv_cobra.dylib
 recursive-include pvcobra/lib/raspberry-pi *
-include pvcobra/lib/windows/amd64/libpv_cobra.dll
+recursive-include pvcobra/lib/windows/amd64 *
 include pvcobra/lib/windows/arm64/libpv_cobra.dll
 """
 
@@ -56,7 +56,7 @@ with open(os.path.join(os.path.dirname(__file__), 'README.md'), 'r') as f:
 
 setuptools.setup(
     name="pvcobra",
-    version="2.1.0",
+    version="3.0.0",
     author="Picovoice",
     author_email="hello@picovoice.ai",
     description="Cobra voice activity detection (VAD) engine",
