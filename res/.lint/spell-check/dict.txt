@@ -13,12 +13,14 @@ colour
 commandline
 Compat
 constraintlayout
+cuda
 cwrap
 dmix
 downsample
 drwav
 dtype
 dylib
+embedder
 emscripten
 filedemo
 HEAPF

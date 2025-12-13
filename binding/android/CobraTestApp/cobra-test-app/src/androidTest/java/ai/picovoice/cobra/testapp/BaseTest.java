@@ -51,6 +51,7 @@ public class BaseTest {
     String testResourcesPath;
 
     String accessKey = "";
+    String device;
 
     @Before
     public void Setup() throws IOException {
@@ -60,11 +61,15 @@ public class BaseTest {
         testResourcesPath = new File(appContext.getFilesDir(), "test_resources").getAbsolutePath();
 
         accessKey = appContext.getString(R.string.pvTestingAccessKey);
+        device = appContext.getString(R.string.pvTestingDevice);
     }
 
     @Test
     public void testProcess() throws CobraException, IOException {
-        Cobra cobra = new Cobra(accessKey);
+        Cobra cobra = new Cobra.Builder()
+                .setAccessKey(accessKey)
+                .setDevice(device)
+                .build();
 
         File testAudio = new File(getAudioFilepath("sample.wav"));
 
@@ -117,15 +122,45 @@ public class BaseTest {
 
     @Test
     public void testVersion() throws CobraException {
-        Cobra cobra = new Cobra(accessKey);
+        Cobra cobra = new Cobra.Builder()
+                .setAccessKey(accessKey)
+                .setDevice(device)
+                .build();
         assertTrue(cobra.getVersion().length() > 0);
+    }
+
+    @Test
+    public void testInvalidDevice() throws CobraException {
+        boolean didFail = false;
+        try {
+            Cobra cobra = new Cobra.Builder()
+                    .setAccessKey(accessKey)
+                    .setDevice("invalid_device")
+                    .build();
+            fail("CobraException expected due to invalid device.");
+        } catch (CobraException e) {
+            didFail = true;
+        }
+        assertTrue(didFail);
+    }
+
+    @Test
+    public void testGetAvailableDevices() throws CobraException {
+        String[] availableDevices = Cobra.getAvailableDevices();
+        assertTrue(availableDevices.length > 0);
+        for (String d : availableDevices) {
+            assertTrue(d != null && d.length() > 0);
+        }
     }
 
     @Test
     public void testErrorStack() {
         String[] error = {};
         try {
-            Cobra cobra = new Cobra("invalid");
+            Cobra cobra = new Cobra.Builder()
+                    .setAccessKey("invalid")
+                    .setDevice(device)
+                    .build();
         } catch (CobraException e) {
             error = e.getMessageStack();
         }
@@ -134,7 +169,10 @@ public class BaseTest {
         assertTrue(error.length <= 8);
 
         try {
-            Cobra cobra = new Cobra("invalid");
+            Cobra cobra = new Cobra.Builder()
+                    .setAccessKey("invalid")
+                    .setDevice(device)
+                    .build();
         } catch (CobraException e) {
             for (int i = 0; i < error.length; i++) {
                 assertEquals(e.getMessageStack()[i], error[i]);

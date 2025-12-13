@@ -11,6 +11,9 @@
 		02A1194B268D39A700A2AC99 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A1194A268D39A700A2AC99 /* ContentView.swift */; };
 		02A1194D268D39AB00A2AC99 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 02A1194C268D39AB00A2AC99 /* Assets.xcassets */; };
 		02A1195F268D3FD600A2AC99 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02A1195E268D3FD600A2AC99 /* ViewModel.swift */; };
+		5A62A17B2EECD46700D483BE /* Cobra in Frameworks */ = {isa = PBXBuildFile; productRef = 5A62A17A2EECD46700D483BE /* Cobra */; };
+		5A62A17E2EECD6F000D483BE /* Cobra in Frameworks */ = {isa = PBXBuildFile; productRef = 5A62A17D2EECD6F000D483BE /* Cobra */; };
+		5AED01F02EE2442700B36D1F /* Cobra in Frameworks */ = {isa = PBXBuildFile; productRef = 5AED01EF2EE2442700B36D1F /* Cobra */; };
 		E132B4472E85D93D00BFE108 /* Cobra in Frameworks */ = {isa = PBXBuildFile; productRef = E132B4462E85D93D00BFE108 /* Cobra */; };
 		E13ECC532E85F39E0049A48F /* Cobra in Frameworks */ = {isa = PBXBuildFile; productRef = E13ECC522E85F39E0049A48F /* Cobra */; };
 		E14CDF4E2CE43A7600E6494C /* ios_voice_processor in Frameworks */ = {isa = PBXBuildFile; productRef = E14CDF4D2CE43A7600E6494C /* ios_voice_processor */; };
@@ -34,9 +37,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				E13ECC532E85F39E0049A48F /* Cobra in Frameworks */,
+				5AED01F02EE2442700B36D1F /* Cobra in Frameworks */,
 				E1643D522CE6DE98009027E6 /* Cobra in Frameworks */,
 				E132B4472E85D93D00BFE108 /* Cobra in Frameworks */,
+				5A62A17B2EECD46700D483BE /* Cobra in Frameworks */,
 				E1643D4F2CE6DE16009027E6 /* Cobra in Frameworks */,
+				5A62A17E2EECD6F000D483BE /* Cobra in Frameworks */,
 				E14CDF512CE43AB600E6494C /* Cobra in Frameworks */,
 				E14CDF4E2CE43A7600E6494C /* ios_voice_processor in Frameworks */,
 			);
@@ -118,7 +124,7 @@
 			mainGroup = 02A1193C268D39A700A2AC99;
 			packageReferences = (
 				E14CDF4C2CE43A7600E6494C /* XCRemoteSwiftPackageReference "ios-voice-processor" */,
-				E13ECC512E85F39E0049A48F /* XCRemoteSwiftPackageReference "cobra" */,
+				5A62A17C2EECD6F000D483BE /* XCRemoteSwiftPackageReference "cobra" */,
 			);
 			productRefGroup = 02A11946268D39A700A2AC99 /* Products */;
 			projectDirPath = "";
@@ -205,7 +211,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -260,7 +266,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -280,7 +286,7 @@
 				DEVELOPMENT_TEAM = 65723695GD;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = CobraDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -302,7 +308,7 @@
 				DEVELOPMENT_TEAM = 65723695GD;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = CobraDemo/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.6;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -338,6 +344,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		5A62A17C2EECD6F000D483BE /* XCRemoteSwiftPackageReference "cobra" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Picovoice/cobra/";
+			requirement = {
+				kind = exactVersion;
+				version = 3.0.0;
+			};
+		};
 		E13ECC512E85F39E0049A48F /* XCRemoteSwiftPackageReference "cobra" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Picovoice/cobra";
@@ -373,6 +387,19 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		5A62A17A2EECD46700D483BE /* Cobra */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Cobra;
+		};
+		5A62A17D2EECD6F000D483BE /* Cobra */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5A62A17C2EECD6F000D483BE /* XCRemoteSwiftPackageReference "cobra" */;
+			productName = Cobra;
+		};
+		5AED01EF2EE2442700B36D1F /* Cobra */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Cobra;
+		};
 		E132B4462E85D93D00BFE108 /* Cobra */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Cobra;

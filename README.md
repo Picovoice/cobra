@@ -418,6 +418,13 @@ cobra.release();
 
 ## Releases
 
+### v3.0.0 - December 12th, 2025
+
+- Improved engine performance
+- Added support for running on GPU or multiple CPU cores
+- Node.js min version bumped to Node 18
+- iOS min version bumped to iOS 16
+
 ### v2.1.0 - September 25th, 2025
 
 - Updated Cobra engine for improved accuracy

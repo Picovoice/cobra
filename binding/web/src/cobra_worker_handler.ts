@@ -53,10 +53,10 @@ self.onmessage = async function (
       try {
         event.data.options.processErrorCallback = processErrorCallback;
 
-        Cobra.setWasm(event.data.wasm);
         Cobra.setWasmSimd(event.data.wasmSimd);
-        Cobra.setWasmLib(event.data.wasmLib);
         Cobra.setWasmSimdLib(event.data.wasmSimdLib);
+        Cobra.setWasmPThread(event.data.wasmPThread);
+        Cobra.setWasmPThreadLib(event.data.wasmPThreadLib);
         Cobra.setSdk(event.data.sdk);
         cobra = await Cobra.create(
           event.data.accessKey,

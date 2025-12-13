@@ -45,7 +45,7 @@ namespace Pv
         static Cobra()
         {
 
-#if NETCOREAPP3_0_OR_GREATER
+#if NET6_0_OR_GREATER
 
             NativeLibrary.SetDllImportResolver(typeof(Cobra).Assembly, ImportResolver);
 
@@ -53,7 +53,7 @@ namespace Pv
 
         }
 
-#if NETCOREAPP3_0_OR_GREATER
+#if NET6_0_OR_GREATER
 
         private static IntPtr ImportResolver(string libraryName, Assembly assembly, DllImportSearchPath? searchPath)
         {
@@ -74,6 +74,7 @@ namespace Pv
         [DllImport(LIBRARY, CallingConvention = CallingConvention.Cdecl)]
         private static extern PvStatus pv_cobra_init(
             IntPtr accessKey,
+            IntPtr device,
             out IntPtr handle);
 
         [DllImport(LIBRARY, CallingConvention = CallingConvention.Cdecl)]
@@ -103,6 +104,16 @@ namespace Pv
         [DllImport(LIBRARY, CallingConvention = CallingConvention.Cdecl)]
         private static extern void pv_free_error_stack(IntPtr messageStack);
 
+        [DllImport(LIBRARY, CallingConvention = CallingConvention.Cdecl)]
+        private static extern PvStatus pv_cobra_list_hardware_devices(
+            out IntPtr hardwareDevices,
+            out int numHardwareDevices);
+
+        [DllImport(LIBRARY, CallingConvention = CallingConvention.Cdecl)]
+        private static extern void pv_cobra_free_hardware_devices(
+            IntPtr hardwareDevices,
+            int numHardwareDevices);
+
         /// <summary>
         /// Gets the version number of the Cobra library.
         /// </summary>
@@ -125,22 +136,35 @@ namespace Pv
         /// Creates an instance of the Cobra VAD engine.
         /// </summary>
         /// <param name="accessKey">AccessKey obtained from Picovoice Console (https://console.picovoice.ai/).</param>
-        public Cobra(string accessKey)
+        /// <param name="device">
+        /// String representation of the device (e.g., CPU or GPU) to use. If set to `best`, the most suitable device
+        /// is selected automatically. If set to `gpu`, the engine uses the first available GPU device. To select a
+        /// specific GPU device, set this argument to `gpu:${GPU_INDEX}`, where `${GPU_INDEX}` is the index of the
+        /// target GPU. If set to `cpu`, the engine will run on the CPU with the default number of threads. To specify
+        /// the number of threads, set this argument to `cpu:${NUM_THREADS}`, where `${NUM_THREADS}` is the desired
+        /// number of threads.
+        /// </param>
+        public Cobra(string accessKey, string device = null)
         {
             if (string.IsNullOrEmpty(accessKey))
             {
                 throw new CobraInvalidArgumentException("No AccessKey provided to Cobra");
             }
 
+            device = device ?? "best";
+
             IntPtr accessKeyPtr = Utils.GetPtrFromUtf8String(accessKey);
+            IntPtr devicePtr = Utils.GetPtrFromUtf8String(device);
 
             pv_set_sdk("dotnet");
 
             PvStatus status = pv_cobra_init(
                 accessKeyPtr,
+                devicePtr,
                 out _libraryPointer);
 
             Marshal.FreeHGlobal(accessKeyPtr);
+            Marshal.FreeHGlobal(devicePtr);
 
             if (status != PvStatus.SUCCESS)
             {
@@ -185,6 +209,36 @@ namespace Pv
             }
 
             return voiceProbability;
+        }
+
+        /// <summary>
+        /// Lists all available devices that Cobra can use for inference.
+        /// Each entry in the list can be used as the `device` argument when initializing Cobra.
+        /// </summary>
+        /// <returns>Array of all available devices that Cobra can use for inference.</returns>
+        public static string[] GetAvailableDevices()
+        {
+            IntPtr deviceListRef;
+            int deviceListSize;
+
+            PvStatus status = pv_cobra_list_hardware_devices(out deviceListRef, out deviceListSize);
+            if (status != PvStatus.SUCCESS)
+            {
+                string[] messageStack = GetMessageStack();
+                throw PvStatusToException(status, "Unable to list hardware devices", messageStack);
+            }
+
+            int elementSize = Marshal.SizeOf(typeof(IntPtr));
+            string[] deviceList = new string[deviceListSize];
+
+            for (int i = 0; i < deviceListSize; i++)
+            {
+                deviceList[i] = Marshal.PtrToStringAnsi(Marshal.ReadIntPtr(deviceListRef, i * elementSize));
+            }
+
+            pv_cobra_free_hardware_devices(deviceListRef, deviceListSize);
+
+            return deviceList;
         }
 
         /// <summary>

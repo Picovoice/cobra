@@ -1,5 +1,5 @@
 #
-# Copyright 2021-2023 Picovoice Inc.
+# Copyright 2021-2025 Picovoice Inc.
 #
 # You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
 # file accompanying this source.
@@ -123,16 +123,26 @@ class Cobra(object):
     class CCobra(Structure):
         pass
 
-    def __init__(self, access_key: str, library_path: str):
+    def __init__(self, access_key: str, device: str, library_path: str):
         """
         Constructor.
 
         :param access_key: AccessKey provided by Picovoice Console (https://console.picovoice.ai/)
+        :param device: String representation of the device (e.g., CPU or GPU) to use. If set to
+        `best`, the most suitable device is selected automatically. If set to `gpu`, the engine
+        uses the first available GPU device. To select a specific GPU device, set this argument
+        to `gpu:${GPU_INDEX}`, where `${GPU_INDEX}` is the index of the target GPU. If set to
+        `cpu`, the engine will run on the CPU with the default number of threads. To specify
+        the number of threads, set this argument to `cpu:${NUM_THREADS}`, where `${NUM_THREADS}`
+        is the desired number of threads.
         :param library_path: Absolute path to Cobra's dynamic library.
         """
 
         if not access_key:
             raise ValueError("access_key should be a non-empty string.")
+
+        if not isinstance(device, str) or len(device) == 0:
+            raise CobraInvalidArgumentError("`device` should be a non-empty string.")
 
         if not os.path.exists(library_path):
             raise IOError("Couldn't find Cobra's dynamic library at '%s'." % library_path)
@@ -156,6 +166,7 @@ class Cobra(object):
         init_func = library.pv_cobra_init
         init_func.argtypes = [
             c_char_p,
+            c_char_p,
             POINTER(POINTER(self.CCobra))]
         init_func.restype = self.PicovoiceStatuses
 
@@ -163,6 +174,7 @@ class Cobra(object):
 
         status = init_func(
             access_key.encode('utf-8'),
+            device.encode('utf-8'),
             byref(self._handle))
         if status is not self.PicovoiceStatuses.SUCCESS:
             raise self._PICOVOICE_STATUS_TO_EXCEPTION[status](
@@ -247,6 +259,34 @@ class Cobra(object):
         return message_stack
 
 
+def list_hardware_devices(library_path: str) -> Sequence[str]:
+    dll_dir_obj = None
+    if hasattr(os, "add_dll_directory"):
+        dll_dir_obj = os.add_dll_directory(os.path.dirname(library_path))
+
+    library = cdll.LoadLibrary(library_path)
+
+    if dll_dir_obj is not None:
+        dll_dir_obj.close()
+
+    list_hardware_devices_func = library.pv_cobra_list_hardware_devices
+    list_hardware_devices_func.argtypes = [POINTER(POINTER(c_char_p)), POINTER(c_int32)]
+    list_hardware_devices_func.restype = Cobra.PicovoiceStatuses
+    c_hardware_devices = POINTER(c_char_p)()
+    c_num_hardware_devices = c_int32()
+    status = list_hardware_devices_func(byref(c_hardware_devices), byref(c_num_hardware_devices))
+    if status is not Cobra.PicovoiceStatuses.SUCCESS:
+        raise Cobra._PICOVOICE_STATUS_TO_EXCEPTION[status](message='`pv_cobra_list_hardware_devices` failed.')
+    res = [c_hardware_devices[i].decode() for i in range(c_num_hardware_devices.value)]
+
+    free_hardware_devices_func = library.pv_cobra_free_hardware_devices
+    free_hardware_devices_func.argtypes = [POINTER(c_char_p), c_int32]
+    free_hardware_devices_func.restype = None
+    free_hardware_devices_func(c_hardware_devices, c_num_hardware_devices.value)
+
+    return res
+
+
 __all__ = [
     'Cobra',
     'CobraActivationError',
@@ -261,4 +301,5 @@ __all__ = [
     'CobraMemoryError',
     'CobraRuntimeError',
     'CobraStopIterationError',
+    'list_hardware_devices',
 ]

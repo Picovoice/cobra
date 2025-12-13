@@ -28,10 +28,10 @@ export class CobraWorker {
   private readonly _sampleRate: number;
   private static _sdk: string = 'web';
 
-  private static _wasm: string;
-  private static _wasmLib: string;
   private static _wasmSimd: string;
   private static _wasmSimdLib: string;
+  private static _wasmPThread: string;
+  private static _wasmPThreadLib: string;
 
   private constructor(
     worker: Worker,
@@ -74,26 +74,6 @@ export class CobraWorker {
   }
 
   /**
-   * Set base64 wasm file.
-   * @param wasm Base64'd wasm file to use to initialize wasm.
-   */
-  public static setWasm(wasm: string): void {
-    if (this._wasm === undefined) {
-      this._wasm = wasm;
-    }
-  }
-
-  /**
-   * Set base64 wasm lib file in text format.
-   * @param wasmLib Base64'd wasm lib file in text format.
-   */
-  public static setWasmLib(wasmLib: string): void {
-    if (this._wasmLib === undefined) {
-      this._wasmLib = wasmLib;
-    }
-  }
-
-  /**
    * Set base64 wasm file with SIMD feature.
    * @param wasmSimd Base64'd wasm SIMD file to use to initialize wasm.
    */
@@ -113,6 +93,26 @@ export class CobraWorker {
     }
   }
 
+  /**
+   * Set base64 wasm file with SIMD and pthread feature.
+   * @param wasmPThread Base64'd wasm file to use to initialize wasm.
+   */
+  public static setWasmPThread(wasmPThread: string): void {
+    if (this._wasmPThread === undefined) {
+      this._wasmPThread = wasmPThread;
+    }
+  }
+
+  /**
+   * Set base64 SIMD and thread wasm file in text format.
+   * @param wasmPThreadLib Base64'd wasm file in text format.
+   */
+  public static setWasmPThreadLib(wasmPThreadLib: string): void {
+    if (this._wasmPThreadLib === undefined) {
+      this._wasmPThreadLib = wasmPThreadLib;
+    }
+  }
+
   public static setSdk(sdk: string): void {
     CobraWorker._sdk = sdk;
   }
@@ -125,6 +125,12 @@ export class CobraWorker {
    * @param accessKey AccessKey obtained from Picovoice Console (https://console.picovoice.ai/)
    * @param voiceProbabilityCallback User-defined callback to run after receiving voice probability result.
    * @param options Optional configuration arguments.
+   * @param options.device String representation of the device (e.g., CPU or GPU) to use. If set to `best`, the most
+   * suitable device is selected automatically. If set to `gpu`, the engine uses the first available GPU device. To
+   * select a specific GPU device, set this argument to `gpu:${GPU_INDEX}`, where `${GPU_INDEX}` is the index of the
+   * target GPU. If set to `cpu`, the engine will run on the CPU with the default number of threads. To specify the
+   * number of threads, set this argument to `cpu:${NUM_THREADS}`, where `${NUM_THREADS}` is the desired number of
+   * threads.
    * @param options.processErrorCallback User-defined callback invoked if any error happens while processing audio.
    *
    * @returns An instance of CobraWorker.
@@ -195,10 +201,10 @@ export class CobraWorker {
     worker.postMessage({
       command: 'init',
       accessKey: accessKey,
-      wasm: this._wasm,
-      wasmLib: this._wasmLib,
       wasmSimd: this._wasmSimd,
       wasmSimdLib: this._wasmSimdLib,
+      wasmPThread: this._wasmPThread,
+      wasmPThreadLib: this._wasmPThreadLib,
       sdk: this._sdk,
       options: workerOptions,
     });

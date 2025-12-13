@@ -1,5 +1,5 @@
 //
-// Copyright 2024 Picovoice Inc.
+// Copyright 2024-2025 Picovoice Inc.
 //
 // You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
 // file accompanying this source.
@@ -29,6 +29,11 @@ type VoiceProbabilityAndStatus = {
   is_voiced: number;
   status: PvStatus;
 };
+type CobraHardwareDevicesAndStatus = {
+  hardware_devices: string[];
+  num_hardware_devices: number;
+  status: PvStatus;
+};
 
 /**
  * Node.js binding for Cobra voice activity detection engine
@@ -48,6 +53,12 @@ export default class Cobra {
    * Creates an instance of Cobra.
    * @param {string} accessKey AccessKey obtained from Picovoice Console (https://console.picovoice.ai/).
    * @param options Optional configuration arguments.
+   * @param {string} options.device String representation of the device (e.g., CPU or GPU) to use.
+   *   If set to `best`, the most suitable device is selected automatically.
+   *   If set to `gpu`, the engine uses the first available GPU device.
+   *   To select a specific GPU device, set this argument to `gpu:${GPU_INDEX}`.
+   *   If set to `cpu`, the engine will run on the CPU with the default number of threads.
+   *   To specify the number of threads, set this argument to `cpu:${NUM_THREADS}`.
    * @param {string} options.libraryPath the path to the Cobra library (.node extension)
    */
   constructor(accessKey: string, options: CobraOptions = {}) {
@@ -60,7 +71,10 @@ export default class Cobra {
       throw new CobraInvalidArgumentError(`No AccessKey provided to Cobra`);
     }
 
-    const { libraryPath = getSystemLibraryPath() } = options;
+    const {
+      libraryPath = getSystemLibraryPath(),
+      device = 'best',
+    } = options;
 
     if (!fs.existsSync(libraryPath)) {
       throw new CobraInvalidArgumentError(
@@ -75,7 +89,7 @@ export default class Cobra {
     try {
       pvCobra.set_sdk('nodejs');
 
-      cobraHandleAndStatus = pvCobra.init(accessKey);
+      cobraHandleAndStatus = pvCobra.init(accessKey, device);
     } catch (err: any) {
       pvStatusToException(PvStatus[err.code as keyof typeof PvStatus], err);
     }
@@ -168,6 +182,39 @@ export default class Cobra {
       this._pvCobra.delete(this._handle);
       this._handle = 0;
     }
+  }
+
+  /**
+   * Lists all available devices that Cobra can use for inference.
+   * Each entry in the list can be used as the `device` argument when initializing Cobra.
+   *
+   * @returns {string[]} Array of all available devices that Cobra can use for inference.
+   */
+  static listAvailableDevices(options: CobraOptions = {}): string[] {
+    const {
+      libraryPath = getSystemLibraryPath(),
+    } = options;
+
+    const pvCobra = require(libraryPath); // eslint-disable-line
+
+    let cobraHardwareDevicesAndStatus: CobraHardwareDevicesAndStatus | null = null;
+    try {
+      cobraHardwareDevicesAndStatus = pvCobra.list_hardware_devices();
+    } catch (err: any) {
+      pvStatusToException(<PvStatus>err.code, err);
+    }
+
+    const status = cobraHardwareDevicesAndStatus!.status;
+    if (status !== PvStatus.SUCCESS) {
+      const errorObject = pvCobra.get_error_stack();
+      if (errorObject.status === PvStatus.SUCCESS) {
+        pvStatusToException(status, 'Cobra failed to get available devices', errorObject.message_stack);
+      } else {
+        pvStatusToException(status, 'Unable to get Cobra error state');
+      }
+    }
+
+    return cobraHardwareDevicesAndStatus!.hardware_devices;
   }
 
   private handlePvStatus(status: PvStatus, message: string): void {
