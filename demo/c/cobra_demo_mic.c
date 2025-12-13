@@ -191,7 +191,7 @@ int picovoice_main(int argc, char *argv[]) {
         exit(1);
     }
 
-    pv_status_t (*pv_cobra_init_func)(const char *, pv_cobra_t **) =
+    pv_status_t (*pv_cobra_init_func)(const char *, const char *, pv_cobra_t **) =
             load_symbol(cobra_library, "pv_cobra_init");
     if (!pv_cobra_init_func) {
         print_dl_error("failed to load 'pv_cobra_init'");
@@ -243,7 +243,7 @@ int picovoice_main(int argc, char *argv[]) {
     pv_status_t error_status = PV_STATUS_RUNTIME_ERROR;
 
     pv_cobra_t *cobra = NULL;
-    pv_status_t cobra_status = pv_cobra_init_func(access_key, &cobra);
+    pv_status_t cobra_status = pv_cobra_init_func(access_key, "best", &cobra);
     if (cobra_status != PV_STATUS_SUCCESS) {
         fprintf(stderr, "failed to init with '%s'", pv_status_to_string_func(cobra_status));
         error_status = pv_get_error_stack_func(&message_stack, &message_stack_depth);
