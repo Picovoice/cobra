@@ -424,7 +424,6 @@ cobra.release();
 - Added support for running on GPU or multiple CPU cores
 - Node.js min version bumped to Node 18
 - iOS min version bumped to iOS 16
-- Added MCU library support and associated demo
 
 ### v2.1.0 - September 25th, 2025
 
