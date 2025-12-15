@@ -1,6 +1,9 @@
 # Cobra Voice Activity Detection Engine Demo for STM32F411 (Multiple languages)
 
-This package contains a demo project for the STM32F411 Discovery kit using Cobra voice activity detection engine.
+This package contains a demo project for the STM32F411 Discovery kit using Cobra voice activity
+detection engine. Cobra VAD for MCU is currently in Beta and available for evaluation for 30 minutes
+per device, (i.e., user). If you are working on a commercial project or require extended access,
+please contact [Picovoice](http://picovoice.ai/contact) with your project details.
 
 ## Installation
 
@@ -39,8 +42,3 @@ To compile and run the demo project on a STM32f411 discovery board, perform the 
 > to [STM32 microcontroller debug toolbox](https://www.st.com/resource/en/application_note/dm00354244-stm32-microcontroller-debug-toolbox-stmicroelectronics.pdf)
 > , Chapter 7.
 
-This demo includes an evaluation version of the Cobra engine designed to help users quickly
-test and integrate voice activity detection on STM32 microcontrollers. The demo runs for
-a limited duration per session, which is sufficient for development, testing, and validation
-purpose. For applications that require extended or uninterrupted operation, or for production deployments,
-please contact the [Picovoice business team](https://picovoice.ai/contact/) to obtain a full, unrestricted version of Cobra.
