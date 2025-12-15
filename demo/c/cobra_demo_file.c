@@ -87,13 +87,17 @@ static void print_dl_error(const char *message) {
 static struct option long_options[] = {
         {"library_path",            required_argument, NULL, 'l'},
         {"access_key",              required_argument, NULL, 'a'},
-        {"device",                  required_argument, NULL, 'd'},
+        {"device",                  required_argument, NULL, 'y'},
         {"wav_path",                required_argument, NULL, 'w'},
         {"show_inference_devices",  no_argument,       NULL, 'i'},
 };
 
 void print_usage(const char *program_name) {
-    fprintf(stdout, "Usage: %s [-l LIBRARY_PATH -a ACCESS_KEY -d DEVICE -w WAV_PATH -i --show_inference_devices]\n", program_name);
+    fprintf(stderr,
+            "Usage : %s -a ACCESS_KEY -l LIBRARY_PATH [-y DEVICE] "
+            "        %s [-i, --show_inference_devices]\n",
+            program_name,
+            program_name);
 }
 
 void print_error_message(char **message_stack, int32_t message_stack_depth) {
@@ -188,7 +192,7 @@ int picovoice_main(int argc, char *argv[]) {
     bool show_inference_devices = false;
 
     int c;
-    while ((c = getopt_long(argc, argv, "l:a:d:w:i", long_options, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "l:a:y:w:i", long_options, NULL)) != -1) {
         switch (c) {
             case 'l':
                 library_path = optarg;
@@ -196,7 +200,7 @@ int picovoice_main(int argc, char *argv[]) {
             case 'a':
                 access_key = optarg;
                 break;
-            case 'd':
+            case 'y':
                 device = optarg;
                 break;
             case 'w':
@@ -326,7 +330,7 @@ int picovoice_main(int argc, char *argv[]) {
     pv_status_t error_status = PV_STATUS_RUNTIME_ERROR;
 
     pv_cobra_t *cobra = NULL;
-    pv_status_t status = pv_cobra_init_func(access_key, "best", &cobra);
+    pv_status_t status = pv_cobra_init_func(access_key, device, &cobra);
     if (status != PV_STATUS_SUCCESS) {
         fprintf(stderr, "failed to init with '%s'", pv_status_to_string_func(status));
         error_status = pv_get_error_stack_func(&message_stack, &message_stack_depth);

@@ -92,14 +92,17 @@ static struct option long_options[] = {
         {"show_inference_devices",  no_argument,       NULL, 'i'},
         {"library_path",            required_argument, NULL, 'l'},
         {"access_key",              required_argument, NULL, 'a'},
-        {"device",                  required_argument, NULL, 'd'},
-        {"audio_device_index",      required_argument, NULL, 'e'}
+        {"device",                  required_argument, NULL, 'y'},
+        {"audio_device_index",      required_argument, NULL, 'd'}
 };
 
 void print_usage(const char *program_name) {
-    fprintf(
-            stdout,
-            "Usage: %s [-s] [-i] [-l LIBRARY_PATH -a ACCESS_KEY -d DEVICE -e AUDIO_DEVICE_INDEX]\n",
+    fprintf(stderr,
+            "Usage : %s -a ACCESS_KEY -l LIBRARY_PATH [-y DEVICE] [-d AUDIO_DEVICE_INDEX]\n"
+            "        %s [-s, --show_audio_devices]\n"
+            "        %s [-i, --show_inference_devices]\n",
+            program_name,
+            program_name,
             program_name);
 }
 
@@ -229,7 +232,7 @@ int picovoice_main(int argc, char *argv[]) {
     bool show_inference_devices = false;
 
     int c;
-    while ((c = getopt_long(argc, argv, "hsil:a:d:e:", long_options, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "hsil:a:y:d:", long_options, NULL)) != -1) {
         switch (c) {
             case 's':
                 show_audio_devices();
@@ -243,7 +246,7 @@ int picovoice_main(int argc, char *argv[]) {
             case 'a':
                 access_key = optarg;
                 break;
-            case 'd':
+            case 'y':
                 device = optarg;
                 break;
             case 'e':
