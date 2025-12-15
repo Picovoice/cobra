@@ -1,5 +1,5 @@
 #
-# Copyright 2023 Picovoice Inc.
+# Copyright 2023-2025 Picovoice Inc.
 #
 # You may not use this file except in compliance with the license. A copy of the license is located in the "LICENSE"
 # file accompanying this source.
@@ -22,11 +22,16 @@ class CobraCTestCase(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls._access_key = sys.argv[1]
-        cls._platform = sys.argv[2]
-        cls._arch = "" if len(sys.argv) != 4 else sys.argv[3]
+        cls._device = sys.argv[2]
+        cls._platform = sys.argv[3]
+        cls._arch = "" if len(sys.argv) != 5 else sys.argv[4]
         cls._root_dir = os.path.join(os.path.dirname(__file__), "../../..")
 
     def _get_library_file(self):
+        if self._platform == "windows":
+            if self._arch == "amd64":
+                os.environ["PATH"] += os.pathsep + os.path.join(self._root_dir, "lib", "windows", "amd64")
+
         return os.path.join(
             self._root_dir,
             "lib",
@@ -41,6 +46,7 @@ class CobraCTestCase(unittest.TestCase):
             os.path.join(os.path.dirname(__file__), "../build/cobra_demo_file"),
             "-a", self._access_key,
             "-l", self._get_library_file(),
+            "-y", self._device,
             "-w", os.path.join(self._root_dir, "res", "audio", "sample.wav"),
         ]
         process = subprocess.Popen(args, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
@@ -50,7 +56,7 @@ class CobraCTestCase(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) < 3 or len(sys.argv) > 4:
-        print("usage: test_cobra_c.py ${AccessKey} ${Platform} [${Arch}]")
+    if len(sys.argv) < 4 or len(sys.argv) > 5:
+        print("usage: test_cobra_c.py ${AccessKey} ${Device} ${Platform} [${Arch}]")
         exit(1)
     unittest.main(argv=sys.argv[:1])

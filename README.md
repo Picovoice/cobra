@@ -241,7 +241,7 @@ using(Cobra cobra = new Cobra(accessKey))
 
 ```c
     pv_cobra_t *handle = NULL;
-    pv_status_t status = pv_cobra_init(${ACCESS_KEY}, &handle);
+    pv_status_t status = pv_cobra_init(${ACCESS_KEY}, ${DEVICE}, &handle);
     if (status != PV_STATUS_SUCCESS) {
         // error handling logic
     }

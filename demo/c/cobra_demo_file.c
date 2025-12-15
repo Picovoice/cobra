@@ -85,13 +85,19 @@ static void print_dl_error(const char *message) {
 }
 
 static struct option long_options[] = {
-        {"library_path",       required_argument, NULL, 'l'},
-        {"access_key",         required_argument, NULL, 'a'},
-        {"wav_path",           required_argument, NULL, 'w'},
+        {"library_path",            required_argument, NULL, 'l'},
+        {"access_key",              required_argument, NULL, 'a'},
+        {"device",                  required_argument, NULL, 'y'},
+        {"wav_path",                required_argument, NULL, 'w'},
+        {"show_inference_devices",  no_argument,       NULL, 'i'},
 };
 
 void print_usage(const char *program_name) {
-    fprintf(stdout, "Usage: %s [-l LIBRARY_PATH -a ACCESS_KEY -w WAV_PATH]\n", program_name);
+    fprintf(stderr,
+            "Usage : %s -a ACCESS_KEY -l LIBRARY_PATH -w WAV_PATH [-y DEVICE] "
+            "        %s [-i, --show_inference_devices]\n",
+            program_name,
+            program_name);
 }
 
 void print_error_message(char **message_stack, int32_t message_stack_depth) {
@@ -100,13 +106,93 @@ void print_error_message(char **message_stack, int32_t message_stack_depth) {
     }
 }
 
+
+void print_inference_devices(const char *library_path) {
+    void *dl_handle = open_dl(library_path);
+    if (!dl_handle) {
+        fprintf(stderr, "Failed to open library at '%s'.\n", library_path);
+        exit(EXIT_FAILURE);
+    }
+
+    const char *(*pv_status_to_string_func)(pv_status_t) = load_symbol(dl_handle, "pv_status_to_string");
+    if (!pv_status_to_string_func) {
+        print_dl_error("Failed to load 'pv_status_to_string'");
+        exit(EXIT_FAILURE);
+    }
+
+    pv_status_t (*pv_cobra_list_hardware_devices_func)(char ***, int32_t *) =
+    load_symbol(dl_handle, "pv_cobra_list_hardware_devices");
+    if (!pv_cobra_list_hardware_devices_func) {
+        print_dl_error("failed to load `pv_cobra_list_hardware_devices`");
+        exit(EXIT_FAILURE);
+    }
+
+    pv_status_t (*pv_cobra_free_hardware_devices_func)(char **, int32_t) =
+        load_symbol(dl_handle, "pv_cobra_free_hardware_devices");
+    if (!pv_cobra_free_hardware_devices_func) {
+        print_dl_error("failed to load `pv_cobra_free_hardware_devices`");
+        exit(EXIT_FAILURE);
+    }
+
+    pv_status_t (*pv_get_error_stack_func)(char ***, int32_t *) =
+        load_symbol(dl_handle, "pv_get_error_stack");
+    if (!pv_get_error_stack_func) {
+        print_dl_error("failed to load 'pv_get_error_stack_func'");
+        exit(EXIT_FAILURE);
+    }
+
+    void (*pv_free_error_stack_func)(char **) =
+        load_symbol(dl_handle, "pv_free_error_stack");
+    if (!pv_free_error_stack_func) {
+        print_dl_error("failed to load 'pv_free_error_stack_func'");
+        exit(EXIT_FAILURE);
+    }
+
+    char **message_stack = NULL;
+    int32_t message_stack_depth = 0;
+    pv_status_t error_status = PV_STATUS_RUNTIME_ERROR;
+
+    char **hardware_devices = NULL;
+    int32_t num_hardware_devices = 0;
+    pv_status_t status = pv_cobra_list_hardware_devices_func(&hardware_devices, &num_hardware_devices);
+    if (status != PV_STATUS_SUCCESS) {
+        fprintf(
+                stderr,
+                "Failed to list hardware devices with `%s`.\n",
+                pv_status_to_string_func(status));
+        error_status = pv_get_error_stack_func(&message_stack, &message_stack_depth);
+        if (error_status != PV_STATUS_SUCCESS) {
+            fprintf(
+                    stderr,
+                    ".\nUnable to get Cobra error state with '%s'.\n",
+                    pv_status_to_string_func(error_status));
+            exit(EXIT_FAILURE);
+        }
+
+        if (message_stack_depth > 0) {
+            fprintf(stderr, ":\n");
+            print_error_message(message_stack, message_stack_depth);
+            pv_free_error_stack_func(message_stack);
+        }
+        exit(EXIT_FAILURE);
+    }
+
+    for (int32_t i = 0; i < num_hardware_devices; i++) {
+        fprintf(stdout, "%s\n", hardware_devices[i]);
+    }
+    pv_cobra_free_hardware_devices_func(hardware_devices, num_hardware_devices);
+    close_dl(dl_handle);
+}
+
 int picovoice_main(int argc, char *argv[]) {
     const char *library_path = NULL;
     const char *access_key = NULL;
+    const char *device = "best";
     const char *wav_path = NULL;
+    bool show_inference_devices = false;
 
     int c;
-    while ((c = getopt_long(argc, argv, "l:a:w:", long_options, NULL)) != -1) {
+    while ((c = getopt_long(argc, argv, "l:a:y:w:i", long_options, NULL)) != -1) {
         switch (c) {
             case 'l':
                 library_path = optarg;
@@ -114,12 +200,29 @@ int picovoice_main(int argc, char *argv[]) {
             case 'a':
                 access_key = optarg;
                 break;
+            case 'y':
+                device = optarg;
+                break;
             case 'w':
                 wav_path = optarg;
+                break;
+            case 'i':
+                show_inference_devices = true;
                 break;
             default:
                 exit(1);
         }
+    }
+
+    if (show_inference_devices) {
+        if (!library_path) {
+            fprintf(stderr, "`library_path` is required to view available inference devices.\n");
+            print_usage(argv[0]);
+            exit(1);
+        }
+
+        print_inference_devices(library_path);
+        return 0;
     }
 
     if (!library_path || !access_key || !wav_path) {
@@ -227,7 +330,7 @@ int picovoice_main(int argc, char *argv[]) {
     pv_status_t error_status = PV_STATUS_RUNTIME_ERROR;
 
     pv_cobra_t *cobra = NULL;
-    pv_status_t status = pv_cobra_init_func(access_key, "best", &cobra);
+    pv_status_t status = pv_cobra_init_func(access_key, device, &cobra);
     if (status != PV_STATUS_SUCCESS) {
         fprintf(stderr, "failed to init with '%s'", pv_status_to_string_func(status));
         error_status = pv_get_error_stack_func(&message_stack, &message_stack_depth);

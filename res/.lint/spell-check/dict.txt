@@ -25,6 +25,7 @@ emscripten
 filedemo
 HEAPF
 HEAPU
+hsil
 iife
 improvments
 itertools
