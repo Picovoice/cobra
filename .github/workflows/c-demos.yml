@@ -33,7 +33,6 @@ jobs:
 
     strategy:
       matrix:
-        device: [ cpu, cpu:1 ]
         os: [ubuntu-latest, windows-latest, macos-latest]
         include:
           - os: ubuntu-latest
@@ -95,6 +94,7 @@ jobs:
 
     strategy:
       matrix:
+        device: [ cpu, cpu:1 ]
         os: [ubuntu-latest, windows-latest, macos-latest]
         include:
         - os: ubuntu-latest
