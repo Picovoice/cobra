@@ -46,7 +46,7 @@ class CobraCTestCase(unittest.TestCase):
             os.path.join(os.path.dirname(__file__), "../build/cobra_demo_file"),
             "-a", self._access_key,
             "-l", self._get_library_file(),
-            "-d", self._device,
+            "-y", self._device,
             "-w", os.path.join(self._root_dir, "res", "audio", "sample.wav"),
         ]
         process = subprocess.Popen(args, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
