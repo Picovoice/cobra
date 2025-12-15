@@ -85,22 +85,15 @@ To list the available audio input devices:
 ./demo/c/build/cobra_demo_mic -s
 ```
 
-To list the available inference devices:
-
-```console
-./demo/c/build/cobra_demo_mic -i
-```
-
 To run the demo:
 
 ```console
-./demo/c/build/cobra_demo_mic -l ${LIBRARY_PATH} -a ${ACCESS_KEY} -d ${AUDIO_DEVICE_INDEX} -y ${INFERENCE_DEVICE}
+./demo/c/build/cobra_demo_mic -l ${LIBRARY_PATH} -a ${ACCESS_KEY} -d ${AUDIO_DEVICE_INDEX}
 ```
 
 Replace `${LIBRARY_PATH}` with path to appropriate library available under [lib](/lib), Replace `${ACCESS_KEY}` with
-AccessKey obtained from [Picovoice Console](https://console.picovoice.ai/), `${INPUT_AUDIO_DEVICE}` with the index of
-your microphone device, and `${INFERENCE_DEVICE}` with the
-desired device to run Cobra on.
+AccessKey obtained from [Picovoice Console](https://console.picovoice.ai/), and `${INPUT_AUDIO_DEVICE}` with the index of
+your  microphone device.
 
 For more information about C demos go to [demo/c](demo/c).
 
@@ -248,7 +241,7 @@ using(Cobra cobra = new Cobra(accessKey))
 
 ```c
     pv_cobra_t *handle = NULL;
-    pv_status_t status = pv_cobra_init(${ACCESS_KEY}, &handle);
+    pv_status_t status = pv_cobra_init(${ACCESS_KEY}, ${DEVICE}, &handle);
     if (status != PV_STATUS_SUCCESS) {
         // error handling logic
     }

@@ -94,7 +94,7 @@ static struct option long_options[] = {
 
 void print_usage(const char *program_name) {
     fprintf(stderr,
-            "Usage : %s -a ACCESS_KEY -l LIBRARY_PATH [-y DEVICE] "
+            "Usage : %s -a ACCESS_KEY -l LIBRARY_PATH -w WAV_PATH [-y DEVICE] "
             "        %s [-i, --show_inference_devices]\n",
             program_name,
             program_name);
