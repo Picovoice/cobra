@@ -69,7 +69,7 @@ _RASPBERRY_PI_MACHINES = {
     "cortex-a76-aarch64"}
 
 
-def pv_library_path(relative):
+def pv_library_path(relative: str = '') -> str:
     if _PV_SYSTEM == 'Darwin':
         if _PV_MACHINE == 'x86_64':
             return os.path.join(os.path.dirname(__file__), relative, 'lib/mac/x86_64/libpv_cobra.dylib')

@@ -3,6 +3,8 @@ import { CobraError } from "../dist/types/cobra_errors";
 
 const ACCESS_KEY: string = Cypress.env("ACCESS_KEY");
 
+const DEVICE: string = Cypress.env('DEVICE');
+
 function delay(time: number) {
   return new Promise(resolve => setTimeout(resolve, time));
 }
@@ -15,11 +17,13 @@ const runInitTest = async (
   instance: typeof Cobra | typeof CobraWorker,
   params: {
     accessKey?: string,
+    device?: string,
     expectFailure?: boolean,
   } = {}
 ) => {
   const {
     accessKey = ACCESS_KEY,
+    device = DEVICE,
     expectFailure = false,
   } = params;
 
@@ -28,7 +32,8 @@ const runInitTest = async (
   try {
     const cobra = await instance.create(
       accessKey,
-      () => {});
+      () => {},
+      { device });
 
     expect(cobra.sampleRate).to.be.eq(16000);
     expect(typeof cobra.version).to.eq('string');
@@ -57,10 +62,12 @@ const runProcTest = async (
   inputPcm: Int16Array,
   params: {
     accessKey?: string,
+    device?: string;
   } = {}
 ) => {
   const {
     accessKey = ACCESS_KEY,
+    device = DEVICE,
   } = params;
 
   const results: number[] = [];
@@ -81,7 +88,8 @@ const runProcTest = async (
         {
           processErrorCallback: (error: CobraError) => {
             reject(error);
-          }
+          },
+          device,
         }
       );
 
@@ -132,7 +140,8 @@ describe("Cobra Binding", function () {
           processErrorCallback: (e: CobraError) => {
             error = e;
             resolve();
-          }
+          },
+          device: DEVICE,
         }
       );
       const testPcm = new Int16Array(cobra.frameLength);
@@ -194,7 +203,8 @@ describe("Cobra Binding", function () {
       try {
         const cobra = await instance.create(
           "invalidAccessKey",
-          () => { }
+          () => { },
+          { device: DEVICE }
         );
         expect(cobra).to.be.undefined;
       } catch (e: any) {
@@ -207,7 +217,8 @@ describe("Cobra Binding", function () {
       try {
         const cobra = await instance.create(
           "invalidAccessKey",
-          () => { }
+          () => { },
+          { device: DEVICE }
         );
         expect(cobra).to.be.undefined;
       } catch (e: any) {

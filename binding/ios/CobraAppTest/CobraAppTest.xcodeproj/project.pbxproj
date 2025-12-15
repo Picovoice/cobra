@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 55;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -16,6 +16,7 @@
 		1E00647D27CEE658006FF6E9 /* sample.wav in Resources */ = {isa = PBXBuildFile; fileRef = 1E00647C27CEE658006FF6E9 /* sample.wav */; };
 		1E5B7AEE2800B2CF00F8BDDB /* PerformanceTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E5B7AED2800B2CF00F8BDDB /* PerformanceTest.swift */; };
 		1E5B7AF12800B4A600F8BDDB /* sample.wav in Resources */ = {isa = PBXBuildFile; fileRef = 1E5B7AF02800B4A600F8BDDB /* sample.wav */; };
+		5AED01ED2EE2354400B36D1F /* Cobra in Frameworks */ = {isa = PBXBuildFile; productRef = 5AED01EC2EE2354400B36D1F /* Cobra */; };
 		E14CDF492CE4349C00E6494C /* Cobra in Frameworks */ = {isa = PBXBuildFile; productRef = E14CDF482CE4349C00E6494C /* Cobra */; };
 		E14CDF4B2CE434D700E6494C /* Cobra in Frameworks */ = {isa = PBXBuildFile; productRef = E14CDF4A2CE434D700E6494C /* Cobra */; };
 		E1643D4C2CE6DA14009027E6 /* Cobra in Frameworks */ = {isa = PBXBuildFile; productRef = E1643D4B2CE6DA14009027E6 /* Cobra */; };
@@ -63,6 +64,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5AED01ED2EE2354400B36D1F /* Cobra in Frameworks */,
 				E1643D4C2CE6DA14009027E6 /* Cobra in Frameworks */,
 				E14CDF492CE4349C00E6494C /* Cobra in Frameworks */,
 			);
@@ -238,7 +240,7 @@
 			);
 			mainGroup = 1E00643F27CEDF9B006FF6E9;
 			packageReferences = (
-				E13ECC502E85F1700049A48F /* XCRemoteSwiftPackageReference "cobra" */,
+				5AED01EB2EE2354400B36D1F /* XCLocalSwiftPackageReference "../../../../cobra" */,
 			);
 			productRefGroup = 1E00644927CEDF9B006FF6E9 /* Products */;
 			projectDirPath = "";
@@ -392,7 +394,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -446,7 +448,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
@@ -644,6 +646,10 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
+		5AED01EB2EE2354400B36D1F /* XCLocalSwiftPackageReference "../../../../cobra" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = ../../../../cobra;
+		};
 		E14CDF442CE425EC00E6494C /* XCLocalSwiftPackageReference "../../../../cobra" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = ../../../../cobra;
@@ -651,14 +657,6 @@
 /* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		E13ECC502E85F1700049A48F /* XCRemoteSwiftPackageReference "cobra" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/Picovoice/cobra";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.1.0;
-			};
-		};
 		E1643D4A2CE6DA14009027E6 /* XCRemoteSwiftPackageReference "cobra" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Picovoice/cobra";
@@ -670,6 +668,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		5AED01EC2EE2354400B36D1F /* Cobra */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Cobra;
+		};
 		E14CDF482CE4349C00E6494C /* Cobra */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E14CDF442CE425EC00E6494C /* XCLocalSwiftPackageReference "../../../../cobra" */;

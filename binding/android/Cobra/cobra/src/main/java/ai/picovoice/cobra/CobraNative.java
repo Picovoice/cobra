@@ -22,10 +22,12 @@ class CobraNative {
 
     static native void setSdk(String sdk);
 
-    static native long init(String accessKey) throws CobraException;
+    static native long init(String accessKey, String device) throws CobraException;
 
     static native void delete(long object);
 
     static native float process(long object, short[] pcm) throws CobraException;
+
+    static native String[] listHardwareDevices() throws CobraException;
 
 }

@@ -62,6 +62,14 @@
       "**/tslint.json",
 
       // wasm
-      "**/lib/wasm/**/*.js"
+      "**/lib/wasm/**/*.js",
+
+      // mcu
+      "../../../demo/mcu/stm32f411/stm32f411e-disco/Drivers/*",
+      "../../../demo/mcu/stm32f411/stm32f411e-disco/Middlewares/**/*",
+      "../../../demo/mcu/stm32f411/stm32f411e-disco/Startup/*",
+      "../../../demo/mcu/stm32f411/stm32f411e-disco/Inc/*",
+      "../../../demo/mcu/stm32f411/stm32f411e-disco/Src/*",
+      "**/*.ld"
     ]
   }

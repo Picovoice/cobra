@@ -24,6 +24,7 @@ jobs:
     strategy:
       matrix:
         node-version: [lts/*]
+        device: [ cpu:1 ]
         include:
         - node-version: lts/*
           procPerformanceThresholdSec: 0.2
@@ -52,4 +53,4 @@ jobs:
       run: yarn setup-test
 
     - name: Test
-      run: yarn test-perf --env ACCESS_KEY=${{secrets.PV_VALID_ACCESS_KEY}},NUM_TEST_ITERATIONS=20,PROC_PERFORMANCE_THRESHOLD_SEC=${{matrix.procPerformanceThresholdSec}}
+      run: yarn test-perf --env ACCESS_KEY=${{secrets.PV_VALID_ACCESS_KEY}},NUM_TEST_ITERATIONS=20,PROC_PERFORMANCE_THRESHOLD_SEC=${{matrix.procPerformanceThresholdSec}},DEVICE=${{matrix.device}}

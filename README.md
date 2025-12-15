@@ -241,7 +241,7 @@ using(Cobra cobra = new Cobra(accessKey))
 
 ```c
     pv_cobra_t *handle = NULL;
-    pv_status_t status = pv_cobra_init(${ACCESS_KEY}, &handle);
+    pv_status_t status = pv_cobra_init(${ACCESS_KEY}, ${DEVICE}, &handle);
     if (status != PV_STATUS_SUCCESS) {
         // error handling logic
     }
@@ -417,6 +417,13 @@ cobra.release();
 ```
 
 ## Releases
+
+### v3.0.0 - December 12th, 2025
+
+- Improved engine performance
+- Added support for running on GPU or multiple CPU cores
+- Node.js min version bumped to Node 18
+- iOS min version bumped to iOS 16
 
 ### v2.1.0 - September 25th, 2025
 

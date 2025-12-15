@@ -20,7 +20,15 @@ extern "C" {
 
 #endif
 
+#ifdef _MSC_VER
+
+#define PV_API __declspec(dllexport)
+
+#else
+
 #define PV_API __attribute__((visibility("default")))
+
+#endif
 
 /**
  * Audio sample rate accepted by Picovoice.

@@ -13,13 +13,14 @@ import Cobra
 class CobraAppTestUITests: XCTestCase {
 
     private let accessKey = "{TESTING_ACCESS_KEY_HERE}"
+    let device: String = "{TESTING_DEVICE_HERE}"
 
     override func setUpWithError() throws {
         continueAfterFailure = true
     }
 
     func testProcess() throws {
-        let cobra: Cobra = try Cobra(accessKey: accessKey)
+        let cobra: Cobra = try Cobra(accessKey: accessKey, device: device)
 
         let bundle = Bundle(for: type(of: self))
         let fileURL: URL = bundle.url(forResource: "sample", withExtension: "wav")!
@@ -66,7 +67,7 @@ class CobraAppTestUITests: XCTestCase {
     func testMessageStack() throws {
         var first_error: String = ""
         do {
-            let cobra: Cobra = try Cobra(accessKey: "invalid")
+            let cobra: Cobra = try Cobra(accessKey: "invalid", device: device)
             XCTAssertNil(cobra)
         } catch {
             first_error = "\(error.localizedDescription)"
@@ -74,7 +75,7 @@ class CobraAppTestUITests: XCTestCase {
         }
 
         do {
-            let cobra: Cobra = try Cobra(accessKey: "invalid")
+            let cobra: Cobra = try Cobra(accessKey: "invalid", device: device)
             XCTAssertNil(cobra)
         } catch {
             XCTAssert("\(error.localizedDescription)".count == first_error.count)
@@ -82,7 +83,7 @@ class CobraAppTestUITests: XCTestCase {
     }
 
     func testProcessMessageStack() throws {
-        let cobra: Cobra = try Cobra(accessKey: accessKey)
+        let cobra: Cobra = try Cobra(accessKey: accessKey, device: device)
         cobra.delete()
 
         var testPcm: [Int16] = []
@@ -93,6 +94,14 @@ class CobraAppTestUITests: XCTestCase {
             XCTAssert(res == 66.6)
         } catch {
             XCTAssert("\(error.localizedDescription)".count > 0)
+        }
+    }
+
+    func testGetAvailableDevices() throws {
+        let devices = try Cobra.getAvailableDevices()
+        XCTAssert(!devices.isEmpty)
+        for device in devices {
+            XCTAssert(!device.isEmpty)
         }
     }
 }
