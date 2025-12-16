@@ -70,14 +70,14 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install dependencies
-        run: yarn install
-
       # ************** REMOVE AFTER RELEASE ********************
       - name: Build Local Packages
         run: yarn && yarn build
         working-directory: binding/nodejs
       # ********************************************************
+
+      - name: Install dependencies
+        run: yarn install
 
       - name: Test
         run: yarn file -a ${{secrets.PV_VALID_ACCESS_KEY}} -i ../../res/audio/sample.wav -d ${{matrix.device}}
