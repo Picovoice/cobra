@@ -349,7 +349,7 @@
 			repositoryURL = "https://github.com/Picovoice/cobra/";
 			requirement = {
 				kind = exactVersion;
-				version = 3.0.0;
+				version = 3.0.1;
 			};
 		};
 		E13ECC512E85F39E0049A48F /* XCRemoteSwiftPackageReference "cobra" */ = {
