@@ -9,7 +9,7 @@ on:
       - 'demo/python/**'
       - '!demo/python/README.md'
   pull_request:
-    branches: [ main, 'v[0-9]+.[0-9]+' ]
+    branches: [ main, 'v[0-9]+.[0-9]+.[0-9]+' ]
     paths:
       - '.github/workflows/python-demos.yml'
       - 'demo/python/**'
@@ -63,6 +63,20 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+
+    - name: Setup Python virtualenv (*nix)
+      if: ${{ matrix.machine != 'pv-windows' && matrix.machine != 'pv-windows-arm64' }}
+      run: |
+        python3 -m venv .venv
+        . .venv/bin/activate
+        echo PATH=$PATH >> $GITHUB_ENV
+
+    - name: Setup Python virtualenv (windows)
+      if: ${{ matrix.machine == 'pv-windows' || matrix.machine == 'pv-windows-arm64' }}
+      run: |
+        python3 -m venv .venv --symlinks
+        .venv\Scripts\activate
+        echo PATH=$PATH >> $GITHUB_ENV
 
     - name: Install dependencies
       run: pip3 install -r requirements.txt
