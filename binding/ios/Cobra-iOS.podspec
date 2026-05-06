@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
     s.name = 'Cobra-iOS'
     s.module_name = 'Cobra'
-    s.version = '3.0.0'
+    s.version = '3.0.1'
     s.license = {:type => 'Apache 2.0'}
     s.summary = 'iOS binding for Picovoice\'s Cobra voice activity detection (VAD) engine.'
     s.description =
