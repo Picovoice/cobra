@@ -125,6 +125,27 @@ PV_API void pv_cobra_free_hardware_devices(
 #ifdef __cplusplus
 }
 
+#if defined(__PV_TARGET_NO_DYNAMIC_MEMORY__) && defined(__PV_TARGET_NO_FILE_SYSTEM__)
+
+/**
+ * Computes the minimum required memory buffer size, in bytes, for Cobra.
+ * A relatively large value for 'preliminary_memory_buffer' is suggested (e.g., 50 kilobytes).
+ * Then, 'pv_cobra_init' can be called optimally passing a memory buffer with the size of 'min_memory_buffer_size'.
+ *
+ * @param preliminary_memory_size Memory size in bytes.
+ * @param preliminary_memory_buffer Memory needs to be 8-byte aligned.
+ * @param[out] min_memory_buffer_size minimum required memory buffer size in bytes.
+ * @return Status code. Returns 'PV_STATUS_INVALID_ARGUMENT', 'PV_STATUS_INVALID_STATE', or 'PV_STATUS_OUT_OF_MEMORY'
+ * on failure.
+ * */
+
+PV_API pv_status_t pv_cobra_get_min_memory_buffer_size(
+        void *preliminary_memory_buffer,
+        int32_t preliminary_memory_size,
+        int32_t *min_memory_buffer_size);
+
+#endif
+
 #endif
 
 #endif // PV_COBRA_H
