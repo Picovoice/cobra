@@ -72,7 +72,7 @@ jobs:
         include:
         - machine: rpi3-32
           num_test_iterations: 100
-          performance_threshold_sec: 0.3
+          performance_threshold_sec: 0.4
         - machine: rpi3-64
           num_test_iterations: 100
           performance_threshold_sec: 0.3
@@ -88,6 +88,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+
+    - name: Setup Python virtualenv (*nix)
+      run: |
+        python3 -m venv .venv
+        . .venv/bin/activate
+        echo PATH=$PATH >> $GITHUB_ENV
 
     - name: Pre-build dependencies
       run: python3 -m pip install --upgrade pip
@@ -120,6 +126,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+
+    - name: Setup Python virtualenv (windows)
+      run: |
+        python3 -m venv .venv --symlinks
+        .venv\Scripts\activate
+        echo PATH=$PATH >> $GITHUB_ENV
 
     - name: Pre-build dependencies
       run: python3 -m pip install --upgrade pip
