@@ -91,7 +91,7 @@ class CobraAppTestUITests: XCTestCase {
 
         do {
             let res = try cobra.process(pcm: testPcm)
-            XCTAssert(res != 66.6)
+            XCTAssert(res == 66.6)
         } catch {
             XCTAssert("\(error.localizedDescription)".count > 0)
         }
