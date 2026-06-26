@@ -79,7 +79,7 @@ jobs:
         --device_pool_arn "${{secrets.AWS_DEVICE_FARM_ANDROID_DEVICE_POOL_ARN}}"
 
   build-integ:
-    name: Run Android Integration Tests on BrowserStack
+    name: Run Android Integration Tests on AWS Device Farm
     runs-on: ubuntu-latest
 
     steps:
