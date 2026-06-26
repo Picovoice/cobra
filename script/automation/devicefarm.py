@@ -32,7 +32,7 @@ def upload_device_farm(
 
     started = datetime.datetime.now()
     while True:
-        print(f"Upload of {filepath} in state {response['upload']['status']} after " + str(datetime.datetime.now() - started))
+        print(f"Upload of `{filepath}` in state `{response['upload']['status']}`; total time {str(datetime.datetime.now() - started)}")
         if response['upload']['status'] == 'FAILED':
             raise Exception("The upload failed processing: \n" + (response['upload']['message'] if 'message' in response['upload'] else response['upload']['metadata']))
         if response['upload']['status'] == 'SUCCEEDED':
@@ -79,14 +79,14 @@ def wait_for_run(
             if state == 'COMPLETED' or state == 'ERRORED':
                 break
             else:
-                print(f"Run {run_uuid} in state {state}, total time " + str(datetime.datetime.now() - start_time))
+                print(f"Run `{run_uuid}` in state `{state}`; total time {str(datetime.datetime.now() - start_time)}")
                 time.sleep(10)
     except Exception as e:
         client.stop_run(arn=run_arn)
         print(e)
         exit(1)
 
-    print(f"Tests finished in state {state} after " + str(datetime.datetime.now() - start_time))
+    print(f"Run `{run_uuid}` FINISHED in state `{state}`; total time {str(datetime.datetime.now() - start_time)}")
 
 
 def main(args: argparse.Namespace) -> None:
@@ -141,13 +141,14 @@ def main(args: argparse.Namespace) -> None:
 
     jobs_response = client.list_jobs(arn=run_arn)
     for job in jobs_response['jobs']:
+        job_name = job['name']
         result = job['result']  # PENDING, PASSED, WARNED, FAILED, SKIPPED, ERRORED, STOPPED
         if result not in ['PASSED']:
-            print(f">> Run `{run_uuid}` ({run_arn}) Failed!")
+            print(f">> Run `{run_uuid}` ({run_arn}) job `{job_name}` failed!")
             print(f">> See AWS console for details.")
             exit(1)
         else:
-            print(f">> Run `{run_uuid}` ({run_arn}) passed!")
+            print(f">> Run `{run_uuid}` ({run_arn}) job `{job_name}` passed!")
 
 
 if __name__ == '__main__':
