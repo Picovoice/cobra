@@ -9,12 +9,6 @@ import os
 import boto3
 
 
-# TODO: These ARNS should be supplied as arguments
-PROJECT_ARN = ""
-ANDROID_TEST_SPEC_ARN = ""
-ANDROID_DEVICE_POOL_ARN = ""
-
-
 def upload_device_farm(
         client,
         run_uuid,
@@ -97,70 +91,50 @@ def wait_for_run(
 
 
 def main(args: argparse.Namespace) -> None:
-    run_uuid = f"cobra-{args.type}-{args.run_name}-{datetime.date.today().isoformat()}-{''.join(random.sample(string.ascii_letters,8))}"
+    run_uuid = f"{args.run_name}-{datetime.date.today().isoformat()}-{''.join(random.sample(string.ascii_letters,8))}"
     client = boto3.client("devicefarm", region_name="us-west-2")
 
-    print(f"Starting device farm run: {run_uuid}")
+    print(f">> Starting device farm run: {run_uuid}")
 
+    params = {}
     if (args.type == 'android'):
-        app_arn = upload_device_farm(
-            client,
-            run_uuid,
-            PROJECT_ARN,
-            args.app_path,
-            "ANDROID_APP")
-        test_arn = upload_device_farm(
-            client,
-            run_uuid,
-            PROJECT_ARN,
-            args.test_path,
-            "INSTRUMENTATION_TEST_PACKAGE")
-        print(f"app_arn: {app_arn}")
-        print(f"test_arn: {test_arn}")
-
-        run_arn = schedule_run(
-            client,
-            run_uuid,
-            PROJECT_ARN,
-            app_arn,
-            test_arn,
-            ANDROID_TEST_SPEC_ARN,
-            "INSTRUMENTATION",
-            ANDROID_DEVICE_POOL_ARN)
-
-        print(f"run_arn: {run_arn}")
-        wait_for_run(client, run_uuid, run_arn)
+        params['app_type'] = "ANDROID_APP"
+        params['test_package_type'] = "INSTRUMENTATION_TEST_PACKAGE"
+        params['test_type'] = "INSTRUMENTATION"
     elif (args.type == 'ios'):
-        app_arn = upload_device_farm(
-            client,
-            run_uuid,
-            PROJECT_ARN,
-            args.app_path,
-            "IOS_APP")
-        test_arn = upload_device_farm(
-            client,
-            run_uuid,
-            PROJECT_ARN,
-            args.test_path,
-            "XCTEST_UI_TEST_PACKAGE")
-        print(f"app_arn: {app_arn}")
-        print(f"test_arn: {test_arn}")
-
-        run_arn = schedule_run(
-            client,
-            run_uuid,
-            PROJECT_ARN,
-            app_arn,
-            test_arn,
-            IOS_TEST_SPEC_ARN,
-            "XCTEST_UI",
-            IOS_DEVICE_POOL_ARN)
-
-        print(f"run_arn: {run_arn}")
-        wait_for_run(client, run_uuid, run_arn)
+        params['app_type'] = "IOS_APP"
+        params['test_package_type'] = "XCTEST_UI_TEST_PACKAGE"
+        params['test_type'] = "XCTEST_UI"
     else:
         print("Invalid device type")
         exit(1)
+
+    app_arn = upload_device_farm(
+        client,
+        run_uuid,
+        args.project_arn,
+        args.app_path,
+        params['app_type'])
+    print(f">> app_arn: {app_arn}")
+    test_arn = upload_device_farm(
+        client,
+        run_uuid,
+        args.project_arn,
+        args.test_path,
+        params['test_package_type'])
+    print(f">> test_arn: {test_arn}")
+
+    run_arn = schedule_run(
+        client,
+        run_uuid,
+        args.project_arn,
+        app_arn,
+        test_arn,
+        args.test_spec_arn,
+        params['test_type'],
+        args.device_pool_arn)=
+    print(f">> run_arn: {run_arn}")
+    wait_for_run(client, run_uuid, run_arn)
 
 
 if __name__ == '__main__':
@@ -170,8 +144,14 @@ if __name__ == '__main__':
     parser.add_argument('--run_name', required=True)
     parser.add_argument('--app_path', required=True)
     parser.add_argument('--test_path', required=True)
-    args = parser.parse_args()
 
-    # TODO: LIST DEVICE POOLS
+    parser.add_argument('--aws_id', required=True)
+    parser.add_argument('--aws_secret', required=True)
+
+    parser.add_argument('--project_arn', required=True)
+    parser.add_argument('--test_spec_arn', required=True)
+    parser.add_argument('--device_pool_arn', required=True)
+
+    args = parser.parse_args()
 
     main(args)
