@@ -1,4 +1,4 @@
-name: AWS Device Farm Tests
+name: Android AWS Device Farm Tests
 
 on:
   workflow_dispatch:
@@ -126,7 +126,7 @@ jobs:
     - name: Build androidTest
       run: ./gradlew assembleReleaseAndroidTest -DtestBuildType=integ
 
-    - name: Run tests on BrowserStack
+    - name: Run tests on AWS Device Farm
       run: python3 ../../../script/automation/devicefarm.py
         --type android
         --run_name cobra-android-integ
