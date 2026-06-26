@@ -131,7 +131,33 @@ def main(args: argparse.Namespace) -> None:
         print(f"run_arn: {run_arn}")
         wait_for_run(client, run_uuid, run_arn)
     elif (args.type == 'ios'):
-        upload_device_farm_ios()
+        app_arn = upload_device_farm(
+            client,
+            run_uuid,
+            PROJECT_ARN,
+            args.app_path,
+            "IOS_APP")
+        test_arn = upload_device_farm(
+            client,
+            run_uuid,
+            PROJECT_ARN,
+            args.test_path,
+            "XCTEST_UI_TEST_PACKAGE")
+        print(f"app_arn: {app_arn}")
+        print(f"test_arn: {test_arn}")
+
+        run_arn = schedule_run(
+            client,
+            run_uuid,
+            PROJECT_ARN,
+            app_arn,
+            test_arn,
+            IOS_TEST_SPEC_ARN,
+            "XCTEST_UI",
+            IOS_DEVICE_POOL_ARN)
+
+        print(f"run_arn: {run_arn}")
+        wait_for_run(client, run_uuid, run_arn)
     else:
         print("Invalid device type")
         exit(1)
