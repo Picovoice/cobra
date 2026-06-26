@@ -92,7 +92,11 @@ def wait_for_run(
 
 def main(args: argparse.Namespace) -> None:
     run_uuid = f"{args.run_name}-{datetime.date.today().isoformat()}-{''.join(random.sample(string.ascii_letters,8))}"
-    client = boto3.client("devicefarm", region_name="us-west-2")
+    client = boto3.client(
+        "devicefarm",
+        aws_access_key_id=args.aws_id,
+        aws_secret_access_key=args.aws_secret,
+        region_name="us-west-2")
 
     print(f">> Starting device farm run: {run_uuid}")
 
@@ -132,7 +136,7 @@ def main(args: argparse.Namespace) -> None:
         test_arn,
         args.test_spec_arn,
         params['test_type'],
-        args.device_pool_arn)=
+        args.device_pool_arn)
     print(f">> run_arn: {run_arn}")
     wait_for_run(client, run_uuid, run_arn)
 

@@ -69,3 +69,4 @@ finalizer
 netcoreapp
 netstandard
 framecount
+XCTEST
