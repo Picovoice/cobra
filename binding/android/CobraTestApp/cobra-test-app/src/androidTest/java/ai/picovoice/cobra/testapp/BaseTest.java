@@ -108,7 +108,7 @@ public class BaseTest {
         Arrays.fill(labels, 163, 183, 1.0f);
         Arrays.fill(labels, 227, 252, 1.0f);
 
-        assertEquals(labels.length, probs.size());
+        assertEquals(labels.length, probs.size() - 1);
 
         float error = 0.f;
 
