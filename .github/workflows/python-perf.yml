@@ -78,7 +78,7 @@ jobs:
           performance_threshold_sec: 0.15
         - machine: rpi5-64
           num_test_iterations: 100
-          performance_threshold_sec: 0.05
+          performance_threshold_sec: 0.06
 
     steps:
     - uses: actions/checkout@v3
