@@ -6,12 +6,14 @@ on:
     branches: [ main ]
     paths:
       - 'binding/web/**'
+      - '!binding/web/README.md'
       - 'lib/wasm/**'
       - '.github/workflows/web-perf.yml'
   pull_request:
     branches: [ main, 'v[0-9]+.[0-9]+' ]
     paths:
       - 'binding/web/**'
+      - '!binding/web/README.md'
       - 'lib/wasm/**'
       - '.github/workflows/web-perf.yml'
 

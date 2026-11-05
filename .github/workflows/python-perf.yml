@@ -7,6 +7,7 @@ on:
     paths:
       - '.github/workflows/python-perf.yml'
       - 'binding/python/**'
+      - '!binding/python/README.md'
       - 'lib/linux/**'
       - 'lib/mac/**'
       - 'lib/raspberry-pi/**'
@@ -17,6 +18,7 @@ on:
     paths:
       - '.github/workflows/python-perf.yml'
       - 'binding/python/**'
+      - '!binding/python/README.md'
       - 'lib/linux/**'
       - 'lib/mac/**'
       - 'lib/raspberry-pi/**'

@@ -6,6 +6,7 @@ on:
     branches: [ main ]
     paths:
       - 'binding/nodejs/**'
+      - '!binding/nodejs/README.md'
       - 'lib/node/**'
       - '.github/workflows/nodejs-perf.yml'
 
@@ -13,6 +14,7 @@ on:
     branches: [ main, 'v[0-9]+.[0-9]+' ]
     paths:
       - 'binding/nodejs/**'
+      - '!binding/nodejs/README.md'
       - 'lib/node/**'
       - '.github/workflows/nodejs-perf.yml'
 
