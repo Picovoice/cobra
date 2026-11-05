@@ -6,7 +6,7 @@ on:
     branches: [ main ]
     paths:
       - '.github/workflows/python-perf.yml'
-      - 'binding/python/test_cobra_perf.py'
+      - 'binding/python/**'
       - 'lib/linux/**'
       - 'lib/mac/**'
       - 'lib/raspberry-pi/**'
@@ -16,7 +16,7 @@ on:
     branches: [ main, 'v[0-9]+.[0-9]+' ]
     paths:
       - '.github/workflows/python-perf.yml'
-      - 'binding/python/test_cobra_perf.py'
+      - 'binding/python/**'
       - 'lib/linux/**'
       - 'lib/mac/**'
       - 'lib/raspberry-pi/**'
